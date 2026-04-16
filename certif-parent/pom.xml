@@ -280,7 +280,7 @@
                         <encoding>UTF-8</encoding>
                         <compilerArgs>
                             <!-- Activer le preview Java 21 si nécessaire -->
-                            <!-- <arg>--enable-preview</arg> -->
+                           <!-- <arg>&#45;&#45;enable-preview</arg> -->
                         </compilerArgs>
                         <annotationProcessorPaths>
                             <path>
