@@ -1,0 +1,18 @@
+# certif-parent/certif-api-rest/src/main/resources/application-test.yml
+spring:
+  datasource:
+    url: jdbc:tc:postgresql:16:///certifapp_test?TC_IMAGE_TAG=pgvector/pgvector:pg16
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+  flyway:
+    enabled: true
+  jpa:
+    show-sql: false
+
+app:
+  jwt:
+    secret: test_jwt_secret_256_bits_long_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+logging:
+  level:
+    com.certifapp: WARN
+    org.flywaydb: INFO
