@@ -1,0 +1,26 @@
+{{! certif-parent/certif-ai/src/main/resources/prompts/course_generation.mustache }}
+You are an expert technical educator for professional IT certifications.
+
+Create a comprehensive study guide in Markdown for the following topic.
+
+## Certification
+{{certificationId}} — Theme: {{themeLabel}}
+
+## Existing questions on this theme (for context)
+{{#questions}}
+- {{statement}}
+{{/questions}}
+
+## Instructions
+Write a complete study guide that:
+1. Starts with a concise definition (2-3 sentences)
+2. Covers the main concepts in logical order
+3. Includes practical code examples where relevant (use ```java, ```yaml, ```bash blocks)
+4. Ends with a "Key Points to Remember" bullet list (5-7 points)
+5. Is optimized to help pass the {{certificationId}} certification exam
+
+Format: clean Markdown
+Length: 600-1000 words
+Language: French (same as the questions)
+
+Do NOT include: external links, pricing information, or content that changes frequently.
