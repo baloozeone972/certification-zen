@@ -1,0 +1,1946 @@
+openapi: 3.1.0
+# certif-api-rest/src/main/resources/openapi.yaml
+info:
+  title: CertifApp API
+  description: |
+    API REST de CertifApp — Plateforme SaaS de préparation aux certifications professionnelles.
+    
+    **Authentification** : JWT Bearer token (access token 15min + refresh token 7j).
+    
+    **Rôles** : USER (standard), ADMIN (back-office), PARTNER (accès API entreprise).
+    
+    **Freemium** : Les endpoints marqués `PRO_REQUIRED` retournent 402 si l'abonnement est FREE.
+  version: 1.0.0
+  contact:
+    name: CertifApp Support
+    url: https://certifapp.com/support
+
+servers:
+  - url: https://api.certifapp.com/api/v1
+    description: Production
+  - url: http://localhost:8080/api/v1
+    description: Développement local
+
+security:
+  - BearerAuth: []
+
+tags:
+  - name: Auth
+  - name: Users
+  - name: Certifications
+  - name: Exams
+  - name: Learning
+  - name: Coaching
+  - name: Community
+  - name: Interview
+  - name: AI
+  - name: Admin
+  - name: Webhooks
+
+paths:
+
+  # ===== AUTH =====
+
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Créer un compte
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Compte créé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '409': { $ref: '#/components/responses/Conflict' }
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Authentification
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Authentifié
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /auth/refresh:
+    post:
+      tags: [Auth]
+      summary: Rafraîchir les tokens
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refreshToken]
+              properties:
+                refreshToken:
+                  type: string
+      responses:
+        '200':
+          description: Tokens rafraîchis
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /auth/logout:
+    post:
+      tags: [Auth]
+      summary: Déconnexion (invalidation refresh token)
+      responses:
+        '204': { description: Déconnecté }
+
+  # ===== USERS =====
+
+  /users/me:
+    get:
+      tags: [Users]
+      summary: Profil de l'utilisateur connecté
+      responses:
+        '200':
+          description: Profil utilisateur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    patch:
+      tags: [Users]
+      summary: Mettre à jour le profil
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserRequest'
+      responses:
+        '200':
+          description: Profil mis à jour
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+
+  /users/me/preferences:
+    get:
+      tags: [Users]
+      summary: Préférences utilisateur
+      responses:
+        '200':
+          description: Préférences
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPreferencesDto'
+    patch:
+      tags: [Users]
+      summary: Mettre à jour les préférences
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePreferencesRequest'
+      responses:
+        '200':
+          description: Préférences mises à jour
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPreferencesDto'
+
+  /users/me/data:
+    get:
+      tags: [Users]
+      summary: Export données personnelles (RGPD Art. 20)
+      responses:
+        '200':
+          description: Archive ZIP données utilisateur
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+    delete:
+      tags: [Users]
+      summary: Supprimer le compte et toutes les données (RGPD Art. 17)
+      responses:
+        '204': { description: Compte supprimé }
+
+  # ===== CERTIFICATIONS =====
+
+  /certifications:
+    get:
+      tags: [Certifications]
+      summary: Liste des certifications disponibles
+      security: []
+      parameters:
+        - name: active
+          in: query
+          schema:
+            type: boolean
+            default: true
+      responses:
+        '200':
+          description: Liste des certifications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CertificationSummaryDto'
+
+  /certifications/{id}:
+    get:
+      tags: [Certifications]
+      summary: Détails d'une certification
+      security: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: ocp21
+      responses:
+        '200':
+          description: Détails certification
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificationDetailDto'
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /certifications/{id}/themes:
+    get:
+      tags: [Certifications]
+      summary: Thèmes d'une certification
+      security: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Liste des thèmes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CertificationThemeDto'
+
+  /certifications/{id}/job-market:
+    get:
+      tags: [Certifications]
+      summary: Données marché de l'emploi par certification
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: country
+          in: query
+          schema:
+            type: string
+            default: FR
+            example: FR
+      responses:
+        '200':
+          description: Données marché emploi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobMarketDto'
+
+  # ===== EXAMS =====
+
+  /exams/sessions:
+    post:
+      tags: [Exams]
+      summary: Démarrer une session d'examen
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StartExamRequest'
+      responses:
+        '201':
+          description: Session créée avec questions (sans réponses correctes)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExamSessionDto'
+        '402':
+          description: Limite freemium atteinte (2 examens max)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /exams/sessions/{id}:
+    get:
+      tags: [Exams]
+      summary: État d'une session en cours
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: État de la session
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExamSessionDto'
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /exams/sessions/{id}/answers:
+    post:
+      tags: [Exams]
+      summary: Soumettre une réponse à une question
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitAnswerRequest'
+      responses:
+        '200':
+          description: Réponse enregistrée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAnswerDto'
+        '409':
+          description: Session déjà terminée
+
+  /exams/sessions/{id}/submit:
+    post:
+      tags: [Exams]
+      summary: Finaliser l'examen et calculer le score
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Résultats complets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExamResultDto'
+
+  /exams/sessions/{id}/results:
+    get:
+      tags: [Exams]
+      summary: Résultats d'une session terminée
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Résultats
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExamResultDto'
+
+  /exams/sessions/{id}/export-pdf:
+    get:
+      tags: [Exams]
+      summary: Exporter les résultats en PDF
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: PDF résultats
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '402':
+          description: Export PDF réservé aux abonnés PRO
+
+  /exams/history:
+    get:
+      tags: [Exams]
+      summary: Historique des sessions
+      parameters:
+        - name: certificationId
+          in: query
+          schema:
+            type: string
+        - name: mode
+          in: query
+          schema:
+            type: string
+            enum: [EXAM, FREE, REVISION]
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Page d'historique
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedExamSessionSummary'
+
+  # ===== LEARNING =====
+
+  /learning/courses/{certificationId}:
+    get:
+      tags: [Learning]
+      summary: Liste des cours disponibles pour une certification
+      parameters:
+        - name: certificationId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Liste des cours
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CourseSummaryDto'
+
+  /learning/courses/{certificationId}/{themeCode}:
+    get:
+      tags: [Learning]
+      summary: Fiche de cours d'un thème
+      parameters:
+        - name: certificationId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: themeCode
+          in: path
+          required: true
+          schema:
+            type: string
+            example: virtual_threads
+      responses:
+        '200':
+          description: Contenu du cours
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseDto'
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /learning/flashcards/{certificationId}:
+    get:
+      tags: [Learning]
+      summary: Flashcards dues pour révision (SM-2)
+      parameters:
+        - name: certificationId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+            maximum: 50
+      responses:
+        '200':
+          description: Flashcards à réviser aujourd'hui
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FlashcardDto'
+        '402':
+          description: Flashcards réservées aux abonnés PRO
+
+  /learning/flashcards/{id}/review:
+    post:
+      tags: [Learning]
+      summary: Enregistrer la révision d'une flashcard (SM-2)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewFlashcardRequest'
+      responses:
+        '200':
+          description: Progression SM-2 mise à jour
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SM2ProgressDto'
+
+  /learning/adaptive-plan:
+    get:
+      tags: [Learning]
+      summary: Plan de révision adaptatif (SM-2)
+      parameters:
+        - name: certificationId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Plan adaptatif du jour
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdaptivePlanDto'
+        '402':
+          description: Parcours adaptatif réservé aux abonnés PRO
+
+  # ===== COACHING =====
+
+  /coaching/diagnostic/start:
+    post:
+      tags: [Coaching]
+      summary: Démarrer le bilan de compétences initial (20 questions)
+      responses:
+        '201':
+          description: Session diagnostic démarrée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExamSessionDto'
+
+  /coaching/diagnostic/submit:
+    post:
+      tags: [Coaching]
+      summary: Soumettre le bilan et obtenir la carte de compétences
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DiagnosticSubmitRequest'
+      responses:
+        '200':
+          description: Résultat diagnostic + certifications recommandées
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiagnosticResultDto'
+
+  /coaching/certification-path:
+    get:
+      tags: [Coaching]
+      summary: Parcours de certifications personnalisé
+      responses:
+        '200':
+          description: Parcours ordonné avec rationale IA
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificationPathDto'
+        '402':
+          description: Parcours réservé aux abonnés PRO
+
+  /coaching/weekly-report:
+    get:
+      tags: [Coaching]
+      summary: Rapport coach hebdomadaire
+      parameters:
+        - name: weekStart
+          in: query
+          schema:
+            type: string
+            format: date
+            description: Lundi de la semaine (défaut = semaine courante)
+      responses:
+        '200':
+          description: Rapport coach personnalisé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WeeklyCoachReportDto'
+        '402':
+          description: Coach IA réservé aux abonnés PRO
+
+  # ===== COMMUNITY =====
+
+  /community/challenges/current:
+    get:
+      tags: [Community]
+      summary: Challenge hebdomadaire en cours
+      parameters:
+        - name: certificationId
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Challenge actif
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WeeklyChallengeDto'
+        '204':
+          description: Aucun challenge actif cette semaine
+
+  /community/challenges/{id}/join:
+    post:
+      tags: [Community]
+      summary: Rejoindre un challenge
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '201':
+          description: Participation créée — session d'examen retournée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExamSessionDto'
+        '409':
+          description: Déjà participé à ce challenge
+
+  /community/challenges/{id}/leaderboard:
+    get:
+      tags: [Community]
+      summary: Classement d'un challenge
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: top
+          in: query
+          schema:
+            type: integer
+            default: 50
+      responses:
+        '200':
+          description: Classement
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LeaderboardEntryDto'
+
+  /community/groups:
+    get:
+      tags: [Community]
+      summary: Liste des groupes d'étude publics
+      parameters:
+        - name: certificationId
+          in: query
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Groupes publics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedStudyGroup'
+    post:
+      tags: [Community]
+      summary: Créer un groupe d'étude
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGroupRequest'
+      responses:
+        '201':
+          description: Groupe créé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudyGroupDto'
+
+  /community/groups/{id}/join:
+    post:
+      tags: [Community]
+      summary: Rejoindre un groupe par code d'invitation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JoinGroupRequest'
+      responses:
+        '200':
+          description: Rejoint le groupe
+        '409':
+          description: Groupe complet ou déjà membre
+
+  /community/certified-wall:
+    get:
+      tags: [Community]
+      summary: Mur des certifiés
+      security: []
+      parameters:
+        - name: certificationId
+          in: query
+          schema:
+            type: string
+        - name: countryCode
+          in: query
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Profils publics des certifiés
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedCertifiedWallProfile'
+
+  # ===== INTERVIEW =====
+
+  /interview/sessions:
+    post:
+      tags: [Interview]
+      summary: Démarrer une session de simulation d'entretien
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [certificationId]
+              properties:
+                certificationId:
+                  type: string
+                mode:
+                  type: string
+                  enum: [TEXT, VOICE, MIXED]
+                  default: TEXT
+      responses:
+        '201':
+          description: Session entretien créée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InterviewSessionDto'
+        '402':
+          description: Simulateur réservé aux abonnés PRO
+
+  /interview/sessions/{id}/answer:
+    post:
+      tags: [Interview]
+      summary: Soumettre une réponse d'entretien
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InterviewAnswerRequest'
+      responses:
+        '200':
+          description: Feedback IA sur la réponse
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InterviewFeedbackDto'
+
+  /interview/sessions/{id}/feedback:
+    get:
+      tags: [Interview]
+      summary: Rapport complet de la session d'entretien
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Rapport entretien
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InterviewSessionDto'
+
+  # ===== AI ASSISTANT =====
+
+  /ai/chat:
+    post:
+      tags: [AI]
+      summary: Message à l'assistant IA conversationnel (RAG)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatMessageRequest'
+      responses:
+        '200':
+          description: Réponse de l'assistant
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  sources:
+                    type: array
+                    items:
+                      type: string
+                    description: IDs des questions/cours sources utilisés dans la réponse RAG
+        '402':
+          description: Assistant IA réservé aux abonnés PRO
+
+  /ai/explain/{questionId}:
+    get:
+      tags: [AI]
+      summary: Explication détaillée d'une question par l'IA
+      parameters:
+        - name: questionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Explication enrichie
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  explanation:
+                    type: string
+                  codeExample:
+                    type: string
+                  officialDocUrl:
+                    type: string
+
+  /ai/generate-flashcards/{courseId}:
+    post:
+      tags: [AI]
+      summary: Générer des flashcards pour un cours (IA)
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '201':
+          description: Flashcards générées
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FlashcardDto'
+
+  # ===== ADMIN =====
+
+  /admin/questions/import:
+    post:
+      tags: [Admin]
+      summary: Import de questions JSON (admin)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImportQuestionsRequest'
+      responses:
+        '201':
+          description: Questions importées
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportResultDto'
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+  /admin/questions:
+    get:
+      tags: [Admin]
+      summary: Liste des questions avec filtre sur statut d'enrichissement
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [ORIGINAL, AI_DRAFT, HUMAN_VALIDATED]
+        - name: certificationId
+          in: query
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Questions paginées
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedQuestion'
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+  /admin/questions/{id}/enrich:
+    post:
+      tags: [Admin]
+      summary: Enrichir une question via IA (génère AI_DRAFT, validation humaine requise)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: saveImmediately
+          in: query
+          schema:
+            type: boolean
+            default: false
+            description: true = sauvegarde directe, false = retourne le draft pour validation
+      responses:
+        '200':
+          description: Question enrichie (draft ou validée selon saveImmediately)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuestionAdminDto'
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+  /admin/challenges:
+    post:
+      tags: [Admin]
+      summary: Publier un challenge hebdomadaire
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublishChallengeRequest'
+      responses:
+        '201':
+          description: Challenge publié
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WeeklyChallengeDto'
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+  # ===== WEBHOOKS =====
+
+  /webhooks/stripe:
+    post:
+      tags: [Webhooks]
+      summary: Webhook Stripe (paiement, abonnement)
+      security: []
+      parameters:
+        - name: Stripe-Signature
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200': { description: Traité }
+        '400': { description: Signature invalide }
+
+# =============================================================================
+# COMPONENTS
+# =============================================================================
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  responses:
+    BadRequest:
+      description: Requête invalide
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Non authentifié
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: Accès refusé (rôle insuffisant)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Ressource introuvable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Conflict:
+      description: Conflit (ex- email déjà existant)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+  schemas:
+
+    # --- Auth ---
+    RegisterRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+          example: user@example.com
+        password:
+          type: string
+          minLength: 8
+          example: Str0ngP@ssword
+        locale:
+          type: string
+          default: fr
+          example: fr
+        timezone:
+          type: string
+          default: Europe/Paris
+
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+
+    TokenResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+        expiresIn:
+          type: integer
+          description: Durée de validité access token en secondes (900 = 15min)
+          example: 900
+        tokenType:
+          type: string
+          default: Bearer
+
+    # --- Users ---
+    UserDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+        role:
+          type: string
+          enum: [USER, ADMIN, PARTNER]
+        subscriptionTier:
+          type: string
+          enum: [FREE, PRO, PACK]
+        locale:
+          type: string
+        timezone:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    UpdateUserRequest:
+      type: object
+      properties:
+        locale:
+          type: string
+        timezone:
+          type: string
+
+    UserPreferencesDto:
+      type: object
+      properties:
+        theme:
+          type: string
+          enum: [light, dark, system]
+        language:
+          type: string
+        defaultMode:
+          type: string
+          enum: [EXAM, FREE, REVISION]
+        notificationsEnabled:
+          type: boolean
+        lastCertificationId:
+          type: string
+
+    UpdatePreferencesRequest:
+      type: object
+      properties:
+        theme:
+          type: string
+          enum: [light, dark, system]
+        language:
+          type: string
+        defaultMode:
+          type: string
+          enum: [EXAM, FREE, REVISION]
+        notificationsEnabled:
+          type: boolean
+
+    # --- Certifications ---
+    CertificationSummaryDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: ocp21
+        code:
+          type: string
+          example: 1Z0-830
+        name:
+          type: string
+        totalQuestions:
+          type: integer
+        passingScore:
+          type: integer
+        examDurationMin:
+          type: integer
+        examType:
+          type: string
+          enum: [MCQ, PRACTICAL, MIXED]
+
+    CertificationDetailDto:
+      allOf:
+        - $ref: '#/components/schemas/CertificationSummaryDto'
+        - type: object
+          properties:
+            description:
+              type: string
+            themes:
+              type: array
+              items:
+                $ref: '#/components/schemas/CertificationThemeDto'
+            examQuestionCount:
+              type: integer
+
+    CertificationThemeDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        code:
+          type: string
+        label:
+          type: string
+        questionCount:
+          type: integer
+        weightPercent:
+          type: number
+
+    # --- Exams ---
+    StartExamRequest:
+      type: object
+      required: [certificationId, mode]
+      properties:
+        certificationId:
+          type: string
+        mode:
+          type: string
+          enum: [EXAM, FREE, REVISION]
+        selectedThemes:
+          type: array
+          items:
+            type: string
+          description: Codes des thèmes sélectionnés (mode FREE uniquement)
+        questionCount:
+          type: integer
+          minimum: 1
+          maximum: 200
+          description: Nombre de questions (mode FREE/REVISION)
+        durationMinutes:
+          type: integer
+          minimum: 0
+          description: Durée en minutes (0 = illimité, mode FREE uniquement)
+
+    ExamSessionDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        certificationId:
+          type: string
+        mode:
+          type: string
+          enum: [EXAM, FREE, REVISION]
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestionDto'
+        startedAt:
+          type: string
+          format: date-time
+        durationSeconds:
+          type: integer
+          description: Durée max configurée en secondes (0 = illimité)
+
+    QuestionDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        statement:
+          type: string
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestionOptionDto'
+        themeCode:
+          type: string
+        difficulty:
+          type: string
+          enum: [easy, medium, hard]
+
+    QuestionOptionDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        label:
+          type: string
+          example: A
+        text:
+          type: string
+
+    SubmitAnswerRequest:
+      type: object
+      required: [questionId]
+      properties:
+        questionId:
+          type: string
+          format: uuid
+        selectedOptionId:
+          type: string
+          format: uuid
+          nullable: true
+          description: null ou absent = question ignorée
+        responseTimeMs:
+          type: integer
+
+    UserAnswerDto:
+      type: object
+      properties:
+        questionId:
+          type: string
+          format: uuid
+        selectedOptionId:
+          type: string
+          format: uuid
+          nullable: true
+        isCorrect:
+          type: boolean
+        isSkipped:
+          type: boolean
+
+    ExamResultDto:
+      type: object
+      properties:
+        session:
+          $ref: '#/components/schemas/ExamSessionSummaryDto'
+        themeStats:
+          type: array
+          items:
+            $ref: '#/components/schemas/ThemeStatsDto'
+        wrongQuestions:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestionResultDto'
+
+    ExamSessionSummaryDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        certificationId:
+          type: string
+        mode:
+          type: string
+          enum: [EXAM, FREE, REVISION]
+        startedAt:
+          type: string
+          format: date-time
+        durationSeconds:
+          type: integer
+        totalQuestions:
+          type: integer
+        correctCount:
+          type: integer
+        percentage:
+          type: number
+        passed:
+          type: boolean
+
+    ThemeStatsDto:
+      type: object
+      properties:
+        theme:
+          type: string
+        correct:
+          type: integer
+        wrong:
+          type: integer
+        skipped:
+          type: integer
+        total:
+          type: integer
+        percentage:
+          type: number
+
+    QuestionResultDto:
+      allOf:
+        - $ref: '#/components/schemas/QuestionDto'
+        - type: object
+          properties:
+            correctOptionId:
+              type: string
+              format: uuid
+            explanationOriginal:
+              type: string
+            explanationEnriched:
+              type: string
+              nullable: true
+
+    PagedExamSessionSummary:
+      $ref: '#/components/schemas/PageWrapper'
+
+    # --- Learning ---
+    CourseSummaryDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        themeCode:
+          type: string
+        title:
+          type: string
+        aiStatus:
+          type: string
+
+    CourseDto:
+      allOf:
+        - $ref: '#/components/schemas/CourseSummaryDto'
+        - type: object
+          properties:
+            contentMarkdown:
+              type: string
+            contentHtml:
+              type: string
+
+    FlashcardDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        frontText:
+          type: string
+        backText:
+          type: string
+        codeExample:
+          type: string
+          nullable: true
+        nextReviewDate:
+          type: string
+          format: date
+        easeFactor:
+          type: number
+        intervalDays:
+          type: integer
+
+    ReviewFlashcardRequest:
+      type: object
+      required: [rating]
+      properties:
+        rating:
+          type: integer
+          minimum: 0
+          maximum: 5
+          description: |
+            SM-2 rating : 0=blackout, 1=wrong, 2=wrong+hint,
+            3=correct+hard, 4=correct, 5=perfect
+
+    SM2ProgressDto:
+      type: object
+      properties:
+        flashcardId:
+          type: string
+          format: uuid
+        nextReviewDate:
+          type: string
+          format: date
+        intervalDays:
+          type: integer
+        easeFactor:
+          type: number
+        repetitions:
+          type: integer
+
+    AdaptivePlanDto:
+      type: object
+      properties:
+        certificationId:
+          type: string
+        dueTodayCount:
+          type: integer
+        weakThemes:
+          type: array
+          items:
+            type: string
+        predictedScore:
+          type: number
+          description: Estimation du score à l'examen basée sur l'historique SM-2
+        recommendedDayJ:
+          type: string
+          format: date
+          description: Date recommandée pour passer l'examen
+
+    # --- Coaching ---
+    DiagnosticSubmitRequest:
+      type: object
+      required: [sessionId, answers]
+      properties:
+        sessionId:
+          type: string
+          format: uuid
+        answers:
+          type: array
+          items:
+            type: object
+            properties:
+              questionId:
+                type: string
+                format: uuid
+              selectedOptionId:
+                type: string
+                format: uuid
+                nullable: true
+
+    DiagnosticResultDto:
+      type: object
+      properties:
+        scoreByDomain:
+          type: object
+          additionalProperties:
+            type: integer
+        skillMap:
+          type: object
+          additionalProperties:
+            type: number
+        recommendedCertifications:
+          type: array
+          items:
+            type: object
+            properties:
+              certificationId:
+                type: string
+              rationale:
+                type: string
+              priority:
+                type: integer
+
+    CertificationPathDto:
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        roleType:
+          type: string
+        steps:
+          type: array
+          items:
+            type: object
+            properties:
+              certificationId:
+                type: string
+              certificationName:
+                type: string
+              order:
+                type: integer
+              rationale:
+                type: string
+              estimatedWeeks:
+                type: integer
+        aiRationale:
+          type: string
+
+    WeeklyCoachReportDto:
+      type: object
+      properties:
+        weekStart:
+          type: string
+          format: date
+        reportContent:
+          type: string
+        studyPlan:
+          type: object
+
+    JobMarketDto:
+      type: object
+      properties:
+        certificationId:
+          type: string
+        countryCode:
+          type: string
+        jobCount:
+          type: integer
+        medianSalaryEur:
+          type: integer
+          nullable: true
+        topCompanies:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              jobCount:
+                type: integer
+        fetchedAt:
+          type: string
+          format: date-time
+
+    # --- Community ---
+    WeeklyChallengeDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        certificationId:
+          type: string
+        themeCode:
+          type: string
+        startsAt:
+          type: string
+          format: date-time
+        endsAt:
+          type: string
+          format: date-time
+        totalParticipants:
+          type: integer
+        questionCount:
+          type: integer
+
+    LeaderboardEntryDto:
+      type: object
+      properties:
+        rank:
+          type: integer
+        userId:
+          type: string
+          format: uuid
+        displayName:
+          type: string
+        score:
+          type: integer
+        percentage:
+          type: number
+        badgeEarned:
+          type: string
+          nullable: true
+        countryCode:
+          type: string
+
+    StudyGroupDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        certificationId:
+          type: string
+        memberCount:
+          type: integer
+        maxMembers:
+          type: integer
+        isPublic:
+          type: boolean
+        inviteCode:
+          type: string
+
+    CreateGroupRequest:
+      type: object
+      required: [name, certificationId]
+      properties:
+        name:
+          type: string
+          maxLength: 100
+        certificationId:
+          type: string
+        maxMembers:
+          type: integer
+          default: 10
+          minimum: 2
+          maximum: 50
+        isPublic:
+          type: boolean
+          default: true
+
+    JoinGroupRequest:
+      type: object
+      required: [inviteCode]
+      properties:
+        inviteCode:
+          type: string
+
+    PagedStudyGroup:
+      $ref: '#/components/schemas/PageWrapper'
+
+    CertifiedWallProfileDto:
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        certificationId:
+          type: string
+        examScore:
+          type: integer
+        prepDurationWeeks:
+          type: integer
+        testimonial:
+          type: string
+        linkedinUrl:
+          type: string
+        countryCode:
+          type: string
+        certifiedAt:
+          type: string
+          format: date
+
+    PagedCertifiedWallProfile:
+      $ref: '#/components/schemas/PageWrapper'
+
+    # --- Interview ---
+    InterviewSessionDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        certificationId:
+          type: string
+        mode:
+          type: string
+          enum: [TEXT, VOICE, MIXED]
+        startedAt:
+          type: string
+          format: date-time
+        overallFeedback:
+          type: string
+          nullable: true
+        scoreByDomain:
+          type: object
+
+    InterviewAnswerRequest:
+      type: object
+      required: [questionText, userAnswer, domain]
+      properties:
+        questionText:
+          type: string
+        userAnswer:
+          type: string
+        domain:
+          type: string
+
+    InterviewFeedbackDto:
+      type: object
+      properties:
+        questionText:
+          type: string
+        userAnswer:
+          type: string
+        aiFeedback:
+          type: string
+        score:
+          type: integer
+          minimum: 0
+          maximum: 10
+        domain:
+          type: string
+
+    # --- AI ---
+    ChatMessageRequest:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string
+          maxLength: 2000
+        sessionId:
+          type: string
+          nullable: true
+          description: ID de session pour conserver le contexte
+
+    # --- Admin ---
+    ImportQuestionsRequest:
+      type: object
+      required: [certificationId, questions]
+      properties:
+        certificationId:
+          type: string
+        questions:
+          type: array
+          minItems: 1
+          maxItems: 500
+          items:
+            type: object
+            required: [statement, options, correctIndex]
+            properties:
+              legacyId:
+                type: string
+              themeLabel:
+                type: string
+              statement:
+                type: string
+              difficulty:
+                type: string
+                enum: [easy, medium, hard]
+              options:
+                type: array
+                minItems: 2
+                maxItems: 5
+                items:
+                  type: string
+              correctIndex:
+                type: integer
+                minimum: 0
+              explanation:
+                type: string
+
+    ImportResultDto:
+      type: object
+      properties:
+        imported:
+          type: integer
+        skipped:
+          type: integer
+        errors:
+          type: array
+          items:
+            type: string
+
+    QuestionAdminDto:
+      allOf:
+        - $ref: '#/components/schemas/QuestionResultDto'
+        - type: object
+          properties:
+            explanationStatus:
+              type: string
+              enum: [ORIGINAL, AI_DRAFT, HUMAN_VALIDATED]
+            aiConfidenceScore:
+              type: number
+              nullable: true
+            lastReviewedAt:
+              type: string
+              format: date-time
+              nullable: true
+
+    PublishChallengeRequest:
+      type: object
+      required: [certificationId, title, questionIds, startsAt, endsAt]
+      properties:
+        certificationId:
+          type: string
+        themeCode:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        questionIds:
+          type: array
+          minItems: 5
+          maxItems: 20
+          items:
+            type: string
+            format: uuid
+        startsAt:
+          type: string
+          format: date-time
+        endsAt:
+          type: string
+          format: date-time
+
+    PagedQuestion:
+      $ref: '#/components/schemas/PageWrapper'
+
+    # --- Commun ---
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+        timestamp:
+          type: string
+          format: date-time
+
+    PageWrapper:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            type: object
+        totalElements:
+          type: integer
+        totalPages:
+          type: integer
+        page:
+          type: integer
+        size:
+          type: integer

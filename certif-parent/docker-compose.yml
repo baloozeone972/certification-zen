@@ -1,0 +1,214 @@
+# certif-parent/docker-compose.yml
+# CertifApp — Stack développement local complète
+# Usage : docker compose up -d
+
+name: certifapp
+
+services:
+
+  # ===========================================================================
+  # PostgreSQL 16 avec pgvector
+  # ===========================================================================
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: certifapp-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB:       certifapp
+      POSTGRES_USER:     certifapp
+      POSTGRES_PASSWORD: certifapp_dev_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./certif-infrastructure/src/main/resources/db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U certifapp -d certifapp"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - certifapp-network
+
+  # ===========================================================================
+  # Redis — rate limiting, sessions, cache distribuée
+  # ===========================================================================
+  redis:
+    image: redis:7.2-alpine
+    container_name: certifapp-redis
+    restart: unless-stopped
+    command: redis-server --requirepass certifapp_redis_dev
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "certifapp_redis_dev", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      - certifapp-network
+
+  # ===========================================================================
+  # Ollama — LLM local (profil local)
+  # Modèles recommandés : llama3.1:8b-instruct-q4_K_M + nomic-embed-text
+  # Premier démarrage : docker exec certifapp-ollama ollama pull llama3.1:8b-instruct-q4_K_M
+  # ===========================================================================
+  ollama:
+    image: ollama/ollama:latest
+    container_name: certifapp-ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+    environment:
+      OLLAMA_KEEP_ALIVE: "24h"
+      OLLAMA_NUM_PARALLEL: "2"
+    # Décommenter pour GPU NVIDIA :
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:11434/api/version || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - certifapp-network
+
+  # ===========================================================================
+  # Spring Boot backend
+  # ===========================================================================
+  app:
+    build:
+      context: ..
+      dockerfile: certif-parent/certif-api-rest/Dockerfile
+      target: runtime
+    container_name: certifapp-backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      ollama:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/certifapp
+      SPRING_DATASOURCE_USERNAME: certifapp
+      SPRING_DATASOURCE_PASSWORD: certifapp_dev_password
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      SPRING_DATA_REDIS_PASSWORD: certifapp_redis_dev
+      # LangChain4j Ollama (profil local)
+      LANGCHAIN4J_OLLAMA_BASE_URL: http://ollama:11434
+      LANGCHAIN4J_OLLAMA_MODEL_NAME: llama3.1:8b-instruct-q4_K_M
+      LANGCHAIN4J_OLLAMA_EMBEDDING_MODEL: nomic-embed-text
+      # JWT
+      APP_JWT_SECRET: local_dev_jwt_secret_must_be_at_least_256_bits_long_for_hs256
+      APP_JWT_ACCESS_EXPIRY: 900
+      APP_JWT_REFRESH_EXPIRY: 604800
+      # Stripe (sandbox)
+      STRIPE_SECRET_KEY: sk_test_replace_with_real_key
+      STRIPE_WEBHOOK_SECRET: whsec_replace_with_real_webhook_secret
+      # Virtual Threads
+      JDK_VIRTUAL_THREAD_SCHEDULER_PARALLELISM: "4"
+      SPRING_THREADS_VIRTUAL_ENABLED: "true"
+      # Mail (MailHog local)
+      SPRING_MAIL_HOST: mailhog
+      SPRING_MAIL_PORT: 1025
+      SPRING_MAIL_USERNAME: ""
+      SPRING_MAIL_PASSWORD: ""
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: "false"
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: "false"
+    ports:
+      - "8080:8080"
+    volumes:
+      - app_logs:/app/logs
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
+    networks:
+      - certifapp-network
+
+  # ===========================================================================
+  # Angular frontend (dev server ng serve)
+  # ===========================================================================
+  web:
+    build:
+      context: certif-web
+      dockerfile: certif-web/Dockerfile
+      target: dev
+    container_name: certifapp-frontend
+    restart: unless-stopped
+    depends_on:
+      app:
+        condition: service_healthy
+    environment:
+      API_URL: http://app:8080
+      NODE_ENV: development
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./certif-web/src:/app/src:ro          # hot reload
+      - node_modules_cache:/app/node_modules
+    networks:
+      - certifapp-network
+
+  # ===========================================================================
+  # Nginx — reverse proxy (unifie :80 → app:8080 + web:4200)
+  # ===========================================================================
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: certifapp-nginx
+    restart: unless-stopped
+    depends_on:
+      - app
+      - web
+    ports:
+      - "80:80"
+    volumes:
+      - ./certif-api-rest/src/main/resources/nginx/nginx.local.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - certifapp-network
+
+  # ===========================================================================
+  # MailHog — serveur SMTP local pour tester les emails
+  # Interface web : http://localhost:8025
+  # ===========================================================================
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: certifapp-mailhog
+    restart: unless-stopped
+    ports:
+      - "1025:1025"   # SMTP
+      - "8025:8025"   # Interface web
+    networks:
+      - certifapp-network
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  ollama_models:
+    driver: local
+  app_logs:
+    driver: local
+  node_modules_cache:
+    driver: local
+
+networks:
+  certifapp-network:
+    driver: bridge
