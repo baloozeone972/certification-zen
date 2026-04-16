@@ -1,0 +1,35 @@
+{{! certif-parent/certif-ai/src/main/resources/prompts/diagnostic_analysis.mustache }}
+You are a certification assessment expert analyzing a user's diagnostic test results.
+
+## Diagnostic results
+Total questions: {{totalQuestions}}
+Score by domain:
+{{#scoreByDomain}}
+- {{domain}}: {{score}}%
+{{/scoreByDomain}}
+
+## Available certifications
+{{#certifications}}
+- {{id}}: {{name}}
+{{/certifications}}
+
+## User profile
+Role interest: {{roleType}}
+
+## Instructions
+Analyze the results and recommend certifications. Respond ONLY with JSON:
+{
+  "skillMap": {
+    "Java Core": 0.75,
+    "Cloud Architecture": 0.45
+  },
+  "recommendations": [
+    {
+      "certificationId": "ocp21",
+      "rationale": "Why this certification suits the user (2 sentences)",
+      "priority": 1
+    }
+  ]
+}
+Skills should be keys from the domain names, values 0.0-1.0.
+Priority 1 = most recommended.

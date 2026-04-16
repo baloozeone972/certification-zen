@@ -1,0 +1,15 @@
+# certif-parent/certif-ai/src/main/resources/application-local.yml
+certifapp:
+  ai:
+    ollama:
+      base-url: ${LANGCHAIN4J_OLLAMA_BASE_URL:http://localhost:11434}
+      light-model: ${LANGCHAIN4J_OLLAMA_MODEL_NAME:llama3.1:8b-instruct-q4_K_M}
+      heavy-model: ${LANGCHAIN4J_OLLAMA_MODEL_NAME:llama3.1:8b-instruct-q4_K_M}
+      embedding-model: ${LANGCHAIN4J_OLLAMA_EMBEDDING_MODEL:nomic-embed-text}
+    embedding:
+      dimension: 1536
+
+logging:
+  level:
+    com.certifapp.ai: DEBUG
+    dev.langchain4j: DEBUG
