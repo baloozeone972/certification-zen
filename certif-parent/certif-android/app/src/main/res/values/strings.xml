@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- certif-parent/certif-android/app/src/main/res/values/strings.xml -->
+<resources>
+    <string name="app_name">CertifApp</string>
+    <string name="home_title">Certifications</string>
+    <string name="exam_start">Démarrer l'examen</string>
+    <string name="exam_submit">Terminer l'examen</string>
+    <string name="results_passed">Réussi ✓</string>
+    <string name="results_failed">Échec ✗</string>
+    <string name="login_button">Se connecter</string>
+    <string name="register_button">Créer un compte</string>
+    <string name="loading">Chargement...</string>
+    <string name="retry">Réessayer</string>
+    <string name="offline_mode">Mode hors-ligne</string>
+</resources>
