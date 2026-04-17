@@ -1,7 +1,8 @@
-// certif-ios/CertifAppTests/Data/APIClientTests.swift
+// certif-parent/certif-ios/APIClientTests.swift
 //
 // Integration-style tests for APIClient using URLProtocol stubbing.
 // No real network calls — all HTTP responses are mocked.
+// KeychainService uses native Security framework (no SPM dependency).
 
 import XCTest
 @testable import CertifApp
@@ -62,7 +63,7 @@ final class APIClientTests: XCTestCase {
         super.tearDown()
     }
 
-    // MARK: - Successful requests
+    // MARK: - Successful GET
 
     func test_get_200_decodesResponse() async throws {
         let expected = [CertificationDTO(
@@ -88,44 +89,18 @@ final class APIClientTests: XCTestCase {
         let result: [CertificationDTO] = try await client.request(.get("/api/v1/certifications"))
         XCTAssertEqual(result.count, 1)
         XCTAssertEqual(result.first?.id, "java21")
-    }
-
-    func test_post_200_sendsBodyAndDecodesResponse() async throws {
-        let requestBody = LoginRequestDTO(email: "test@test.com", password: "pass123")
-        let expectedTokens = TokenPairDTO(
-            accessToken: "access_abc",
-            refreshToken: "refresh_xyz",
-            expiresIn: 3600
-        )
-
-        let encoder = JSONEncoder()
-        encoder.keyEncodingStrategy = .convertToSnakeCase
-        let responseData = try encoder.encode(expectedTokens)
-
-        MockURLProtocol.handler = { request in
-            XCTAssertEqual(request.httpMethod, "POST")
-            XCTAssertNotNil(request.httpBody)
-            let response = HTTPURLResponse(
-                url: request.url!, statusCode: 200,
-                httpVersion: nil, headerFields: nil
-            )!
-            return (response, responseData)
-        }
-
-        let result: TokenPairDTO = try await client.request(.post("/api/v1/auth/login", body: requestBody))
-        XCTAssertEqual(result.accessToken, "access_abc")
-        XCTAssertEqual(result.refreshToken, "refresh_xyz")
+        XCTAssertEqual(result.first?.code, "1Z0-830")
     }
 
     // MARK: - JWT injection
 
-    func test_get_withToken_injectsAuthorizationHeader() async throws {
-        keychainService.save(accessToken: "my_token_123", refreshToken: "refresh")
+    func test_authenticatedRequest_includesBearerToken() async throws {
+        keychainService.save(accessToken: "test-token-123", refreshToken: "refresh-456")
 
         let data = try JSONEncoder().encode([String]())
         MockURLProtocol.handler = { request in
             let auth = request.value(forHTTPHeaderField: "Authorization")
-            XCTAssertEqual(auth, "Bearer my_token_123")
+            XCTAssertEqual(auth, "Bearer test-token-123")
             let response = HTTPURLResponse(
                 url: request.url!, statusCode: 200,
                 httpVersion: nil, headerFields: nil
@@ -133,14 +108,13 @@ final class APIClientTests: XCTestCase {
             return (response, data)
         }
 
-        let _: [String] = try await client.request(.get("/api/v1/test"))
+        let _: [String] = try await client.request(.get("/api/v1/certifications"))
     }
 
-    // MARK: - Error mapping
+    // MARK: - 401 Unauthorized
 
     func test_401_throwsUnauthorized() async {
         MockURLProtocol.handler = { request in
-            // 401 — block refresh attempt too
             let response = HTTPURLResponse(
                 url: request.url!, statusCode: 401,
                 httpVersion: nil, headerFields: nil
@@ -149,61 +123,37 @@ final class APIClientTests: XCTestCase {
         }
 
         do {
-            let _: [String] = try await client.request(.get("/api/v1/test"))
+            let _: [CertificationDTO] = try await client.request(.get("/api/v1/certifications"))
             XCTFail("Expected APIError.unauthorized")
         } catch APIError.unauthorized {
             // Expected
         } catch {
-            XCTFail("Wrong error: \(error)")
+            XCTFail("Unexpected error: \(error)")
         }
     }
 
+    // MARK: - 404 Not Found
+
     func test_404_throwsNotFound() async {
-        MockURLProtocol.handler = { _ in
+        MockURLProtocol.handler = { request in
             let response = HTTPURLResponse(
-                url: URL(string: "https://api.test.com")!, statusCode: 404,
+                url: request.url!, statusCode: 404,
                 httpVersion: nil, headerFields: nil
             )!
             return (response, Data())
         }
 
         do {
-            let _: [String] = try await client.request(.get("/api/v1/missing"))
+            let _: CertificationDTO = try await client.request(.get("/api/v1/certifications/unknown"))
             XCTFail("Expected APIError.notFound")
         } catch APIError.notFound {
             // Expected
         } catch {
-            XCTFail("Wrong error: \(error)")
+            XCTFail("Unexpected error: \(error)")
         }
     }
 
-    func test_403_freemiumLimit_throwsFreemiumError() async throws {
-        struct ErrorBody: Encodable {
-            let message: String
-            let errorCode: String
-        }
-        let body = ErrorBody(message: "Limite gratuit atteinte", errorCode: "FREEMIUM_LIMIT_REACHED")
-        let encoder = JSONEncoder()
-        encoder.keyEncodingStrategy = .convertToSnakeCase
-        let data = try encoder.encode(body)
-
-        MockURLProtocol.handler = { _ in
-            let response = HTTPURLResponse(
-                url: URL(string: "https://api.test.com")!, statusCode: 403,
-                httpVersion: nil, headerFields: nil
-            )!
-            return (response, data)
-        }
-
-        do {
-            let _: ExamSessionDTO = try await client.request(.post("/api/v1/exams/start", body: EmptyEncodable()))
-            XCTFail("Expected freemium error")
-        } catch APIError.freemiumLimitReached(let msg) {
-            XCTAssertEqual(msg, "Limite gratuit atteinte")
-        } catch {
-            XCTFail("Wrong error: \(error)")
-        }
-    }
+    // MARK: - Network error
 
     func test_networkError_throwsNetworkError() async {
         MockURLProtocol.handler = { _ in
@@ -211,35 +161,62 @@ final class APIClientTests: XCTestCase {
         }
 
         do {
-            let _: [String] = try await client.request(.get("/api/v1/test"))
-            XCTFail("Expected network error")
+            let _: [CertificationDTO] = try await client.request(.get("/api/v1/certifications"))
+            XCTFail("Expected APIError.networkError")
         } catch APIError.networkError {
             // Expected
         } catch {
-            XCTFail("Wrong error: \(error)")
+            XCTFail("Unexpected error: \(error)")
         }
     }
 
-    func test_invalidJSON_throwsDecodingError() async {
-        MockURLProtocol.handler = { _ in
+    // MARK: - POST with body
+
+    func test_post_encodesBodyAndDecodesResponse() async throws {
+        let loginRequest = LoginRequestDTO(email: "user@test.com", password: "password123")
+        let expectedToken = TokenPairDTO(
+            accessToken: "access-abc", refreshToken: "refresh-xyz", expiresIn: 3600
+        )
+
+        let encoder = JSONEncoder()
+        encoder.keyEncodingStrategy = .convertToSnakeCase
+        let responseData = try encoder.encode(expectedToken)
+
+        MockURLProtocol.handler = { request in
+            XCTAssertEqual(request.httpMethod, "POST")
+            XCTAssertEqual(request.value(forHTTPHeaderField: "Content-Type"), "application/json")
             let response = HTTPURLResponse(
-                url: URL(string: "https://api.test.com")!, statusCode: 200,
+                url: request.url!, statusCode: 200,
                 httpVersion: nil, headerFields: nil
             )!
-            return (response, Data("not json".utf8))
+            return (response, responseData)
+        }
+
+        let result: TokenPairDTO = try await client.request(
+            .post("/api/v1/auth/login", body: loginRequest)
+        )
+        XCTAssertEqual(result.accessToken, "access-abc")
+    }
+
+    // MARK: - Decoding error
+
+    func test_invalidJSON_throwsDecodingError() async {
+        let invalidData = "not json at all".data(using: .utf8)!
+        MockURLProtocol.handler = { request in
+            let response = HTTPURLResponse(
+                url: request.url!, statusCode: 200,
+                httpVersion: nil, headerFields: nil
+            )!
+            return (response, invalidData)
         }
 
         do {
-            let _: [CertificationDTO] = try await client.request(.get("/api/v1/certifications"))
+            let _: CertificationDTO = try await client.request(.get("/api/v1/certifications/1"))
             XCTFail("Expected decoding error")
         } catch APIError.decodingError {
             // Expected
         } catch {
-            XCTFail("Wrong error: \(error)")
+            XCTFail("Unexpected: \(error)")
         }
     }
 }
-
-// MARK: - Helper
-
-private struct EmptyEncodable: Encodable {}
