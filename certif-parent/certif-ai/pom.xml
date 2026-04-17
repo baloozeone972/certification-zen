@@ -1,133 +1,101 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- certif-ai/pom.xml -->
+<!-- certif-parent/certif-ai/pom.xml -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
          https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.certifapp</groupId>
-        <artifactId>certif-parent</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
-    </parent>
+  <parent>
+    <groupId>com.certifapp</groupId>
+    <artifactId>certif-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
 
-    <artifactId>certif-ai</artifactId>
-    <packaging>jar</packaging>
-    <name>CertifApp — AI Services</name>
-    <description>
-        Services IA : LangChain4j, ModelRouter (Ollama local / Claude cloud),
-        RAG sur le corpus de questions et cours, génération de contenu pédagogique,
-        assistant conversationnel, simulateur d'entretien, coach hebdomadaire.
-        Profil local → Ollama. Profil prod → Claude API Anthropic.
-    </description>
+  <artifactId>certif-ai</artifactId>
+  <name>certif-ai</name>
+  <description>
+    AI module — LangChain4j ModelRouter (Ollama local / Anthropic Claude prod),
+    RAG pgvector, explanation enrichment, flashcard generation, chat assistant,
+    coach report, interview simulator, diagnostic analyzer.
+  </description>
 
-    <dependencies>
-        <!-- Modules internes -->
-        <dependency>
-            <groupId>com.certifapp</groupId>
-            <artifactId>certif-domain</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.certifapp</groupId>
-            <artifactId>certif-application</artifactId>
-        </dependency>
+  <dependencies>
+    <!-- Domain -->
+    <dependency>
+      <groupId>com.certifapp</groupId>
+      <artifactId>certif-domain</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
-        <!-- LangChain4j core -->
-        <dependency>
-            <groupId>dev.langchain4j</groupId>
-            <artifactId>langchain4j</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>dev.langchain4j</groupId>
-            <artifactId>langchain4j-core</artifactId>
-        </dependency>
+    <!-- Spring Boot (autoconfiguration, cache, scheduling) -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-cache</artifactId>
+    </dependency>
 
-        <!-- LangChain4j Spring Boot starter -->
-        <dependency>
-            <groupId>dev.langchain4j</groupId>
-            <artifactId>langchain4j-spring-boot-starter</artifactId>
-        </dependency>
+    <!-- LangChain4j core -->
+    <dependency>
+      <groupId>dev.langchain4j</groupId>
+      <artifactId>langchain4j</artifactId>
+      <version>${langchain4j.version}</version>
+    </dependency>
 
-        <!-- LangChain4j Anthropic (Claude) — profil prod -->
-        <dependency>
-            <groupId>dev.langchain4j</groupId>
-            <artifactId>langchain4j-anthropic</artifactId>
-        </dependency>
+    <!-- LangChain4j — Anthropic Claude -->
+    <dependency>
+      <groupId>dev.langchain4j</groupId>
+      <artifactId>langchain4j-anthropic</artifactId>
+      <version>${langchain4j.version}</version>
+    </dependency>
 
-        <!-- LangChain4j Ollama — profil local -->
-        <dependency>
-            <groupId>dev.langchain4j</groupId>
-            <artifactId>langchain4j-ollama</artifactId>
-        </dependency>
+    <!-- LangChain4j — Ollama -->
+    <dependency>
+      <groupId>dev.langchain4j</groupId>
+      <artifactId>langchain4j-ollama</artifactId>
+      <version>${langchain4j.version}</version>
+    </dependency>
 
-        <!-- LangChain4j Embeddings -->
-        <dependency>
-            <groupId>dev.langchain4j</groupId>
-            <artifactId>langchain4j-embeddings</artifactId>
-        </dependency>
+    <!-- LangChain4j — pgvector embedding store -->
+    <dependency>
+      <groupId>dev.langchain4j</groupId>
+      <artifactId>langchain4j-pgvector</artifactId>
+      <version>${langchain4j.version}</version>
+    </dependency>
 
-        <!-- LangChain4j pgvector store -->
-        <dependency>
-            <groupId>dev.langchain4j</groupId>
-            <artifactId>langchain4j-pgvector</artifactId>
-        </dependency>
+    <!-- Jackson (JSON parsing for AI responses) -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+    </dependency>
 
-        <!-- LangChain4j document loaders -->
-        <dependency>
-            <groupId>dev.langchain4j</groupId>
-            <artifactId>langchain4j-document-loader-filesystem</artifactId>
-        </dependency>
+    <!-- PostgreSQL driver (for pgvector DataSource) -->
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <scope>runtime</scope>
+    </dependency>
 
-        <!-- Spring Boot (pour les beans @Service, @Configuration) -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
+    <!-- Caffeine cache (aiExplanations 24h) -->
+    <dependency>
+      <groupId>com.github.ben-manes.caffeine</groupId>
+      <artifactId>caffeine</artifactId>
+    </dependency>
 
-        <!-- Cache pour les réponses IA (éviter appels répétés Claude API) -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-cache</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.ben-manes.caffeine</groupId>
-            <artifactId>caffeine</artifactId>
-        </dependency>
-
-        <!-- Jackson pour sérialisation des prompts et réponses IA -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-        </dependency>
-
-        <!-- Spring Data JPA (pour VectorStoreAdapter qui accède PostgreSQL pgvector) -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-
-        <!-- Tests -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>postgresql</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+    <!-- Test -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 </project>
