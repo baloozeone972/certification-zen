@@ -67,8 +67,9 @@ public class DiagnosticAnalyzer {
 
         try {
             String response = lightModel.generate(prompt);
-            String json = response.replaceAll("json\\s*|", "").trim();
-            return objectMapper.readValue(json, new TypeReference<>() {});
+            String json = response.replaceAll("json\s*|", "").trim();
+            return objectMapper.readValue(json, new TypeReference<>() {
+            });
         } catch (Exception e) {
             log.error("Failed to analyze diagnostic: {}", e.getMessage());
             return Map.of(

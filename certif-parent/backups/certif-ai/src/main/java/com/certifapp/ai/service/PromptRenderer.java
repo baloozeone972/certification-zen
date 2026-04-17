@@ -2,7 +2,6 @@
 package com.certifapp.ai.service;
 
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,7 +28,6 @@ public class PromptRenderer {
      * @param variables    key-value pairs to inject into the template
      * @return rendered prompt string
      */
-    @Transactional(readOnly = true)
     public String render(String templateName, Map<String, Object> variables) {
         String template = templateCache.computeIfAbsent(
                 templateName, this::loadTemplate);

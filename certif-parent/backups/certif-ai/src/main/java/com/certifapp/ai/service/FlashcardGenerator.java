@@ -68,7 +68,7 @@ public class FlashcardGenerator {
         try {
             String response = lightModel.generate(prompt);
             // Strip potential markdown code fences
-            String json = response.replaceAll("json\\s*|", "").trim();
+            String json = response.replaceAll("json\s*|", "").trim();
             List<Map<String, String>> raw = objectMapper.readValue(
                     json, new TypeReference<>() {
                     });
