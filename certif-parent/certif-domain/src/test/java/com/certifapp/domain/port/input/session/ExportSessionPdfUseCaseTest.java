@@ -3,25 +3,14 @@ package com.certifapp.domain.port.input.session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 public class ExportSessionPdfUseCaseTest {
-
-    @Mock
-    private SessionRepository sessionRepository;
-
-    @InjectMocks
-    private ExportSessionPdfUseCase exportSessionPdfUseCase;
 
     private UUID sessionId;
     private UUID userId;
@@ -36,7 +25,9 @@ public class ExportSessionPdfUseCaseTest {
     @DisplayName("Nominal case: export session PDF for a valid user")
     public void execute_validSessionId_andValidUserId_returnPdfContent() throws Exception {
         byte[] expectedPdfContent = new byte[1024];
+        // Mocking sessionRepository.findById to return an Optional containing a new ExamSession
         when(sessionRepository.findById(sessionId)).thenReturn(Optional.of(new ExamSession()));
+        // Mocking pdfGenerator.generatePdf to return the expected PDF content
         when(pdfGenerator.generatePdf(any(ExamSession.class))).thenReturn(expectedPdfContent);
 
         byte[] pdfContent = exportSessionPdfUseCase.execute(sessionId, userId);
@@ -48,6 +39,7 @@ public class ExportSessionPdfUseCaseTest {
     @Test
     @DisplayName("Edge case: session not found")
     public void execute_sessionNotFound_throwExamSessionNotFoundException() {
+        // Mocking sessionRepository.findById to return an empty Optional
         when(sessionRepository.findById(sessionId)).thenReturn(Optional.empty());
 
         Exception exception = catchThrowable(() -> exportSessionPdfUseCase.execute(sessionId, userId));
@@ -63,6 +55,7 @@ public class ExportSessionPdfUseCaseTest {
         User user = new User();
         user.setPlan(UserPlan.FREE);
 
+        // Mocking userRepository.findBySessionId to return an Optional containing the user
         when(userRepository.findBySessionId(eq(sessionId))).thenReturn(Optional.of(user));
 
         Exception exception = catchThrowable(() -> exportSessionPdfUseCase.execute(sessionId, userId));
@@ -72,4 +65,3 @@ public class ExportSessionPdfUseCaseTest {
         verify(sessionRepository, times(1)).findById(sessionId);
     }
 }
-

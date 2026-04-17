@@ -1,34 +1,17 @@
 package com.certifapp.domain.model.certification;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.Collections;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@ExtendWith(MockitoExtension.class)
 public class CertificationTest {
 
-    @Mock
-    private CertificationTheme theme1;
-
-    @Mock
-    private CertificationTheme theme2;
-
-    @InjectMocks
-    private Certification certification;
-
-    @BeforeEach
-    public void setUp() {
-        certification = new Certification(
+    @Test
+    @DisplayName("passingQuestionsCount_calculatesCorrectlyForNominalCase")
+    public void passingQuestionsCount_calculatesCorrectlyForNominalCase() {
+        Certification certification = new Certification(
                 "ocp21",
                 "1Z0-830",
                 "Oracle Certified Professional Java SE 21",
@@ -38,14 +21,9 @@ public class CertificationTest {
                 90,
                 68,
                 "MCQ",
-                List.of(theme1, theme2),
+                List.of(),
                 true
         );
-    }
-
-    @Test
-    @DisplayName("passingQuestionsCount_calculatesCorrectlyForNominalCase")
-    public void passingQuestionsCount_calculatesCorrectlyForNominalCase() {
         int result = certification.passingQuestionsCount();
         assertThat(result).isEqualTo(56);
     }
@@ -53,7 +31,7 @@ public class CertificationTest {
     @Test
     @DisplayName("passingQuestionsCount_returnsMinimumOfOne")
     public void passingQuestionsCount_returnsMinimumOfOne() {
-        Certification cert = new Certification(
+        Certification certification = new Certification(
                 "ocp21",
                 "1Z0-830",
                 "Oracle Certified Professional Java SE 21",
@@ -63,17 +41,17 @@ public class CertificationTest {
                 90,
                 1,
                 "MCQ",
-                Collections.emptyList(),
+                List.of(),
                 true
         );
-        int result = cert.passingQuestionsCount();
+        int result = certification.passingQuestionsCount();
         assertThat(result).isEqualTo(1);
     }
 
     @Test
     @DisplayName("passingQuestionsCount_returnsMaximumOfTotalQuestions")
     public void passingQuestionsCount_returnsMaximumOfTotalQuestions() {
-        Certification cert = new Certification(
+        Certification certification = new Certification(
                 "ocp21",
                 "1Z0-830",
                 "Oracle Certified Professional Java SE 21",
@@ -83,16 +61,29 @@ public class CertificationTest {
                 90,
                 100,
                 "MCQ",
-                Collections.emptyList(),
+                List.of(),
                 true
         );
-        int result = cert.passingQuestionsCount();
+        int result = certification.passingQuestionsCount();
         assertThat(result).isEqualTo(1);
     }
 
     @Test
     @DisplayName("examDurationSeconds_calculatesCorrectlyForNominalCase")
     public void examDurationSeconds_calculatesCorrectlyForNominalCase() {
+        Certification certification = new Certification(
+                "ocp21",
+                "1Z0-830",
+                "Oracle Certified Professional Java SE 21",
+                "Long description...",
+                80,
+                40,
+                90,
+                68,
+                "MCQ",
+                List.of(),
+                true
+        );
         int result = certification.examDurationSeconds();
         assertThat(result).isEqualTo(5400);
     }
@@ -100,13 +91,41 @@ public class CertificationTest {
     @Test
     @DisplayName("findTheme_returnsMatchingThemeIfFound")
     public void findTheme_returnsMatchingThemeIfFound() {
+        Certification certification = new Certification(
+                "ocp21",
+                "1Z0-830",
+                "Oracle Certified Professional Java SE 21",
+                "Long description...",
+                80,
+                40,
+                90,
+                68,
+                "MCQ",
+                List.of(),
+                true
+        );
+        CertificationTheme theme = new CertificationTheme("virtual_threads", "Virtual Threads");
+        certification.addTheme(theme);
         CertificationTheme foundTheme = certification.findTheme("virtual_threads");
-        assertThat(foundTheme).isEqualTo(theme1);
+        assertThat(foundTheme).isEqualTo(theme);
     }
 
     @Test
     @DisplayName("findTheme_returnsNullIfNotFound")
     public void findTheme_returnsNullIfNotFound() {
+        Certification certification = new Certification(
+                "ocp21",
+                "1Z0-830",
+                "Oracle Certified Professional Java SE 21",
+                "Long description...",
+                80,
+                40,
+                90,
+                68,
+                "MCQ",
+                List.of(),
+                true
+        );
         CertificationTheme foundTheme = certification.findTheme("non_existent_theme");
         assertThat(foundTheme).isNull();
     }
@@ -125,7 +144,7 @@ public class CertificationTest {
                     90,
                     68,
                     "MCQ",
-                    List.of(theme1, theme2),
+                    List.of(),
                     true
             );
         });
@@ -146,7 +165,7 @@ public class CertificationTest {
                     90,
                     68,
                     "MCQ",
-                    List.of(theme1, theme2),
+                    List.of(),
                     true
             );
         });
@@ -167,7 +186,7 @@ public class CertificationTest {
                     90,
                     68,
                     "MCQ",
-                    List.of(theme1, theme2),
+                    List.of(),
                     true
             );
         });
@@ -188,7 +207,7 @@ public class CertificationTest {
                     -1,
                     68,
                     "MCQ",
-                    List.of(theme1, theme2),
+                    List.of(),
                     true
             );
         });
@@ -209,11 +228,10 @@ public class CertificationTest {
                     90,
                     150,
                     "MCQ",
-                    List.of(theme1, theme2),
+                    List.of(),
                     true
             );
         });
         assertThat(exception.getMessage()).isEqualTo("passingScore must be between 1 and 100, got: 150");
     }
 }
-

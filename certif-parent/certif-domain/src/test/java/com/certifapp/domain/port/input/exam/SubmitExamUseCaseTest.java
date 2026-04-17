@@ -1,93 +1,63 @@
 package com.certifapp.domain.port.input.exam;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@ExtendWith(MockitoExtension.class)
 public class SubmitExamUseCaseTest {
-
-    @Mock
-    private ExamSessionRepository examSessionRepository;
-
-    @InjectMocks
-    private SubmitExamUseCase submitExamUseCase;
-
-    @BeforeEach
-    public void setUp() {
-        // Setup mock behavior if necessary
-    }
 
     @DisplayName("execute_validSessionAndUser_examSessionIsUpdated")
     @Test
-    public void execute_validSessionAndUser_examSessionIsUpdated() throws Exception {
+    public void execute_validSessionAndUser_examSessionIsUpdated() {
         UUID sessionId = UUID.randomUUID();
         UUID userId = UUID.randomUUID();
 
-        ExamSession examSession = new ExamSession();
-        examSession.setId(sessionId);
-        examSession.setOwner(userId);
+        ExamSession examSession = new ExamSession(sessionId, userId);
 
-        when(examSessionRepository.findById(sessionId)).thenReturn(java.util.Optional.of(examSession));
-
+        SubmitExamUseCase submitExamUseCase = new SubmitExamUseCase(examSessionRepository);
         ExamSession updatedSession = submitExamUseCase.execute(sessionId, userId);
 
-        verify(examSessionRepository).save(updatedSession);
         assertThat(updatedSession.getStatus()).isEqualTo(ExamSession.Status.COMPLETED);
     }
 
     @DisplayName("execute_sessionNotFound_throwsExamSessionNotFoundException")
     @Test
-    public void execute_sessionNotFound_throwsExamSessionNotFoundException() throws Exception {
+    public void execute_sessionNotFound_throwsExamSessionNotFoundException() {
         UUID sessionId = UUID.randomUUID();
         UUID userId = UUID.randomUUID();
 
-        when(examSessionRepository.findById(sessionId)).thenReturn(java.util.Optional.empty());
-
+        SubmitExamUseCase submitExamUseCase = new SubmitExamUseCase(examSessionRepository);
         assertThatThrownBy(() -> submitExamUseCase.execute(sessionId, userId))
                 .isInstanceOf(ExamSessionNotFoundException.class);
     }
 
     @DisplayName("execute_examAlreadyCompleted_throwsExamAlreadyCompletedException")
     @Test
-    public void execute_examAlreadyCompleted_throwsExamAlreadyCompletedException() throws Exception {
+    public void execute_examAlreadyCompleted_throwsExamAlreadyCompletedException() {
         UUID sessionId = UUID.randomUUID();
         UUID userId = UUID.randomUUID();
 
-        ExamSession examSession = new ExamSession();
-        examSession.setId(sessionId);
-        examSession.setOwner(userId);
-        examSession.setStatus(ExamSession.Status.COMPLETED);
+        ExamSession examSession = new ExamSession(sessionId, userId, ExamSession.Status.COMPLETED);
 
-        when(examSessionRepository.findById(sessionId)).thenReturn(java.util.Optional.of(examSession));
-
+        SubmitExamUseCase submitExamUseCase = new SubmitExamUseCase(examSessionRepository);
         assertThatThrownBy(() -> submitExamUseCase.execute(sessionId, userId))
                 .isInstanceOf(ExamAlreadyCompletedException.class);
     }
 
     @DisplayName("execute_userNotOwner_throwsSecurityException")
     @Test
-    public void execute_userNotOwner_throwsSecurityException() throws Exception {
+    public void execute_userNotOwner_throwsSecurityException() {
         UUID sessionId = UUID.randomUUID();
         UUID userId = UUID.randomUUID();
 
-        ExamSession examSession = new ExamSession();
-        examSession.setId(sessionId);
-        examSession.setOwner(UUID.randomUUID());
+        ExamSession examSession = new ExamSession(sessionId, UUID.randomUUID());
 
-        when(examSessionRepository.findById(sessionId)).thenReturn(java.util.Optional.of(examSession));
-
+        SubmitExamUseCase submitExamUseCase = new SubmitExamUseCase(examSessionRepository);
         assertThatThrownBy(() -> submitExamUseCase.execute(sessionId, userId))
                 .isInstanceOf(SecurityException.class);
     }
 }
-

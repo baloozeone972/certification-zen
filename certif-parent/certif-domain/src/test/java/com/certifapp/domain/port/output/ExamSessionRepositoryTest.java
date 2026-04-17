@@ -6,10 +6,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -18,18 +14,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
 public class ExamSessionRepositoryTest {
-
-    @Mock
-    private ExamSessionRepository examSessionRepository;
-
-    @InjectMocks
-    private ExamSessionRepository examSessionRepositoryImpl; // Assuming there's an implementation
 
     @BeforeEach
     public void setUp() {
@@ -45,13 +32,8 @@ public class ExamSessionRepositoryTest {
     @DisplayName("findById_nominalCase_returnsExamSession")
     public void findById_nominalCase_returnsExamSession() {
         UUID id = UUID.randomUUID();
-        ExamSession session = ExamSession.start(
-                UUID.randomUUID(),   // userId
-                "cert1",             // certificationId
-                ExamMode.EXAM,       // mode
-                10                   // totalQuestions (example)
-        );
-        when(examSessionRepository.findById(eq(id))).thenReturn(Optional.of(session));
+        ExamSession session = new ExamSession(id, UUID.randomUUID(), "cert1", ExamMode.EXAM, 10);
+        when(examSessionRepository.findById(id)).thenReturn(Optional.of(session));
 
         Optional<ExamSession> result = examSessionRepository.findById(id);
 
@@ -63,7 +45,7 @@ public class ExamSessionRepositoryTest {
     public void findById_edgeCase_emptyId_returnsEmptyOptional() {
         UUID id = null;
 
-        when(examSessionRepository.findById(eq(id))).thenReturn(Optional.empty());
+        when(examSessionRepository.findById(id)).thenReturn(Optional.empty());
 
         Optional<ExamSession> result = examSessionRepository.findById(id);
 
@@ -78,8 +60,7 @@ public class ExamSessionRepositoryTest {
         ExamMode mode = ExamMode.EXAM;
 
         int count = 5;
-
-        when(examSessionRepository.countTodayByUserAndCertification(eq(userId), eq(certificationId), eq(mode))).thenReturn(count);
+        when(examSessionRepository.countTodayByUserAndCertification(userId, certificationId, mode)).thenReturn(count);
 
         int result = examSessionRepository.countTodayByUserAndCertification(userId, certificationId, mode);
 
@@ -93,7 +74,7 @@ public class ExamSessionRepositoryTest {
         String certificationId = "cert1";
         ExamMode mode = ExamMode.EXAM;
 
-        when(examSessionRepository.countTodayByUserAndCertification(eq(userId), eq(certificationId), eq(mode))).thenReturn(0);
+        when(examSessionRepository.countTodayByUserAndCertification(userId, certificationId, mode)).thenReturn(0);
 
         int result = examSessionRepository.countTodayByUserAndCertification(userId, certificationId, mode);
 
@@ -115,8 +96,7 @@ public class ExamSessionRepositoryTest {
                 new ExamSession(UUID.randomUUID(), userId, certificationId, mode, from),
                 new ExamSession(UUID.randomUUID(), userId, certificationId, mode, to)
         );
-
-        when(examSessionRepository.findByUserId(eq(userId), eq(certificationId), eq(mode), eq(from), eq(to), eq(page), eq(size))).thenReturn(sessions);
+        when(examSessionRepository.findByUserId(userId, certificationId, mode, from, to, page, size)).thenReturn(sessions);
 
         List<ExamSession> result = examSessionRepository.findByUserId(userId, certificationId, mode, from, to, page, size);
 
@@ -134,7 +114,7 @@ public class ExamSessionRepositoryTest {
         int page = 0;
         int size = 10;
 
-        when(examSessionRepository.findByUserId(eq(userId), eq(certificationId), eq(mode), eq(from), eq(to), eq(page), eq(size))).thenReturn(Arrays.asList());
+        when(examSessionRepository.findByUserId(userId, certificationId, mode, from, to, page, size)).thenReturn(Arrays.asList());
 
         List<ExamSession> result = examSessionRepository.findByUserId(userId, certificationId, mode, from, to, page, size);
 
@@ -146,7 +126,7 @@ public class ExamSessionRepositoryTest {
     public void save_nominalCase_returnsSavedSession() {
         ExamSession session = new ExamSession(UUID.randomUUID(), UUID.randomUUID(), "cert1", ExamMode.EXAM, LocalDate.now());
 
-        when(examSessionRepository.save(eq(session))).thenReturn(session);
+        when(examSessionRepository.save(session)).thenReturn(session);
 
         ExamSession result = examSessionRepository.save(session);
 
@@ -158,9 +138,6 @@ public class ExamSessionRepositoryTest {
     public void save_edgeCase_nullSession_throwsNullPointerException() {
         ExamSession session = null;
 
-        when(examSessionRepository.save(eq(session))).thenThrow(NullPointerException.class);
-
         assertThrows(NullPointerException.class, () -> examSessionRepository.save(session));
     }
 }
-

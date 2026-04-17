@@ -4,37 +4,22 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.UUID;
-
-@ExtendWith(MockitoExtension.class)
 public class CertificationThemeTest {
-
-    @InjectMocks
-    private CertificationTheme certificationTheme;
 
     @BeforeEach
     public void setUp() {
-        certificationTheme = new CertificationTheme(
-                UUID.randomUUID(),
-                "ocp21",
-                "virtual_threads",
-                "Virtual Threads",
-                60,
-                60.0,
-                0
-        );
+        // Arrange is done in the test methods themselves
     }
 
     @Test
     @DisplayName("Should create a transient theme with default values")
     public void of_stateUnderTest_expectedBehavior() {
+        // Arrange
         CertificationTheme theme = CertificationTheme.of(
                 "ocp21", "virtual_threads", "Virtual Threads", 60, 0);
 
+        // Act and Assert
         Assertions.assertThat(theme.id()).isNull();
         Assertions.assertThat(theme.certificationId()).isEqualTo("ocp21");
         Assertions.assertThat(theme.code()).isEqualTo("virtual_threads");
@@ -47,6 +32,7 @@ public class CertificationThemeTest {
     @Test
     @DisplayName("Should throw IllegalArgumentException for blank certificationId")
     public void constructor_stateUnderTest_expectedBehavior() {
+        // Arrange and Act & Assert
         Assertions.assertThatThrownBy(() -> new CertificationTheme(
                         UUID.randomUUID(),
                         "",
@@ -62,6 +48,7 @@ public class CertificationThemeTest {
     @Test
     @DisplayName("Should throw IllegalArgumentException for blank code")
     public void constructor_stateUnderTest_expectedBehavior() {
+        // Arrange and Act & Assert
         Assertions.assertThatThrownBy(() -> new CertificationTheme(
                         UUID.randomUUID(),
                         "ocp21",
@@ -77,6 +64,7 @@ public class CertificationThemeTest {
     @Test
     @DisplayName("Should throw IllegalArgumentException for blank label")
     public void constructor_stateUnderTest_expectedBehavior() {
+        // Arrange and Act & Assert
         Assertions.assertThatThrownBy(() -> new CertificationTheme(
                         UUID.randomUUID(),
                         "ocp21",
@@ -92,6 +80,7 @@ public class CertificationThemeTest {
     @Test
     @DisplayName("Should throw IllegalArgumentException for negative questionCount")
     public void constructor_stateUnderTest_expectedBehavior() {
+        // Arrange and Act & Assert
         Assertions.assertThatThrownBy(() -> new CertificationTheme(
                         UUID.randomUUID(),
                         "ocp21",
@@ -107,6 +96,7 @@ public class CertificationThemeTest {
     @Test
     @DisplayName("Should throw IllegalArgumentException for weightPercent < 0")
     public void constructor_stateUnderTest_expectedBehavior() {
+        // Arrange and Act & Assert
         Assertions.assertThatThrownBy(() -> new CertificationTheme(
                         UUID.randomUUID(),
                         "ocp21",
@@ -122,6 +112,7 @@ public class CertificationThemeTest {
     @Test
     @DisplayName("Should throw IllegalArgumentException for weightPercent > 100")
     public void constructor_stateUnderTest_expectedBehavior() {
+        // Arrange and Act & Assert
         Assertions.assertThatThrownBy(() -> new CertificationTheme(
                         UUID.randomUUID(),
                         "ocp21",
@@ -134,4 +125,3 @@ public class CertificationThemeTest {
                 .hasMessage("weightPercent must be between 0 and 100, got: 101.0");
     }
 }
-

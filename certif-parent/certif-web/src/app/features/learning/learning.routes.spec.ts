@@ -30,7 +30,7 @@ describe('LEARNING_ROUTES', () => {
         const routes: Routes = LEARNING_ROUTES;
         const flashcardsRoute = routes.find(route => route.path === 'flashcards/:certId');
         expect(flashcardsRoute).toBeTruthy();
-        expect(dashboardRoute?.loadComponent).toBeDefined();
+        expect(flashcardsRoute?.loadComponent).toBeDefined();
     });
 
     it('should handle invalid path', () => {
@@ -39,4 +39,3 @@ describe('LEARNING_ROUTES', () => {
         expect(invalidRoute).toBeUndefined();
     });
 });
-

@@ -19,39 +19,41 @@ import {AuthService} from "../../core/auth/auth.service";
         <h1>Préparez vos certifications<br><span>avec l'IA</span></h1>
         <p>Examens blancs, flashcards SM-2, coach IA personnalisé, communauté.
            Rejoignez plus de 10 000 professionnels IT.</p>
-        @if (!authService.isAuthenticated()) {
+        <div *ngIf="!authService.isAuthenticated(); else authenticated">
           <div class="hero__actions">
             <a routerLink="/auth/register" class="btn btn-primary btn--lg">Commencer gratuitement</a>
             <a routerLink="/auth/login" class="btn btn-secondary btn--lg">Se connecter</a>
           </div>
-        }
+        </div>
       </div>
     </section>
 
-    <section class="catalogue container">
-      <h2>Certifications disponibles</h2>
-      @if (loading()) {
-        <div class="catalogue__loading">Chargement...</div>
-      } @else {
-        <div class="catalogue__grid">
-          @for (cert of certifications(); track cert.id) {
-            <div class="cert-card card">
-              <h3>{{ cert.name }}</h3>
-              <p class="cert-card__code">{{ cert.code }}</p>
-              <div class="cert-card__stats">
-                <span>{{ cert.totalQuestions }} questions</span>
-                <span>{{ cert.passingScore }}% requis</span>
-                <span>{{ cert.examDurationMin }} min</span>
-              </div>
-              <a [routerLink]="['/exam']" [queryParams]="{certId: cert.id}"
-                 class="btn btn-primary cert-card__btn">
-                Commencer l'examen
-              </a>
-            </div>
-          }
+    <ng-template #authenticated>
+      <section class="catalogue container">
+        <h2>Certifications disponibles</h2>
+        <div *ngIf="loading(); else loaded">
+          <div class="catalogue__loading">Chargement...</div>
         </div>
-      }
-    </section>
+      </section>
+    </ng-template>
+
+    <ng-template #loaded>
+      <div class="catalogue__grid">
+        <div *ngFor="let cert of certifications; track by cert.id" class="cert-card card">
+          <h3>{{ cert.name }}</h3>
+          <p class="cert-card__code">{{ cert.code }}</p>
+          <div class="cert-card__stats">
+            <span>{{ cert.totalQuestions }} questions</span>
+            <span>{{ cert.passingScore }}% requis</span>
+            <span>{{ cert.examDurationMin }} min</span>
+          </div>
+          <a [routerLink]="['/exam']" [queryParams]="{certId: cert.id}"
+             class="btn btn-primary cert-card__btn">
+            Commencer l'examen
+          </a>
+        </div>
+      </div>
+    </ng-template>
   `,
     styles: [`
     .hero { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);

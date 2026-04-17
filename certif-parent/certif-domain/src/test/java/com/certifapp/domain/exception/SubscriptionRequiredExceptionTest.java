@@ -1,46 +1,26 @@
 package com.certifapp.domain.exception;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
 
-@ExtendWith(MockitoExtension.class)
 public class SubscriptionRequiredExceptionTest {
 
-    @InjectMocks
-    private SubscriptionRequiredException exception;
-
-    @Mock
-    private CertifAppException mockCertifAppException;
-
-    @BeforeEach
-    public void setUp() {
-        exception = new SubscriptionRequiredException("Premium Feature");
-    }
-
     @Test
-    @DisplayName(" nominal case: should create an instance with the correct message and feature name")
+    @DisplayName("nominal case: should create an instance with the correct message and feature name")
     public void constructor_correctFeatureName_expectedMessageAndFeatureName() {
+        SubscriptionRequiredException exception = new SubscriptionRequiredException("Premium Feature");
         assertThat(exception.getMessage()).isEqualTo("Feature \"Premium Feature\" requires a PRO subscription");
         assertThat(exception.getFeatureName()).isEqualTo("Premium Feature");
     }
 
     @Test
-    @DisplayName(" edge case: should handle null feature name without throwing exception")
+    @DisplayName("edge case: should handle null feature name without throwing exception")
     public void constructor_nullFeatureName_expectedDefaultMessageAndNullFeatureName() {
         SubscriptionRequiredException exception = new SubscriptionRequiredException(null);
         assertThat(exception.getMessage()).isEqualTo("Feature \"null\" requires a PRO subscription");
         assertThat(exception.getFeatureName()).isNull();
     }
 
-
 }
-

@@ -1,37 +1,10 @@
 package com.certifapp.domain.model.learning;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDate;
-import java.util.UUID;
-
-import static org.mockito.Mockito.when;
-
-@ExtendWith(MockitoExtension.class)
 public class SM2ScheduleTest {
-
-    @Mock
-    private SomeDependency someDependency; // Replace with actual dependencies if any
-
-    @InjectMocks
-    private SM2Schedule sm2Schedule;
-
-    @BeforeEach
-    public void setUp() {
-        // Setup any common mock behavior here if necessary
-    }
-
-    @AfterEach
-    public void tearDown() {
-        // Clean up resources if needed
-    }
 
     @Test
     @DisplayName("initial_shouldCreateNewSM2Schedule")
@@ -56,7 +29,6 @@ public class SM2ScheduleTest {
     public void isDueToday_shouldReturnTrueIfDueToday() {
         SM2Schedule schedule = SM2Schedule.initial(UUID.randomUUID(), UUID.randomUUID());
 
-        when(someDependency.getCurrentDate()).thenReturn(LocalDate.now());
         Assertions.assertThat(schedule.isDueToday()).isTrue();
     }
 
@@ -65,7 +37,6 @@ public class SM2ScheduleTest {
     public void isDueToday_shouldReturnFalseIfNotDueToday() {
         SM2Schedule schedule = SM2Schedule.initial(UUID.randomUUID(), UUID.randomUUID());
 
-        when(someDependency.getCurrentDate()).thenReturn(LocalDate.now().plusDays(1));
         Assertions.assertThat(schedule.isDueToday()).isFalse();
     }
 

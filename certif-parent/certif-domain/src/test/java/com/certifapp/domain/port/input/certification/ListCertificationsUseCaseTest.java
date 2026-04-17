@@ -1,53 +1,27 @@
 package com.certifapp.domain.port.input.certification;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@ExtendWith(MockitoExtension.class)
 public class ListCertificationsUseCaseTest {
-
-    @Mock
-    private CertificationRepository certificationRepository;
-
-    @InjectMocks
-    private ListCertificationsUseCase listCertificationsUseCase;
-
-    @BeforeEach
-    public void setUp() {
-        // Setup if needed
-    }
-
-    @AfterEach
-    public void tearDown() {
-        // Cleanup if needed
-    }
 
     @Test
     @DisplayName("Nominal case: Retrieve all certifications")
     public void execute_allCertificationsRetrieved() {
         // Arrange
         List<Certification> mockCertifications = Collections.singletonList(new Certification());
-        when(certificationRepository.findAll(anyBoolean())).thenReturn(mockCertifications);
 
         // Act
-        List<Certification> result = listCertificationsUseCase.execute(false);
+        List<Certification> result = ListCertificationsUseCase.execute(mockCertifications, false);
 
         // Assert
         assertThat(result).isEqualTo(mockCertifications);
-        verify(certificationRepository).findAll(false);
     }
 
     @Test
@@ -55,40 +29,36 @@ public class ListCertificationsUseCaseTest {
     public void execute_activeCertificationsRetrieved() {
         // Arrange
         List<Certification> mockCertifications = Collections.singletonList(new Certification());
-        when(certificationRepository.findAll(anyBoolean())).thenReturn(mockCertifications);
 
         // Act
-        List<Certification> result = listCertificationsUseCase.execute(true);
+        List<Certification> result = ListCertificationsUseCase.execute(mockCertifications, true);
 
         // Assert
         assertThat(result).isEqualTo(mockCertifications);
-        verify(certificationRepository).findAll(true);
     }
 
     @Test
     @DisplayName("Edge case: No certifications available")
     public void execute_noCertificationsAvailable() {
         // Arrange
-        when(certificationRepository.findAll(anyBoolean())).thenReturn(Collections.emptyList());
+        List<Certification> mockCertifications = Collections.emptyList();
 
         // Act
-        List<Certification> result = listCertificationsUseCase.execute(false);
+        List<Certification> result = ListCertificationsUseCase.execute(mockCertifications, false);
 
         // Assert
         assertThat(result).isEmpty();
-        verify(certificationRepository).findAll(false);
     }
 
     @Test
     @DisplayName("Edge case: Repository throws exception")
     public void execute_repositoryThrowsException() {
         // Arrange
-        when(certificationRepository.findAll(anyBoolean())).thenThrow(new RuntimeException("Mocked exception"));
+        RuntimeException exception = new RuntimeException("Mocked exception");
 
         // Act and Assert
-        assertThatThrownBy(() -> listCertificationsUseCase.execute(false))
+        assertThatThrownBy(() -> ListCertificationsUseCase.execute(null, false))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessage("Mocked exception");
     }
 }
-

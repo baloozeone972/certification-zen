@@ -5,27 +5,19 @@ import com.certifapp.domain.model.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@ExtendWith(MockitoExtension.class)
 public class AuthenticateUserUseCaseTest {
 
-    @Mock
-    private UserRepository userRepository;
-
-    @InjectMocks
     private AuthenticateUserUseCase authenticateUserUseCase;
+    private UserRepository userRepository;
 
     @BeforeEach
     public void setUp() {
-        // Setup common mock behaviors if needed
+        userRepository = new InMemoryUserRepository(); // Assuming an in-memory implementation for testing
+        authenticateUserUseCase = new AuthenticateUserUseCase(userRepository);
     }
 
     @Test
@@ -35,8 +27,7 @@ public class AuthenticateUserUseCaseTest {
         String password = "password123";
         User expectedUser = new User(email, "hashedPassword");
 
-        when(userRepository.findByEmail(email)).thenReturn(expectedUser);
-        when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
+        userRepository.save(expectedUser);
 
         User authenticatedUser = authenticateUserUseCase.execute(email, password);
 
@@ -48,8 +39,6 @@ public class AuthenticateUserUseCaseTest {
     public void authenticateUser_userNotFound_InvalidCredentialsException() throws InvalidCredentialsException {
         String email = "test@example.com";
         String password = "password123";
-
-        when(userRepository.findByEmail(email)).thenReturn(null);
 
         assertThatThrownBy(() -> authenticateUserUseCase.execute(email, password))
                 .isInstanceOf(InvalidCredentialsException.class)
@@ -63,12 +52,10 @@ public class AuthenticateUserUseCaseTest {
         String password = "wrongpassword";
         User expectedUser = new User(email, "hashedPassword");
 
-        when(userRepository.findByEmail(email)).thenReturn(expectedUser);
-        when(passwordEncoder.matches(anyString(), anyString())).thenReturn(false);
+        userRepository.save(expectedUser);
 
         assertThatThrownBy(() -> authenticateUserUseCase.execute(email, password))
                 .isInstanceOf(InvalidCredentialsException.class)
                 .hasMessage("Invalid credentials");
     }
 }
-

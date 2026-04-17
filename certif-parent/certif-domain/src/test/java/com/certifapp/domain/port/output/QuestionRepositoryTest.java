@@ -5,25 +5,12 @@ import com.certifapp.domain.model.question.QuestionFilter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 public class QuestionRepositoryTest {
-
-    @Mock
-    private QuestionRepository questionRepository;
-
-    @InjectMocks
-    private QuestionRepository questionRepositoryImpl; // Assuming an implementation exists
 
     private UUID testQuestionId;
     private String testLegacyId;
@@ -43,10 +30,13 @@ public class QuestionRepositoryTest {
     @Test
     @DisplayName("findById_nominalCase_questionFound")
     public void findById_nominalCase_questionFound() {
+        // Arrange
         when(questionRepository.findById(testQuestionId)).thenReturn(Optional.of(new Question()));
 
+        // Act
         Optional<Question> result = questionRepository.findById(testQuestionId);
 
+        // Assert
         assertThat(result).isPresent();
         verify(questionRepository, times(1)).findById(testQuestionId);
     }
@@ -54,10 +44,13 @@ public class QuestionRepositoryTest {
     @Test
     @DisplayName("findById_nominalCase_questionNotFound")
     public void findById_nominalCase_questionNotFound() {
+        // Arrange
         when(questionRepository.findById(testQuestionId)).thenReturn(Optional.empty());
 
+        // Act
         Optional<Question> result = questionRepository.findById(testQuestionId);
 
+        // Assert
         assertThat(result).isNotPresent();
         verify(questionRepository, times(1)).findById(testQuestionId);
     }
@@ -65,10 +58,13 @@ public class QuestionRepositoryTest {
     @Test
     @DisplayName("findByLegacyId_nominalCase_questionFound")
     public void findByLegacyId_nominalCase_questionFound() {
+        // Arrange
         when(questionRepository.findByLegacyId(testLegacyId)).thenReturn(Optional.of(new Question()));
 
+        // Act
         Optional<Question> result = questionRepository.findByLegacyId(testLegacyId);
 
+        // Assert
         assertThat(result).isPresent();
         verify(questionRepository, times(1)).findByLegacyId(testLegacyId);
     }
@@ -76,10 +72,13 @@ public class QuestionRepositoryTest {
     @Test
     @DisplayName("findByLegacyId_nominalCase_questionNotFound")
     public void findByLegacyId_nominalCase_questionNotFound() {
+        // Arrange
         when(questionRepository.findByLegacyId(testLegacyId)).thenReturn(Optional.empty());
 
+        // Act
         Optional<Question> result = questionRepository.findByLegacyId(testLegacyId);
 
+        // Assert
         assertThat(result).isNotPresent();
         verify(questionRepository, times(1)).findByLegacyId(testLegacyId);
     }
@@ -87,10 +86,13 @@ public class QuestionRepositoryTest {
     @Test
     @DisplayName("findByFilter_nominalCase_questionsFound")
     public void findByFilter_nominalCase_questionsFound() {
+        // Arrange
         when(questionRepository.findByFilter(testQuestionFilter)).thenReturn(testQuestions);
 
+        // Act
         List<Question> result = questionRepository.findByFilter(testQuestionFilter);
 
+        // Assert
         assertThat(result).isEqualTo(testQuestions);
         verify(questionRepository, times(1)).findByFilter(testQuestionFilter);
     }
@@ -98,10 +100,13 @@ public class QuestionRepositoryTest {
     @Test
     @DisplayName("countByTheme_nominalCase_countMapReturned")
     public void countByTheme_nominalCase_countMapReturned() {
+        // Arrange
         when(questionRepository.countByTheme(any(String.class))).thenReturn(testCountMap);
 
+        // Act
         Map<String, Integer> result = questionRepository.countByTheme("testCertificationId");
 
+        // Assert
         assertThat(result).isEqualTo(testCountMap);
         verify(questionRepository, times(1)).countByTheme(any(String.class));
     }
@@ -109,11 +114,14 @@ public class QuestionRepositoryTest {
     @Test
     @DisplayName("save_nominalCase_questionSaved")
     public void save_nominalCase_questionSaved() {
+        // Arrange
         Question savedQuestion = new Question();
         when(questionRepository.save(any(Question.class))).thenReturn(savedQuestion);
 
+        // Act
         Question result = questionRepository.save(new Question());
 
+        // Assert
         assertThat(result).isEqualTo(savedQuestion);
         verify(questionRepository, times(1)).save(any(Question.class));
     }
@@ -121,12 +129,14 @@ public class QuestionRepositoryTest {
     @Test
     @DisplayName("saveAll_nominalCase_questionsSaved")
     public void saveAll_nominalCase_questionsSaved() {
+        // Arrange
         when(questionRepository.saveAll(any(List.class))).thenReturn(testQuestions);
 
+        // Act
         List<Question> result = questionRepository.saveAll(testQuestions);
 
+        // Assert
         assertThat(result).isEqualTo(testQuestions);
         verify(questionRepository, times(1)).saveAll(any(List.class));
     }
 }
-

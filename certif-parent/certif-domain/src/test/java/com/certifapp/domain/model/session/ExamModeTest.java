@@ -1,24 +1,11 @@
 package com.certifapp.domain.model.session;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(MockitoExtension.class)
 public class ExamModeTest {
-
-    @InjectMocks
-    private ExamMode examMode;
-
-    @BeforeEach
-    public void setUp() {
-        // No setup required for this enum, but it's good practice to have one for consistency
-    }
 
     @Test
     @DisplayName("Exam mode supports timer")
@@ -45,7 +32,7 @@ public class ExamModeTest {
     }
 
     @Test
-    @DisplayName("Exam mode shows immediate correction")
+    @DisplayName("Exam mode does not show immediate correction")
     public void exam_mode_does_not_show_immediate_correction() {
         assertThat(ExamMode.EXAM.showsImmediateCorrection()).isFalse();
         assertThat(ExamMode.FREE.showsImmediateCorrection()).isFalse();
@@ -68,4 +55,3 @@ public class ExamModeTest {
         assertThat(ExamMode.REVISION.showsImmediateCorrection()).isTrue();
     }
 }
-

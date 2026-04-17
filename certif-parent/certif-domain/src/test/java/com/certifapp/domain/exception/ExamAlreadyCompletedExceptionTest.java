@@ -1,31 +1,18 @@
 package com.certifapp.domain.exception;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(MockitoExtension.class)
 public class ExamAlreadyCompletedExceptionTest {
-
-    @InjectMocks
-    private ExamAlreadyCompletedException examAlreadyCompletedException;
-
-    @BeforeEach
-    public void setUp() {
-        java.util.UUID sessionId = java.util.UUID.randomUUID();
-        examAlreadyCompletedException = new ExamAlreadyCompletedException(sessionId);
-    }
 
     @Test
     @DisplayName("Nominal case: get session ID")
     public void testGetSessionId_nominalCase() {
-        java.util.UUID sessionId = examAlreadyCompletedException.getSessionId();
-        assertThat(sessionId).isNotNull();
+        var sessionId = java.util.UUID.randomUUID();
+        ExamAlreadyCompletedException exception = new ExamAlreadyCompletedException(sessionId);
+        assertThat(exception.getSessionId()).isEqualTo(sessionId);
     }
 
     @Test
@@ -38,9 +25,9 @@ public class ExamAlreadyCompletedExceptionTest {
     @Test
     @DisplayName("Error case: empty string message")
     public void testGetMessage_errorCase_emptyString() {
-        ExamAlreadyCompletedException exception = new ExamAlreadyCompletedException(java.util.UUID.randomUUID());
+        var sessionId = java.util.UUID.randomUUID();
+        ExamAlreadyCompletedException exception = new ExamAlreadyCompletedException(sessionId);
         String message = exception.getMessage();
         assertThat(message).isNotNull().contains("Exam session already completed");
     }
 }
-

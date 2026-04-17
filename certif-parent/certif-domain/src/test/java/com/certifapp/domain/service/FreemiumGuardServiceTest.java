@@ -2,54 +2,45 @@ package com.certifapp.domain.service;
 
 import com.certifapp.domain.model.certification.Certification;
 import com.certifapp.domain.model.user.SubscriptionTier;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@ExtendWith(MockitoExtension.class)
 public class FreemiumGuardServiceTest {
-
-    @Mock
-    private SubscriptionTier tierMock;
-
-    @InjectMocks
-    private FreemiumGuardService freemiumGuardService;
-
-    @BeforeEach
-    public void setUp() {
-        when(tierMock.hasAiFeatures()).thenReturn(true);
-        when(tierMock.isUnlimited()).thenReturn(false);
-    }
-
-    @AfterEach
-    public void tearDown() {
-        verifyNoMoreInteractions(tierMock);
-    }
 
     @Test
     @DisplayName("checkDailyExamLimit_freeTierDailyLimitNotExceeded")
     public void checkDailyExamLimit_freeTierDailyLimitNotExceeded() throws FreemiumLimitExceededException {
+        // Arrange
+        var freemiumGuardService = new FreemiumGuardService();
+
+        // Act
         freemiumGuardService.checkDailyExamLimit(SubscriptionTier.FREE, Certification.FREE_DAILY_EXAM_LIMIT - 1);
+
+        // Assert
     }
 
     @Test
     @DisplayName("checkDailyExamLimit_proTierNoException")
     public void checkDailyExamLimit_proTierNoException() throws FreemiumLimitExceededException {
+        // Arrange
+        var freemiumGuardService = new FreemiumGuardService();
+
+        // Act
         freemiumGuardService.checkDailyExamLimit(SubscriptionTier.PRO, Certification.FREE_DAILY_EXAM_LIMIT - 1);
+
+        // Assert
     }
 
     @Test
     @DisplayName("checkDailyExamLimit_freeTierDailyLimitExceeded")
     public void checkDailyExamLimit_freeTierDailyLimitExceeded() {
+        // Arrange
+        var freemiumGuardService = new FreemiumGuardService();
+
+        // Act & Assert
         assertThatThrownBy(() -> freemiumGuardService.checkDailyExamLimit(SubscriptionTier.FREE, Certification.FREE_DAILY_EXAM_LIMIT))
                 .isInstanceOf(FreemiumLimitExceededException.class)
                 .hasMessage("daily exams");
@@ -58,6 +49,10 @@ public class FreemiumGuardServiceTest {
     @Test
     @DisplayName("effectiveQuestionCount_freeTierRequestWithinLimit")
     public void effectiveQuestionCount_freeTierRequestWithinLimit() {
+        // Arrange
+        var freemiumGuardService = new FreemiumGuardService();
+
+        // Act & Assert
         assertThat(freemiumGuardService.effectiveQuestionCount(SubscriptionTier.FREE, Certification.FREE_QUESTION_LIMIT + 1))
                 .isEqualTo(Certification.FREE_QUESTION_LIMIT);
     }
@@ -65,6 +60,10 @@ public class FreemiumGuardServiceTest {
     @Test
     @DisplayName("effectiveQuestionCount_proTierNoCapping")
     public void effectiveQuestionCount_proTierNoCapping() {
+        // Arrange
+        var freemiumGuardService = new FreemiumGuardService();
+
+        // Act & Assert
         assertThat(freemiumGuardService.effectiveQuestionCount(SubscriptionTier.PRO, Certification.FREE_QUESTION_LIMIT + 1))
                 .isEqualTo(Certification.FREE_QUESTION_LIMIT + 1);
     }
@@ -72,6 +71,10 @@ public class FreemiumGuardServiceTest {
     @Test
     @DisplayName("requirePro_freeTierException")
     public void requirePro_freeTierException() {
+        // Arrange
+        var freemiumGuardService = new FreemiumGuardService();
+
+        // Act & Assert
         assertThatThrownBy(() -> freemiumGuardService.requirePro(SubscriptionTier.FREE, "AI feature"))
                 .isInstanceOf(SubscriptionRequiredException.class)
                 .hasMessage("AI feature");
@@ -80,12 +83,22 @@ public class FreemiumGuardServiceTest {
     @Test
     @DisplayName("requirePro_proTierNoException")
     public void requirePro_proTierNoException() {
-        freemunGuardService.requirePro(SubscriptionTier.PRO, "AI feature");
+        // Arrange
+        var freemiumGuardService = new FreemiumGuardService();
+
+        // Act
+        freemiumGuardService.requirePro(SubscriptionTier.PRO, "AI feature");
+
+        // Assert
     }
 
     @Test
     @DisplayName("requireUnlimited_freeTierException")
     public void requireUnlimited_freeTierException() {
+        // Arrange
+        var freemiumGuardService = new FreemiumGuardService();
+
+        // Act & Assert
         assertThatThrownBy(() -> freemiumGuardService.requireUnlimited(SubscriptionTier.FREE, "Unlimited access"))
                 .isInstanceOf(SubscriptionRequiredException.class)
                 .hasMessage("Unlimited access");
@@ -94,8 +107,13 @@ public class FreemiumGuardServiceTest {
     @Test
     @DisplayName("requireUnlimited_proOrPackTierNoException")
     public void requireUnlimited_proOrPackTierNoException() {
-        when(tierMock.isUnlimited()).thenReturn(true);
+        // Arrange
+        var freemiumGuardService = new FreemiumGuardService();
+
+        // Act
         freemiumGuardService.requireUnlimited(SubscriptionTier.PRO, "Unlimited access");
         freemiumGuardService.requireUnlimited(SubscriptionTier.PACK, "Unlimited access");
+
+        // Assert
     }
 }

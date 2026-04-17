@@ -1,24 +1,11 @@
 package com.certifapp.domain.model.user;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(MockitoExtension.class)
 public class SubscriptionTierTest {
-
-    @InjectMocks
-    private SubscriptionTier subscriptionTier;
-
-    @BeforeEach
-    public void setUp() {
-        // No-op setup for this test class
-    }
 
     @DisplayName("isUnlimited should return true for PRO and PACK")
     @Test
@@ -46,4 +33,3 @@ public class SubscriptionTierTest {
         assertThat(SubscriptionTier.PACK.hasAiFeatures()).isFalse();
     }
 }
-

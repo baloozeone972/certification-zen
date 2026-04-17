@@ -4,25 +4,12 @@ import com.certifapp.domain.model.question.Question;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
 public class QuestionSelectionServiceTest {
-
-    @Mock
-    private Random random;
-
-    @InjectMocks
-    private QuestionSelectionService questionSelectionService;
 
     private List<Question> allQuestions;
     private Map<String, List<Question>> questionsByTheme;
@@ -42,42 +29,40 @@ public class QuestionSelectionServiceTest {
             }
             questionsByTheme.put("T" + i, themeQuestions);
         }
-
-        when(random.nextInt(anyInt())).thenReturn(4); // Mock random shuffle index
     }
 
     @Test
     @DisplayName("selectRandom_count_zero_shouldReturnEmptyList")
     public void selectRandom_count_zero_shouldReturnEmptyList() {
-        List<Question> result = questionSelectionService.selectRandom(allQuestions, 0);
+        List<Question> result = QuestionSelectionService.selectRandom(allQuestions, 0);
         assertThat(result).isEmpty();
     }
 
     @Test
     @DisplayName("selectRandom_allQuestions_empty_shouldReturnEmptyList")
     public void selectRandom_allQuestions_empty_shouldReturnEmptyList() {
-        List<Question> result = questionSelectionService.selectRandom(new ArrayList<>(), 5);
+        List<Question> result = QuestionSelectionService.selectRandom(new ArrayList<>(), 5);
         assertThat(result).isEmpty();
     }
 
     @Test
     @DisplayName("selectRandom_count_greaterThanAllQuestions_shouldReturnAllQuestions")
     public void selectRandom_count_greaterThanAllQuestions_shouldReturnAllQuestions() {
-        List<Question> result = questionSelectionService.selectRandom(allQuestions, 15);
+        List<Question> result = QuestionSelectionService.selectRandom(allQuestions, 15);
         assertThat(result).isEqualTo(allQuestions);
     }
 
     @Test
     @DisplayName("selectProportional_questionsByTheme_empty_shouldReturnEmptyList")
     public void selectProportional_questionsByTheme_empty_shouldReturnEmptyList() {
-        List<Question> result = questionSelectionService.selectProportional(new HashMap<>(), 5);
+        List<Question> result = QuestionSelectionService.selectProportional(new HashMap<>(), 5);
         assertThat(result).isEmpty();
     }
 
     @Test
     @DisplayName("selectProportional_totalRequested_zero_shouldReturnEmptyList")
     public void selectProportional_totalRequested_zero_shouldReturnEmptyList() {
-        List<Question> result = questionSelectionService.selectProportional(questionsByTheme, 0);
+        List<Question> result = QuestionSelectionService.selectProportional(questionsByTheme, 0);
         assertThat(result).isEmpty();
     }
 
@@ -85,15 +70,14 @@ public class QuestionSelectionServiceTest {
     @DisplayName("selectProportional_totalAvailable_zero_shouldReturnEmptyList")
     public void selectProportional_totalAvailable_zero_shouldReturnEmptyList() {
         questionsByTheme.clear();
-        List<Question> result = questionSelectionService.selectProportional(questionsByTheme, 5);
+        List<Question> result = QuestionSelectionService.selectProportional(questionsByTheme, 5);
         assertThat(result).isEmpty();
     }
 
     @Test
     @DisplayName("selectProportional_count_greaterThanTotalAvailable_shouldReturnAllQuestions")
     public void selectProportional_count_greaterThanTotalAvailable_shouldReturnAllQuestions() {
-        List<Question> result = questionSelectionService.selectProportional(questionsByTheme, 20);
+        List<Question> result = QuestionSelectionService.selectProportional(questionsByTheme, 20);
         assertThat(result).isEqualTo(allQuestions);
     }
 }
-

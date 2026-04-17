@@ -1,28 +1,14 @@
 package com.certifapp.domain.model.user;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@ExtendWith(MockitoExtension.class)
 public class UserPreferencesTest {
-
-    @Mock
-    private User user;
-
-    @InjectMocks
-    private UserPreferences userPreferences;
-
-    @BeforeEach
-    public void setUp() {
-        // Initialization if needed
-    }
 
     @Test
     @DisplayName("Should create defaults with provided userId")
@@ -102,4 +88,3 @@ public class UserPreferencesTest {
         assertThat(preferences.freeModeDurationMin()).isEqualTo(60);
     }
 }
-

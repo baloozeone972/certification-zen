@@ -19,7 +19,7 @@ import {LearningService} from "../../core/services/learning.service";
             <h3>{{ cert.name }}</h3>
             <p class="learn-card__code">{{ cert.code }}</p>
             <div class="learn-card__actions">
-              <a [routerLink]="["/learning/flashcards", cert.id]" class="btn btn-primary">
+              <a [routerLink]="['/learning/flashcards', cert.id]" class="btn btn-primary">
                 🃏 Flashcards SM-2
               </a>
             </div>

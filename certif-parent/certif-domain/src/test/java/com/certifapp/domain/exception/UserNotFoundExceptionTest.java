@@ -1,20 +1,9 @@
 package com.certifapp.domain.exception;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
-@ExtendWith(MockitoExtension.class)
 public class UserNotFoundExceptionTest {
-
-    @BeforeEach
-    public void setUp() {
-        // Set up any necessary mocks or initializations here
-    }
 
     @DisplayName("UserNotFoundException should be thrown with identifier")
     @Test
@@ -26,4 +15,3 @@ public class UserNotFoundExceptionTest {
                 .hasMessage("User not found: " + identifier);
     }
 }
-

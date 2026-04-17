@@ -5,10 +5,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,20 +12,16 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
 public class FlashcardRepositoryTest {
 
-    @Mock
     private FlashcardRepository flashcardRepository;
-
-    @InjectMocks
-    private FlashcardRepositoryImpl flashcardRepositoryImpl; // Assuming an implementation exists
+    private FlashcardRepositoryImpl flashcardRepositoryImpl;
 
     @BeforeEach
     public void setUp() {
-        // Initialization if needed
+        flashcardRepository = new FlashcardRepositoryImpl();
+        flashcardRepositoryImpl = new FlashcardRepositoryImpl();
     }
 
     @AfterEach
@@ -45,11 +37,13 @@ public class FlashcardRepositoryTest {
         int limit = 5;
         List<Flashcard> expectedFlashcards = Arrays.asList(new Flashcard(), new Flashcard());
 
-        when(flashcardRepository.findDueByUserAndCertification(userId, certificationId, limit))
-                .thenReturn(expectedFlashcards);
+        // Arrange
+        flashcardRepository.findDueByUserAndCertification(userId, certificationId, limit);
 
+        // Act
         List<Flashcard> actualFlashcards = flashcardRepositoryImpl.findDueByUserAndCertification(userId, certificationId, limit);
 
+        // Assert
         assertThat(actualFlashcards).isEqualTo(expectedFlashcards);
     }
 
@@ -61,11 +55,13 @@ public class FlashcardRepositoryTest {
         int limit = 5;
         List<Flashcard> expectedFlashcards = Arrays.asList();
 
-        when(flashcardRepository.findDueByUserAndCertification(userId, certificationId, limit))
-                .thenReturn(expectedFlashcards);
+        // Arrange
+        flashcardRepository.findDueByUserAndCertification(userId, certificationId, limit);
 
+        // Act
         List<Flashcard> actualFlashcards = flashcardRepositoryImpl.findDueByUserAndCertification(userId, certificationId, limit);
 
+        // Assert
         assertThat(actualFlashcards).isEqualTo(expectedFlashcards);
     }
 
@@ -76,9 +72,12 @@ public class FlashcardRepositoryTest {
         String certificationId = "cert123";
         int limit = 5;
 
-        assertThrows(NullPointerException.class, () ->
-                flashcardRepositoryImpl.findDueByUserAndCertification(userId, certificationId, limit)
-        );
+        // Arrange
+        flashcardRepository.findDueByUserAndCertification(userId, certificationId, limit);
+
+        // Act & Assert
+        assertThatThrownBy(() -> flashcardRepositoryImpl.findDueByUserAndCertification(userId, certificationId, limit))
+                .isInstanceOf(NullPointerException.class);
     }
 
     @Test
@@ -87,10 +86,13 @@ public class FlashcardRepositoryTest {
         Flashcard flashcard = new Flashcard();
         Flashcard expectedFlashcard = new Flashcard();
 
-        when(flashcardRepository.save(flashcard)).thenReturn(expectedFlashcard);
+        // Arrange
+        flashcardRepository.save(flashcard);
 
+        // Act
         Flashcard actualFlashcard = flashcardRepositoryImpl.save(flashcard);
 
+        // Assert
         assertThat(actualFlashcard).isEqualTo(expectedFlashcard);
     }
 
@@ -99,9 +101,12 @@ public class FlashcardRepositoryTest {
     public void save_nullFlashcard() {
         Flashcard flashcard = null;
 
-        assertThrows(NullPointerException.class, () ->
-                flashcardRepositoryImpl.save(flashcard)
-        );
+        // Arrange
+        flashcardRepository.save(flashcard);
+
+        // Act & Assert
+        assertThatThrownBy(() -> flashcardRepositoryImpl.save(flashcard))
+                .isInstanceOf(NullPointerException.class);
     }
 
     @Test
@@ -110,10 +115,13 @@ public class FlashcardRepositoryTest {
         List<Flashcard> flashcards = Arrays.asList(new Flashcard(), new Flashcard());
         List<Flashcard> expectedFlashcards = Arrays.asList(new Flashcard(), new Flashcard());
 
-        when(flashcardRepository.saveAll(flashcards)).thenReturn(expectedFlashcards);
+        // Arrange
+        flashcardRepository.saveAll(flashcards);
 
+        // Act
         List<Flashcard> actualFlashcards = flashcardRepositoryImpl.saveAll(flashcards);
 
+        // Assert
         assertThat(actualFlashcards).isEqualTo(expectedFlashcards);
     }
 
@@ -123,10 +131,13 @@ public class FlashcardRepositoryTest {
         List<Flashcard> flashcards = Arrays.asList();
         List<Flashcard> expectedFlashcards = Arrays.asList();
 
-        when(flashcardRepository.saveAll(flashcards)).thenReturn(expectedFlashcards);
+        // Arrange
+        flashcardRepository.saveAll(flashcards);
 
+        // Act
         List<Flashcard> actualFlashcards = flashcardRepositoryImpl.saveAll(flashcards);
 
+        // Assert
         assertThat(actualFlashcards).isEqualTo(expectedFlashcards);
     }
 
@@ -135,9 +146,12 @@ public class FlashcardRepositoryTest {
     public void saveAll_nullList() {
         List<Flashcard> flashcards = null;
 
-        assertThrows(NullPointerException.class, () ->
-                flashcardRepositoryImpl.saveAll(flashcards)
-        );
+        // Arrange
+        flashcardRepository.saveAll(flashcards);
+
+        // Act & Assert
+        assertThatThrownBy(() -> flashcardRepositoryImpl.saveAll(flashcards))
+                .isInstanceOf(NullPointerException.class);
     }
 }
 
@@ -161,4 +175,3 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
         return null;
     }
 }
-

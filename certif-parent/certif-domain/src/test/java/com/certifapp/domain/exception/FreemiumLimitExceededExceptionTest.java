@@ -1,20 +1,9 @@
 package com.certifapp.domain.exception;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-@ExtendWith(MockitoExtension.class)
 public class FreemiumLimitExceededExceptionTest {
-
-    @BeforeEach
-    public void setUp() {
-        // Setup code if needed
-    }
 
     @DisplayName("dailyExams_nominalCase_expectedErrorMessage")
     @Test
@@ -36,4 +25,3 @@ public class FreemiumLimitExceededExceptionTest {
         assertThat(exception.getMessage()).isEqualTo("FREE tier: maximum 20 questions per session");
     }
 }
-

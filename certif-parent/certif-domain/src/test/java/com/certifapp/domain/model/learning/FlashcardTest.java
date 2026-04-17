@@ -1,27 +1,14 @@
 package com.certifapp.domain.model.learning;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@ExtendWith(MockitoExtension.class)
 public class FlashcardTest {
-
-    @InjectMocks
-    private Flashcard flashcard;
-
-    @BeforeEach
-    public void setUp() {
-        // No setup needed for this simple record
-    }
 
     @DisplayName("should throw IllegalArgumentException when both questionId and courseId are null")
     @Test
@@ -32,11 +19,9 @@ public class FlashcardTest {
         String backText = "back";
         boolean aiGenerated = true;
 
-        IllegalArgumentException exception = assertThatThrownBy(() -> Flashcard.fromQuestion(questionId, frontText, backText, "", aiGenerated))
+        assertThatThrownBy(() -> Flashcard.fromQuestion(questionId, frontText, backText, "", aiGenerated))
                 .isInstanceOf(IllegalArgumentException.class)
                 .withMessage("A flashcard must have either a questionId or a courseId");
-
-        // No need to verify anything as the error is thrown during object creation
     }
 
     @DisplayName("should throw IllegalArgumentException when frontText is blank")
@@ -47,11 +32,9 @@ public class FlashcardTest {
         String backText = "back";
         boolean aiGenerated = true;
 
-        IllegalArgumentException exception = assertThatThrownBy(() -> Flashcard.fromQuestion(questionId, frontText, backText, "", aiGenerated))
+        assertThatThrownBy(() -> Flashcard.fromQuestion(questionId, frontText, backText, "", aiGenerated))
                 .isInstanceOf(IllegalArgumentException.class)
                 .withMessage("frontText must not be blank");
-
-        // No need to verify anything as the error is thrown during object creation
     }
 
     @DisplayName("should throw IllegalArgumentException when backText is blank")
@@ -62,11 +45,9 @@ public class FlashcardTest {
         String backText = "";
         boolean aiGenerated = true;
 
-        IllegalArgumentException exception = assertThatThrownBy(() -> Flashcard.fromQuestion(questionId, frontText, backText, "", aiGenerated))
+        assertThatThrownBy(() -> Flashcard.fromQuestion(questionId, frontText, backText, "", aiGenerated))
                 .isInstanceOf(IllegalArgumentException.class)
                 .withMessage("backText must not be blank");
-
-        // No need to verify anything as the error is thrown during object creation
     }
 
     @DisplayName("should create a flashcard sourced from a question")
@@ -95,11 +76,9 @@ public class FlashcardTest {
         String backText = "back";
         boolean aiGenerated = true;
 
-        IllegalArgumentException exception = assertThatThrownBy(() -> Flashcard.fromCourse(courseId, frontText, backText, "", aiGenerated))
+        assertThatThrownBy(() -> Flashcard.fromCourse(courseId, frontText, backText, "", aiGenerated))
                 .isInstanceOf(IllegalArgumentException.class)
                 .withMessage("A flashcard must have either a questionId or a courseId");
-
-        // No need to verify anything as the error is thrown during object creation
     }
 
     @DisplayName("should throw IllegalArgumentException when frontText is blank")
@@ -110,11 +89,9 @@ public class FlashcardTest {
         String backText = "back";
         boolean aiGenerated = true;
 
-        IllegalArgumentException exception = assertThatThrownBy(() -> Flashcard.fromCourse(courseId, frontText, backText, "", aiGenerated))
+        assertThatThrownBy(() -> Flashcard.fromCourse(courseId, frontText, backText, "", aiGenerated))
                 .isInstanceOf(IllegalArgumentException.class)
                 .withMessage("frontText must not be blank");
-
-        // No need to verify anything as the error is thrown during object creation
     }
 
     @DisplayName("should throw IllegalArgumentException when backText is blank")
@@ -125,11 +102,9 @@ public class FlashcardTest {
         String backText = "";
         boolean aiGenerated = true;
 
-        IllegalArgumentException exception = assertThatThrownBy(() -> Flashcard.fromCourse(courseId, frontText, backText, "", aiGenerated))
+        assertThatThrownBy(() -> Flashcard.fromCourse(courseId, frontText, backText, "", aiGenerated))
                 .isInstanceOf(IllegalArgumentException.class)
                 .withMessage("backText must not be blank");
-
-        // No need to verify anything as the error is thrown during object creation
     }
 
     @DisplayName("should create a flashcard sourced from a course")
@@ -150,4 +125,3 @@ public class FlashcardTest {
         assertThat(result.createdAt()).isNotNull();
     }
 }
-

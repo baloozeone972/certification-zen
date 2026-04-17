@@ -1,19 +1,12 @@
 package com.certifapp.domain.model.question;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static com.certifapp.domain.model.question.ExplanationStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(MockitoExtension.class)
 public class ExplanationStatusTest {
-
-    @BeforeEach
-    void setUp() {
-        // No setup needed for this test class
-    }
 
     @Test
     @DisplayName("isValidated returns true for HUMAN_VALIDATED")
@@ -41,4 +34,3 @@ public class ExplanationStatusTest {
         assertThat(HUMAN_VALIDATED.isAiGenerated()).isFalse();
     }
 }
-

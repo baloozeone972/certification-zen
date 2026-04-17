@@ -1,39 +1,13 @@
 package com.certifapp.domain.port.input.learning;
 
 import com.certifapp.domain.model.learning.SM2Schedule;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-
-
-@DisplayName("ReviewFlashcardUseCase tests")
-@ExtendWith(MockitoExtension.class)
 public class ReviewFlashcardUseCaseTest {
-
-    @Mock
-    private SM2ScheduleService sm2ScheduleService;
-
-    @InjectMocks
-    private ReviewFlashcardUseCase reviewFlashcardUseCase;
-
-    @BeforeEach
-    public void setUp() {
-        // Setup code if needed
-    }
-
-    @AfterEach
-    public void tearDown() {
-        // Teardown code if needed
-    }
 
     @Test
     @DisplayName("record valid SM-2 rating")
@@ -43,12 +17,16 @@ public class ReviewFlashcardUseCaseTest {
         int rating = 3;
         SM2Schedule expectedSchedule = new SM2Schedule();
 
-        when(sm2ScheduleService.update(any(SM2Schedule.class))).thenReturn(expectedSchedule);
+        ReviewFlashcardUseCase reviewFlashcardUseCase = new ReviewFlashcardUseCase();
+        SM2ScheduleService sm2ScheduleServiceMock = mock(SM2ScheduleService.class);
+        reviewFlashcardUseCase.setSm2ScheduleService(sm2ScheduleServiceMock);
+
+        when(sm2ScheduleServiceMock.update(any(SM2Schedule.class))).thenReturn(expectedSchedule);
 
         SM2Schedule result = reviewFlashcardUseCase.execute(new ReviewFlashcardCommand(userId, flashcardId, rating));
 
         assertThat(result).isEqualTo(expectedSchedule);
-        verify(sm2ScheduleService, times(1)).update(any(SM2Schedule.class));
+        verify(sm2ScheduleServiceMock, times(1)).update(any(SM2Schedule.class));
     }
 
     @Test
@@ -57,6 +35,10 @@ public class ReviewFlashcardUseCaseTest {
         UUID userId = UUID.randomUUID();
         UUID flashcardId = UUID.randomUUID();
         int rating = 6;
+
+        ReviewFlashcardUseCase reviewFlashcardUseCase = new ReviewFlashcardUseCase();
+        SM2ScheduleService sm2ScheduleServiceMock = mock(SM2ScheduleService.class);
+        reviewFlashcardUseCase.setSm2ScheduleService(sm2ScheduleServiceMock);
 
         assertThrows(IllegalArgumentException.class, () ->
                 reviewFlashcardUseCase.execute(new ReviewFlashcardCommand(userId, flashcardId, rating))
@@ -71,12 +53,16 @@ public class ReviewFlashcardUseCaseTest {
         int rating = 0;
         SM2Schedule expectedSchedule = new SM2Schedule();
 
-        when(sm2ScheduleService.update(any(SM2Schedule.class))).thenReturn(expectedSchedule);
+        ReviewFlashcardUseCase reviewFlashcardUseCase = new ReviewFlashcardUseCase();
+        SM2ScheduleService sm2ScheduleServiceMock = mock(SM2ScheduleService.class);
+        reviewFlashcardUseCase.setSm2ScheduleService(sm2ScheduleServiceMock);
+
+        when(sm2ScheduleServiceMock.update(any(SM2Schedule.class))).thenReturn(expectedSchedule);
 
         SM2Schedule result = reviewFlashcardUseCase.execute(new ReviewFlashcardCommand(userId, flashcardId, rating));
 
         assertThat(result).isEqualTo(expectedSchedule);
-        verify(sm2ScheduleService, times(1)).update(any(SM2Schedule.class));
+        verify(sm2ScheduleServiceMock, times(1)).update(any(SM2Schedule.class));
     }
 
     @Test
@@ -87,12 +73,16 @@ public class ReviewFlashcardUseCaseTest {
         int rating = 1;
         SM2Schedule expectedSchedule = new SM2Schedule();
 
-        when(sm2ScheduleService.update(any(SM2Schedule.class))).thenReturn(expectedSchedule);
+        ReviewFlashcardUseCase reviewFlashcardUseCase = new ReviewFlashcardUseCase();
+        SM2ScheduleService sm2ScheduleServiceMock = mock(SM2ScheduleService.class);
+        reviewFlashcardUseCase.setSm2ScheduleService(sm2ScheduleServiceMock);
+
+        when(sm2ScheduleServiceMock.update(any(SM2Schedule.class))).thenReturn(expectedSchedule);
 
         SM2Schedule result = reviewFlashcardUseCase.execute(new ReviewFlashcardCommand(userId, flashcardId, rating));
 
         assertThat(result).isEqualTo(expectedSchedule);
-        verify(sm2ScheduleService, times(1)).update(any(SM2Schedule.class));
+        verify(sm2ScheduleServiceMock, times(1)).update(any(SM2Schedule.class));
     }
 
     @Test
@@ -103,12 +93,16 @@ public class ReviewFlashcardUseCaseTest {
         int rating = 2;
         SM2Schedule expectedSchedule = new SM2Schedule();
 
-        when(sm2ScheduleService.update(any(SM2Schedule.class))).thenReturn(expectedSchedule);
+        ReviewFlashcardUseCase reviewFlashcardUseCase = new ReviewFlashcardUseCase();
+        SM2ScheduleService sm2ScheduleServiceMock = mock(SM2ScheduleService.class);
+        reviewFlashcardUseCase.setSm2ScheduleService(sm2ScheduleServiceMock);
+
+        when(sm2ScheduleServiceMock.update(any(SM2Schedule.class))).thenReturn(expectedSchedule);
 
         SM2Schedule result = reviewFlashcardUseCase.execute(new ReviewFlashcardCommand(userId, flashcardId, rating));
 
         assertThat(result).isEqualTo(expectedSchedule);
-        verify(sm2ScheduleService, times(1)).update(any(SM2Schedule.class));
+        verify(sm2ScheduleServiceMock, times(1)).update(any(SM2Schedule.class));
     }
 
     @Test
@@ -119,12 +113,16 @@ public class ReviewFlashcardUseCaseTest {
         int rating = 4;
         SM2Schedule expectedSchedule = new SM2Schedule();
 
-        when(sm2ScheduleService.update(any(SM2Schedule.class))).thenReturn(expectedSchedule);
+        ReviewFlashcardUseCase reviewFlashcardUseCase = new ReviewFlashcardUseCase();
+        SM2ScheduleService sm2ScheduleServiceMock = mock(SM2ScheduleService.class);
+        reviewFlashcardUseCase.setSm2ScheduleService(sm2ScheduleServiceMock);
+
+        when(sm2ScheduleServiceMock.update(any(SM2Schedule.class))).thenReturn(expectedSchedule);
 
         SM2Schedule result = reviewFlashcardUseCase.execute(new ReviewFlashcardCommand(userId, flashcardId, rating));
 
         assertThat(result).isEqualTo(expectedSchedule);
-        verify(sm2ScheduleService, times(1)).update(any(SM2Schedule.class));
+        verify(sm2ScheduleServiceMock, times(1)).update(any(SM2Schedule.class));
     }
 
     @Test
@@ -135,11 +133,15 @@ public class ReviewFlashcardUseCaseTest {
         int rating = 5;
         SM2Schedule expectedSchedule = new SM2Schedule();
 
-        when(sm2ScheduleService.update(any(SM2Schedule.class))).thenReturn(expectedSchedule);
+        ReviewFlashcardUseCase reviewFlashcardUseCase = new ReviewFlashcardUseCase();
+        SM2ScheduleService sm2ScheduleServiceMock = mock(SM2ScheduleService.class);
+        reviewFlashcardUseCase.setSm2ScheduleService(sm2ScheduleServiceMock);
+
+        when(sm2ScheduleServiceMock.update(any(SM2Schedule.class))).thenReturn(expectedSchedule);
 
         SM2Schedule result = reviewFlashcardUseCase.execute(new ReviewFlashcardCommand(userId, flashcardId, rating));
 
         assertThat(result).isEqualTo(expectedSchedule);
-        verify(sm2ScheduleService, times(1)).update(any(SM2Schedule.class));
+        verify(sm2ScheduleServiceMock, times(1)).update(any(SM2Schedule.class));
     }
 }

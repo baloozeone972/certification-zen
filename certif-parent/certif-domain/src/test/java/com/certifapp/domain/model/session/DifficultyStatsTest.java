@@ -1,29 +1,18 @@
 package com.certifapp.domain.model.session;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.certifapp.domain.model.question.DifficultyLevel.EASY;
 import static com.certifapp.domain.model.question.DifficultyLevel.MEDIUM;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(MockitoExtension.class)
 public class DifficultyStatsTest {
-
-    @InjectMocks
-    private DifficultyStats difficultyStats;
-
-    @BeforeEach
-    public void setUp() {
-        difficultyStats = new DifficultyStats(MEDIUM, 5, 10);
-    }
 
     @DisplayName("Constructor initializes with correct values")
     @Test
     public void constructor_initializesWithCorrectValues() {
+        DifficultyStats difficultyStats = new DifficultyStats(MEDIUM, 5, 10);
         assertThat(difficultyStats.difficulty()).isEqualTo(MEDIUM);
         assertThat(difficultyStats.correct()).isEqualTo(5);
         assertThat(difficultyStats.total()).isEqualTo(10);
@@ -60,6 +49,7 @@ public class DifficultyStatsTest {
     @DisplayName("Percentage calculates correct percentage")
     @Test
     public void percentage_calculatesCorrectPercentage() {
+        DifficultyStats difficultyStats = new DifficultyStats(MEDIUM, 5, 10);
         assertThat(difficultyStats.percentage()).isEqualTo(50.0);
     }
 
@@ -70,4 +60,3 @@ public class DifficultyStatsTest {
         assertThat(stats.percentage()).isEqualTo(0.0);
     }
 }
-

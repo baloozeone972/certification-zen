@@ -1,33 +1,12 @@
 package com.certifapp.domain.model.user;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@ExtendWith(MockitoExtension.class)
 public class UserRoleTest {
-
-    @InjectMocks
-    private UserRole userRole;
-
-    @Mock
-    private SomeDependency someDependency; // Replace with actual dependency if any
-
-    @BeforeEach
-    public void setUp() {
-        // Setup initial state before each test
-    }
-
-    @AfterEach
-    public void tearDown() {
-        // Cleanup after each test
-    }
 
     @Test
     @DisplayName("UserRole_ADMIN_getGrantedAuthority_shouldReturnROLE_ADMIN")
@@ -57,10 +36,8 @@ public class UserRoleTest {
     @Test
     @DisplayName("UserRole_fromString_invalidRoleString_shouldThrowIllegalArgumentException")
     public void fromString_invalidRoleString_shouldThrowIllegalArgumentException() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            UserRole.fromString("INVALID_ROLE");
-        });
-        assertThat(exception.getMessage()).isEqualTo("Invalid role: INVALID_ROLE");
+        assertThatThrownBy(() -> UserRole.fromString("INVALID_ROLE"))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("Invalid role: INVALID_ROLE");
     }
 }
-

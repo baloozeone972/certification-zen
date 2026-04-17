@@ -6,23 +6,16 @@ import com.certifapp.domain.model.session.UserAnswer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 public class SubmitAnswerUseCaseTest {
 
-    @Mock
     private ExamSessionRepository examSessionRepository;
-
-    @InjectMocks
     private SubmitAnswerUseCase submitAnswerUseCase;
 
     private UUID sessionId = UUID.randomUUID();
@@ -34,6 +27,9 @@ public class SubmitAnswerUseCaseTest {
 
     @BeforeEach
     public void setUp() {
+        examSessionRepository = mock(ExamSessionRepository.class);
+        submitAnswerUseCase = new SubmitAnswerUseCase(examSessionRepository);
+
         userAnswer = new UserAnswer(sessionId, userId, questionId, selectedOptionId, responseTimeMs);
     }
 
@@ -83,4 +79,3 @@ public class SubmitAnswerUseCaseTest {
         verify(examSessionRepository).save(any(UserAnswer.class));
     }
 }
-

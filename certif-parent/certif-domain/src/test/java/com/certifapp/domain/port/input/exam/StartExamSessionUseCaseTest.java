@@ -5,40 +5,24 @@ import com.certifapp.domain.exception.FreemiumLimitExceededException;
 import com.certifapp.domain.model.session.ExamMode;
 import com.certifapp.domain.model.session.ExamSession;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
+@DisplayName("StartExamSessionUseCase")
 public class StartExamSessionUseCaseTest {
-
-    @Mock
-    private ExamSessionRepository examSessionRepository;
 
     @InjectMocks
     private StartExamSessionUseCase startExamSessionUseCase;
 
-    @BeforeEach
-    public void setUp() {
-        // Setup code if needed
-    }
-
-    @AfterEach
-    public void tearDown() {
-        // Teardown code if needed
-    }
-
     @DisplayName("Nominal case: valid command with default parameters")
     @Test
     public void startExamSession_validCommand_defaultParameters_success() throws CertificationNotFoundException, FreemiumLimitExceededException {
+        // Arrange
         UUID userId = UUID.randomUUID();
         String certificationId = "cert123";
         ExamMode mode = ExamMode.EXAM;
@@ -51,8 +35,10 @@ public class StartExamSessionUseCaseTest {
 
         when(examSessionRepository.create(any())).thenReturn(expectedSession);
 
+        // Act
         ExamSession result = startExamSessionUseCase.execute(command);
 
+        // Assert
         assertThat(result).isSameAs(expectedSession);
         verify(examSessionRepository).create(any());
     }
@@ -60,6 +46,7 @@ public class StartExamSessionUseCaseTest {
     @DisplayName("Edge case: null userId")
     @Test
     public void startExamSession_nullUserId_exception() {
+        // Arrange
         UUID userId = null;
         String certificationId = "cert123";
         ExamMode mode = ExamMode.EXAM;
@@ -69,6 +56,7 @@ public class StartExamSessionUseCaseTest {
 
         StartExamCommand command = new StartExamCommand(userId, certificationId, mode, selectedThemes, questionCount, durationMinutes);
 
+        // Act & Assert
         IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             startExamSessionUseCase.execute(command);
         });
@@ -79,6 +67,7 @@ public class StartExamSessionUseCaseTest {
     @DisplayName("Edge case: blank certificationId")
     @Test
     public void startExamSession_blankCertificationId_exception() {
+        // Arrange
         UUID userId = UUID.randomUUID();
         String certificationId = "";
         ExamMode mode = ExamMode.EXAM;
@@ -88,6 +77,7 @@ public class StartExamSessionUseCaseTest {
 
         StartExamCommand command = new StartExamCommand(userId, certificationId, mode, selectedThemes, questionCount, durationMinutes);
 
+        // Act & Assert
         IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             startExamSessionUseCase.execute(command);
         });
@@ -98,6 +88,7 @@ public class StartExamSessionUseCaseTest {
     @DisplayName("Edge case: null mode")
     @Test
     public void startExamSession_nullMode_exception() {
+        // Arrange
         UUID userId = UUID.randomUUID();
         String certificationId = "cert123";
         ExamMode mode = null;
@@ -107,6 +98,7 @@ public class StartExamSessionUseCaseTest {
 
         StartExamCommand command = new StartExamCommand(userId, certificationId, mode, selectedThemes, questionCount, durationMinutes);
 
+        // Act & Assert
         IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             startExamSessionUseCase.execute(command);
         });
@@ -117,6 +109,7 @@ public class StartExamSessionUseCaseTest {
     @DisplayName("Error case: certification not found")
     @Test
     public void startExamSession_certificationNotFound_exception() throws CertificationNotFoundException, FreemiumLimitExceededException {
+        // Arrange
         UUID userId = UUID.randomUUID();
         String certificationId = "nonexistentCert";
         ExamMode mode = ExamMode.EXAM;
@@ -128,6 +121,7 @@ public class StartExamSessionUseCaseTest {
 
         when(examSessionRepository.create(any())).thenThrow(new CertificationNotFoundException("Certification not found"));
 
+        // Act & Assert
         FreemiumLimitExceededException exception = Assertions.assertThrows(FreemiumLimitExceededException.class, () -> {
             startExamSessionUseCase.execute(command);
         });
@@ -138,6 +132,7 @@ public class StartExamSessionUseCaseTest {
     @DisplayName("Error case: freemium limit exceeded")
     @Test
     public void startExamSession_freemiumLimitExceeded_exception() throws CertificationNotFoundException, FreemiumLimitExceededException {
+        // Arrange
         UUID userId = UUID.randomUUID();
         String certificationId = "cert123";
         ExamMode mode = ExamMode.FREE;
@@ -149,6 +144,7 @@ public class StartExamSessionUseCaseTest {
 
         when(examSessionRepository.create(any())).thenThrow(new FreemiumLimitExceededException("Freemium limit exceeded"));
 
+        // Act & Assert
         FreemiumLimitExceededException exception = Assertions.assertThrows(FreemiumLimitExceededException.class, () -> {
             startExamSessionUseCase.execute(command);
         });
@@ -156,4 +152,3 @@ public class StartExamSessionUseCaseTest {
         assertThat(exception.getMessage()).isEqualTo("Freemium limit exceeded");
     }
 }
-

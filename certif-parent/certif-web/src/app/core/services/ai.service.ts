@@ -1,5 +1,5 @@
 // certif-parent/certif-web/src/app/core/services/ai.service.ts
-import {inject, Injectable} from "@angular/core";
+import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 
@@ -8,8 +8,13 @@ import {environment} from "../../../environments/environment";
  */
 @Injectable({providedIn: "root"})
 export class AiService {
-    private readonly http = inject(HttpClient);
-    private readonly base = `${environment.apiUrl}/ai`;
+    private readonly http: HttpClient;
+    private readonly base: string;
+
+    constructor(http: HttpClient) {
+        this.http = http;
+        this.base = `${environment.apiUrl}/ai`;
+    }
 
     chat(message: string, sessionId?: string) {
         return this.http.post<{ message: string; sources: string[] }>(

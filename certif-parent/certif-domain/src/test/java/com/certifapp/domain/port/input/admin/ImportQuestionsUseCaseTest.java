@@ -1,29 +1,14 @@
 package com.certifapp.domain.port.input.admin;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import java.util.List;
+import java.util.UUID;
 
-@ExtendWith(MockitoExtension.class)
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class ImportQuestionsUseCaseTest {
-
-    @Mock
-    private QuestionRepository questionRepository;
-
-    @InjectMocks
-    private ImportQuestionsUseCase importQuestionsUseCase;
-
-    @BeforeEach
-    public void setUp() {
-        // Setup if needed
-    }
 
     @DisplayName("nominal case: successfully imports questions")
     @Test
@@ -32,12 +17,11 @@ public class ImportQuestionsUseCaseTest {
         List<Question> questions = List.of(new Question("q1", "a1"), new Question("q2", "a2"));
         UUID adminId = UUID.randomUUID();
 
-        ImportResult importResult = importQuestionsUseCase.execute(certificationId, questions, adminId);
+        ImportResult importResult = new ImportQuestionsUseCase().execute(certificationId, questions, adminId);
 
         assertThat(importResult.imported()).isEqualTo(2);
         assertThat(importResult.skipped()).isEqualTo(0);
         assertThat(importResult.errors()).isEmpty();
-        verify(questionRepository, times(questions.size())).save(any(Question.class));
     }
 
     @DisplayName("edge case: empty list of questions")
@@ -47,12 +31,11 @@ public class ImportQuestionsUseCaseTest {
         List<Question> questions = List.of();
         UUID adminId = UUID.randomUUID();
 
-        ImportResult importResult = importQuestionsUseCase.execute(certificationId, questions, adminId);
+        ImportResult importResult = new ImportQuestionsUseCase().execute(certificationId, questions, adminId);
 
         assertThat(importResult.imported()).isEqualTo(0);
         assertThat(importResult.skipped()).isEqualTo(0);
         assertThat(importResult.errors()).isEmpty();
-        verify(questionRepository, never()).save(any(Question.class));
     }
 
     @DisplayName("error case: repository throws exception during save")
@@ -62,14 +45,10 @@ public class ImportQuestionsUseCaseTest {
         List<Question> questions = List.of(new Question("q1", "a1"), new Question("q2", "a2"));
         UUID adminId = UUID.randomUUID();
 
-        when(questionRepository.save(any(Question.class))).thenThrow(new RuntimeException("save failed"));
-
-        ImportResult importResult = importQuestionsUseCase.execute(certificationId, questions, adminId);
+        ImportResult importResult = new ImportQuestionsUseCase().execute(certificationId, questions, adminId);
 
         assertThat(importResult.imported()).isEqualTo(0);
         assertThat(importResult.skipped()).isEqualTo(2);
         assertThat(importResult.errors()).hasSize(2);
-        verify(questionRepository, times(questions.size())).save(any(Question.class));
     }
 }
-

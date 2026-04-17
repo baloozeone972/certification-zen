@@ -1,42 +1,10 @@
 package com.certifapp.domain.model.question;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
-
-@ExtendWith(MockitoExtension.class)
 public class QuestionFilterTest {
-
-    @InjectMocks
-    private QuestionFilter questionFilter;
-
-    @Mock
-    private List<String> themeCodes;
-
-    @Mock
-    private List<DifficultyLevel> difficulties;
-
-    @Mock
-    private Set<UUID> excludeIds;
-
-    @BeforeEach
-    public void setUp() {
-        when(themeCodes.size()).thenReturn(2);
-        when(difficulties.size()).thenReturn(3);
-        when(excludeIds.size()).thenReturn(1);
-    }
 
     @Test
     @DisplayName("should throw IllegalArgumentException for blank certificationId")
@@ -50,7 +18,7 @@ public class QuestionFilterTest {
     @DisplayName("should copy themeCodes to a non-mutable list")
     public void shouldCopyThemeCodesToNonMutableList() {
         List<String> originalThemeCodes = List.of("THEME1", "THEME2");
-        QuestionFilter filter = new QuestionFilter("certificationId", originalThemeCodes, difficulties, excludeIds, true, 0);
+        QuestionFilter filter = new QuestionFilter("certificationId", originalThemeCodes, List.of(), Set.of(), true, 0);
         assertThat(filter.themeCodes()).hasSize(2).containsExactlyInAnyOrder("THEME1", "THEME2");
     }
 
@@ -58,21 +26,22 @@ public class QuestionFilterTest {
     @DisplayName("should copy difficulties to a non-mutable list")
     public void shouldCopyDifficultiesToNonMutableList() {
         List<DifficultyLevel> originalDifficulties = List.of(DifficultyLevel.EASY, DifficultyLevel.MEDIUM, DifficultyLevel.HARD);
-        QuestionFilter filter = new QuestionFilter("certificationId", themeCodes, originalDifficulties, excludeIds, true, 0);
+        QuestionFilter filter = new QuestionFilter("certificationId", List.of(), originalDifficulties, Set.of(), true, 0);
 
         assertThat(filter.difficulties())
                 .hasSize(3)
-                .containsExactlyInAnyOrder();
+                .containsExactlyInAnyOrder(DifficultyLevel.EASY, DifficultyLevel.MEDIUM, DifficultyLevel.HARD);
     }
+
     @Test
     @DisplayName("should copy excludeIds to a non-mutable set")
     public void shouldCopyExcludeIdsToNonMutableSet() {
         Set<UUID> originalExcludeIds = Set.of(UUID.randomUUID(), UUID.randomUUID());
-        QuestionFilter filter = new QuestionFilter("certificationId", themeCodes, difficulties, originalExcludeIds, true, 0);
+        QuestionFilter filter = new QuestionFilter("certificationId", List.of(), List.of(), originalExcludeIds, true, 0);
 
         assertThat(filter.excludeIds())
                 .hasSize(2)
-                .containsExactlyInAnyOrder();  // ✅ Pass Set directly
+                .containsExactlyInAnyOrder(originalExcludeIds.toArray(new UUID[0]));
     }
 
     @Test
@@ -103,22 +72,21 @@ public class QuestionFilterTest {
     @Test
     @DisplayName("should set themeCodes to an empty list when null is passed")
     public void shouldSetThemeCodesToEmptyListWhenNull() {
-        QuestionFilter filter = new QuestionFilter("certificationId", null, difficulties, excludeIds, true, 0);
+        QuestionFilter filter = new QuestionFilter("certificationId", null, List.of(), Set.of(), true, 0);
         assertThat(filter.themeCodes()).isEmpty();
     }
 
     @Test
     @DisplayName("should set difficulties to an empty list when null is passed")
     public void shouldSetDifficultiesToEmptyListWhenNull() {
-        QuestionFilter filter = new QuestionFilter("certificationId", themeCodes, null, excludeIds, true, 0);
+        QuestionFilter filter = new QuestionFilter("certificationId", List.of(), null, Set.of(), true, 0);
         assertThat(filter.difficulties()).isEmpty();
     }
 
     @Test
     @DisplayName("should set excludeIds to an empty set when null is passed")
     public void shouldSetExcludeIdsToEmptySetWhenNull() {
-        QuestionFilter filter = new QuestionFilter("certificationId", themeCodes, difficulties, null, true, 0);
+        QuestionFilter filter = new QuestionFilter("certificationId", List.of(), List.of(), null, true, 0);
         assertThat(filter.excludeIds()).isEmpty();
     }
 }
-

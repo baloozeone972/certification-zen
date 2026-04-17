@@ -4,8 +4,6 @@ import com.certifapp.domain.model.certification.Certification;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 
 import java.util.Collections;
 import java.util.List;
@@ -18,10 +16,6 @@ public class CertificationRepositoryTest {
 
     private static final String CERT_ID = "12345";
     private static final Certification SAMPLE_CERTIFICATION = new Certification(CERT_ID, "Java Developer");
-    @Mock
-    private CertificationRepository certificationRepository;
-    @InjectMocks
-    private CertificationService certificationService;
 
     @BeforeEach
     public void setUp() {
@@ -29,70 +23,87 @@ public class CertificationRepositoryTest {
     }
 
     @Test
-    @DisplayName("should return optional certification when found by id")
+    @DisplayName("findById_existingId_returnCertification")
     public void findById_existingId_returnCertification() {
+        // Arrange
         when(certificationRepository.findById(CERT_ID)).thenReturn(Optional.of(SAMPLE_CERTIFICATION));
 
+        // Act
         Optional<Certification> result = certificationService.findById(CERT_ID);
 
+        // Assert
         assertThat(result).isPresent();
         assertThat(result.get()).isEqualTo(SAMPLE_CERTIFICATION);
         verify(certificationRepository, times(1)).findById(CERT_ID);
     }
 
     @Test
-    @DisplayName("should return empty optional when certification not found by id")
+    @DisplayName("findById_nonExistingId_returnEmptyOptional")
     public void findById_nonExistingId_returnEmptyOptional() {
+        // Arrange
         when(certificationRepository.findById(CERT_ID)).thenReturn(Optional.empty());
 
+        // Act
         Optional<Certification> result = certificationService.findById(CERT_ID);
 
+        // Assert
         assertThat(result).isEmpty();
         verify(certificationRepository, times(1)).findById(CERT_ID);
     }
 
     @Test
-    @DisplayName("should return all active certifications when findAll with true")
+    @DisplayName("findAll_activeOnly_true_returnActiveCertifications")
     public void findAll_activeOnly_true_returnActiveCertifications() {
+        // Arrange
         List<Certification> sampleCertifications = Collections.singletonList(SAMPLE_CERTIFICATION);
 
         when(certificationRepository.findAll(true)).thenReturn(sampleCertifications);
 
+        // Act
         List<Certification> result = certificationService.findAll(true);
 
+        // Assert
         assertThat(result).isEqualTo(sampleCertifications);
         verify(certificationRepository, times(1)).findAll(true);
     }
 
     @Test
-    @DisplayName("should return all certifications when findAll with false")
+    @DisplayName("findAll_activeOnly_false_returnAllCertifications")
     public void findAll_activeOnly_false_returnAllCertifications() {
+        // Arrange
         List<Certification> sampleCertifications = Collections.singletonList(SAMPLE_CERTIFICATION);
 
         when(certificationRepository.findAll(false)).thenReturn(sampleCertifications);
 
+        // Act
         List<Certification> result = certificationService.findAll(false);
 
+        // Assert
         assertThat(result).isEqualTo(sampleCertifications);
         verify(certificationRepository, times(1)).findAll(false);
     }
 
     @Test
-    @DisplayName("should save and return the saved certification")
+    @DisplayName("save_certification_returnSavedCertification")
     public void save_certification_returnSavedCertification() {
+        // Arrange
         when(certificationRepository.save(SAMPLE_CERTIFICATION)).thenReturn(SAMPLE_CERTIFICATION);
 
+        // Act
         Certification result = certificationService.save(SAMPLE_CERTIFICATION);
 
+        // Assert
         assertThat(result).isEqualTo(SAMPLE_CERTIFICATION);
         verify(certificationRepository, times(1)).save(SAMPLE_CERTIFICATION);
     }
 
     @Test
-    @DisplayName("should throw IllegalArgumentException when null id provided")
+    @DisplayName("findById_nullId_throwIllegalArgumentException")
     public void findById_nullId_throwIllegalArgumentException() {
+        // Arrange
         String nullId = null;
 
+        // Act & Assert
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> certificationService.findById(nullId))
                 .withMessage("Invalid id: null");
@@ -101,10 +112,12 @@ public class CertificationRepositoryTest {
     }
 
     @Test
-    @DisplayName("should throw IllegalArgumentException when null certification provided for save")
+    @DisplayName("save_nullCertification_throwIllegalArgumentException")
     public void save_nullCertification_throwIllegalArgumentException() {
+        // Arrange
         Certification nullCertification = null;
 
+        // Act & Assert
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> certificationService.save(nullCertification))
                 .withMessage("Invalid certification: null");

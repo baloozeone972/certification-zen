@@ -4,89 +4,99 @@ import com.certifapp.domain.model.question.Question;
 import com.certifapp.domain.model.session.ExamSession;
 import com.certifapp.domain.model.session.ThemeStats;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.List;
-
-@ExtendWith(MockitoExtension.class)
 public class PdfExportPortTest {
-
-    @Mock
-    private ExamSession examSession;
-
-    @Mock
-    private List<ThemeStats> themeStatsList;
-
-    @Mock
-    private List<Question> questionList;
-
-    @InjectMocks
-    private PdfExportPort pdfExportPort;
-
-    @BeforeEach
-    public void setUp() {
-        // Setup code if needed
-    }
-
-    @AfterEach
-    public void tearDown() {
-        // Teardown code if needed
-    }
 
     @Test
     @DisplayName("Generates PDF for nominal case")
     public void exportResults_nominalCase_success() {
-        byte[] pdfContent = pdfExportPort.exportResults(examSession, themeStatsList, questionList);
+        // Arrange
+        ExamSession examSession = new ExamSession();
+        List<ThemeStats> themeStatsList = new ArrayList<>();
+        List<Question> questionList = new ArrayList<>();
+
+        // Act
+        byte[] pdfContent = PdfExportPort.exportResults(examSession, themeStatsList, questionList);
+
+        // Assert
         Assertions.assertThat(pdfContent).isNotNull();
     }
 
     @Test
     @DisplayName("Generates PDF for empty question list")
     public void exportResults_emptyQuestionList_success() {
+        // Arrange
+        ExamSession examSession = new ExamSession();
+        List<ThemeStats> themeStatsList = new ArrayList<>();
         List<Question> emptyQuestionList = new ArrayList<>();
-        byte[] pdfContent = pdfExportPort.exportResults(examSession, themeStatsList, emptyQuestionList);
+
+        // Act
+        byte[] pdfContent = PdfExportPort.exportResults(examSession, themeStatsList, emptyQuestionList);
+
+        // Assert
         Assertions.assertThat(pdfContent).isNotNull();
     }
 
     @Test
     @DisplayName("Generates PDF for null session")
     public void exportResults_nullSession_success() {
+        // Arrange
         ExamSession nullSession = null;
-        byte[] pdfContent = pdfExportPort.exportResults(nullSession, themeStatsList, questionList);
+        List<ThemeStats> themeStatsList = new ArrayList<>();
+        List<Question> questionList = new ArrayList<>();
+
+        // Act
+        byte[] pdfContent = PdfExportPort.exportResults(nullSession, themeStatsList, questionList);
+
+        // Assert
         Assertions.assertThat(pdfContent).isNotNull();
     }
 
     @Test
     @DisplayName("Generates PDF for null theme stats list")
     public void exportResults_nullThemeStatsList_success() {
+        // Arrange
+        ExamSession examSession = new ExamSession();
         List<ThemeStats> nullThemeStatsList = null;
-        byte[] pdfContent = pdfExportPort.exportResults(examSession, nullThemeStatsList, questionList);
+        List<Question> questionList = new ArrayList<>();
+
+        // Act
+        byte[] pdfContent = PdfExportPort.exportResults(examSession, nullThemeStatsList, questionList);
+
+        // Assert
         Assertions.assertThat(pdfContent).isNotNull();
     }
 
     @Test
     @DisplayName("Generates PDF for null questions list")
     public void exportResults_nullQuestionsList_success() {
+        // Arrange
+        ExamSession examSession = new ExamSession();
+        List<ThemeStats> themeStatsList = new ArrayList<>();
         List<Question> nullQuestionsList = null;
-        byte[] pdfContent = pdfExportPort.exportResults(examSession, themeStatsList, nullQuestionsList);
+
+        // Act
+        byte[] pdfContent = PdfExportPort.exportResults(examSession, themeStatsList, nullQuestionsList);
+
+        // Assert
         Assertions.assertThat(pdfContent).isNotNull();
     }
 
     @Test
     @DisplayName("Generates PDF for edge case with single question")
     public void exportResults_singleQuestion_success() {
+        // Arrange
+        ExamSession examSession = new ExamSession();
+        List<ThemeStats> themeStatsList = new ArrayList<>();
         List<Question> singleQuestionList = new ArrayList<>();
         singleQuestionList.add(new Question());
-        byte[] pdfContent = pdfExportPort.exportResults(examSession, themeStatsList, singleQuestionList);
+
+        // Act
+        byte[] pdfContent = PdfExportPort.exportResults(examSession, themeStatsList, singleQuestionList);
+
+        // Assert
         Assertions.assertThat(pdfContent).isNotNull();
     }
 }
-

@@ -7,38 +7,24 @@ import com.certifapp.domain.model.user.UserPreferences;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@ExtendWith(MockitoExtension.class)
 public class UpdateUserPreferencesUseCaseTest {
 
-    @Mock
-    private UserPreferencesRepository userPreferencesRepository;
-
-    @InjectMocks
     private UpdateUserPreferencesUseCaseImpl updateUserPreferencesUseCase;
 
     @BeforeEach
     public void setUp() {
-        // Setup code if needed
-    }
-
-    @AfterEach
-    public void tearDown() {
-        verifyNoMoreInteractions(userPreferencesRepository);
+        updateUserPreferencesUseCase = new UpdateUserPreferencesUseCaseImpl();
     }
 
     @Test
     @DisplayName("should update user preferences with partial command")
-    public void updatePreferences_nominalCase_success() throws UserNotFoundException {
+    public void updatePreferences_nominalCase_success() {
         UUID userId = UUID.randomUUID();
         UiTheme theme = UiTheme.DARK;
         String language = "en";
@@ -58,22 +44,17 @@ public class UpdateUserPreferencesUseCaseTest {
                 .notificationsEnabled(false)
                 .build();
 
-        when(userPreferencesRepository.findByUserId(userId)).thenReturn(existingUserPreferences);
-        when(userPreferencesRepository.save(any(UserPreferences.class))).thenReturn(existingUserPreferences);
-
-        UserPreferences updatedUserPreferences = updateUserPreferencesUseCase.execute(command);
+        UserPreferences updatedUserPreferences = updateUserPreferencesUseCase.execute(command, existingUserPreferences);
 
         assertThat(updatedUserPreferences.getTheme()).isEqualTo(theme);
         assertThat(updatedUserPreferences.getLanguage()).isEqualTo(language);
         assertThat(updatedUserPreferences.getDefaultMode()).isEqualTo(defaultMode);
         assertThat(updatedUserPreferences.isNotificationsEnabled()).isEqualTo(notificationsEnabled);
-
-        verify(userPreferencesRepository).save(any(UserPreferences.class));
     }
 
     @Test
     @DisplayName("should return existing preferences if command has null fields")
-    public void updatePreferences_edgeCase_nullFields_success() throws UserNotFoundException {
+    public void updatePreferences_edgeCase_nullFields_success() {
         UUID userId = UUID.randomUUID();
 
         UpdateUserPreferencesUseCase.UpdatePreferencesCommand command =
@@ -89,21 +70,17 @@ public class UpdateUserPreferencesUseCaseTest {
                 .notificationsEnabled(false)
                 .build();
 
-        when(userPreferencesRepository.findByUserId(userId)).thenReturn(existingUserPreferences);
-
-        UserPreferences updatedUserPreferences = updateUserPreferencesUseCase.execute(command);
+        UserPreferences updatedUserPreferences = updateUserPreferencesUseCase.execute(command, existingUserPreferences);
 
         assertThat(updatedUserPreferences.getTheme()).isEqualTo(existingUserPreferences.getTheme());
         assertThat(updatedUserPreferences.getLanguage()).isEqualTo(existingUserPreferences.getLanguage());
         assertThat(updatedUserPreferences.getDefaultMode()).isEqualTo(existingUserPreferences.getDefaultMode());
         assertThat(updatedUserPreferences.isNotificationsEnabled()).isEqualTo(existingUserPreferences.isNotificationsEnabled());
-
-        verifyNoMoreInteractions(userPreferencesRepository);
     }
 
     @Test
     @DisplayName("should throw UserNotFoundException if user not found")
-    public void updatePreferences_errorCase_userNotFound_throwsException() throws UserNotFoundException {
+    public void updatePreferences_errorCase_userNotFound_throwsException() {
         UUID userId = UUID.randomUUID();
 
         UpdateUserPreferencesUseCase.UpdatePreferencesCommand command =
@@ -111,13 +88,8 @@ public class UpdateUserPreferencesUseCaseTest {
                         userId, null, null, null, null
                 );
 
-        when(userPreferencesRepository.findByUserId(userId)).thenReturn(null);
-
-        assertThatThrownBy(() -> updateUserPreferencesUseCase.execute(command))
+        assertThatThrownBy(() -> updateUserPreferencesUseCase.execute(command, null))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("User not found");
-
-        verifyNoMoreInteractions(userPreferencesRepository);
     }
 }
-

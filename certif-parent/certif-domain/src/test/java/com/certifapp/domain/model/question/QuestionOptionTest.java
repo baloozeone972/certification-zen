@@ -1,27 +1,12 @@
 package com.certifapp.domain.model.question;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@ExtendWith(MockitoExtension.class)
 public class QuestionOptionTest {
-
-    @InjectMocks
-    private QuestionOption questionOption;
-
-    @BeforeEach
-    public void setUp() {
-        questionOption = new QuestionOption(UUID.randomUUID(), UUID.randomUUID(), 'A', "Option A", true, 0);
-    }
 
     @DisplayName("Should create a valid QuestionOption with default values")
     @Test
@@ -88,8 +73,6 @@ public class QuestionOptionTest {
         new QuestionOption(UUID.randomUUID(), UUID.randomUUID(), label, "Lowercase", true, 0);
 
         // Assert
-        // No direct way to verify the constructor's behavior in Mockito, but we can check if the value is uppercase
         assertThat(questionOption.label()).isEqualTo('A');
     }
 }
-

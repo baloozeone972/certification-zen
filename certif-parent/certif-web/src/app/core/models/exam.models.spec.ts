@@ -5,7 +5,9 @@ describe('ExamModelService', () => {
     let service: ExamModelService;
 
     beforeEach(() => {
-        TestBed.configureTestingModule({});
+        TestBed.configureTestingModule({
+            providers: [ExamModelService]
+        });
         service = TestBed.inject(ExamModelService);
     });
 
@@ -17,4 +19,3 @@ describe('ExamModelService', () => {
         expect(service).toBeTruthy();
     });
 });
-

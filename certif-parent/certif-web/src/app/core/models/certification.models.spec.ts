@@ -2,29 +2,25 @@ describe('Certification', () => {
     let certification: Certification;
 
     beforeEach(() => {
-        certification = {
-            id: '1',
-            code: 'C1',
-            name: 'Test Certification',
-            totalQuestions: 50,
-            examQuestionCount: 40,
-            passingScore: 30,
-            examDurationMin: 60,
-            examType: 'MCQ',
-            themes: [
+        certification = new Certification(
+            '1',
+            'C1',
+            'Test Certification',
+            50,
+            40,
+            30,
+            60,
+            'MCQ',
+            [
                 {id: 'T1', code: 'T1C', label: 'Theme 1', questionCount: 20},
                 {id: 'T2', code: 'T2C', label: 'Theme 2', questionCount: 30}
             ],
-            isActive: true
-        };
+            true
+        );
     });
 
     it('should create an instance with default values', () => {
-        const instance = {
-            id: '',
-            code: '',
-            name: ''
-        };
+        const instance = new Certification('', '', '', 0, 0, 0, 0, '', [], false);
         expect(instance).toBeDefined();
     });
 
@@ -50,4 +46,3 @@ describe('Certification', () => {
         expect(certification.isActive).toBe(true);
     });
 });
-

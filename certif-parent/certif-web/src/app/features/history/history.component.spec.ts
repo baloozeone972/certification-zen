@@ -1,4 +1,4 @@
-import {async, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {CommonModule} from '@angular/common';
 import {HistoryComponent} from './history.component';
@@ -11,7 +11,7 @@ describe('HistoryComponent', () => {
     let fixture: ComponentFixture<HistoryComponent>;
     let examService: jasmine.SpyObj<ExamService>;
 
-    beforeEach(async(() => {
+    beforeEach(async () => {
         TestBed.configureTestingModule({
             declarations: [HistoryComponent],
             imports: [CommonModule, RouterTestingModule.withRoutes([]), DurationPipe],
@@ -20,7 +20,7 @@ describe('HistoryComponent', () => {
             ]
         })
             .compileComponents();
-    }));
+    });
 
     beforeEach(() => {
         fixture = TestBed.createComponent(HistoryComponent);
@@ -44,7 +44,7 @@ describe('HistoryComponent', () => {
         expect(compiled.querySelector('.history__empty')).toBeTruthy();
     });
 
-    it('should display sessions when they are available', async(() => {
+    it('should display sessions when they are available', async () => {
         const mockSessions: ExamSessionSummary[] = [
             {
                 id: '1',
@@ -60,12 +60,11 @@ describe('HistoryComponent', () => {
         examService.getHistory.and.returnValue(of(mockSessions));
         fixture.detectChanges();
 
-        fixture.whenStable().then(() => {
-            const compiled = fixture.nativeElement;
-            expect(compiled.querySelector('.history__empty')).toBeFalsy();
-            expect(compiled.querySelectorAll('.history-row').length).toBe(1);
-        });
-    }));
+        await fixture.whenStable();
+        const compiled = fixture.nativeElement;
+        expect(compiled.querySelector('.history__empty')).toBeFalsy();
+        expect(compiled.querySelectorAll('.history-row').length).toBe(1);
+    });
 
     it('should call examService.getHistory on init', () => {
         spyOn(examService, 'getHistory');
@@ -73,15 +72,13 @@ describe('HistoryComponent', () => {
         expect(examService.getHistory).toHaveBeenCalled();
     });
 
-    it('should handle error when getHistory fails', async(() => {
+    it('should handle error when getHistory fails', async () => {
         examService.getHistory.and.returnValue(throwError('Server error'));
         fixture.detectChanges();
 
-        fixture.whenStable().then(() => {
-            const compiled = fixture.nativeElement;
-            expect(compiled.querySelector('.history__empty')).toBeTruthy();
-            expect(examService.getHistory).toHaveBeenCalled();
-        });
-    }));
+        await fixture.whenStable();
+        const compiled = fixture.nativeElement;
+        expect(compiled.querySelector('.history__empty')).toBeTruthy();
+        expect(examService.getHistory).toHaveBeenCalled();
+    });
 });
-

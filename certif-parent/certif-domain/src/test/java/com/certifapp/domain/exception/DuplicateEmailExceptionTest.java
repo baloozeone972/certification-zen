@@ -1,25 +1,12 @@
 package com.certifapp.domain.exception;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@ExtendWith(MockitoExtension.class)
 public class DuplicateEmailExceptionTest {
-
-    @InjectMocks
-    private DuplicateEmailException exception;
-
-    @BeforeEach
-    public void setUp() {
-        exception = new DuplicateEmailException("test@example.com");
-    }
 
     @DisplayName("Nominal case: Email is already registered")
     @Test
@@ -45,4 +32,3 @@ public class DuplicateEmailExceptionTest {
                 .hasMessage("email cannot be empty");
     }
 }
-

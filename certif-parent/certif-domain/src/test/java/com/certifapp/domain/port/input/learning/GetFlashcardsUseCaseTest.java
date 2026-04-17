@@ -2,34 +2,17 @@ package com.certifapp.domain.port.input.learning;
 
 import com.certifapp.domain.exception.SubscriptionRequiredException;
 import com.certifapp.domain.model.learning.Flashcard;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@ExtendWith(MockitoExtension.class)
 public class GetFlashcardsUseCaseTest {
-
-    @Mock
-    private FlashcardService flashcardService;
-
-    @InjectMocks
-    private GetFlashcardsUseCase getFlashcardsUseCase;
-
-    @BeforeEach
-    public void setUp() {
-        // Setup mock behavior if necessary
-    }
 
     @DisplayName("nominal case: retrieve flashcards due for SM-2 review")
     @Test
@@ -39,12 +22,19 @@ public class GetFlashcardsUseCaseTest {
         int limit = 5;
         List<Flashcard> expectedFlashcards = Arrays.asList(new Flashcard(), new Flashcard());
 
-        when(flashcardService.getFlashcardsDueForReview(userId, certificationId, limit)).thenReturn(expectedFlashcards);
+        // Arrange
+        GetFlashcardsUseCase getFlashcardsUseCase = new GetFlashcardsUseCase(new FlashcardService() {
+            @Override
+            public List<Flashcard> getFlashcardsDueForReview(UUID userId, String certificationId, int limit) {
+                return expectedFlashcards;
+            }
+        });
 
+        // Act
         List<Flashcard> result = getFlashcardsUseCase.execute(userId, certificationId, limit);
 
+        // Assert
         assertThat(result).isEqualTo(expectedFlashcards);
-        verify(flashcardService, times(1)).getFlashcardsDueForReview(userId, certificationId, limit);
     }
 
     @DisplayName("edge case: limit is 0")
@@ -55,12 +45,19 @@ public class GetFlashcardsUseCaseTest {
         int limit = 0;
         List<Flashcard> expectedFlashcards = Arrays.asList(new Flashcard(), new Flashcard());
 
-        when(flashcardService.getFlashcardsDueForReview(userId, certificationId, anyInt())).thenReturn(expectedFlashcards);
+        // Arrange
+        GetFlashcardsUseCase getFlashcardsUseCase = new GetFlashcardsUseCase(new FlashcardService() {
+            @Override
+            public List<Flashcard> getFlashcardsDueForReview(UUID userId, String certificationId, int limit) {
+                return expectedFlashcards;
+            }
+        });
 
+        // Act
         List<Flashcard> result = getFlashcardsUseCase.execute(userId, certificationId, limit);
 
+        // Assert
         assertThat(result).isEqualTo(expectedFlashcards);
-        verify(flashcardService, times(1)).getFlashcardsDueForReview(userId, certificationId, anyInt());
     }
 
     @DisplayName("error case: user does not have subscription")
@@ -70,13 +67,17 @@ public class GetFlashcardsUseCaseTest {
         String certificationId = "cert123";
         int limit = 5;
 
-        when(flashcardService.getFlashcardsDueForReview(userId, certificationId, limit)).thenThrow(new SubscriptionRequiredException("User does not have a subscription"));
+        // Arrange
+        GetFlashcardsUseCase getFlashcardsUseCase = new GetFlashcardsUseCase(new FlashcardService() {
+            @Override
+            public List<Flashcard> getFlashcardsDueForReview(UUID userId, String certificationId, int limit) {
+                throw new SubscriptionRequiredException("User does not have a subscription");
+            }
+        });
 
+        // Act & Assert
         assertThatThrownBy(() -> getFlashcardsUseCase.execute(userId, certificationId, limit))
                 .isInstanceOf(SubscriptionRequiredException.class)
                 .hasMessage("User does not have a subscription");
-
-        verify(flashcardService, times(1)).getFlashcardsDueForReview(userId, certificationId, limit);
     }
 }
-

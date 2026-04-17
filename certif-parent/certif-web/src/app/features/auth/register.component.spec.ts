@@ -2,12 +2,14 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {RouterTestingModule} from '@angular/router/testing';
 import {AuthService} from '../../core/auth/auth.service';
-import {RegisterComponent} from './register.component';
+import {Router} from '@angular/router';
+import {of, throwError} from 'rxjs';
 
 describe('RegisterComponent', () => {
     let component: RegisterComponent;
     let fixture: ComponentFixture<RegisterComponent>;
     let authService: AuthService;
+    let router: Router;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
@@ -22,6 +24,7 @@ describe('RegisterComponent', () => {
         fixture = TestBed.createComponent(RegisterComponent);
         component = fixture.componentInstance;
         authService = TestBed.inject(AuthService);
+        router = TestBed.inject(Router);
         fixture.detectChanges();
     });
 
@@ -40,7 +43,7 @@ describe('RegisterComponent', () => {
             component.submit();
 
             expect(authService.register).toHaveBeenCalledWith(email, password);
-            expect(component.router.navigate).toHaveBeenCalledWith(['/']);
+            expect(router.navigate).toHaveBeenCalledWith(['/']);
         });
 
         it('should set error message on failure', () => {
@@ -81,4 +84,3 @@ describe('RegisterComponent', () => {
         });
     });
 });
-

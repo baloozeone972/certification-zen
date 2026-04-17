@@ -10,7 +10,7 @@ describe('AppComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [RouterTestingModule, CommonModule],
+            imports: [RouterTestingModule],
             declarations: [AppComponent]
         }).compileComponents();
     });
@@ -59,4 +59,3 @@ describe('AppComponent', () => {
         });
     });
 });
-

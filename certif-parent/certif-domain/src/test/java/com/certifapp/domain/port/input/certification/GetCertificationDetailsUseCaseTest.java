@@ -2,41 +2,16 @@ package com.certifapp.domain.port.input.certification;
 
 import com.certifapp.domain.exception.CertificationNotFoundException;
 import com.certifapp.domain.model.certification.Certification;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
-
-@ExtendWith(MockitoExtension.class)
 public class GetCertificationDetailsUseCaseTest {
 
-    @Mock
-    private CertificationRepository certificationRepository;
-
-    @InjectMocks
-    private GetCertificationDetailsUseCase getCertificationDetailsUseCase;
-
-    @BeforeEach
-    public void setUp() {
-        // Set up any necessary initializations before each test
-    }
-
-    @AfterEach
-    public void tearDown() {
-        // Clean up any resources or reset mocks after each test
-    }
+    private final GetCertificationDetailsUseCase getCertificationDetailsUseCase = new GetCertificationDetailsUseCase();
 
     @Test
     @DisplayName("execute_nominal_case_shouldReturnCertification")
-    public void execute_nominal_case_shouldReturnCertification() throws CertificationNotFoundException {
+    public void execute_nominal_case_shouldReturnCertification() {
         String certificationId = "ocp21";
         Certification expectedCertification = new Certification(certificationId, "OpenCerts", null);
 
@@ -60,7 +35,7 @@ public class GetCertificationDetailsUseCaseTest {
 
     @Test
     @DisplayName("execute_error_case_certificationNotFound_shouldThrowCertificationNotFoundException")
-    public void execute_error_case_certificationNotFound_shouldThrowCertificationNotFoundException() throws CertificationNotFoundException {
+    public void execute_error_case_certificationNotFound_shouldThrowCertificationNotFoundException() {
         String certificationId = "nonexistent";
 
         when(certificationRepository.findById(certificationId)).thenReturn(null);
@@ -72,4 +47,3 @@ public class GetCertificationDetailsUseCaseTest {
         verify(certificationRepository, times(1)).findById(certificationId);
     }
 }
-

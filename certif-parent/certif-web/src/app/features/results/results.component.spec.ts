@@ -14,7 +14,8 @@ describe('ResultsComponent', () => {
         examServiceSpy = jasmine.createSpyObj('ExamService', ['getResults', 'exportPdf']);
 
         await TestBed.configureTestingModule({
-            imports: [CommonModule, ResultsComponent],
+            imports: [CommonModule],
+            declarations: [ResultsComponent],
             providers: [
                 {provide: ExamService, useValue: examServiceSpy},
                 {provide: ActivatedRoute, useValue: {snapshot: {paramMap: {get: () => '123'}}}}
@@ -106,4 +107,3 @@ describe('ResultsComponent', () => {
         });
     });
 });
-
