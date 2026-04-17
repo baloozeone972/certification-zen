@@ -21,8 +21,11 @@ public class GetExamResultsUseCaseImpl implements GetExamResultsUseCase {
 
     @Override
     public ExamSession execute(UUID sessionId, UUID userId) {
-        return sessionRepository.findById(sessionId)
-                .filter(session -> session.userId().equals(userId))
+        ExamSession session = sessionRepository.findById(sessionId)
                 .orElseThrow(() -> new ExamSessionNotFoundException(sessionId));
+        if (!session.userId().equals(userId)) {
+            throw new ExamSessionNotFoundException(sessionId);
+        }
+        return session;
     }
 }
