@@ -1,0 +1,7 @@
+# certif-ios/Gemfile
+# Ruby dependencies for Fastlane
+
+source "https://rubygems.org"
+
+gem "fastlane", "~> 2.221"
+gem "xcpretty", "~> 0.3"

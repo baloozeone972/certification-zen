@@ -1,0 +1,16 @@
+# certif-ios/fastlane/Appfile
+#
+# App Store Connect configuration for Fastlane.
+# app_identifier and apple_id are read from environment variables
+# when running in CI to avoid hardcoding sensitive data.
+
+app_identifier("com.certifapp.CertifApp")
+
+# App Store Connect email — override via ENV in CI
+apple_id(ENV["APPLE_ID"] || "admin@certifapp.com")
+
+# Team ID — override via ENV in CI
+team_id(ENV["APPLE_TEAM_ID"] || "XXXXXXXXXX")
+
+# App Store Connect API key (preferred over username/password)
+# Set in Fastfile lane using api_key_path or api_key block
