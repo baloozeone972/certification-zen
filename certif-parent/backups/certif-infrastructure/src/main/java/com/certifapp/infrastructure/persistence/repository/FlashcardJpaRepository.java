@@ -34,5 +34,6 @@ public interface FlashcardJpaRepository extends JpaRepository<FlashcardEntity, U
     List<FlashcardEntity> findDueByUserAndCertification(
             @Param("userId") UUID userId,
             @Param("certId") String certId,
-            @Param("today") LocalDate today);
+            @Param("today") LocalDate today,
+            org.springframework.data.domain.Pageable pageable);
 }
