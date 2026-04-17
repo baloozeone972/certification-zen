@@ -12,12 +12,18 @@ package com.certifapp.domain.model.user;
  */
 public enum UserRole {
 
-    /** Standard end-user — access to all public and freemium features. */
+    /**
+     * Standard end-user — access to all public and freemium features.
+     */
     USER,
 
-    /** Back-office administrator — access to question enrichment, challenge publishing, metrics. */
+    /**
+     * Back-office administrator — access to question enrichment, challenge publishing, metrics.
+     */
     ADMIN,
 
-    /** API partner — programmatic access for B2B integrations. */
+    /**
+     * API partner — programmatic access for B2B integrations.
+     */
     PARTNER
 }

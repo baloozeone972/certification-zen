@@ -13,11 +13,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 sealed interface ExamUiState {
-    object Idle    : ExamUiState
+    object Idle : ExamUiState
     object Loading : ExamUiState
     data class SessionStarted(val sessionId: String) : ExamUiState
-    data class Submitted(val sessionId: String)      : ExamUiState
-    data class Error(val message: String)            : ExamUiState
+    data class Submitted(val sessionId: String) : ExamUiState
+    data class Error(val message: String) : ExamUiState
 }
 
 @HiltViewModel
@@ -26,10 +26,10 @@ class ExamViewModel @Inject constructor(
     private val examRepository: ExamRepository
 ) : ViewModel() {
 
-    private val _uiState      = MutableStateFlow<ExamUiState>(ExamUiState.Idle)
+    private val _uiState = MutableStateFlow<ExamUiState>(ExamUiState.Idle)
     val uiState: StateFlow<ExamUiState> = _uiState.asStateFlow()
 
-    private val _session      = MutableStateFlow<ExamSession?>(null)
+    private val _session = MutableStateFlow<ExamSession?>(null)
     val session: StateFlow<ExamSession?> = _session.asStateFlow()
 
     private val _currentIndex = MutableStateFlow(0)
@@ -76,7 +76,7 @@ class ExamViewModel @Inject constructor(
 
     fun skipQuestion() {
         val session = _session.value ?: return
-        val qId     = session.questions[_currentIndex.value].id
+        val qId = session.questions[_currentIndex.value].id
         viewModelScope.launch { examRepository.submitAnswer(session.id, qId, null, 0) }
         nextQuestion()
     }

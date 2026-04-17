@@ -2,6 +2,7 @@
 package com.certifapp.infrastructure.persistence.entity;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -11,8 +12,8 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "user_sm2_schedule",
-    uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "question_id"}),
-    indexes = { @Index(name = "idx_sm2_user_due", columnList = "user_id, due_date") })
+        uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "question_id"}),
+        indexes = {@Index(name = "idx_sm2_user_due", columnList = "user_id, due_date")})
 public class SM2ScheduleEntity {
 
     @Id
@@ -41,20 +42,67 @@ public class SM2ScheduleEntity {
     @Column(name = "last_reviewed_at")
     private OffsetDateTime lastReviewedAt;
 
-    public UUID getId()                          { return id; }
-    public void setId(UUID id)                   { this.id = id; }
-    public UUID getUserId()                      { return userId; }
-    public void setUserId(UUID u)                { this.userId = u; }
-    public UUID getQuestionId()                  { return questionId; }
-    public void setQuestionId(UUID q)            { this.questionId = q; }
-    public double getEaseFactor()                { return easeFactor; }
-    public void setEaseFactor(double e)          { this.easeFactor = e; }
-    public int getIntervalDays()                 { return intervalDays; }
-    public void setIntervalDays(int i)           { this.intervalDays = i; }
-    public int getRepetitions()                  { return repetitions; }
-    public void setRepetitions(int r)            { this.repetitions = r; }
-    public LocalDate getDueDate()                { return dueDate; }
-    public void setDueDate(LocalDate d)          { this.dueDate = d; }
-    public OffsetDateTime getLastReviewedAt()    { return lastReviewedAt; }
-    public void setLastReviewedAt(OffsetDateTime t) { this.lastReviewedAt = t; }
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID u) {
+        this.userId = u;
+    }
+
+    public UUID getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(UUID q) {
+        this.questionId = q;
+    }
+
+    public double getEaseFactor() {
+        return easeFactor;
+    }
+
+    public void setEaseFactor(double e) {
+        this.easeFactor = e;
+    }
+
+    public int getIntervalDays() {
+        return intervalDays;
+    }
+
+    public void setIntervalDays(int i) {
+        this.intervalDays = i;
+    }
+
+    public int getRepetitions() {
+        return repetitions;
+    }
+
+    public void setRepetitions(int r) {
+        this.repetitions = r;
+    }
+
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDate d) {
+        this.dueDate = d;
+    }
+
+    public OffsetDateTime getLastReviewedAt() {
+        return lastReviewedAt;
+    }
+
+    public void setLastReviewedAt(OffsetDateTime t) {
+        this.lastReviewedAt = t;
+    }
 }

@@ -1,17 +1,16 @@
 // certif-parent/certif-web/src/app/features/learning/learning-dashboard.component.ts
-import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from "@angular/core";
-import { RouterLink } from "@angular/router";
-import { CommonModule } from "@angular/common";
-import { CertificationService } from "../../core/services/certification.service";
-import { LearningService } from "../../core/services/learning.service";
-import { AdaptivePlan } from "../../core/models/learning.models";
+import {ChangeDetectionStrategy, Component, inject, OnInit} from "@angular/core";
+import {RouterLink} from "@angular/router";
+import {CommonModule} from "@angular/common";
+import {CertificationService} from "../../core/services/certification.service";
+import {LearningService} from "../../core/services/learning.service";
 
 @Component({
-  selector: "app-learning-dashboard",
-  standalone: true,
-  imports: [CommonModule, RouterLink],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    selector: "app-learning-dashboard",
+    standalone: true,
+    imports: [CommonModule, RouterLink],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <div class="learn container">
       <h1>Mes révisions</h1>
       <div class="learn__grid">
@@ -29,7 +28,7 @@ import { AdaptivePlan } from "../../core/models/learning.models";
       </div>
     </div>
   `,
-  styles: [`
+    styles: [`
     .learn { padding: 2rem 1rem; }
     .learn h1 { font-size: 1.75rem; margin-bottom: 1.5rem; }
     .learn__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap: 1.25rem; }
@@ -40,8 +39,10 @@ import { AdaptivePlan } from "../../core/models/learning.models";
   `]
 })
 export class LearningDashboardComponent implements OnInit {
-  readonly certService = inject(CertificationService);
-  private readonly learningService = inject(LearningService);
+    readonly certService = inject(CertificationService);
+    private readonly learningService = inject(LearningService);
 
-  ngOnInit(): void { this.certService.loadAll().subscribe(); }
+    ngOnInit(): void {
+        this.certService.loadAll().subscribe();
+    }
 }

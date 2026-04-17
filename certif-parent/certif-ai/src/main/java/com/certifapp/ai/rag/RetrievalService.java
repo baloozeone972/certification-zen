@@ -42,13 +42,13 @@ public class RetrievalService {
                     String source = match.embedded().metadata().getString("source");
                     String content = match.embedded().text();
                     return String.format("### Source: %s
-%s", source != null ? source : "corpus", content);
+                            % s", source != null ? source : " corpus", content);
                 })
                 .collect(Collectors.joining("
 
----
+                        -- -
 
-"));
+                        "));
     }
 
     /**
@@ -63,7 +63,7 @@ public class RetrievalService {
         return vectorStore.search(query, maxResults, 0.65).stream()
                 .map(match -> {
                     String certId = match.embedded().metadata().getString("certificationId");
-                    String theme  = match.embedded().metadata().getString("themeCode");
+                    String theme = match.embedded().metadata().getString("themeCode");
                     return certId != null ? certId + (theme != null ? "/" + theme : "") : "corpus";
                 })
                 .distinct()

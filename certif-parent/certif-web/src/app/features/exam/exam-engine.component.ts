@@ -1,22 +1,22 @@
 // certif-parent/certif-web/src/app/features/exam/exam-engine.component.ts
-import { Component, OnInit, inject, signal, computed, ChangeDetectionStrategy } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
-import { CommonModule } from "@angular/common";
-import { ExamService } from "../../core/services/exam.service";
-import { ExamSession, Question } from "../../core/models/exam.models";
-import { QuestionCardComponent } from "../../shared/components/question-card/question-card.component";
-import { TimerWidgetComponent } from "../../shared/components/timer-widget/timer-widget.component";
+import {ChangeDetectionStrategy, Component, computed, inject, OnInit, signal} from "@angular/core";
+import {ActivatedRoute, Router} from "@angular/router";
+import {CommonModule} from "@angular/common";
+import {ExamService} from "../../core/services/exam.service";
+import {ExamSession, Question} from "../../core/models/exam.models";
+import {QuestionCardComponent} from "../../shared/components/question-card/question-card.component";
+import {TimerWidgetComponent} from "../../shared/components/timer-widget/timer-widget.component";
 
 /**
  * Main exam engine — navigates through questions,
  * submits answers in real time, finalises the session.
  */
 @Component({
-  selector: "app-exam-engine",
-  standalone: true,
-  imports: [CommonModule, QuestionCardComponent, TimerWidgetComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    selector: "app-exam-engine",
+    standalone: true,
+    imports: [CommonModule, QuestionCardComponent, TimerWidgetComponent],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <div class="engine">
       @if (session()) {
         <header class="engine__header">
@@ -54,7 +54,7 @@ import { TimerWidgetComponent } from "../../shared/components/timer-widget/timer
       }
     </div>
   `,
-  styles: [`
+    styles: [`
     .engine { display: flex; flex-direction: column; min-height: calc(100vh - 60px); }
     .engine__header { padding: 1rem 2rem; background: var(--color-surface);
                        border-bottom: 1px solid var(--color-border);
@@ -72,51 +72,55 @@ import { TimerWidgetComponent } from "../../shared/components/timer-widget/timer
   `]
 })
 export class ExamEngineComponent implements OnInit {
-  private readonly examService = inject(ExamService);
-  private readonly route       = inject(ActivatedRoute);
-  private readonly router      = inject(Router);
+    readonly session = signal<ExamSession | null>(null);
+    readonly currentIndex = signal(0);
+    readonly answers = signal<Map<string, string>>(new Map());
+    readonly submitting = signal(false);
+    readonly startTime = signal(Date.now());
+    readonly currentQuestion = computed<Question>(() =>
+        this.session()!.questions[this.currentIndex()]
+    );
+    private readonly examService = inject(ExamService);
+    private readonly route = inject(ActivatedRoute);
+    private readonly router = inject(Router);
 
-  readonly session      = signal<ExamSession | null>(null);
-  readonly currentIndex = signal(0);
-  readonly answers      = signal<Map<string, string>>(new Map());
-  readonly submitting   = signal(false);
-  readonly startTime    = signal(Date.now());
+    ngOnInit(): void {
+        const sessionId = this.route.snapshot.paramMap.get("sessionId") ?? "";
+        this.examService.getResults(sessionId).subscribe(s => this.session.set(s as any));
+    }
 
-  readonly currentQuestion = computed<Question>(() =>
-    this.session()!.questions[this.currentIndex()]
-  );
+    onAnswered(optionId: string | null): void {
+        if (!optionId) return;
+        const qId = this.currentQuestion().id;
+        this.answers.update(m => {
+            const nm = new Map(m);
+            nm.set(qId, optionId);
+            return nm;
+        });
+        const elapsed = Date.now() - this.startTime();
+        this.examService.submitAnswer(this.session()!.id, qId, optionId, elapsed).subscribe();
+    }
 
-  ngOnInit(): void {
-    const sessionId = this.route.snapshot.paramMap.get("sessionId") ?? "";
-    this.examService.getResults(sessionId).subscribe(s => this.session.set(s as any));
-  }
+    skipQuestion(): void {
+        const qId = this.currentQuestion().id;
+        this.examService.submitAnswer(this.session()!.id, qId, null, 0).subscribe();
+        this.nextQuestion();
+    }
 
-  onAnswered(optionId: string | null): void {
-    if (!optionId) return;
-    const qId = this.currentQuestion().id;
-    this.answers.update(m => { const nm = new Map(m); nm.set(qId, optionId); return nm; });
-    const elapsed = Date.now() - this.startTime();
-    this.examService.submitAnswer(this.session()!.id, qId, optionId, elapsed).subscribe();
-  }
+    nextQuestion(): void {
+        const max = (this.session()?.questions.length ?? 1) - 1;
+        if (this.currentIndex() < max) this.currentIndex.update(i => i + 1);
+    }
 
-  skipQuestion(): void {
-    const qId = this.currentQuestion().id;
-    this.examService.submitAnswer(this.session()!.id, qId, null, 0).subscribe();
-    this.nextQuestion();
-  }
+    onTimerExpired(): void {
+        this.submitExam();
+    }
 
-  nextQuestion(): void {
-    const max = (this.session()?.questions.length ?? 1) - 1;
-    if (this.currentIndex() < max) this.currentIndex.update(i => i + 1);
-  }
-
-  onTimerExpired(): void { this.submitExam(); }
-
-  submitExam(): void {
-    this.submitting.set(true);
-    this.examService.submitExam(this.session()!.id).subscribe({
-      next: () => this.router.navigate(["/results", this.session()!.id]),
-      error: () => this.submitting.set(false)
-    });
-  }
+    submitExam(): void {
+        this.submitting.set(true);
+        this.examService.submitExam(this.session()!.id).subscribe({
+            next: () => this.router.navigate(["/results", this.session()!.id]),
+            error: () => this.submitting.set(false)
+        });
+    }
 }

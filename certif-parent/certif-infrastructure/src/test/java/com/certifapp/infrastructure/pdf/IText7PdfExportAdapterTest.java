@@ -1,13 +1,5 @@
-```java
 package com.certifapp.infrastructure.pdf;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
-import java.io.ByteArrayOutputStream;
-import java.time.LocalDateTime;
-import java.util.*;
 import com.certifapp.domain.model.question.QuestionOption;
 import com.certifapp.domain.model.session.ExamSession;
 import com.certifapp.domain.model.session.ThemeStats;
@@ -19,6 +11,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.time.LocalDateTime;
+import java.util.*;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 public class IText7PdfExportAdapterTest {
@@ -44,8 +41,8 @@ public class IText7PdfExportAdapterTest {
         themeStats = Collections.singletonList(new ThemeStats("Maths", 4, 1, 5, 80.0));
 
         questions = Arrays.asList(
-            new Question(UUID.randomUUID(), "What is 2+2?", Optional.of(new QuestionOption(UUID.randomUUID(), "A", "3")), List.of()),
-            new Question(UUID.randomUUID(), "What is 3*3?", Optional.of(new QuestionOption(UUID.randomUUID(), "B", "9")), List.of())
+                new Question(UUID.randomUUID(), "What is 2+2?", Optional.of(new QuestionOption(UUID.randomUUID(), "A", "3")), List.of()),
+                new Question(UUID.randomUUID(), "What is 3*3?", Optional.of(new QuestionOption(UUID.randomUUID(), "B", "9")), List.of())
         );
     }
 
@@ -94,4 +91,4 @@ public class IText7PdfExportAdapterTest {
         assertThat(pdfBytes).isNotEmpty();
     }
 }
-```
+

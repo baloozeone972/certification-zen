@@ -1,14 +1,19 @@
-```java
 package com.certifapp.domain.port.input.learning;
 
 import com.certifapp.domain.model.learning.SM2Schedule;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+
+
 
 @DisplayName("ReviewFlashcardUseCase tests")
 @ExtendWith(MockitoExtension.class)
@@ -53,8 +58,8 @@ public class ReviewFlashcardUseCaseTest {
         UUID flashcardId = UUID.randomUUID();
         int rating = 6;
 
-        assertThrows(IllegalArgumentException.class, () -> 
-            reviewFlashcardUseCase.execute(new ReviewFlashcardCommand(userId, flashcardId, rating))
+        assertThrows(IllegalArgumentException.class, () ->
+                reviewFlashcardUseCase.execute(new ReviewFlashcardCommand(userId, flashcardId, rating))
         );
     }
 
@@ -138,6 +143,3 @@ public class ReviewFlashcardUseCaseTest {
         verify(sm2ScheduleService, times(1)).update(any(SM2Schedule.class));
     }
 }
-```
-
-Note: The `SM2ScheduleService` class and its `update` method are assumed to be properly implemented in the production codebase. If not, you would need to mock or implement them for the tests to run.

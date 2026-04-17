@@ -2,6 +2,7 @@
 package com.certifapp.infrastructure.persistence.entity;
 
 import jakarta.persistence.*;
+
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -39,22 +40,71 @@ public class FlashcardEntity {
     private OffsetDateTime createdAt;
 
     @PrePersist
-    protected void onCreate() { if (createdAt == null) createdAt = OffsetDateTime.now(); }
+    protected void onCreate() {
+        if (createdAt == null) createdAt = OffsetDateTime.now();
+    }
 
-    public UUID getId()                        { return id; }
-    public void setId(UUID id)                 { this.id = id; }
-    public UUID getQuestionId()                { return questionId; }
-    public void setQuestionId(UUID q)          { this.questionId = q; }
-    public UUID getCourseId()                  { return courseId; }
-    public void setCourseId(UUID c)            { this.courseId = c; }
-    public String getFrontText()               { return frontText; }
-    public void setFrontText(String f)         { this.frontText = f; }
-    public String getBackText()                { return backText; }
-    public void setBackText(String b)          { this.backText = b; }
-    public String getCodeExample()             { return codeExample; }
-    public void setCodeExample(String c)       { this.codeExample = c; }
-    public boolean isAiGenerated()             { return aiGenerated; }
-    public void setAiGenerated(boolean a)      { this.aiGenerated = a; }
-    public OffsetDateTime getCreatedAt()       { return createdAt; }
-    public void setCreatedAt(OffsetDateTime t) { this.createdAt = t; }
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public UUID getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(UUID q) {
+        this.questionId = q;
+    }
+
+    public UUID getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(UUID c) {
+        this.courseId = c;
+    }
+
+    public String getFrontText() {
+        return frontText;
+    }
+
+    public void setFrontText(String f) {
+        this.frontText = f;
+    }
+
+    public String getBackText() {
+        return backText;
+    }
+
+    public void setBackText(String b) {
+        this.backText = b;
+    }
+
+    public String getCodeExample() {
+        return codeExample;
+    }
+
+    public void setCodeExample(String c) {
+        this.codeExample = c;
+    }
+
+    public boolean isAiGenerated() {
+        return aiGenerated;
+    }
+
+    public void setAiGenerated(boolean a) {
+        this.aiGenerated = a;
+    }
+
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(OffsetDateTime t) {
+        this.createdAt = t;
+    }
 }

@@ -18,8 +18,8 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModelTest {
 
-    private val dispatcher  = StandardTestDispatcher()
-    private val repository  = mockk<CertificationRepository>()
+    private val dispatcher = StandardTestDispatcher()
+    private val repository = mockk<CertificationRepository>()
     private lateinit var viewModel: HomeViewModel
 
     @Before
@@ -29,7 +29,9 @@ class HomeViewModelTest {
     }
 
     @After
-    fun tearDown() { Dispatchers.resetMain() }
+    fun tearDown() {
+        Dispatchers.resetMain()
+    }
 
     @Test
     fun `init loads certifications successfully`() = runTest {
@@ -56,5 +58,6 @@ class HomeViewModelTest {
     }
 
     private fun buildCert(id: String, name: String) = Certification(
-        id, "1Z0-830", name, null, 500, 80, 68, 180, "MCQ", emptyList(), true)
+        id, "1Z0-830", name, null, 500, 80, 68, 180, "MCQ", emptyList(), true
+    )
 }

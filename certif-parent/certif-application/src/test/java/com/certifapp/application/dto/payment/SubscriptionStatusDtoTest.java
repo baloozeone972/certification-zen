@@ -1,14 +1,12 @@
-```java
 package com.certifapp.application.dto.payment;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoExtension;
-import org.assertj.core.api.Assertions;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.OffsetDateTime;
 
@@ -68,4 +66,4 @@ public class SubscriptionStatusDtoTest {
                 .hasMessageContaining("Invalid tier value");
     }
 }
-```
+

@@ -16,21 +16,21 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun DifficultyChip(difficulty: String, modifier: Modifier = Modifier) {
     val (label, color) = when (difficulty.lowercase()) {
-        "easy"   -> "Facile"  to Color(0xFF27AE60)
-        "hard"   -> "Difficile" to Color(0xFFE74C3C)
-        else     -> "Moyen"   to Color(0xFFF39C12)
+        "easy" -> "Facile" to Color(0xFF27AE60)
+        "hard" -> "Difficile" to Color(0xFFE74C3C)
+        else -> "Moyen" to Color(0xFFF39C12)
     }
     Surface(
-        modifier      = modifier,
-        shape         = RoundedCornerShape(12.dp),
-        color         = color.copy(alpha = 0.15f)
+        modifier = modifier,
+        shape = RoundedCornerShape(12.dp),
+        color = color.copy(alpha = 0.15f)
     ) {
         Text(
-            text       = label,
-            color      = color,
+            text = label,
+            color = color,
             fontWeight = FontWeight.Bold,
-            fontSize   = 11.sp,
-            modifier   = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
+            fontSize = 11.sp,
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
         )
     }
 }
@@ -54,7 +54,11 @@ fun ErrorState(message: String, onRetry: () -> Unit) {
         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(32.dp)) {
             Text("⚠️", fontSize = 40.sp)
             Spacer(Modifier.height(8.dp))
-            Text(text = message, color = MaterialTheme.colorScheme.error, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+            Text(
+                text = message,
+                color = MaterialTheme.colorScheme.error,
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+            )
             Spacer(Modifier.height(16.dp))
             Button(onClick = onRetry) { Text("Réessayer") }
         }
@@ -71,16 +75,16 @@ fun ScoreIndicator(percentage: Double, passed: Boolean, modifier: Modifier = Mod
             modifier = Modifier.padding(16.dp)
         ) {
             Text(
-                text       = String.format("%.1f%%", percentage),
-                fontSize   = 32.sp,
+                text = String.format("%.1f%%", percentage),
+                fontSize = 32.sp,
                 fontWeight = FontWeight.ExtraBold,
-                color      = color
+                color = color
             )
             Text(
-                text  = if (passed) "RÉUSSI ✓" else "ÉCHEC ✗",
+                text = if (passed) "RÉUSSI ✓" else "ÉCHEC ✗",
                 color = color,
                 fontWeight = FontWeight.Bold,
-                fontSize   = 12.sp
+                fontSize = 12.sp
             )
         }
     }

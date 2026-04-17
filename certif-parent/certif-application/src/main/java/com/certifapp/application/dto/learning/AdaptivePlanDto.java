@@ -8,18 +8,19 @@ import java.util.UUID;
 /**
  * Daily adaptive study plan generated from SM-2 schedules and session history.
  *
- * @param userId            owner user UUID
- * @param certificationId   target certification
- * @param dueTodayCount     number of flashcards due for review today
- * @param weakThemes        theme codes where the user is consistently underperforming
- * @param predictedScore    AI-estimated exam score based on SM-2 state (0-100)
+ * @param userId              owner user UUID
+ * @param certificationId     target certification
+ * @param dueTodayCount       number of flashcards due for review today
+ * @param weakThemes          theme codes where the user is consistently underperforming
+ * @param predictedScore      AI-estimated exam score based on SM-2 state (0-100)
  * @param recommendedExamDate recommended date to sit the exam
  */
 public record AdaptivePlanDto(
-        UUID         userId,
-        String       certificationId,
-        int          dueTodayCount,
+        UUID userId,
+        String certificationId,
+        int dueTodayCount,
         List<String> weakThemes,
-        Double       predictedScore,
-        LocalDate    recommendedExamDate
-) {}
+        Double predictedScore,
+        LocalDate recommendedExamDate
+) {
+}

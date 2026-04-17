@@ -7,9 +7,13 @@ package com.certifapp.domain.exception;
 public class StudyGroupFullException extends CertifAppException {
 
     private final java.util.UUID groupId;
+
     public StudyGroupFullException(java.util.UUID groupId, int maxMembers) {
         super("Study group " + groupId + " is full (max: " + maxMembers + ")");
         this.groupId = groupId;
     }
-    public java.util.UUID getGroupId() { return groupId; }
+
+    public java.util.UUID getGroupId() {
+        return groupId;
+    }
 }

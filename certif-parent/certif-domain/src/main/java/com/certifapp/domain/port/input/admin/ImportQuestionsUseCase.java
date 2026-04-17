@@ -2,6 +2,7 @@
 package com.certifapp.domain.port.input.admin;
 
 import com.certifapp.domain.model.question.Question;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -10,9 +11,6 @@ import java.util.UUID;
  */
 public interface ImportQuestionsUseCase {
 
-    /** Result of a bulk import operation. */
-    record ImportResult(int imported, int skipped, List<String> errors) {}
-
     /**
      * @param certificationId target certification
      * @param questions       questions to import
@@ -20,4 +18,10 @@ public interface ImportQuestionsUseCase {
      * @return summary of import outcome
      */
     ImportResult execute(String certificationId, List<Question> questions, UUID adminId);
+
+    /**
+     * Result of a bulk import operation.
+     */
+    record ImportResult(int imported, int skipped, List<String> errors) {
+    }
 }

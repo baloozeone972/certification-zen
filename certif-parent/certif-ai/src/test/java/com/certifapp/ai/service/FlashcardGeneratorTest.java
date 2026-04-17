@@ -1,4 +1,3 @@
-```java
 package com.certifapp.ai.service;
 
 import com.certifapp.domain.model.learning.Flashcard;
@@ -18,7 +17,8 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class FlashcardGeneratorTest {
@@ -52,7 +52,8 @@ public class FlashcardGeneratorTest {
         List<Flashcard> expectedFlashcards = new ArrayList<>();
 
         when(lightModel.generate(anyString())).thenReturn("{\"front\":\"Front\", \"back\":\"Back\"}");
-        when(objectMapper.readValue(anyString(), eq(new TypeReference<List<Map<String, String>>>() {}))).thenReturn(List.of());
+        when(objectMapper.readValue(anyString(), eq(new TypeReference<List<Map<String, String>>>() {
+        }))).thenReturn(List.of());
 
         // Act
         List<Flashcard> actualFlashcards = flashcardGenerator.generateFromCourse(courseId, certificationId, themeLabel, content, count);
@@ -73,7 +74,8 @@ public class FlashcardGeneratorTest {
         List<Flashcard> expectedFlashcards = new ArrayList<>();
 
         when(lightModel.generate(anyString())).thenReturn("{\"front\":\"Front\", \"back\":\"Back\"}");
-        when(objectMapper.readValue(anyString(), eq(new TypeReference<List<Map<String, String>>>() {}))).thenReturn(List.of());
+        when(objectMapper.readValue(anyString(), eq(new TypeReference<List<Map<String, String>>>() {
+        }))).thenReturn(List.of());
 
         // Act
         List<Flashcard> actualFlashcards = flashcardGenerator.generateFromCourse(courseId, certificationId, themeLabel, content, count);
@@ -94,7 +96,8 @@ public class FlashcardGeneratorTest {
         List<Flashcard> expectedFlashcards = new ArrayList<>();
 
         when(lightModel.generate(anyString())).thenReturn("{\"front\":\"Front\", \"back\":\"Back\"}");
-        when(objectMapper.readValue(anyString(), eq(new TypeReference<List<Map<String, String>>>() {}))).thenReturn(List.of());
+        when(objectMapper.readValue(anyString(), eq(new TypeReference<List<Map<String, String>>>() {
+        }))).thenReturn(List.of());
 
         // Act
         List<Flashcard> actualFlashcards = flashcardGenerator.generateFromCourse(courseId, certificationId, themeLabel, content, count);
@@ -115,7 +118,8 @@ public class FlashcardGeneratorTest {
         List<Flashcard> expectedFlashcards = new ArrayList<>();
 
         when(lightModel.generate(anyString())).thenReturn("{\"front\":\"Front\", \"back\":\"Back\"}");
-        when(objectMapper.readValue(anyString(), eq(new TypeReference<List<Map<String, String>>>() {}))).thenThrow(new Exception("Parsing error"));
+        when(objectMapper.readValue(anyString(), eq(new TypeReference<List<Map<String, String>>>() {
+        }))).thenThrow(new Exception("Parsing error"));
 
         // Act
         List<Flashcard> actualFlashcards = flashcardGenerator.generateFromCourse(courseId, certificationId, themeLabel, content, count);
@@ -124,4 +128,4 @@ public class FlashcardGeneratorTest {
         assertThat(actualFlashcards).isEqualTo(expectedFlashcards);
     }
 }
-```
+

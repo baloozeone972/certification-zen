@@ -1,15 +1,14 @@
-```java
 package com.certifapp.domain.model.user;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserPreferencesTest {
@@ -49,8 +48,8 @@ public class UserPreferencesTest {
 
         assertThatThrownBy(() -> new UserPreferences(userId, UiTheme.LIGHT, "fr",
                 ExamMode.EXAM, true, null, 30, 60))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("userId must not be null");
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("userId must not be null");
     }
 
     @Test
@@ -103,4 +102,4 @@ public class UserPreferencesTest {
         assertThat(preferences.freeModeDurationMin()).isEqualTo(60);
     }
 }
-```
+

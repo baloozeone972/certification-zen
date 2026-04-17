@@ -15,11 +15,12 @@ import java.util.UUID;
  * @param aiStatus        content lifecycle status
  */
 public record CourseDto(
-        UUID   id,
+        UUID id,
         String certificationId,
         String themeCode,
         String title,
         String contentMarkdown,
         String contentHtml,
         String aiStatus
-) {}
+) {
+}

@@ -19,8 +19,10 @@ class ExamRepositoryImpl @Inject constructor(
         return dto.toDomain()
     }
 
-    override suspend fun submitAnswer(sessionId: String, questionId: String,
-                                       selectedOptionId: String?, responseTimeMs: Long) {
+    override suspend fun submitAnswer(
+        sessionId: String, questionId: String,
+        selectedOptionId: String?, responseTimeMs: Long
+    ) {
         api.submitAnswer(sessionId, SubmitAnswerRequest(questionId, selectedOptionId, responseTimeMs))
     }
 
@@ -31,16 +33,18 @@ class ExamRepositoryImpl @Inject constructor(
         api.getResults(sessionId).data.toDomain()
 
     private fun com.certifapp.android.data.remote.dto.ExamSessionDto.toDomain() = ExamSession(
-        id              = id,
+        id = id,
         certificationId = certificationId,
-        mode            = ExamMode.valueOf(mode),
-        questions       = questions.map { q ->
-            Question(id = q.id, statement = q.statement,
+        mode = ExamMode.valueOf(mode),
+        questions = questions.map { q ->
+            Question(
+                id = q.id, statement = q.statement,
                 options = q.options.map { QuestionOption(it.id, it.label, it.text) },
-                themeCode = q.themeCode, difficulty = q.difficulty)
+                themeCode = q.themeCode, difficulty = q.difficulty
+            )
         },
-        startedAt       = startedAt,
+        startedAt = startedAt,
         durationSeconds = durationSeconds,
-        timerEnabled    = timerEnabled
+        timerEnabled = timerEnabled
     )
 }

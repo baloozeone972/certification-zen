@@ -1,4 +1,3 @@
-```java
 package com.certifapp.ai.config;
 
 import dev.langchain4j.model.anthropic.AnthropicChatModel;
@@ -11,10 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-
-import java.time.Duration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -141,4 +136,4 @@ public class ModelRouterConfigTest {
         verify(modelRouterConfig, times(1)).ollamaLightModel(anyString(), anyString());
     }
 }
-```
+

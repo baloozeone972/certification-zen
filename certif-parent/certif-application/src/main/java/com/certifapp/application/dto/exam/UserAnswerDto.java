@@ -12,8 +12,9 @@ import java.util.UUID;
  * @param isSkipped        true if no option was selected
  */
 public record UserAnswerDto(
-        UUID    questionId,
-        UUID    selectedOptionId,
+        UUID questionId,
+        UUID selectedOptionId,
         boolean isCorrect,
         boolean isSkipped
-) {}
+) {
+}

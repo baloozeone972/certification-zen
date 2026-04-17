@@ -20,10 +20,10 @@ fun ExamEngineScreen(
     onExamFinished: (sessionId: String) -> Unit,
     viewModel: ExamViewModel = hiltViewModel()
 ) {
-    val uiState  by viewModel.uiState.collectAsState()
-    val session  by viewModel.session.collectAsState()
-    val qIndex   by viewModel.currentIndex.collectAsState()
-    val answers  by viewModel.answers.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
+    val session by viewModel.session.collectAsState()
+    val qIndex by viewModel.currentIndex.collectAsState()
+    val answers by viewModel.answers.collectAsState()
 
     LaunchedEffect(sessionId) { viewModel.loadSession(sessionId) }
     LaunchedEffect(uiState) {
@@ -52,12 +52,15 @@ fun ExamEngineScreen(
         Column(
             modifier = Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(16.dp)
         ) {
-            Text(currentQ.statement, style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(bottom = 16.dp))
+            Text(
+                currentQ.statement, style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
             currentQ.options.forEach { opt ->
                 Card(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
-                        .selectable(selected = selected == opt.id,
+                        .selectable(
+                            selected = selected == opt.id,
                             onClick = { viewModel.selectOption(currentQ.id, opt.id) }),
                     colors = if (selected == opt.id)
                         CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
@@ -67,7 +70,11 @@ fun ExamEngineScreen(
                         RadioButton(selected = selected == opt.id, onClick = null)
                         Spacer(Modifier.width(8.dp))
                         Column {
-                            Text(opt.label, fontWeight = FontWeight.Bold, fontSize = androidx.compose.ui.unit.TextUnit.Unspecified)
+                            Text(
+                                opt.label,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = androidx.compose.ui.unit.TextUnit.Unspecified
+                            )
                             Text(opt.text, style = MaterialTheme.typography.bodyMedium)
                         }
                     }
@@ -83,7 +90,7 @@ fun ExamEngineScreen(
             } else {
                 Button(
                     onClick = { viewModel.submitExam() }, Modifier.weight(1f),
-                    colors  = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary)
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary)
                 ) { Text("Terminer ✓") }
             }
         }

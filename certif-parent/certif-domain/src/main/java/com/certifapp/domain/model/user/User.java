@@ -25,24 +25,30 @@ import java.util.UUID;
  * @param updatedAt        last profile modification timestamp
  */
 public record User(
-        UUID             id,
-        String           email,
-        String           passwordHash,
-        UserRole         role,
+        UUID id,
+        String email,
+        String passwordHash,
+        UserRole role,
         SubscriptionTier subscriptionTier,
-        String           locale,
-        String           timezone,
-        String           stripeCustomerId,
-        boolean          isActive,
-        OffsetDateTime   createdAt,
-        OffsetDateTime   updatedAt
+        String locale,
+        String timezone,
+        String stripeCustomerId,
+        boolean isActive,
+        OffsetDateTime createdAt,
+        OffsetDateTime updatedAt
 ) {
-    /** Default locale for new users targeting the francophone market. */
-    public static final String DEFAULT_LOCALE   = "fr";
-    /** Default timezone for Metropolitan France. */
+    /**
+     * Default locale for new users targeting the francophone market.
+     */
+    public static final String DEFAULT_LOCALE = "fr";
+    /**
+     * Default timezone for Metropolitan France.
+     */
     public static final String DEFAULT_TIMEZONE = "Europe/Paris";
 
-    /** Compact constructor — validates mandatory fields. */
+    /**
+     * Compact constructor — validates mandatory fields.
+     */
     public User {
         if (email == null || email.isBlank())
             throw new IllegalArgumentException("email must not be blank");

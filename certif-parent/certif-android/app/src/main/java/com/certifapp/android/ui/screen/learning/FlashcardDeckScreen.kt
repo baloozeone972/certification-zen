@@ -17,8 +17,10 @@ fun FlashcardDeckScreen(certId: String, onFinished: () -> Unit) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text("Flashcards", fontSize = 22.sp, fontWeight = FontWeight.Bold)
             Spacer(Modifier.height(12.dp))
-            Text("Disponible prochainement",
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+            Text(
+                "Disponible prochainement",
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            )
         }
     }
 }

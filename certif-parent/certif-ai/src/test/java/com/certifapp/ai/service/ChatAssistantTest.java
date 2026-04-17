@@ -3,17 +3,20 @@ package com.certifapp.ai.service;
 
 import com.certifapp.ai.rag.RetrievalService;
 import dev.langchain4j.model.chat.ChatLanguageModel;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 /**
@@ -23,11 +26,18 @@ import static org.mockito.Mockito.*;
 @DisplayName("ChatAssistant")
 class ChatAssistantTest {
 
-    @Mock private ChatLanguageModel heavyModel;
-    @Mock private RetrievalService  retrievalService;
-    @Mock private PromptRenderer    promptRenderer;
+    @Mock
+    private ChatLanguageModel heavyModel;
+    @Mock
+    private RetrievalService retrievalService;
+    @Mock
+    private PromptRenderer promptRenderer;
 
     private ChatAssistant chatAssistant;
+
+    private static java.util.Map<String, Object> anyMap() {
+        return ArgumentMatchers.anyMap();
+    }
 
     @BeforeEach
     void setUp() {
@@ -84,9 +94,5 @@ class ChatAssistantTest {
         chatAssistant.chat("Question 2?", sessionId, "ocp21", "PRO");
 
         verify(heavyModel, times(2)).generate(anyString());
-    }
-
-    private static java.util.Map<String, Object> anyMap() {
-        return ArgumentMatchers.anyMap();
     }
 }

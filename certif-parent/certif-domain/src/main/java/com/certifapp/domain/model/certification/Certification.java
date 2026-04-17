@@ -26,23 +26,27 @@ import java.util.List;
  * @param isActive          whether this certification is visible in the catalogue
  */
 public record Certification(
-        String              id,
-        String              code,
-        String              name,
-        String              description,
-        int                 totalQuestions,
-        int                 examQuestionCount,
-        int                 examDurationMin,
-        int                 passingScore,
-        String              examType,
+        String id,
+        String code,
+        String name,
+        String description,
+        int totalQuestions,
+        int examQuestionCount,
+        int examDurationMin,
+        int passingScore,
+        String examType,
         List<CertificationTheme> themes,
-        boolean             isActive
+        boolean isActive
 ) {
 
-    /** Maximum number of FREE-tier exams allowed per day per certification. */
+    /**
+     * Maximum number of FREE-tier exams allowed per day per certification.
+     */
     public static final int FREE_DAILY_EXAM_LIMIT = 2;
 
-    /** Maximum number of questions per FREE-tier session. */
+    /**
+     * Maximum number of questions per FREE-tier session.
+     */
     public static final int FREE_QUESTION_LIMIT = 20;
 
     /**
@@ -57,15 +61,15 @@ public record Certification(
         }
         if (examQuestionCount <= 0) {
             throw new IllegalArgumentException(
-                "examQuestionCount must be > 0, got: " + examQuestionCount);
+                    "examQuestionCount must be > 0, got: " + examQuestionCount);
         }
         if (examDurationMin <= 0) {
             throw new IllegalArgumentException(
-                "examDurationMin must be > 0, got: " + examDurationMin);
+                    "examDurationMin must be > 0, got: " + examDurationMin);
         }
         if (passingScore < 1 || passingScore > 100) {
             throw new IllegalArgumentException(
-                "passingScore must be between 1 and 100, got: " + passingScore);
+                    "passingScore must be between 1 and 100, got: " + passingScore);
         }
         themes = themes == null ? List.of() : List.copyOf(themes);
     }
@@ -99,8 +103,8 @@ public record Certification(
      */
     public CertificationTheme findTheme(String themeCode) {
         return themes.stream()
-            .filter(t -> t.code().equals(themeCode))
-            .findFirst()
-            .orElse(null);
+                .filter(t -> t.code().equals(themeCode))
+                .findFirst()
+                .orElse(null);
     }
 }

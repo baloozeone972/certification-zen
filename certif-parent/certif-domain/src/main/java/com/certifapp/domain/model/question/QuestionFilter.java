@@ -11,22 +11,22 @@ import java.util.UUID;
  * <p>Used by {@code QuestionSelectionService} and {@code QuestionRepository}
  * to build filtered, randomised question sets for exam sessions.</p>
  *
- * @param certificationId  mandatory — certification to draw questions from
- * @param themeCodes       optional — restrict to specific theme codes;
- *                         empty list means all themes
- * @param difficulties     optional — restrict to specific difficulty levels;
- *                         empty list means all difficulties
- * @param excludeIds       UUIDs of questions to exclude (already seen in this session)
- * @param activeOnly       if {@code true}, only return questions with {@code is_active = true}
- * @param limit            maximum number of questions to return (0 = no limit)
+ * @param certificationId mandatory — certification to draw questions from
+ * @param themeCodes      optional — restrict to specific theme codes;
+ *                        empty list means all themes
+ * @param difficulties    optional — restrict to specific difficulty levels;
+ *                        empty list means all difficulties
+ * @param excludeIds      UUIDs of questions to exclude (already seen in this session)
+ * @param activeOnly      if {@code true}, only return questions with {@code is_active = true}
+ * @param limit           maximum number of questions to return (0 = no limit)
  */
 public record QuestionFilter(
-        String              certificationId,
-        List<String>        themeCodes,
+        String certificationId,
+        List<String> themeCodes,
         List<DifficultyLevel> difficulties,
-        Set<UUID>           excludeIds,
-        boolean             activeOnly,
-        int                 limit
+        Set<UUID> excludeIds,
+        boolean activeOnly,
+        int limit
 ) {
 
     /**
@@ -36,9 +36,9 @@ public record QuestionFilter(
         if (certificationId == null || certificationId.isBlank()) {
             throw new IllegalArgumentException("certificationId must not be blank");
         }
-        themeCodes    = themeCodes    == null ? List.of()  : List.copyOf(themeCodes);
-        difficulties  = difficulties  == null ? List.of()  : List.copyOf(difficulties);
-        excludeIds    = excludeIds    == null ? Set.of()   : Set.copyOf(excludeIds);
+        themeCodes = themeCodes == null ? List.of() : List.copyOf(themeCodes);
+        difficulties = difficulties == null ? List.of() : List.copyOf(difficulties);
+        excludeIds = excludeIds == null ? Set.of() : Set.copyOf(excludeIds);
     }
 
     /**

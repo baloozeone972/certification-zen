@@ -21,8 +21,8 @@ fun ExamSetupScreen(
     onBack: () -> Unit,
     viewModel: ExamViewModel = hiltViewModel()
 ) {
-    val uiState  by viewModel.uiState.collectAsState()
-    var mode     by remember { mutableStateOf(ExamMode.EXAM) }
+    val uiState by viewModel.uiState.collectAsState()
+    var mode by remember { mutableStateOf(ExamMode.EXAM) }
 
     LaunchedEffect(uiState) {
         if (uiState is ExamUiState.SessionStarted)
@@ -33,8 +33,11 @@ fun ExamSetupScreen(
         topBar = {
             TopAppBar(
                 title = { Text("Configurer l'examen") },
-                navigationIcon = { IconButton(onClick = onBack) {
-                    Icon(Icons.Default.ArrowBack, null) } }
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.Default.ArrowBack, null)
+                    }
+                }
             )
         }
     ) { padding ->
@@ -51,19 +54,22 @@ fun ExamSetupScreen(
 
             ExamMode.entries.forEach { m ->
                 val label = when (m) {
-                    ExamMode.EXAM     -> "📝 Examen officiel" to "Conditions réelles, correction à la fin"
-                    ExamMode.FREE     -> "🎯 Mode libre"     to "Choisissez vos thèmes"
-                    ExamMode.REVISION -> "📚 Révision"       to "Correction immédiate"
+                    ExamMode.EXAM -> "📝 Examen officiel" to "Conditions réelles, correction à la fin"
+                    ExamMode.FREE -> "🎯 Mode libre" to "Choisissez vos thèmes"
+                    ExamMode.REVISION -> "📚 Révision" to "Correction immédiate"
                 }
                 Row(
-                    Modifier.fillMaxWidth().selectable(selected = mode == m,
+                    Modifier.fillMaxWidth().selectable(
+                        selected = mode == m,
                         onClick = { mode = m }).padding(vertical = 8.dp)
                 ) {
                     RadioButton(selected = mode == m, onClick = { mode = m })
                     Column(Modifier.padding(start = 8.dp)) {
                         Text(label.first, fontWeight = FontWeight.Medium)
-                        Text(label.second, style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                        Text(
+                            label.second, style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        )
                     }
                 }
             }

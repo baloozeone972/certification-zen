@@ -1,8 +1,8 @@
 // certif-parent/certif-web/src/app/app.component.ts
-import { Component, OnInit, inject, signal, effect } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { AuthService } from './core/auth/auth.service';
+import {Component, inject, OnInit, signal} from '@angular/core';
+import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
+import {CommonModule} from '@angular/common';
+import {AuthService} from './core/auth/auth.service';
 
 /**
  * Root shell component.
@@ -10,10 +10,10 @@ import { AuthService } from './core/auth/auth.service';
  * Uses Angular 18 Signals for reactive state.
  */
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule],
-  template: `
+    selector: 'app-root',
+    standalone: true,
+    imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule],
+    template: `
     <nav class="navbar" [attr.data-theme]="theme()">
       <div class="container navbar__inner">
         <a routerLink="/" class="navbar__brand">
@@ -45,7 +45,7 @@ import { AuthService } from './core/auth/auth.service';
       <router-outlet />
     </main>
   `,
-  styles: [`
+    styles: [`
     .navbar {
       position: sticky; top: 0; z-index: 100;
       background: var(--color-surface);
@@ -82,20 +82,20 @@ import { AuthService } from './core/auth/auth.service';
   `]
 })
 export class AppComponent implements OnInit {
-  readonly authService = inject(AuthService);
-  readonly theme = signal<'light' | 'dark'>('light');
+    readonly authService = inject(AuthService);
+    readonly theme = signal<'light' | 'dark'>('light');
 
-  ngOnInit(): void {
-    // Restore theme from localStorage
-    const saved = localStorage.getItem('theme') as 'light' | 'dark' | null;
-    if (saved) this.theme.set(saved);
-    document.documentElement.setAttribute('data-theme', this.theme());
-  }
+    ngOnInit(): void {
+        // Restore theme from localStorage
+        const saved = localStorage.getItem('theme') as 'light' | 'dark' | null;
+        if (saved) this.theme.set(saved);
+        document.documentElement.setAttribute('data-theme', this.theme());
+    }
 
-  toggleTheme(): void {
-    const next = this.theme() === 'light' ? 'dark' : 'light';
-    this.theme.set(next);
-    localStorage.setItem('theme', next);
-    document.documentElement.setAttribute('data-theme', next);
-  }
+    toggleTheme(): void {
+        const next = this.theme() === 'light' ? 'dark' : 'light';
+        this.theme.set(next);
+        localStorage.setItem('theme', next);
+        document.documentElement.setAttribute('data-theme', next);
+    }
 }

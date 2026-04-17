@@ -9,7 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * AI service analyzing diagnostic test results to build a skill map
@@ -23,16 +25,16 @@ public class DiagnosticAnalyzer {
     private static final Logger log = LoggerFactory.getLogger(DiagnosticAnalyzer.class);
 
     private final ChatLanguageModel lightModel;
-    private final PromptRenderer    promptRenderer;
-    private final ObjectMapper      objectMapper;
+    private final PromptRenderer promptRenderer;
+    private final ObjectMapper objectMapper;
 
     public DiagnosticAnalyzer(
             @Qualifier("lightModel") ChatLanguageModel lightModel,
             PromptRenderer promptRenderer,
             ObjectMapper objectMapper) {
-        this.lightModel    = lightModel;
+        this.lightModel = lightModel;
         this.promptRenderer = promptRenderer;
-        this.objectMapper  = objectMapper;
+        this.objectMapper = objectMapper;
     }
 
     /**
@@ -65,8 +67,9 @@ public class DiagnosticAnalyzer {
 
         try {
             String response = lightModel.generate(prompt);
-            String json = response.replaceAll("```json\s*|```", "").trim();
-            return objectMapper.readValue(json, new TypeReference<>() {});
+            String json = response.replaceAll("json\s*|", "").trim();
+            return objectMapper.readValue(json, new TypeReference<>() {
+            });
         } catch (Exception e) {
             log.error("Failed to analyze diagnostic: {}", e.getMessage());
             return Map.of(

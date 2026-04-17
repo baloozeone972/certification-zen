@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.port.input.exam;
 
 import com.certifapp.domain.exception.ExamSessionNotFoundException;
@@ -9,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -84,4 +83,4 @@ public class GetExamResultsUseCaseTest {
                 .withNoCause();
     }
 }
-```
+

@@ -15,11 +15,12 @@ import java.util.UUID;
  * @param countryCode user's country code (ISO 3166-1 alpha-2)
  */
 public record LeaderboardEntryDto(
-        int    rank,
-        UUID   userId,
+        int rank,
+        UUID userId,
         String displayName,
-        int    score,
+        int score,
         double percentage,
         String badgeEarned,
         String countryCode
-) {}
+) {
+}

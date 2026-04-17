@@ -1,8 +1,4 @@
-```java
 package com.certifapp.domain.port.input.exam;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
 import com.certifapp.domain.exception.ExamAlreadyCompletedException;
 import com.certifapp.domain.exception.ExamSessionNotFoundException;
@@ -16,6 +12,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class SubmitAnswerUseCaseTest {
@@ -84,4 +83,4 @@ public class SubmitAnswerUseCaseTest {
         verify(examSessionRepository).save(any(UserAnswer.class));
     }
 }
-```
+

@@ -1,10 +1,12 @@
 // certif-parent/certif-infrastructure/src/main/java/com/certifapp/infrastructure/persistence/mapper/CertificationMapper.java
 package com.certifapp.infrastructure.persistence.mapper;
 
-import com.certifapp.domain.model.certification.*;
+import com.certifapp.domain.model.certification.Certification;
+import com.certifapp.domain.model.certification.CertificationTheme;
 import com.certifapp.infrastructure.persistence.entity.CertificationEntity;
 import com.certifapp.infrastructure.persistence.entity.CertificationThemeEntity;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
@@ -22,7 +24,7 @@ public interface CertificationMapper {
     @Mapping(target = "certificationId", source = "certification.id")
     CertificationTheme toDomain(CertificationThemeEntity entity);
 
-    @Mapping(target = "id",            ignore = true)
-    @Mapping(target = "themes",        ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "themes", ignore = true)
     CertificationEntity toEntity(Certification domain);
 }

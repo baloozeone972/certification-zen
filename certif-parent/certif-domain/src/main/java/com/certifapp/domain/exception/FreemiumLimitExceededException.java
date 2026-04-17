@@ -9,12 +9,14 @@ public class FreemiumLimitExceededException extends CertifAppException {
     public FreemiumLimitExceededException(String message) {
         super(message);
     }
+
     public static FreemiumLimitExceededException dailyExams() {
         return new FreemiumLimitExceededException(
-            "FREE tier: maximum 2 exams per day per certification reached");
+                "FREE tier: maximum 2 exams per day per certification reached");
     }
+
     public static FreemiumLimitExceededException questionCount() {
         return new FreemiumLimitExceededException(
-            "FREE tier: maximum 20 questions per session");
+                "FREE tier: maximum 20 questions per session");
     }
 }

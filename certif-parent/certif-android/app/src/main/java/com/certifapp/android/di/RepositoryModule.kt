@@ -16,22 +16,26 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
 
-    @Binds @Singleton
+    @Binds
+    @Singleton
     abstract fun bindCertificationRepository(
         impl: CertificationRepositoryImpl
     ): CertificationRepository
 
-    @Binds @Singleton
+    @Binds
+    @Singleton
     abstract fun bindAuthRepository(
         impl: AuthRepositoryImpl
     ): AuthRepository
 
-    @Binds @Singleton
+    @Binds
+    @Singleton
     abstract fun bindExamRepository(
         impl: ExamRepositoryImpl
     ): ExamRepository
 
-    @Binds @Singleton
+    @Binds
+    @Singleton
     abstract fun bindLearningRepository(
         impl: LearningRepositoryImpl
     ): LearningRepository

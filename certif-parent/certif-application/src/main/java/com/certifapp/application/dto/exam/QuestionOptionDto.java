@@ -11,4 +11,5 @@ import java.util.UUID;
  * @param label display letter: A, B, C, D or E
  * @param text  option text
  */
-public record QuestionOptionDto(UUID id, char label, String text) {}
+public record QuestionOptionDto(UUID id, char label, String text) {
+}

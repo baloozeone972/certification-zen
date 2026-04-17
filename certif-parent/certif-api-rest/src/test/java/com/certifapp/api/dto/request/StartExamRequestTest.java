@@ -1,4 +1,3 @@
-```java
 package com.certifapp.api.dto.request;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -6,10 +5,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class StartExamRequestTest {
@@ -38,7 +36,7 @@ public class StartExamRequestTest {
         StartExamRequest request = new StartExamRequest(
                 "certification-slug", "FREE",
                 List.of("THEME1", "THEME2"), 50, 60);
-        
+
         assertThat(request.certificationId()).isEqualTo("certification-slug");
         assertThat(request.mode()).isEqualTo("FREE");
         assertThat(request.selectedThemes()).containsExactly("THEME1", "THEME2");
@@ -97,4 +95,4 @@ public class StartExamRequestTest {
     }
 
 }
-```
+

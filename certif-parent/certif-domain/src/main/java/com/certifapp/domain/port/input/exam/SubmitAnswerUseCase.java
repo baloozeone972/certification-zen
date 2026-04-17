@@ -2,12 +2,23 @@
 package com.certifapp.domain.port.input.exam;
 
 import com.certifapp.domain.model.session.UserAnswer;
+
 import java.util.UUID;
 
 /**
  * Use case: record a single answer during an in-progress exam session.
  */
 public interface SubmitAnswerUseCase {
+
+    /**
+     * Persists the answer and returns it with the {@code isCorrect} flag set.
+     *
+     * @param command answer data
+     * @return the persisted {@link UserAnswer} with correctness evaluated
+     * @throws com.certifapp.domain.exception.ExamSessionNotFoundException  if session not found
+     * @throws com.certifapp.domain.exception.ExamAlreadyCompletedException if session is closed
+     */
+    UserAnswer execute(SubmitAnswerCommand command);
 
     /**
      * Command for one answer submission.
@@ -24,15 +35,6 @@ public interface SubmitAnswerUseCase {
             UUID questionId,
             UUID selectedOptionId,
             long responseTimeMs
-    ) {}
-
-    /**
-     * Persists the answer and returns it with the {@code isCorrect} flag set.
-     *
-     * @param command answer data
-     * @return the persisted {@link UserAnswer} with correctness evaluated
-     * @throws com.certifapp.domain.exception.ExamSessionNotFoundException  if session not found
-     * @throws com.certifapp.domain.exception.ExamAlreadyCompletedException if session is closed
-     */
-    UserAnswer execute(SubmitAnswerCommand command);
+    ) {
+    }
 }

@@ -7,9 +7,13 @@ package com.certifapp.domain.exception;
 public class CertificationNotFoundException extends CertifAppException {
 
     private final String certificationId;
+
     public CertificationNotFoundException(String certificationId) {
         super("Certification not found: " + certificationId);
         this.certificationId = certificationId;
     }
-    public String getCertificationId() { return certificationId; }
+
+    public String getCertificationId() {
+        return certificationId;
+    }
 }

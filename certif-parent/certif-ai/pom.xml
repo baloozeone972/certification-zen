@@ -1,101 +1,101 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- certif-parent/certif-ai/pom.xml -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
          https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>com.certifapp</groupId>
-    <artifactId>certif-parent</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
-  </parent>
+    <parent>
+        <groupId>com.certifapp</groupId>
+        <artifactId>certif-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
 
-  <artifactId>certif-ai</artifactId>
-  <name>certif-ai</name>
-  <description>
-    AI module — LangChain4j ModelRouter (Ollama local / Anthropic Claude prod),
-    RAG pgvector, explanation enrichment, flashcard generation, chat assistant,
-    coach report, interview simulator, diagnostic analyzer.
-  </description>
+    <artifactId>certif-ai</artifactId>
+    <name>certif-ai</name>
+    <description>
+        AI module — LangChain4j ModelRouter (Ollama local / Anthropic Claude prod),
+        RAG pgvector, explanation enrichment, flashcard generation, chat assistant,
+        coach report, interview simulator, diagnostic analyzer.
+    </description>
 
-  <dependencies>
-    <!-- Domain -->
-    <dependency>
-      <groupId>com.certifapp</groupId>
-      <artifactId>certif-domain</artifactId>
-      <version>${project.version}</version>
-    </dependency>
+    <dependencies>
+        <!-- Domain -->
+        <dependency>
+            <groupId>com.certifapp</groupId>
+            <artifactId>certif-domain</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
-    <!-- Spring Boot (autoconfiguration, cache, scheduling) -->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-cache</artifactId>
-    </dependency>
+        <!-- Spring Boot (autoconfiguration, cache, scheduling) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
 
-    <!-- LangChain4j core -->
-    <dependency>
-      <groupId>dev.langchain4j</groupId>
-      <artifactId>langchain4j</artifactId>
-      <version>${langchain4j.version}</version>
-    </dependency>
+        <!-- LangChain4j core -->
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j</artifactId>
+            <version>${langchain4j.version}</version>
+        </dependency>
 
-    <!-- LangChain4j — Anthropic Claude -->
-    <dependency>
-      <groupId>dev.langchain4j</groupId>
-      <artifactId>langchain4j-anthropic</artifactId>
-      <version>${langchain4j.version}</version>
-    </dependency>
+        <!-- LangChain4j — Anthropic Claude -->
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-anthropic</artifactId>
+            <version>${langchain4j.version}</version>
+        </dependency>
 
-    <!-- LangChain4j — Ollama -->
-    <dependency>
-      <groupId>dev.langchain4j</groupId>
-      <artifactId>langchain4j-ollama</artifactId>
-      <version>${langchain4j.version}</version>
-    </dependency>
+        <!-- LangChain4j — Ollama -->
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-ollama</artifactId>
+            <version>${langchain4j.version}</version>
+        </dependency>
 
-    <!-- LangChain4j — pgvector embedding store -->
-    <dependency>
-      <groupId>dev.langchain4j</groupId>
-      <artifactId>langchain4j-pgvector</artifactId>
-      <version>${langchain4j.version}</version>
-    </dependency>
+        <!-- LangChain4j — pgvector embedding store -->
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-pgvector</artifactId>
+            <version>${langchain4j.version}</version>
+        </dependency>
 
-    <!-- Jackson (JSON parsing for AI responses) -->
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-    </dependency>
+        <!-- Jackson (JSON parsing for AI responses) -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
 
-    <!-- PostgreSQL driver (for pgvector DataSource) -->
-    <dependency>
-      <groupId>org.postgresql</groupId>
-      <artifactId>postgresql</artifactId>
-      <scope>runtime</scope>
-    </dependency>
+        <!-- PostgreSQL driver (for pgvector DataSource) -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
 
-    <!-- Caffeine cache (aiExplanations 24h) -->
-    <dependency>
-      <groupId>com.github.ben-manes.caffeine</groupId>
-      <artifactId>caffeine</artifactId>
-    </dependency>
+        <!-- Caffeine cache (aiExplanations 24h) -->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
 
-    <!-- Test -->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-junit-jupiter</artifactId>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+        <!-- Test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>

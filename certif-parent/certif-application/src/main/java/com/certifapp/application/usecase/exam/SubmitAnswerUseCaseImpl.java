@@ -14,7 +14,6 @@ import com.certifapp.domain.service.ScoringService;
 
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link SubmitAnswerUseCase}.
@@ -25,19 +24,19 @@ import java.util.stream.Collectors;
 public class SubmitAnswerUseCaseImpl implements SubmitAnswerUseCase {
 
     private final ExamSessionRepository sessionRepository;
-    private final QuestionRepository    questionRepository;
-    private final UserAnswerRepository  answerRepository;
-    private final ScoringService        scoringService;
+    private final QuestionRepository questionRepository;
+    private final UserAnswerRepository answerRepository;
+    private final ScoringService scoringService;
 
     public SubmitAnswerUseCaseImpl(
             ExamSessionRepository sessionRepository,
-            QuestionRepository    questionRepository,
-            UserAnswerRepository  answerRepository,
-            ScoringService        scoringService) {
+            QuestionRepository questionRepository,
+            UserAnswerRepository answerRepository,
+            ScoringService scoringService) {
         this.sessionRepository = sessionRepository;
         this.questionRepository = questionRepository;
-        this.answerRepository   = answerRepository;
-        this.scoringService     = scoringService;
+        this.answerRepository = answerRepository;
+        this.scoringService = scoringService;
     }
 
     @Override
@@ -58,7 +57,7 @@ public class SubmitAnswerUseCaseImpl implements SubmitAnswerUseCase {
         UserAnswer answer = (command.selectedOptionId() == null)
                 ? UserAnswer.skipped(command.sessionId(), command.questionId())
                 : UserAnswer.answered(command.sessionId(), command.questionId(),
-                        command.selectedOptionId(), command.responseTimeMs());
+                command.selectedOptionId(), command.responseTimeMs());
 
         // Evaluate correctness
         Question question = questionRepository.findById(command.questionId()).orElse(null);

@@ -1,4 +1,3 @@
-```java
 package com.certifapp.application.dto.certification;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -6,10 +5,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CertificationDetailDtoTest {
@@ -20,16 +18,16 @@ public class CertificationDetailDtoTest {
     @BeforeEach
     void setUp() {
         certificationDetailDto = new CertificationDetailDto(
-            "id123",
-            "CITP",
-            "Certified IT Professional",
-            "A comprehensive certification for IT professionals.",
-            100,
-            25,
-            75,
-            90,
-            "MCQ",
-            List.of()
+                "id123",
+                "CITP",
+                "Certified IT Professional",
+                "A comprehensive certification for IT professionals.",
+                100,
+                25,
+                75,
+                90,
+                "MCQ",
+                List.of()
         );
     }
 
@@ -93,4 +91,4 @@ public class CertificationDetailDtoTest {
         assertThat(certificationDetailDto.themes()).isEmpty();
     }
 }
-```
+

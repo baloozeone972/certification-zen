@@ -15,9 +15,10 @@ package com.certifapp.application.dto.exam;
 public record ThemeStatsDto(
         String themeCode,
         String themeLabel,
-        int    correct,
-        int    wrong,
-        int    skipped,
-        int    total,
+        int correct,
+        int wrong,
+        int skipped,
+        int total,
         double percentage
-) {}
+) {
+}

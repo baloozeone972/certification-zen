@@ -21,18 +21,22 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun provideDatabase(@ApplicationContext context: Context): CertifDatabase =
         Room.databaseBuilder(context, CertifDatabase::class.java, "certifapp.db")
             .fallbackToDestructiveMigration() // Replace with proper migrations in prod
             .build()
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun provideCertificationDao(db: CertifDatabase): CertificationDao = db.certificationDao()
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun provideFlashcardDao(db: CertifDatabase): FlashcardDao = db.flashcardDao()
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun providePendingAnswerDao(db: CertifDatabase): PendingAnswerDao = db.pendingAnswerDao()
 }

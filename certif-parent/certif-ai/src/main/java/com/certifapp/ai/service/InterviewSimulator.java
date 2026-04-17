@@ -24,16 +24,16 @@ public class InterviewSimulator {
     private static final Logger log = LoggerFactory.getLogger(InterviewSimulator.class);
 
     private final ChatLanguageModel heavyModel;
-    private final PromptRenderer    promptRenderer;
-    private final ObjectMapper      objectMapper;
+    private final PromptRenderer promptRenderer;
+    private final ObjectMapper objectMapper;
 
     public InterviewSimulator(
             @Qualifier("heavyModel") ChatLanguageModel heavyModel,
             PromptRenderer promptRenderer,
             ObjectMapper objectMapper) {
-        this.heavyModel    = heavyModel;
+        this.heavyModel = heavyModel;
         this.promptRenderer = promptRenderer;
-        this.objectMapper  = objectMapper;
+        this.objectMapper = objectMapper;
     }
 
     /**
@@ -49,9 +49,9 @@ public class InterviewSimulator {
                                    String roleType, String difficulty) {
         String prompt = promptRenderer.render("interview_question", Map.of(
                 "certificationId", certificationId,
-                "domain",          domain,
-                "roleType",        roleType != null ? roleType : "Software Developer",
-                "difficulty",      difficulty
+                "domain", domain,
+                "roleType", roleType != null ? roleType : "Software Developer",
+                "difficulty", difficulty
         ));
 
         try {
@@ -72,25 +72,26 @@ public class InterviewSimulator {
      * @return map with score (0-10), feedback, keyPointsMissed, strongPoints
      */
     public Map<String, Object> evaluateAnswer(String certificationId, String questionText,
-                                               String userAnswer, String domain) {
+                                              String userAnswer, String domain) {
         String prompt = promptRenderer.render("interview_feedback", Map.of(
                 "certificationId", certificationId,
-                "questionText",    questionText,
-                "userAnswer",      userAnswer,
-                "domain",          domain
+                "questionText", questionText,
+                "userAnswer", userAnswer,
+                "domain", domain
         ));
 
         try {
             String response = heavyModel.generate(prompt);
-            String json = response.replaceAll("```json\s*|```", "").trim();
-            return objectMapper.readValue(json, new TypeReference<>() {});
+            String json = response.replaceAll("json\s*|", "").trim();
+            return objectMapper.readValue(json, new TypeReference<>() {
+            });
         } catch (Exception e) {
             log.error("Failed to evaluate interview answer: {}", e.getMessage());
             return Map.of(
-                    "score",           5,
-                    "feedback",        "Évaluation non disponible. Continuez à pratiquer !",
+                    "score", 5,
+                    "feedback", "Évaluation non disponible. Continuez à pratiquer !",
                     "keyPointsMissed", List.of(),
-                    "strongPoints",    List.of()
+                    "strongPoints", List.of()
             );
         }
     }

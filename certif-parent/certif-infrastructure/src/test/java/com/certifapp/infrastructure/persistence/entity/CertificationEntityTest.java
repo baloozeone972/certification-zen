@@ -1,17 +1,15 @@
-```java
 package com.certifapp.infrastructure.persistence.entity;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
-import org.assertj.core.api.Assertions;
-
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class CertificationEntityTest {
@@ -84,4 +82,4 @@ public class CertificationEntityTest {
         verify(entityManager).persist(any(CertificationEntity.class));
     }
 }
-```
+

@@ -13,13 +13,19 @@ package com.certifapp.domain.model.question;
  */
 public enum DifficultyLevel {
 
-    /** Introductory question — fundamental concepts, definitions. */
+    /**
+     * Introductory question — fundamental concepts, definitions.
+     */
     EASY,
 
-    /** Standard exam-level question — applied knowledge. */
+    /**
+     * Standard exam-level question — applied knowledge.
+     */
     MEDIUM,
 
-    /** Advanced question — edge cases, architecture, deep internals. */
+    /**
+     * Advanced question — edge cases, architecture, deep internals.
+     */
     HARD;
 
     /**
@@ -31,11 +37,11 @@ public enum DifficultyLevel {
      */
     public static DifficultyLevel fromJson(String value) {
         return switch (value.toLowerCase().trim()) {
-            case "easy"   -> EASY;
+            case "easy" -> EASY;
             case "medium" -> MEDIUM;
-            case "hard"   -> HARD;
+            case "hard" -> HARD;
             default -> throw new IllegalArgumentException(
-                "Unknown difficulty level: '%s'. Expected easy | medium | hard".formatted(value));
+                    "Unknown difficulty level: '%s'. Expected easy | medium | hard".formatted(value));
         };
     }
 

@@ -29,29 +29,31 @@ public class ChatAssistant {
 
     private static final Logger log = LoggerFactory.getLogger(ChatAssistant.class);
 
-    /** In-memory session store — conversation history per session UUID. */
+    /**
+     * In-memory session store — conversation history per session UUID.
+     */
     private final Map<UUID, MessageWindowChatMemory> sessions = new ConcurrentHashMap<>();
 
     private final ChatLanguageModel heavyModel;
-    private final RetrievalService  retrievalService;
-    private final PromptRenderer    promptRenderer;
+    private final RetrievalService retrievalService;
+    private final PromptRenderer promptRenderer;
 
     public ChatAssistant(
             @Qualifier("heavyModel") ChatLanguageModel heavyModel,
             RetrievalService retrievalService,
             PromptRenderer promptRenderer) {
-        this.heavyModel      = heavyModel;
+        this.heavyModel = heavyModel;
         this.retrievalService = retrievalService;
-        this.promptRenderer  = promptRenderer;
+        this.promptRenderer = promptRenderer;
     }
 
     /**
      * Sends a user message and returns the AI response.
      * RAG context is automatically retrieved and injected into the prompt.
      *
-     * @param message         the user's question or message
-     * @param sessionId       conversation session UUID (null = new session)
-     * @param certificationId the certification the user is studying
+     * @param message          the user's question or message
+     * @param sessionId        conversation session UUID (null = new session)
+     * @param certificationId  the certification the user is studying
      * @param subscriptionTier the user's subscription tier
      * @return AI response text
      */
@@ -61,7 +63,7 @@ public class ChatAssistant {
         UUID sid = sessionId != null ? sessionId : UUID.randomUUID();
 
         // Retrieve relevant context from vector store
-        String context   = retrievalService.retrieveContext(message, 5);
+        String context = retrievalService.retrieveContext(message, 5);
         List<String> sources = retrievalService.retrieveSources(message, 5);
 
         log.debug("Chat session {} — retrieved {} context chars from {} sources",
@@ -69,7 +71,7 @@ public class ChatAssistant {
 
         // Build system prompt with RAG context
         Map<String, Object> templateVars = new HashMap<>();
-        templateVars.put("certificationId",  certificationId);
+        templateVars.put("certificationId", certificationId);
         templateVars.put("subscriptionTier", subscriptionTier);
         templateVars.put("sources", buildSourcesForTemplate(context, sources));
 
@@ -78,8 +80,8 @@ public class ChatAssistant {
         // Full prompt = system + user message
         String fullPrompt = systemPrompt + "
 
-## User question
-" + message;
+##User question
+        " + message;
 
         try {
             return heavyModel.generate(fullPrompt);

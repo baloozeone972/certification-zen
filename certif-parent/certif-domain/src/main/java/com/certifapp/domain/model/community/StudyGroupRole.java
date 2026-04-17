@@ -8,13 +8,19 @@ package com.certifapp.domain.model.community;
  */
 public enum StudyGroupRole {
 
-    /** Group creator — can delete the group and manage members. */
+    /**
+     * Group creator — can delete the group and manage members.
+     */
     OWNER,
 
-    /** Trusted member — can kick members and pin messages. */
+    /**
+     * Trusted member — can kick members and pin messages.
+     */
     MODERATOR,
 
-    /** Regular participant. */
+    /**
+     * Regular participant.
+     */
     MEMBER;
 
     /**

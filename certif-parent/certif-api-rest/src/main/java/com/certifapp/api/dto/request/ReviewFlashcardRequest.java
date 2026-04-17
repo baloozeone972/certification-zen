@@ -10,4 +10,5 @@ import jakarta.validation.constraints.Min;
  * @param rating SM-2 quality rating 0-5
  *               (0=blackout, 3=correct+hard, 4=correct, 5=perfect)
  */
-public record ReviewFlashcardRequest(@Min(0) @Max(5) int rating) {}
+public record ReviewFlashcardRequest(@Min(0) @Max(5) int rating) {
+}

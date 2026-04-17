@@ -33,17 +33,17 @@ class CertificationRepositoryImpl @Inject constructor(
         val dtos = api.getAll().data
         val entities = dtos.map { dto ->
             CertificationEntity(
-                id               = dto.id,
-                code             = dto.code,
-                name             = dto.name,
-                description      = dto.description,
-                totalQuestions   = dto.totalQuestions,
+                id = dto.id,
+                code = dto.code,
+                name = dto.name,
+                description = dto.description,
+                totalQuestions = dto.totalQuestions,
                 examQuestionCount = dto.examQuestionCount,
-                passingScore     = dto.passingScore,
-                examDurationMin  = dto.examDurationMin,
-                examType         = dto.examType,
-                themesJson       = json.encodeToString(dto.themes),
-                isActive         = dto.isActive
+                passingScore = dto.passingScore,
+                examDurationMin = dto.examDurationMin,
+                examType = dto.examType,
+                themesJson = json.encodeToString(dto.themes),
+                isActive = dto.isActive
             )
         }
         dao.refreshAll(entities)
@@ -53,8 +53,12 @@ class CertificationRepositoryImpl @Inject constructor(
         val themes = try {
             json.decodeFromString<List<com.certifapp.android.data.remote.dto.CertificationThemeDto>>(themesJson)
                 .map { CertificationTheme(it.id, it.code, it.label, it.questionCount, it.weightPercent) }
-        } catch (e: Exception) { emptyList() }
-        return Certification(id, code, name, description, totalQuestions,
-            examQuestionCount, passingScore, examDurationMin, examType, themes, isActive)
+        } catch (e: Exception) {
+            emptyList()
+        }
+        return Certification(
+            id, code, name, description, totalQuestions,
+            examQuestionCount, passingScore, examDurationMin, examType, themes, isActive
+        )
     }
 }

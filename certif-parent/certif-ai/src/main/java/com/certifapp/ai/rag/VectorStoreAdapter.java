@@ -33,7 +33,7 @@ public class VectorStoreAdapter {
     private static final Logger log = LoggerFactory.getLogger(VectorStoreAdapter.class);
 
     private final PgVectorEmbeddingStore store;
-    private final EmbeddingModel         embeddingModel;
+    private final EmbeddingModel embeddingModel;
 
     public VectorStoreAdapter(
             DataSource dataSource,

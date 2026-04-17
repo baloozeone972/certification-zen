@@ -2,6 +2,7 @@
 package com.certifapp.infrastructure.persistence.entity;
 
 import jakarta.persistence.*;
+
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -12,8 +13,8 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "users", indexes = {
-    @Index(name = "idx_users_email",        columnList = "email"),
-    @Index(name = "idx_users_subscription", columnList = "subscription_tier")
+        @Index(name = "idx_users_email", columnList = "email"),
+        @Index(name = "idx_users_subscription", columnList = "subscription_tier")
 })
 public class UserEntity {
 
@@ -66,26 +67,91 @@ public class UserEntity {
 
     // ── Getters / Setters ────────────────────────────────────────────────────
 
-    public UUID getId()                         { return id; }
-    public void setId(UUID id)                  { this.id = id; }
-    public String getEmail()                    { return email; }
-    public void setEmail(String email)          { this.email = email; }
-    public String getPasswordHash()             { return passwordHash; }
-    public void setPasswordHash(String h)       { this.passwordHash = h; }
-    public String getRole()                     { return role; }
-    public void setRole(String role)            { this.role = role; }
-    public String getSubscriptionTier()         { return subscriptionTier; }
-    public void setSubscriptionTier(String t)   { this.subscriptionTier = t; }
-    public String getLocale()                   { return locale; }
-    public void setLocale(String locale)        { this.locale = locale; }
-    public String getTimezone()                 { return timezone; }
-    public void setTimezone(String tz)          { this.timezone = tz; }
-    public String getStripeCustomerId()         { return stripeCustomerId; }
-    public void setStripeCustomerId(String s)   { this.stripeCustomerId = s; }
-    public boolean isActive()                   { return isActive; }
-    public void setActive(boolean active)       { this.isActive = active; }
-    public OffsetDateTime getCreatedAt()        { return createdAt; }
-    public void setCreatedAt(OffsetDateTime t)  { this.createdAt = t; }
-    public OffsetDateTime getUpdatedAt()        { return updatedAt; }
-    public void setUpdatedAt(OffsetDateTime t)  { this.updatedAt = t; }
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String h) {
+        this.passwordHash = h;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getSubscriptionTier() {
+        return subscriptionTier;
+    }
+
+    public void setSubscriptionTier(String t) {
+        this.subscriptionTier = t;
+    }
+
+    public String getLocale() {
+        return locale;
+    }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
+    }
+
+    public String getTimezone() {
+        return timezone;
+    }
+
+    public void setTimezone(String tz) {
+        this.timezone = tz;
+    }
+
+    public String getStripeCustomerId() {
+        return stripeCustomerId;
+    }
+
+    public void setStripeCustomerId(String s) {
+        this.stripeCustomerId = s;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        this.isActive = active;
+    }
+
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(OffsetDateTime t) {
+        this.createdAt = t;
+    }
+
+    public OffsetDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(OffsetDateTime t) {
+        this.updatedAt = t;
+    }
 }

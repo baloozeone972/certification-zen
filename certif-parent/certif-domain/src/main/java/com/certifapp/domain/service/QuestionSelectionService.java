@@ -72,7 +72,7 @@ public class QuestionSelectionService {
             if (remainder <= 0) break;
             String theme = entry.getKey();
             int current = allocations.get(theme);
-            int max     = entry.getValue().size();
+            int max = entry.getValue().size();
             if (current < max) {
                 allocations.put(theme, current + 1);
                 remainder--;

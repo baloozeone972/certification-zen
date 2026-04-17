@@ -2,11 +2,15 @@
 package com.certifapp.domain.port.output;
 
 import com.certifapp.domain.model.user.UserPreferences;
+
 import java.util.Optional;
 import java.util.UUID;
 
-/** Output port: persistence of user preferences. */
+/**
+ * Output port: persistence of user preferences.
+ */
 public interface UserPreferencesRepository {
     Optional<UserPreferences> findByUserId(UUID userId);
-    UserPreferences            save(UserPreferences preferences);
+
+    UserPreferences save(UserPreferences preferences);
 }

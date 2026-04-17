@@ -8,7 +8,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,17 +20,17 @@ public interface QuestionJpaRepository extends JpaRepository<QuestionEntity, UUI
     Optional<QuestionEntity> findByLegacyId(String legacyId);
 
     @Query("SELECT q FROM QuestionEntity q WHERE q.certificationId = :certId " +
-           "AND q.isActive = true ORDER BY FUNCTION('random')")
+            "AND q.isActive = true ORDER BY FUNCTION('random')")
     List<QuestionEntity> findByCertificationIdActiveRandom(@Param("certId") String certId);
 
     @Query("SELECT q FROM QuestionEntity q WHERE q.certificationId = :certId " +
-           "AND q.themeId IN :themeIds AND q.isActive = true ORDER BY FUNCTION('random')")
+            "AND q.themeId IN :themeIds AND q.isActive = true ORDER BY FUNCTION('random')")
     List<QuestionEntity> findByCertificationIdAndThemeIdsRandom(
             @Param("certId") String certId,
             @Param("themeIds") List<UUID> themeIds);
 
     @Query("SELECT q.themeId, COUNT(q) FROM QuestionEntity q " +
-           "WHERE q.certificationId = :certId AND q.isActive = true GROUP BY q.themeId")
+            "WHERE q.certificationId = :certId AND q.isActive = true GROUP BY q.themeId")
     List<Object[]> countByThemeForCertification(@Param("certId") String certId);
 
     @Query("SELECT q FROM QuestionEntity q WHERE q.explanationStatus = :status")

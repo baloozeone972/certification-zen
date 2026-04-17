@@ -1,13 +1,15 @@
-```java
 package com.certifapp.infrastructure.persistence.entity;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @ExtendWith(MockitoExtension.class)
 public class CertificationThemeEntityTest {
@@ -124,4 +126,4 @@ public class CertificationThemeEntityTest {
                 .withMessageContaining("label");
     }
 }
-```
+

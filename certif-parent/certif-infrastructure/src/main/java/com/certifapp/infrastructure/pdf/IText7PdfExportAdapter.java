@@ -2,7 +2,6 @@
 package com.certifapp.infrastructure.pdf;
 
 import com.certifapp.domain.model.question.Question;
-import com.certifapp.domain.model.question.QuestionOption;
 import com.certifapp.domain.model.session.ExamSession;
 import com.certifapp.domain.model.session.ThemeStats;
 import com.certifapp.domain.port.output.PdfExportPort;
@@ -12,14 +11,19 @@ import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.*;
+import com.itextpdf.layout.element.AreaBreak;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayOutputStream;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * iText7 implementation of {@link PdfExportPort}.
@@ -32,8 +36,8 @@ public class IText7PdfExportAdapter implements PdfExportPort {
 
     private static final DateTimeFormatter DATE_FMT =
             DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-    private static final DeviceRgb COLOR_GREEN  = new DeviceRgb(34, 139, 34);
-    private static final DeviceRgb COLOR_RED    = new DeviceRgb(220, 20, 60);
+    private static final DeviceRgb COLOR_GREEN = new DeviceRgb(34, 139, 34);
+    private static final DeviceRgb COLOR_RED = new DeviceRgb(220, 20, 60);
     private static final DeviceRgb COLOR_HEADER = new DeviceRgb(52, 73, 94);
 
     @Override
@@ -149,14 +153,14 @@ public class IText7PdfExportAdapter implements PdfExportPort {
 
             // Correct option
             q.correctOption().ifPresent(opt ->
-                doc.add(new Paragraph("  ✓ Réponse correcte : " + opt.label() + ". " + opt.text())
-                        .setFontColor(COLOR_GREEN).setMarginLeft(15)));
+                    doc.add(new Paragraph("  ✓ Réponse correcte : " + opt.label() + ". " + opt.text())
+                            .setFontColor(COLOR_GREEN).setMarginLeft(15)));
 
             // User's answer
             if (answer.selectedOptionId() != null) {
                 q.findOption(answer.selectedOptionId()).ifPresent(opt ->
-                    doc.add(new Paragraph("  ✗ Votre réponse : " + opt.label() + ". " + opt.text())
-                            .setFontColor(COLOR_RED).setMarginLeft(15)));
+                        doc.add(new Paragraph("  ✗ Votre réponse : " + opt.label() + ". " + opt.text())
+                                .setFontColor(COLOR_RED).setMarginLeft(15)));
             }
 
             // Explanation

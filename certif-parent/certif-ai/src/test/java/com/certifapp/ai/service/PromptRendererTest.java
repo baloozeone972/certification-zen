@@ -1,4 +1,3 @@
-```java
 package com.certifapp.ai.service;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -7,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -15,7 +14,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class PromptRendererTest {
@@ -81,4 +80,4 @@ public class PromptRendererTest {
         assertThat(exception.getMessage()).isEqualTo("Failed to load prompt template: /prompts/testTemplate.mustache");
     }
 }
-```
+

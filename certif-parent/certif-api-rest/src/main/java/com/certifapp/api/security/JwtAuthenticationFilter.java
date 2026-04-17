@@ -1,8 +1,10 @@
 // certif-parent/certif-api-rest/src/main/java/com/certifapp/api/security/JwtAuthenticationFilter.java
 package com.certifapp.api.security;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -43,13 +45,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 var claims = tokenProvider.validateAndGetClaims(token);
                 String userId = claims.getSubject();
-                String role   = claims.get("role", String.class);
+                String role = claims.get("role", String.class);
 
                 var auth = new UsernamePasswordAuthenticationToken(
                         userId,
                         null,
                         role != null ? List.of(new SimpleGrantedAuthority("ROLE_" + role))
-                                     : List.of()
+                                : List.of()
                 );
                 SecurityContextHolder.getContext().setAuthentication(auth);
 

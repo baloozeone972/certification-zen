@@ -1,11 +1,4 @@
-```java
 package com.certifapp.domain.model.certification;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
-
-import java.util.Collections;
-import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,12 +8,18 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 @ExtendWith(MockitoExtension.class)
 public class CertificationTest {
 
     @Mock
     private CertificationTheme theme1;
-    
+
     @Mock
     private CertificationTheme theme2;
 
@@ -30,17 +29,17 @@ public class CertificationTest {
     @BeforeEach
     public void setUp() {
         certification = new Certification(
-            "ocp21",
-            "1Z0-830",
-            "Oracle Certified Professional Java SE 21",
-            "Long description...",
-            80,
-            40,
-            90,
-            68,
-            "MCQ",
-            List.of(theme1, theme2),
-            true
+                "ocp21",
+                "1Z0-830",
+                "Oracle Certified Professional Java SE 21",
+                "Long description...",
+                80,
+                40,
+                90,
+                68,
+                "MCQ",
+                List.of(theme1, theme2),
+                true
         );
     }
 
@@ -55,17 +54,17 @@ public class CertificationTest {
     @DisplayName("passingQuestionsCount_returnsMinimumOfOne")
     public void passingQuestionsCount_returnsMinimumOfOne() {
         Certification cert = new Certification(
-            "ocp21",
-            "1Z0-830",
-            "Oracle Certified Professional Java SE 21",
-            "Long description...",
-            1,
-            1,
-            90,
-            1,
-            "MCQ",
-            Collections.emptyList(),
-            true
+                "ocp21",
+                "1Z0-830",
+                "Oracle Certified Professional Java SE 21",
+                "Long description...",
+                1,
+                1,
+                90,
+                1,
+                "MCQ",
+                Collections.emptyList(),
+                true
         );
         int result = cert.passingQuestionsCount();
         assertThat(result).isEqualTo(1);
@@ -75,17 +74,17 @@ public class CertificationTest {
     @DisplayName("passingQuestionsCount_returnsMaximumOfTotalQuestions")
     public void passingQuestionsCount_returnsMaximumOfTotalQuestions() {
         Certification cert = new Certification(
-            "ocp21",
-            "1Z0-830",
-            "Oracle Certified Professional Java SE 21",
-            "Long description...",
-            1,
-            1,
-            90,
-            100,
-            "MCQ",
-            Collections.emptyList(),
-            true
+                "ocp21",
+                "1Z0-830",
+                "Oracle Certified Professional Java SE 21",
+                "Long description...",
+                1,
+                1,
+                90,
+                100,
+                "MCQ",
+                Collections.emptyList(),
+                true
         );
         int result = cert.passingQuestionsCount();
         assertThat(result).isEqualTo(1);
@@ -117,17 +116,17 @@ public class CertificationTest {
     public void constructor_throwsIllegalArgumentExceptionForBlankId() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             new Certification(
-                "",
-                "1Z0-830",
-                "Oracle Certified Professional Java SE 21",
-                "Long description...",
-                80,
-                40,
-                90,
-                68,
-                "MCQ",
-                List.of(theme1, theme2),
-                true
+                    "",
+                    "1Z0-830",
+                    "Oracle Certified Professional Java SE 21",
+                    "Long description...",
+                    80,
+                    40,
+                    90,
+                    68,
+                    "MCQ",
+                    List.of(theme1, theme2),
+                    true
             );
         });
         assertThat(exception.getMessage()).isEqualTo("id must not be blank");
@@ -138,17 +137,17 @@ public class CertificationTest {
     public void constructor_throwsIllegalArgumentExceptionForBlankCode() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             new Certification(
-                "ocp21",
-                "",
-                "Oracle Certified Professional Java SE 21",
-                "Long description...",
-                80,
-                40,
-                90,
-                68,
-                "MCQ",
-                List.of(theme1, theme2),
-                true
+                    "ocp21",
+                    "",
+                    "Oracle Certified Professional Java SE 21",
+                    "Long description...",
+                    80,
+                    40,
+                    90,
+                    68,
+                    "MCQ",
+                    List.of(theme1, theme2),
+                    true
             );
         });
         assertThat(exception.getMessage()).isEqualTo("code must not be blank");
@@ -159,17 +158,17 @@ public class CertificationTest {
     public void constructor_throwsIllegalArgumentExceptionForNonPositiveExamQuestionCount() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             new Certification(
-                "ocp21",
-                "1Z0-830",
-                "Oracle Certified Professional Java SE 21",
-                "Long description...",
-                80,
-                -1,
-                90,
-                68,
-                "MCQ",
-                List.of(theme1, theme2),
-                true
+                    "ocp21",
+                    "1Z0-830",
+                    "Oracle Certified Professional Java SE 21",
+                    "Long description...",
+                    80,
+                    -1,
+                    90,
+                    68,
+                    "MCQ",
+                    List.of(theme1, theme2),
+                    true
             );
         });
         assertThat(exception.getMessage()).isEqualTo("examQuestionCount must be > 0, got: -1");
@@ -180,17 +179,17 @@ public class CertificationTest {
     public void constructor_throwsIllegalArgumentExceptionForNonPositiveExamDurationMin() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             new Certification(
-                "ocp21",
-                "1Z0-830",
-                "Oracle Certified Professional Java SE 21",
-                "Long description...",
-                80,
-                40,
-                -1,
-                68,
-                "MCQ",
-                List.of(theme1, theme2),
-                true
+                    "ocp21",
+                    "1Z0-830",
+                    "Oracle Certified Professional Java SE 21",
+                    "Long description...",
+                    80,
+                    40,
+                    -1,
+                    68,
+                    "MCQ",
+                    List.of(theme1, theme2),
+                    true
             );
         });
         assertThat(exception.getMessage()).isEqualTo("examDurationMin must be > 0, got: -1");
@@ -201,20 +200,20 @@ public class CertificationTest {
     public void constructor_throwsIllegalArgumentExceptionForPassingScoreOutOfRange() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             new Certification(
-                "ocp21",
-                "1Z0-830",
-                "Oracle Certified Professional Java SE 21",
-                "Long description...",
-                80,
-                40,
-                90,
-                150,
-                "MCQ",
-                List.of(theme1, theme2),
-                true
+                    "ocp21",
+                    "1Z0-830",
+                    "Oracle Certified Professional Java SE 21",
+                    "Long description...",
+                    80,
+                    40,
+                    90,
+                    150,
+                    "MCQ",
+                    List.of(theme1, theme2),
+                    true
             );
         });
         assertThat(exception.getMessage()).isEqualTo("passingScore must be between 1 and 100, got: 150");
     }
 }
-```
+

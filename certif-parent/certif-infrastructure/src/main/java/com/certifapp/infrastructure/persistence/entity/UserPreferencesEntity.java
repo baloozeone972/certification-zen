@@ -2,6 +2,7 @@
 package com.certifapp.infrastructure.persistence.entity;
 
 import jakarta.persistence.*;
+
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -42,24 +43,79 @@ public class UserPreferencesEntity {
 
     @PrePersist
     @PreUpdate
-    protected void onUpdate() { updatedAt = OffsetDateTime.now(); }
+    protected void onUpdate() {
+        updatedAt = OffsetDateTime.now();
+    }
 
-    public UUID getUserId()                           { return userId; }
-    public void setUserId(UUID userId)                { this.userId = userId; }
-    public String getTheme()                          { return theme; }
-    public void setTheme(String theme)                { this.theme = theme; }
-    public String getLanguage()                       { return language; }
-    public void setLanguage(String language)          { this.language = language; }
-    public String getDefaultMode()                    { return defaultMode; }
-    public void setDefaultMode(String defaultMode)    { this.defaultMode = defaultMode; }
-    public boolean isNotificationsEnabled()           { return notificationsEnabled; }
-    public void setNotificationsEnabled(boolean n)    { this.notificationsEnabled = n; }
-    public String getLastCertificationId()            { return lastCertificationId; }
-    public void setLastCertificationId(String id)     { this.lastCertificationId = id; }
-    public int getFreeModeQuestionCount()             { return freeModeQuestionCount; }
-    public void setFreeModeQuestionCount(int c)       { this.freeModeQuestionCount = c; }
-    public int getFreeModeDurationMin()               { return freeModeDurationMin; }
-    public void setFreeModeDurationMin(int d)         { this.freeModeDurationMin = d; }
-    public OffsetDateTime getUpdatedAt()              { return updatedAt; }
-    public void setUpdatedAt(OffsetDateTime t)        { this.updatedAt = t; }
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
+    }
+
+    public String getTheme() {
+        return theme;
+    }
+
+    public void setTheme(String theme) {
+        this.theme = theme;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public String getDefaultMode() {
+        return defaultMode;
+    }
+
+    public void setDefaultMode(String defaultMode) {
+        this.defaultMode = defaultMode;
+    }
+
+    public boolean isNotificationsEnabled() {
+        return notificationsEnabled;
+    }
+
+    public void setNotificationsEnabled(boolean n) {
+        this.notificationsEnabled = n;
+    }
+
+    public String getLastCertificationId() {
+        return lastCertificationId;
+    }
+
+    public void setLastCertificationId(String id) {
+        this.lastCertificationId = id;
+    }
+
+    public int getFreeModeQuestionCount() {
+        return freeModeQuestionCount;
+    }
+
+    public void setFreeModeQuestionCount(int c) {
+        this.freeModeQuestionCount = c;
+    }
+
+    public int getFreeModeDurationMin() {
+        return freeModeDurationMin;
+    }
+
+    public void setFreeModeDurationMin(int d) {
+        this.freeModeDurationMin = d;
+    }
+
+    public OffsetDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(OffsetDateTime t) {
+        this.updatedAt = t;
+    }
 }

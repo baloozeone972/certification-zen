@@ -1,10 +1,4 @@
-```java
 package com.certifapp.domain.port.input.payment;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.model.Event;
@@ -15,7 +9,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class ProcessStripeWebhookUseCaseTest {
@@ -112,4 +110,4 @@ public class ProcessStripeWebhookUseCaseTest {
                 .hasMessage("Invalid Stripe-Signature");
     }
 }
-```
+

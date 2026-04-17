@@ -9,6 +9,13 @@ import com.certifapp.domain.model.user.User;
 public interface RegisterUserUseCase {
 
     /**
+     * @param command registration data
+     * @return the created {@link User} (without passwordHash exposed)
+     * @throws com.certifapp.domain.exception.DuplicateEmailException if email already registered
+     */
+    User execute(RegisterUserCommand command);
+
+    /**
      * Registration command.
      *
      * @param email    user email address (will be lowercased)
@@ -18,17 +25,10 @@ public interface RegisterUserUseCase {
      */
     record RegisterUserCommand(String email, String password, String locale, String timezone) {
         public RegisterUserCommand {
-            if (email    == null || email.isBlank())
+            if (email == null || email.isBlank())
                 throw new IllegalArgumentException("email must not be blank");
             if (password == null || password.length() < 8)
                 throw new IllegalArgumentException("password must be at least 8 characters");
         }
     }
-
-    /**
-     * @param command registration data
-     * @return the created {@link User} (without passwordHash exposed)
-     * @throws com.certifapp.domain.exception.DuplicateEmailException if email already registered
-     */
-    User execute(RegisterUserCommand command);
 }

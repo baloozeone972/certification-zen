@@ -8,20 +8,21 @@ import java.util.UUID;
 /**
  * Active exam session returned after {@code StartExamSessionUseCase}.
  *
- * @param id               session UUID
- * @param certificationId  certification slug
- * @param mode             EXAM | FREE | REVISION
- * @param questions        drawn questions (without correct answers)
- * @param startedAt        session start timestamp
- * @param durationSeconds  max timer in seconds (0 = unlimited)
- * @param timerEnabled     whether a countdown timer is active
+ * @param id              session UUID
+ * @param certificationId certification slug
+ * @param mode            EXAM | FREE | REVISION
+ * @param questions       drawn questions (without correct answers)
+ * @param startedAt       session start timestamp
+ * @param durationSeconds max timer in seconds (0 = unlimited)
+ * @param timerEnabled    whether a countdown timer is active
  */
 public record ExamSessionDto(
-        UUID            id,
-        String          certificationId,
-        String          mode,
+        UUID id,
+        String certificationId,
+        String mode,
         List<QuestionDto> questions,
-        OffsetDateTime  startedAt,
-        int             durationSeconds,
-        boolean         timerEnabled
-) {}
+        OffsetDateTime startedAt,
+        int durationSeconds,
+        boolean timerEnabled
+) {
+}

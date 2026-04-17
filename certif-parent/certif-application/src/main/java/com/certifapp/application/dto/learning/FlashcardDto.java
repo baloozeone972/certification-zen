@@ -17,12 +17,13 @@ import java.util.UUID;
  * @param repetitions    number of successful consecutive reviews
  */
 public record FlashcardDto(
-        UUID      id,
-        String    frontText,
-        String    backText,
-        String    codeExample,
+        UUID id,
+        String frontText,
+        String backText,
+        String codeExample,
         LocalDate nextReviewDate,
-        double    easeFactor,
-        int       intervalDays,
-        int       repetitions
-) {}
+        double easeFactor,
+        int intervalDays,
+        int repetitions
+) {
+}

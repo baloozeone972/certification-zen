@@ -1,8 +1,8 @@
 // certif-parent/certif-web/src/app/shared/components/question-card/question-card.component.ts
-import { Component, Input, Output, EventEmitter, signal, ChangeDetectionStrategy } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { Question } from "../../../core/models/exam.models";
-import { DifficultyBadgeComponent } from "../difficulty-badge/difficulty-badge.component";
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output, signal} from "@angular/core";
+import {CommonModule} from "@angular/common";
+import {Question} from "../../../core/models/exam.models";
+import {DifficultyBadgeComponent} from "../difficulty-badge/difficulty-badge.component";
 
 /**
  * Question card component — renders a question with answer options.
@@ -10,11 +10,11 @@ import { DifficultyBadgeComponent } from "../difficulty-badge/difficulty-badge.c
  * In REVISION mode, reveals the correct answer after selection.
  */
 @Component({
-  selector: "app-question-card",
-  standalone: true,
-  imports: [CommonModule, DifficultyBadgeComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    selector: "app-question-card",
+    standalone: true,
+    imports: [CommonModule, DifficultyBadgeComponent],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <div class="q-card card">
       <div class="q-card__header">
         <app-difficulty-badge [difficulty]="question.difficulty" />
@@ -39,7 +39,7 @@ import { DifficultyBadgeComponent } from "../difficulty-badge/difficulty-badge.c
       </div>
     </div>
   `,
-  styles: [`
+    styles: [`
     .q-card { max-width: 800px; }
     .q-card__header { display: flex; gap: .75rem; align-items: center; margin-bottom: 1rem; }
     .q-card__theme { font-size: .75rem; color: var(--color-text-muted); }
@@ -69,19 +69,20 @@ import { DifficultyBadgeComponent } from "../difficulty-badge/difficulty-badge.c
   `]
 })
 export class QuestionCardComponent {
-  @Input({ required: true }) question!: Question;
-  @Input() locked            = false;
-  @Input() revealMode        = false;
-  @Input() correctOptionId?: string;
-  @Input() set preselected(val: string | null) { this.selectedOptionId.set(val); }
+    @Input({required: true}) question!: Question;
+    @Input() locked = false;
+    @Input() revealMode = false;
+    @Input() correctOptionId?: string;
+    @Output() answered = new EventEmitter<string | null>();
+    readonly selectedOptionId = signal<string | null>(null);
 
-  @Output() answered = new EventEmitter<string | null>();
+    @Input() set preselected(val: string | null) {
+        this.selectedOptionId.set(val);
+    }
 
-  readonly selectedOptionId = signal<string | null>(null);
-
-  selectOption(optionId: string): void {
-    if (this.locked) return;
-    this.selectedOptionId.set(optionId);
-    this.answered.emit(optionId);
-  }
+    selectOption(optionId: string): void {
+        if (this.locked) return;
+        this.selectedOptionId.set(optionId);
+        this.answered.emit(optionId);
+    }
 }

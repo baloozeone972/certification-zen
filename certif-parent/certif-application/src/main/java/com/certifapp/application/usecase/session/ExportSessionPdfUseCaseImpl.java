@@ -2,7 +2,6 @@
 package com.certifapp.application.usecase.session;
 
 import com.certifapp.domain.exception.ExamSessionNotFoundException;
-import com.certifapp.domain.exception.SubscriptionRequiredException;
 import com.certifapp.domain.model.question.Question;
 import com.certifapp.domain.model.session.ExamSession;
 import com.certifapp.domain.model.session.ThemeStats;
@@ -13,7 +12,10 @@ import com.certifapp.domain.port.output.*;
 import com.certifapp.domain.service.FreemiumGuardService;
 import com.certifapp.domain.service.ScoringService;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -25,28 +27,28 @@ import java.util.stream.Collectors;
 public class ExportSessionPdfUseCaseImpl implements ExportSessionPdfUseCase {
 
     private final ExamSessionRepository sessionRepository;
-    private final QuestionRepository    questionRepository;
-    private final UserRepository        userRepository;
-    private final UserAnswerRepository  answerRepository;
-    private final PdfExportPort         pdfExportPort;
-    private final FreemiumGuardService  freemiumGuardService;
-    private final ScoringService        scoringService;
+    private final QuestionRepository questionRepository;
+    private final UserRepository userRepository;
+    private final UserAnswerRepository answerRepository;
+    private final PdfExportPort pdfExportPort;
+    private final FreemiumGuardService freemiumGuardService;
+    private final ScoringService scoringService;
 
     public ExportSessionPdfUseCaseImpl(
             ExamSessionRepository sessionRepository,
-            QuestionRepository    questionRepository,
-            UserRepository        userRepository,
-            UserAnswerRepository  answerRepository,
-            PdfExportPort         pdfExportPort,
-            FreemiumGuardService  freemiumGuardService,
-            ScoringService        scoringService) {
-        this.sessionRepository   = sessionRepository;
-        this.questionRepository  = questionRepository;
-        this.userRepository      = userRepository;
-        this.answerRepository    = answerRepository;
-        this.pdfExportPort       = pdfExportPort;
+            QuestionRepository questionRepository,
+            UserRepository userRepository,
+            UserAnswerRepository answerRepository,
+            PdfExportPort pdfExportPort,
+            FreemiumGuardService freemiumGuardService,
+            ScoringService scoringService) {
+        this.sessionRepository = sessionRepository;
+        this.questionRepository = questionRepository;
+        this.userRepository = userRepository;
+        this.answerRepository = answerRepository;
+        this.pdfExportPort = pdfExportPort;
         this.freemiumGuardService = freemiumGuardService;
-        this.scoringService      = scoringService;
+        this.scoringService = scoringService;
     }
 
     @Override

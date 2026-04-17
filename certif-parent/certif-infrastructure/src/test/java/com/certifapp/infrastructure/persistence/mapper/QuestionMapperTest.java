@@ -1,11 +1,4 @@
-```java
 package com.certifapp.infrastructure.persistence.mapper;
-
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
-
-import java.util.Arrays;
-import java.util.List;
 
 import com.certifapp.domain.model.question.*;
 import com.certifapp.infrastructure.persistence.entity.QuestionEntity;
@@ -17,9 +10,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class QuestionMapperTest {
@@ -56,7 +56,7 @@ public class QuestionMapperTest {
 
         QuestionOptionEntity optionEntity = new QuestionOptionEntity();
         List<QuestionOptionEntity> options = Arrays.asList(optionEntity);
-        
+
         QuestionEntity entity = new QuestionEntity();
         entity.setDifficulty("EASY");
         entity.setQuestionType("MULTIPLE_CHOICE");
@@ -84,7 +84,7 @@ public class QuestionMapperTest {
 
         QuestionOptionEntity optionEntity = new QuestionOptionEntity();
         List<QuestionOptionEntity> options = Arrays.asList(optionEntity);
-        
+
         QuestionEntity entity1 = new QuestionEntity();
         entity1.setDifficulty("EASY");
         entity1.setQuestionType("MULTIPLE_CHOICE");
@@ -149,7 +149,7 @@ public class QuestionMapperTest {
 
         QuestionOptionEntity optionEntity = new QuestionOptionEntity();
         List<QuestionOption> options = Arrays.asList(new QuestionOption("A", true), new QuestionOption("B", false));
-        
+
         Question domain = new Question(domainDifficulty, QuestionType.MULTIPLE_CHOICE, ExplanationStatus.VISIBLE, "What is 2 + 2?", options);
 
         // Act
@@ -175,7 +175,7 @@ public class QuestionMapperTest {
 
         QuestionOptionEntity optionEntity = new QuestionOptionEntity();
         List<QuestionOption> options = Arrays.asList(new QuestionOption("A", true), new QuestionOption("B", false));
-        
+
         Question domain = new Question(domainDifficulty, QuestionType.MULTIPLE_CHOICE, ExplanationStatus.VISIBLE, null, options);
 
         // Act
@@ -186,4 +186,4 @@ public class QuestionMapperTest {
         assertThat(result.getQuestion()).isNull();
     }
 }
-```
+

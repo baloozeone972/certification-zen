@@ -1,4 +1,3 @@
-```java
 package com.certifapp;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -9,7 +8,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.SpringApplication;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -47,4 +45,4 @@ public class CertifAppApplicationTest {
         verify(mockSpringApplication, times(1)).run(anyString());
     }
 }
-```
+

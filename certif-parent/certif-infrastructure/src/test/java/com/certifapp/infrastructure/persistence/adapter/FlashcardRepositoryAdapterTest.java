@@ -1,25 +1,24 @@
 package com.certifapp.infrastructure.persistence.adapter;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
+import com.certifapp.domain.model.learning.Flashcard;
+import com.certifapp.infrastructure.persistence.entity.FlashcardEntity;
+import com.certifapp.infrastructure.persistence.repository.FlashcardJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
-import com.certifapp.domain.model.learning.Flashcard;
-import com.certifapp.infrastructure.persistence.entity.FlashcardEntity;
-import com.certifapp.infrastructure.persistence.repository.FlashcardJpaRepository;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class FlashcardRepositoryAdapterTest {
@@ -52,12 +51,12 @@ public class FlashcardRepositoryAdapterTest {
         domainObjects = Arrays.asList(flashcard1, flashcard2);
 
         entities = Arrays.asList(
-            new FlashcardEntity(flashcard1.id(), flashcard1.questionId(), flashcard1.courseId(),
-                    flashcard1.frontText(), flashcard1.backText(), flashcard1.codeExample(),
-                    flashcard1.aiGenerated(), flashcard1.createdAt()),
-            new FlashcardEntity(flashcard2.id(), flashcard2.questionId(), flashcard2.courseId(),
-                    flashcard2.frontText(), flashcard2.backText(), flashcard2.codeExample(),
-                    flashcard2.aiGenerated(), flashcard2.createdAt())
+                new FlashcardEntity(flashcard1.id(), flashcard1.questionId(), flashcard1.courseId(),
+                        flashcard1.frontText(), flashcard1.backText(), flashcard1.codeExample(),
+                        flashcard1.aiGenerated(), flashcard1.createdAt()),
+                new FlashcardEntity(flashcard2.id(), flashcard2.questionId(), flashcard2.courseId(),
+                        flashcard2.frontText(), flashcard2.backText(), flashcard2.codeExample(),
+                        flashcard2.aiGenerated(), flashcard2.createdAt())
         );
     }
 

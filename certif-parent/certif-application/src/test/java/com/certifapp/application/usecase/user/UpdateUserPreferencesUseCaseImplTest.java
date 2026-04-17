@@ -1,8 +1,4 @@
-```java
 package com.certifapp.application.usecase.user;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
 import com.certifapp.domain.exception.UserNotFoundException;
 import com.certifapp.domain.model.user.UserId;
@@ -10,14 +6,16 @@ import com.certifapp.domain.model.user.UserPreferences;
 import com.certifapp.domain.port.input.user.UpdateUserPreferencesUseCase.UpdatePreferencesCommand;
 import com.certifapp.domain.port.output.UserPreferencesRepository;
 import com.certifapp.domain.port.output.UserRepository;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class UpdateUserPreferencesUseCaseImplTest {
@@ -88,4 +86,4 @@ public class UpdateUserPreferencesUseCaseImplTest {
                 .hasMessage(userId.toString());
     }
 }
-```
+

@@ -12,20 +12,21 @@ import java.util.Map;
  * @param recommendedCertifications ordered list of recommended certifications
  */
 public record DiagnosticResultDto(
-        Map<String, Integer>             scoreByDomain,
-        Map<String, Double>              skillMap,
+        Map<String, Integer> scoreByDomain,
+        Map<String, Double> skillMap,
         List<RecommendedCertificationDto> recommendedCertifications
 ) {
     /**
      * One recommended certification from the diagnostic.
      *
-     * @param certificationId  certification slug
-     * @param rationale        AI explanation for why this is recommended
-     * @param priority         1 = highest priority
+     * @param certificationId certification slug
+     * @param rationale       AI explanation for why this is recommended
+     * @param priority        1 = highest priority
      */
     public record RecommendedCertificationDto(
             String certificationId,
             String rationale,
-            int    priority
-    ) {}
+            int priority
+    ) {
+    }
 }

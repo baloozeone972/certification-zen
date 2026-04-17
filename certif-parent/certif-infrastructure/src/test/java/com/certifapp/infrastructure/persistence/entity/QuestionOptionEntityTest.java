@@ -1,4 +1,3 @@
-```java
 package com.certifapp.infrastructure.persistence.entity;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -9,7 +8,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class QuestionOptionEntityTest {
@@ -73,4 +72,4 @@ public class QuestionOptionEntityTest {
         assertThat(questionOption.getDisplayOrder()).isEqualTo(order);
     }
 }
-```
+

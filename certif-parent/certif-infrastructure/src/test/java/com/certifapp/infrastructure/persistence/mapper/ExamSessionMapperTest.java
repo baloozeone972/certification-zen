@@ -1,13 +1,17 @@
 package com.certifapp.infrastructure.persistence.mapper;
 
-import com.certifapp.domain.model.session.*;
+import com.certifapp.domain.model.session.ExamMode;
+import com.certifapp.domain.model.session.ExamSession;
+import com.certifapp.domain.model.session.SessionStatus;
+import com.certifapp.domain.model.session.UserAnswer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 

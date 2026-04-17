@@ -1,4 +1,3 @@
-```java
 package com.certifapp.api.security;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -8,7 +7,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -79,4 +77,4 @@ public class SecurityConfigTest {
         assertThat(((BCryptPasswordEncoder) passwordEncoder).getStrength()).isEqualTo(12);
     }
 }
-```
+

@@ -16,11 +16,12 @@ import java.util.UUID;
  * @param createdAt        account creation timestamp
  */
 public record UserDto(
-        UUID           id,
-        String         email,
-        String         role,
-        String         subscriptionTier,
-        String         locale,
-        String         timezone,
+        UUID id,
+        String email,
+        String role,
+        String subscriptionTier,
+        String locale,
+        String timezone,
         OffsetDateTime createdAt
-) {}
+) {
+}

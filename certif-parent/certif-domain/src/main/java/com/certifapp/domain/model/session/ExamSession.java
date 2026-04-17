@@ -37,18 +37,18 @@ import java.util.UUID;
  * @param answers         user answers collected during the session
  */
 public record ExamSession(
-        UUID            id,
-        UUID            userId,
-        String          certificationId,
-        ExamMode        mode,
-        SessionStatus   status,
-        OffsetDateTime  startedAt,
-        OffsetDateTime  endedAt,
-        Integer         durationSeconds,
-        int             totalQuestions,
-        int             correctCount,
-        double          percentage,
-        boolean         passed,
+        UUID id,
+        UUID userId,
+        String certificationId,
+        ExamMode mode,
+        SessionStatus status,
+        OffsetDateTime startedAt,
+        OffsetDateTime endedAt,
+        Integer durationSeconds,
+        int totalQuestions,
+        int correctCount,
+        double percentage,
+        boolean passed,
         List<UserAnswer> answers
 ) {
 
@@ -56,20 +56,29 @@ public record ExamSession(
      * Compact constructor — enforces invariants.
      */
     public ExamSession {
-        if (userId == null)          throw new IllegalArgumentException("userId must not be null");
+        if (userId == null) throw new IllegalArgumentException("userId must not be null");
         if (certificationId == null || certificationId.isBlank())
             throw new IllegalArgumentException("certificationId must not be blank");
-        if (mode == null)            throw new IllegalArgumentException("mode must not be null");
-        if (status == null)          throw new IllegalArgumentException("status must not be null");
-        if (startedAt == null)       throw new IllegalArgumentException("startedAt must not be null");
+        if (mode == null) throw new IllegalArgumentException("mode must not be null");
+        if (status == null) throw new IllegalArgumentException("status must not be null");
+        if (startedAt == null) throw new IllegalArgumentException("startedAt must not be null");
         if (totalQuestions <= 0)
             throw new IllegalArgumentException("totalQuestions must be > 0, got: " + totalQuestions);
         if (correctCount < 0 || correctCount > totalQuestions)
             throw new IllegalArgumentException(
-                "correctCount must be 0..%d, got: %d".formatted(totalQuestions, correctCount));
+                    "correctCount must be 0..%d, got: %d".formatted(totalQuestions, correctCount));
         if (percentage < 0.0 || percentage > 100.0)
             throw new IllegalArgumentException(
-                "percentage must be 0-100, got: " + percentage);
+                    "percentage must be 0-100, got: " + percentage);
+        // Cohérence score : si la session est terminée, percentage doit correspondre
+        if (status != null && status.isFinished() && totalQuestions > 0) {
+            double expectedPct = (correctCount * 100.0) / totalQuestions;
+            if (Math.abs(percentage - expectedPct) > 0.01) {
+                throw new IllegalArgumentException(
+                        "Inconsistent score: correctCount=%d / totalQuestions=%d → expected %.2f%% but got %.2f%%"
+                                .formatted(correctCount, totalQuestions, expectedPct, percentage));
+            }
+        }
         answers = answers == null ? List.of() : List.copyOf(answers);
     }
 
@@ -85,10 +94,10 @@ public record ExamSession(
     public static ExamSession start(
             UUID userId, String certificationId, ExamMode mode, int totalQuestions) {
         return new ExamSession(
-            UUID.randomUUID(), userId, certificationId, mode,
-            SessionStatus.IN_PROGRESS,
-            OffsetDateTime.now(), null, null,
-            totalQuestions, 0, 0.0, false, List.of());
+                UUID.randomUUID(), userId, certificationId, mode,
+                SessionStatus.IN_PROGRESS,
+                OffsetDateTime.now(), null, null,
+                totalQuestions, 0, 0.0, false, List.of());
     }
 
     /**
@@ -108,8 +117,8 @@ public record ExamSession(
      */
     public UserAnswer answerFor(UUID questionId) {
         return answers.stream()
-            .filter(a -> questionId.equals(a.questionId()))
-            .findFirst()
-            .orElse(null);
+                .filter(a -> questionId.equals(a.questionId()))
+                .findFirst()
+                .orElse(null);
     }
 }

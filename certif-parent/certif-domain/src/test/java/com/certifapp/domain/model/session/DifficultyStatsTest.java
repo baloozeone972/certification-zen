@@ -1,15 +1,14 @@
-```java
 package com.certifapp.domain.model.session;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static com.certifapp.domain.model.question.DifficultyLevel.EASY;
+import static com.certifapp.domain.model.question.DifficultyLevel.MEDIUM;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
-import static com.certifapp.domain.model.question.DifficultyLevel.*;
 
 @ExtendWith(MockitoExtension.class)
 public class DifficultyStatsTest {
@@ -71,4 +70,4 @@ public class DifficultyStatsTest {
         assertThat(stats.percentage()).isEqualTo(0.0);
     }
 }
-```
+

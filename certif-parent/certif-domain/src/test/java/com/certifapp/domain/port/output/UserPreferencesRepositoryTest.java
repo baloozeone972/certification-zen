@@ -1,20 +1,21 @@
-```java
 package com.certifapp.domain.port.output;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.assertj.core.api.Assertions.*;
-
-import java.util.Optional;
-import java.util.UUID;
-
+import com.certifapp.domain.model.user.UserPreferences;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserPreferencesRepositoryTest {
@@ -80,4 +81,4 @@ public class UserPreferencesRepositoryTest {
         verify(userPreferencesRepository, times(1)).save(any(UserPreferences.class));
     }
 }
-```
+

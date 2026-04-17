@@ -1,4 +1,3 @@
-```java
 package com.certifapp.application.dto.exam;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +12,7 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class ExamSessionSummaryDtoTest {
@@ -131,4 +130,4 @@ public class ExamSessionSummaryDtoTest {
         assertThat(dto.passed()).isTrue();
     }
 }
-```
+

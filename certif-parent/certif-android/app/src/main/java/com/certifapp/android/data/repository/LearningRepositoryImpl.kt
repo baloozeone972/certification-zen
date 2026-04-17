@@ -19,7 +19,7 @@ class LearningRepositoryImpl @Inject constructor(
 
     override fun getFlashcardsDue(certificationId: String): Flow<List<Flashcard>> =
         dao.getDue(certificationId, LocalDate.now().toString())
-           .map { it.map(FlashcardEntity::toDomain) }
+            .map { it.map(FlashcardEntity::toDomain) }
 
     override suspend fun reviewFlashcard(flashcardId: String, rating: Int) {
         api.reviewFlashcard(flashcardId, ReviewFlashcardRequest(rating))
@@ -28,12 +28,15 @@ class LearningRepositoryImpl @Inject constructor(
     override suspend fun syncFlashcards(certificationId: String) {
         val dtos = api.getFlashcardsDue(certificationId, 50).data
         val entities = dtos.map {
-            FlashcardEntity(it.id, certificationId, it.frontText, it.backText,
-                it.codeExample, it.nextReviewDate, it.easeFactor, it.intervalDays, it.repetitions)
+            FlashcardEntity(
+                it.id, certificationId, it.frontText, it.backText,
+                it.codeExample, it.nextReviewDate, it.easeFactor, it.intervalDays, it.repetitions
+            )
         }
         dao.insertAll(entities)
     }
 
     private fun FlashcardEntity.toDomain() = Flashcard(
-        id, frontText, backText, codeExample, nextReviewDate, easeFactor, intervalDays, repetitions)
+        id, frontText, backText, codeExample, nextReviewDate, easeFactor, intervalDays, repetitions
+    )
 }

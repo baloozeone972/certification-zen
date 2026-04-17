@@ -1,11 +1,4 @@
-```java
 package com.certifapp.infrastructure.persistence.mapper;
-
-import static org.mockito.Mockito.*;
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.Arrays;
-import java.util.List;
 
 import com.certifapp.domain.model.user.*;
 import com.certifapp.infrastructure.persistence.entity.UserEntity;
@@ -16,7 +9,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class UserMapperTest {
@@ -205,8 +205,8 @@ public class UserMapperTest {
     public void toDomains_NominalCase() {
         // Arrange
         List<UserEntity> entities = Arrays.asList(
-            new UserEntity().setRole("ADMIN").setSubscriptionTier("PREMIUM"),
-            new UserEntity().setRole("USER").setSubscriptionTier("BASIC")
+                new UserEntity().setRole("ADMIN").setSubscriptionTier("PREMIUM"),
+                new UserEntity().setRole("USER").setSubscriptionTier("BASIC")
         );
 
         // Act
@@ -233,4 +233,4 @@ public class UserMapperTest {
         assertThat(domains).isEmpty();
     }
 }
-```
+

@@ -3,6 +3,7 @@ package com.certifapp.api.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
+
 import java.util.UUID;
 
 /**
@@ -16,4 +17,5 @@ public record SubmitAnswerRequest(
         @NotNull UUID questionId,
         UUID selectedOptionId,
         @PositiveOrZero long responseTimeMs
-) {}
+) {
+}

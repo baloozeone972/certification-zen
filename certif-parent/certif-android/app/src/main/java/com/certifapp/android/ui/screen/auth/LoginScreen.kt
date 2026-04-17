@@ -27,25 +27,33 @@ fun LoginScreen(
     }
 
     Column(
-        modifier            = Modifier.fillMaxSize().padding(24.dp),
+        modifier = Modifier.fillMaxSize().padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text("Connexion", fontSize = 28.sp, fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 32.dp))
+        Text(
+            "Connexion", fontSize = 28.sp, fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 32.dp)
+        )
 
-        OutlinedTextField(value = email, onValueChange = { email = it },
+        OutlinedTextField(
+            value = email, onValueChange = { email = it },
             label = { Text("Email") }, modifier = Modifier.fillMaxWidth(),
-            singleLine = true)
+            singleLine = true
+        )
         Spacer(Modifier.height(12.dp))
-        OutlinedTextField(value = password, onValueChange = { password = it },
+        OutlinedTextField(
+            value = password, onValueChange = { password = it },
             label = { Text("Mot de passe") }, modifier = Modifier.fillMaxWidth(),
-            visualTransformation = PasswordVisualTransformation(), singleLine = true)
+            visualTransformation = PasswordVisualTransformation(), singleLine = true
+        )
 
         if (uiState is AuthUiState.Error) {
-            Text((uiState as AuthUiState.Error).message,
+            Text(
+                (uiState as AuthUiState.Error).message,
                 color = MaterialTheme.colorScheme.error,
-                modifier = Modifier.padding(top = 8.dp))
+                modifier = Modifier.padding(top = 8.dp)
+            )
         }
 
         Spacer(Modifier.height(24.dp))

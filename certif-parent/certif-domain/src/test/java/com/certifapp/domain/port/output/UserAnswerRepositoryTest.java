@@ -1,14 +1,18 @@
-```java
 package com.certifapp.domain.port.output;
 
+import com.certifapp.domain.model.session.UserAnswer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.List;
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -45,8 +49,8 @@ public class UserAnswerRepositoryTest {
     public void saveAll_UserAnswers_savedSuccessfully() {
         // Arrange
         List<UserAnswer> answers = List.of(
-            new UserAnswer(UUID.randomUUID(), UUID.randomUUID(), "answer1"),
-            new UserAnswer(UUID.randomUUID(), UUID.randomUUID(), "answer2")
+                new UserAnswer(UUID.randomUUID(), UUID.randomUUID(), "answer1"),
+                new UserAnswer(UUID.randomUUID(), UUID.randomUUID(), "answer2")
         );
 
         // Act
@@ -63,8 +67,8 @@ public class UserAnswerRepositoryTest {
         // Arrange
         UUID sessionId = UUID.randomUUID();
         List<UserAnswer> answers = List.of(
-            new UserAnswer(UUID.randomUUID(), sessionId, "answer1"),
-            new UserAnswer(UUID.randomUUID(), sessionId, "answer2")
+                new UserAnswer(UUID.randomUUID(), sessionId, "answer1"),
+                new UserAnswer(UUID.randomUUID(), sessionId, "answer2")
         );
         when(userAnswerRepository.findBySessionId(sessionId)).thenReturn(answers);
 
@@ -89,4 +93,4 @@ public class UserAnswerRepositoryTest {
         assertThat(result).isEmpty();
     }
 }
-```
+

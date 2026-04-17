@@ -13,7 +13,8 @@ import java.util.UUID;
  */
 public final class CurrentUser {
 
-    private CurrentUser() {}
+    private CurrentUser() {
+    }
 
     /**
      * Returns the UUID of the currently authenticated user.

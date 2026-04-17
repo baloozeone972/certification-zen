@@ -1,10 +1,4 @@
-```java
 package com.certifapp.infrastructure.cache;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
-
-import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,6 +8,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.cache.CacheManager;
+
+import java.util.concurrent.TimeUnit;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CaffeineCacheConfigTest {
@@ -53,4 +52,4 @@ public class CaffeineCacheConfigTest {
         assertThrows(NullPointerException.class, () -> caffeineCacheConfig.cacheManager());
     }
 }
-```
+

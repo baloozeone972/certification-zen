@@ -3,11 +3,15 @@ package com.certifapp.api.controller;
 
 import com.certifapp.api.dto.response.ApiResponse;
 import com.certifapp.domain.model.certification.Certification;
-import com.certifapp.domain.port.input.certification.*;
+import com.certifapp.domain.port.input.certification.GetCertificationDetailsUseCase;
+import com.certifapp.domain.port.input.certification.ListCertificationsUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -21,13 +25,13 @@ import java.util.List;
 @Tag(name = "Certifications", description = "Certification catalogue")
 public class CertificationController {
 
-    private final ListCertificationsUseCase      listUseCase;
+    private final ListCertificationsUseCase listUseCase;
     private final GetCertificationDetailsUseCase detailsUseCase;
 
     public CertificationController(
-            ListCertificationsUseCase      listUseCase,
+            ListCertificationsUseCase listUseCase,
             GetCertificationDetailsUseCase detailsUseCase) {
-        this.listUseCase    = listUseCase;
+        this.listUseCase = listUseCase;
         this.detailsUseCase = detailsUseCase;
     }
 

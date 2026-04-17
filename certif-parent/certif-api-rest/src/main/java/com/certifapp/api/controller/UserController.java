@@ -4,7 +4,9 @@ package com.certifapp.api.controller;
 import com.certifapp.api.dto.request.UpdatePreferencesRequest;
 import com.certifapp.api.dto.response.ApiResponse;
 import com.certifapp.api.security.CurrentUser;
-import com.certifapp.domain.model.user.*;
+import com.certifapp.domain.model.user.UiTheme;
+import com.certifapp.domain.model.user.User;
+import com.certifapp.domain.model.user.UserPreferences;
 import com.certifapp.domain.port.input.user.UpdateUserPreferencesUseCase;
 import com.certifapp.domain.port.output.UserPreferencesRepository;
 import com.certifapp.domain.port.output.UserRepository;
@@ -24,17 +26,17 @@ import org.springframework.web.bind.annotation.*;
 @SecurityRequirement(name = "BearerAuth")
 public class UserController {
 
-    private final UserRepository                 userRepository;
-    private final UserPreferencesRepository      preferencesRepository;
-    private final UpdateUserPreferencesUseCase   updatePrefsUseCase;
+    private final UserRepository userRepository;
+    private final UserPreferencesRepository preferencesRepository;
+    private final UpdateUserPreferencesUseCase updatePrefsUseCase;
 
     public UserController(
-            UserRepository               userRepository,
-            UserPreferencesRepository    preferencesRepository,
+            UserRepository userRepository,
+            UserPreferencesRepository preferencesRepository,
             UpdateUserPreferencesUseCase updatePrefsUseCase) {
-        this.userRepository       = userRepository;
+        this.userRepository = userRepository;
         this.preferencesRepository = preferencesRepository;
-        this.updatePrefsUseCase   = updatePrefsUseCase;
+        this.updatePrefsUseCase = updatePrefsUseCase;
     }
 
     /**

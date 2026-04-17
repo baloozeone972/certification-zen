@@ -1,12 +1,6 @@
-```java
 package com.certifapp.infrastructure.persistence.repository;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
-
 import com.certifapp.infrastructure.persistence.entity.SM2ScheduleEntity;
-import java.util.Optional;
-import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +8,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class SM2ScheduleJpaRepositoryTest {
@@ -72,4 +72,4 @@ public class SM2ScheduleJpaRepositoryTest {
         verify(jpaRepository, never()).findByUserIdAndQuestionId(any(UUID.class), any(UUID.class));
     }
 }
-```
+

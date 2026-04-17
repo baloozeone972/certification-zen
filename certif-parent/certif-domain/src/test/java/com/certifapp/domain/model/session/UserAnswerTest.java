@@ -1,11 +1,4 @@
-```java
 package com.certifapp.domain.model.session;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
-
-import java.time.OffsetDateTime;
-import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,6 +7,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class UserAnswerTest {
@@ -35,14 +34,14 @@ public class UserAnswerTest {
         UserAnswer result = UserAnswer.skipped(UUID.randomUUID(), UUID.randomUUID());
 
         assertThat(result).isEqualTo(new UserAnswer(
-            null, 
-            UUID.randomUUID(), 
-            UUID.randomUUID(), 
-            null, 
-            false, 
-            true, 
-            null, 
-            null
+                null,
+                UUID.randomUUID(),
+                UUID.randomUUID(),
+                null,
+                false,
+                true,
+                null,
+                null
         ));
     }
 
@@ -52,14 +51,14 @@ public class UserAnswerTest {
         UserAnswer result = UserAnswer.answered(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), 100L);
 
         assertThat(result).isEqualTo(new UserAnswer(
-            null, 
-            UUID.randomUUID(), 
-            UUID.randomUUID(), 
-            UUID.randomUUID(), 
-            false, 
-            false, 
-            100L, 
-            OffsetDateTime.now()
+                null,
+                UUID.randomUUID(),
+                UUID.randomUUID(),
+                UUID.randomUUID(),
+                false,
+                false,
+                100L,
+                OffsetDateTime.now()
         ));
     }
 
@@ -67,25 +66,25 @@ public class UserAnswerTest {
     @DisplayName("should auto-correct isSkipped when selectedOptionId is null")
     public void compact_constructor_auto_correct_isSkipped() {
         UserAnswer result = new UserAnswer(
-            UUID.randomUUID(), 
-            UUID.randomUUID(), 
-            UUID.randomUUID(), 
-            null, 
-            false, 
-            false, 
-            100L, 
-            OffsetDateTime.now()
+                UUID.randomUUID(),
+                UUID.randomUUID(),
+                UUID.randomUUID(),
+                null,
+                false,
+                false,
+                100L,
+                OffsetDateTime.now()
         );
 
         assertThat(result).isEqualTo(new UserAnswer(
-            UUID.randomUUID(), 
-            UUID.randomUUID(), 
-            UUID.randomUUID(), 
-            null, 
-            true, 
-            true, 
-            100L, 
-            OffsetDateTime.now()
+                UUID.randomUUID(),
+                UUID.randomUUID(),
+                UUID.randomUUID(),
+                null,
+                true,
+                true,
+                100L,
+                OffsetDateTime.now()
         ));
     }
 
@@ -95,35 +94,35 @@ public class UserAnswerTest {
         UUID sessionId = UUID.randomUUID();
         UUID questionId = UUID.randomUUID();
 
-        assertThrows(IllegalArgumentException.class, () -> 
-            new UserAnswer(
-                UUID.randomUUID(), 
-                sessionId, 
-                questionId, 
-                UUID.randomUUID(), 
-                false, 
-                true, 
-                100L, 
-                OffsetDateTime.now()
-            )
+        assertThrows(IllegalArgumentException.class, () ->
+                new UserAnswer(
+                        UUID.randomUUID(),
+                        sessionId,
+                        questionId,
+                        UUID.randomUUID(),
+                        false,
+                        true,
+                        100L,
+                        OffsetDateTime.now()
+                )
         );
     }
 
     @Test
     @DisplayName("should throw IllegalArgumentException when responseTimeMs is negative")
     public void compact_constructor_throw_exception_when_responseTimeMs_negative() {
-        assertThrows(IllegalArgumentException.class, () -> 
-            new UserAnswer(
-                UUID.randomUUID(), 
-                UUID.randomUUID(), 
-                UUID.randomUUID(), 
-                null, 
-                false, 
-                false, 
-                -1L, 
-                OffsetDateTime.now()
-            )
+        assertThrows(IllegalArgumentException.class, () ->
+                new UserAnswer(
+                        UUID.randomUUID(),
+                        UUID.randomUUID(),
+                        UUID.randomUUID(),
+                        null,
+                        false,
+                        false,
+                        -1L,
+                        OffsetDateTime.now()
+                )
         );
     }
 }
-```
+

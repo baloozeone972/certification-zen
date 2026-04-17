@@ -9,7 +9,10 @@ import com.certifapp.domain.model.session.ExamMode;
 import com.certifapp.domain.model.session.ExamSession;
 import com.certifapp.domain.model.user.SubscriptionTier;
 import com.certifapp.domain.port.input.exam.StartExamSessionUseCase;
-import com.certifapp.domain.port.output.*;
+import com.certifapp.domain.port.output.CertificationRepository;
+import com.certifapp.domain.port.output.ExamSessionRepository;
+import com.certifapp.domain.port.output.QuestionRepository;
+import com.certifapp.domain.port.output.UserRepository;
 import com.certifapp.domain.service.FreemiumGuardService;
 import com.certifapp.domain.service.QuestionSelectionService;
 
@@ -32,25 +35,25 @@ import java.util.stream.Collectors;
  */
 public class StartExamSessionUseCaseImpl implements StartExamSessionUseCase {
 
-    private final CertificationRepository   certificationRepository;
-    private final QuestionRepository        questionRepository;
-    private final ExamSessionRepository     sessionRepository;
-    private final UserRepository            userRepository;
-    private final FreemiumGuardService      freemiumGuardService;
-    private final QuestionSelectionService  questionSelectionService;
+    private final CertificationRepository certificationRepository;
+    private final QuestionRepository questionRepository;
+    private final ExamSessionRepository sessionRepository;
+    private final UserRepository userRepository;
+    private final FreemiumGuardService freemiumGuardService;
+    private final QuestionSelectionService questionSelectionService;
 
     public StartExamSessionUseCaseImpl(
-            CertificationRepository  certificationRepository,
-            QuestionRepository       questionRepository,
-            ExamSessionRepository    sessionRepository,
-            UserRepository           userRepository,
-            FreemiumGuardService     freemiumGuardService,
+            CertificationRepository certificationRepository,
+            QuestionRepository questionRepository,
+            ExamSessionRepository sessionRepository,
+            UserRepository userRepository,
+            FreemiumGuardService freemiumGuardService,
             QuestionSelectionService questionSelectionService) {
-        this.certificationRepository  = certificationRepository;
-        this.questionRepository       = questionRepository;
-        this.sessionRepository        = sessionRepository;
-        this.userRepository           = userRepository;
-        this.freemiumGuardService     = freemiumGuardService;
+        this.certificationRepository = certificationRepository;
+        this.questionRepository = questionRepository;
+        this.sessionRepository = sessionRepository;
+        this.userRepository = userRepository;
+        this.freemiumGuardService = freemiumGuardService;
         this.questionSelectionService = questionSelectionService;
     }
 

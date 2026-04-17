@@ -13,9 +13,10 @@ import java.util.UUID;
  * @param weightPercent official weight percentage — null if not published
  */
 public record CertificationThemeDto(
-        UUID   id,
+        UUID id,
         String code,
         String label,
-        int    questionCount,
+        int questionCount,
         Double weightPercent
-) {}
+) {
+}

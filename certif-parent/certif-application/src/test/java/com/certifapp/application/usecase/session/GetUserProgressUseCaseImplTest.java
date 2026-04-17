@@ -1,23 +1,19 @@
-```java
 package com.certifapp.application.usecase.session;
 
 import com.certifapp.domain.model.session.ExamSession;
-import com.certifapp.domain.port.input.session.GetSessionHistoryUseCase;
 import com.certifapp.domain.port.output.ExamSessionRepository;
-import com.certifapp.domain.port.output.UserAnswerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -107,4 +103,4 @@ public class GetUserProgressUseCaseImplTest {
                 .hasMessageContaining("Simulated repository error");
     }
 }
-```
+

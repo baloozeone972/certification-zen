@@ -1,4 +1,3 @@
-```java
 package com.certifapp.api.controller;
 
 import com.certifapp.api.dto.request.StartExamRequest;
@@ -6,15 +5,18 @@ import com.certifapp.api.dto.request.SubmitAnswerRequest;
 import com.certifapp.api.dto.response.ApiResponse;
 import com.certifapp.domain.model.session.ExamSession;
 import com.certifapp.domain.model.session.UserAnswer;
-import com.certifapp.domain.port.input.exam.*;
-import com.certifapp.domain.port.input.session.*;
+import com.certifapp.domain.port.input.exam.GetExamResultsUseCase;
+import com.certifapp.domain.port.input.exam.StartExamSessionUseCase;
+import com.certifapp.domain.port.input.exam.SubmitAnswerUseCase;
+import com.certifapp.domain.port.input.exam.SubmitExamUseCase;
+import com.certifapp.domain.port.input.session.ExportSessionPdfUseCase;
+import com.certifapp.domain.port.input.session.GetSessionHistoryUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -152,4 +154,4 @@ public class ExamControllerTest {
         verify(historyUseCase).execute(eq(userId), any(GetSessionHistoryUseCase.HistoryFilter.class), eq(page), eq(size));
     }
 }
-```
+

@@ -20,16 +20,16 @@ import java.util.UUID;
  */
 public class GetFlashcardsUseCaseImpl implements GetFlashcardsUseCase {
 
-    private final FlashcardRepository  flashcardRepository;
-    private final UserRepository       userRepository;
+    private final FlashcardRepository flashcardRepository;
+    private final UserRepository userRepository;
     private final FreemiumGuardService freemiumGuardService;
 
     public GetFlashcardsUseCaseImpl(
-            FlashcardRepository  flashcardRepository,
-            UserRepository       userRepository,
+            FlashcardRepository flashcardRepository,
+            UserRepository userRepository,
             FreemiumGuardService freemiumGuardService) {
-        this.flashcardRepository  = flashcardRepository;
-        this.userRepository       = userRepository;
+        this.flashcardRepository = flashcardRepository;
+        this.userRepository = userRepository;
         this.freemiumGuardService = freemiumGuardService;
     }
 

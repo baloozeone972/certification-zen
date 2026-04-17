@@ -22,7 +22,7 @@ public class UserPreferencesRepositoryAdapter implements UserPreferencesReposito
     public UserPreferencesRepositoryAdapter(
             UserPreferencesJpaRepository jpaRepository, UserMapper mapper) {
         this.jpaRepository = jpaRepository;
-        this.mapper        = mapper;
+        this.mapper = mapper;
     }
 
     @Override

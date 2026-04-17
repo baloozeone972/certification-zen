@@ -1,5 +1,9 @@
 package com.certifapp.domain.port.output;
 
+import com.certifapp.domain.model.question.Question;
+import com.certifapp.domain.model.session.ExamSession;
+import com.certifapp.domain.model.session.ThemeStats;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -7,12 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
-import org.assertj.core.api.Assertions;
-
-import com.certifapp.domain.model.session.ExamSession;
-import com.certifapp.domain.model.session.ThemeStats;
-import com.certifapp.domain.model.question.Question;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,4 +89,4 @@ public class PdfExportPortTest {
         Assertions.assertThat(pdfContent).isNotNull();
     }
 }
-```
+

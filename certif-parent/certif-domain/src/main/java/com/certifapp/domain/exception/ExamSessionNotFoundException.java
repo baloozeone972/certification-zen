@@ -7,9 +7,13 @@ package com.certifapp.domain.exception;
 public class ExamSessionNotFoundException extends CertifAppException {
 
     private final java.util.UUID sessionId;
+
     public ExamSessionNotFoundException(java.util.UUID sessionId) {
         super("Exam session not found: " + sessionId);
         this.sessionId = sessionId;
     }
-    public java.util.UUID getSessionId() { return sessionId; }
+
+    public java.util.UUID getSessionId() {
+        return sessionId;
+    }
 }

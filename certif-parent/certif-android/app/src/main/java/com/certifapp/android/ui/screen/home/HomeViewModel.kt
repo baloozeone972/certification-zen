@@ -24,7 +24,9 @@ class HomeViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
-    init { loadCertifications() }
+    init {
+        loadCertifications()
+    }
 
     fun loadCertifications() {
         viewModelScope.launch {
@@ -36,7 +38,10 @@ class HomeViewModel @Inject constructor(
                     else HomeUiState.Success(certs)
                 }
             // Refresh from network in background
-            try { repository.refreshCertifications() } catch (_: Exception) {}
+            try {
+                repository.refreshCertifications()
+            } catch (_: Exception) {
+            }
         }
     }
 }

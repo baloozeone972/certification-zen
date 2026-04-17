@@ -22,7 +22,7 @@ servers:
     description: Développement local
 
 security:
-  - BearerAuth: []
+  - BearerAuth: [ ]
 
 tags:
   - name: Auth
@@ -43,9 +43,9 @@ paths:
 
   /auth/register:
     post:
-      tags: [Auth]
+      tags: [ Auth ]
       summary: Créer un compte
-      security: []
+      security: [ ]
       requestBody:
         required: true
         content:
@@ -64,9 +64,9 @@ paths:
 
   /auth/login:
     post:
-      tags: [Auth]
+      tags: [ Auth ]
       summary: Authentification
-      security: []
+      security: [ ]
       requestBody:
         required: true
         content:
@@ -84,16 +84,16 @@ paths:
 
   /auth/refresh:
     post:
-      tags: [Auth]
+      tags: [ Auth ]
       summary: Rafraîchir les tokens
-      security: []
+      security: [ ]
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              required: [refreshToken]
+              required: [ refreshToken ]
               properties:
                 refreshToken:
                   type: string
@@ -108,7 +108,7 @@ paths:
 
   /auth/logout:
     post:
-      tags: [Auth]
+      tags: [ Auth ]
       summary: Déconnexion (invalidation refresh token)
       responses:
         '204': { description: Déconnecté }
@@ -117,7 +117,7 @@ paths:
 
   /users/me:
     get:
-      tags: [Users]
+      tags: [ Users ]
       summary: Profil de l'utilisateur connecté
       responses:
         '200':
@@ -128,7 +128,7 @@ paths:
                 $ref: '#/components/schemas/UserDto'
         '401': { $ref: '#/components/responses/Unauthorized' }
     patch:
-      tags: [Users]
+      tags: [ Users ]
       summary: Mettre à jour le profil
       requestBody:
         required: true
@@ -146,7 +146,7 @@ paths:
 
   /users/me/preferences:
     get:
-      tags: [Users]
+      tags: [ Users ]
       summary: Préférences utilisateur
       responses:
         '200':
@@ -156,7 +156,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserPreferencesDto'
     patch:
-      tags: [Users]
+      tags: [ Users ]
       summary: Mettre à jour les préférences
       requestBody:
         required: true
@@ -174,7 +174,7 @@ paths:
 
   /users/me/data:
     get:
-      tags: [Users]
+      tags: [ Users ]
       summary: Export données personnelles (RGPD Art. 20)
       responses:
         '200':
@@ -185,7 +185,7 @@ paths:
                 type: string
                 format: binary
     delete:
-      tags: [Users]
+      tags: [ Users ]
       summary: Supprimer le compte et toutes les données (RGPD Art. 17)
       responses:
         '204': { description: Compte supprimé }
@@ -194,9 +194,9 @@ paths:
 
   /certifications:
     get:
-      tags: [Certifications]
+      tags: [ Certifications ]
       summary: Liste des certifications disponibles
-      security: []
+      security: [ ]
       parameters:
         - name: active
           in: query
@@ -215,9 +215,9 @@ paths:
 
   /certifications/{id}:
     get:
-      tags: [Certifications]
+      tags: [ Certifications ]
       summary: Détails d'une certification
-      security: []
+      security: [ ]
       parameters:
         - name: id
           in: path
@@ -236,9 +236,9 @@ paths:
 
   /certifications/{id}/themes:
     get:
-      tags: [Certifications]
+      tags: [ Certifications ]
       summary: Thèmes d'une certification
-      security: []
+      security: [ ]
       parameters:
         - name: id
           in: path
@@ -257,7 +257,7 @@ paths:
 
   /certifications/{id}/job-market:
     get:
-      tags: [Certifications]
+      tags: [ Certifications ]
       summary: Données marché de l'emploi par certification
       parameters:
         - name: id
@@ -283,7 +283,7 @@ paths:
 
   /exams/sessions:
     post:
-      tags: [Exams]
+      tags: [ Exams ]
       summary: Démarrer une session d'examen
       requestBody:
         required: true
@@ -307,7 +307,7 @@ paths:
 
   /exams/sessions/{id}:
     get:
-      tags: [Exams]
+      tags: [ Exams ]
       summary: État d'une session en cours
       parameters:
         - name: id
@@ -328,7 +328,7 @@ paths:
 
   /exams/sessions/{id}/answers:
     post:
-      tags: [Exams]
+      tags: [ Exams ]
       summary: Soumettre une réponse à une question
       parameters:
         - name: id
@@ -355,7 +355,7 @@ paths:
 
   /exams/sessions/{id}/submit:
     post:
-      tags: [Exams]
+      tags: [ Exams ]
       summary: Finaliser l'examen et calculer le score
       parameters:
         - name: id
@@ -374,7 +374,7 @@ paths:
 
   /exams/sessions/{id}/results:
     get:
-      tags: [Exams]
+      tags: [ Exams ]
       summary: Résultats d'une session terminée
       parameters:
         - name: id
@@ -393,7 +393,7 @@ paths:
 
   /exams/sessions/{id}/export-pdf:
     get:
-      tags: [Exams]
+      tags: [ Exams ]
       summary: Exporter les résultats en PDF
       parameters:
         - name: id
@@ -415,7 +415,7 @@ paths:
 
   /exams/history:
     get:
-      tags: [Exams]
+      tags: [ Exams ]
       summary: Historique des sessions
       parameters:
         - name: certificationId
@@ -426,7 +426,7 @@ paths:
           in: query
           schema:
             type: string
-            enum: [EXAM, FREE, REVISION]
+            enum: [ EXAM, FREE, REVISION ]
         - name: page
           in: query
           schema:
@@ -449,7 +449,7 @@ paths:
 
   /learning/courses/{certificationId}:
     get:
-      tags: [Learning]
+      tags: [ Learning ]
       summary: Liste des cours disponibles pour une certification
       parameters:
         - name: certificationId
@@ -469,7 +469,7 @@ paths:
 
   /learning/courses/{certificationId}/{themeCode}:
     get:
-      tags: [Learning]
+      tags: [ Learning ]
       summary: Fiche de cours d'un thème
       parameters:
         - name: certificationId
@@ -494,7 +494,7 @@ paths:
 
   /learning/flashcards/{certificationId}:
     get:
-      tags: [Learning]
+      tags: [ Learning ]
       summary: Flashcards dues pour révision (SM-2)
       parameters:
         - name: certificationId
@@ -522,7 +522,7 @@ paths:
 
   /learning/flashcards/{id}/review:
     post:
-      tags: [Learning]
+      tags: [ Learning ]
       summary: Enregistrer la révision d'une flashcard (SM-2)
       parameters:
         - name: id
@@ -547,7 +547,7 @@ paths:
 
   /learning/adaptive-plan:
     get:
-      tags: [Learning]
+      tags: [ Learning ]
       summary: Plan de révision adaptatif (SM-2)
       parameters:
         - name: certificationId
@@ -569,7 +569,7 @@ paths:
 
   /coaching/diagnostic/start:
     post:
-      tags: [Coaching]
+      tags: [ Coaching ]
       summary: Démarrer le bilan de compétences initial (20 questions)
       responses:
         '201':
@@ -581,7 +581,7 @@ paths:
 
   /coaching/diagnostic/submit:
     post:
-      tags: [Coaching]
+      tags: [ Coaching ]
       summary: Soumettre le bilan et obtenir la carte de compétences
       requestBody:
         required: true
@@ -599,7 +599,7 @@ paths:
 
   /coaching/certification-path:
     get:
-      tags: [Coaching]
+      tags: [ Coaching ]
       summary: Parcours de certifications personnalisé
       responses:
         '200':
@@ -613,7 +613,7 @@ paths:
 
   /coaching/weekly-report:
     get:
-      tags: [Coaching]
+      tags: [ Coaching ]
       summary: Rapport coach hebdomadaire
       parameters:
         - name: weekStart
@@ -636,7 +636,7 @@ paths:
 
   /community/challenges/current:
     get:
-      tags: [Community]
+      tags: [ Community ]
       summary: Challenge hebdomadaire en cours
       parameters:
         - name: certificationId
@@ -655,7 +655,7 @@ paths:
 
   /community/challenges/{id}/join:
     post:
-      tags: [Community]
+      tags: [ Community ]
       summary: Rejoindre un challenge
       parameters:
         - name: id
@@ -676,7 +676,7 @@ paths:
 
   /community/challenges/{id}/leaderboard:
     get:
-      tags: [Community]
+      tags: [ Community ]
       summary: Classement d'un challenge
       parameters:
         - name: id
@@ -702,7 +702,7 @@ paths:
 
   /community/groups:
     get:
-      tags: [Community]
+      tags: [ Community ]
       summary: Liste des groupes d'étude publics
       parameters:
         - name: certificationId
@@ -722,7 +722,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/PagedStudyGroup'
     post:
-      tags: [Community]
+      tags: [ Community ]
       summary: Créer un groupe d'étude
       requestBody:
         required: true
@@ -740,7 +740,7 @@ paths:
 
   /community/groups/{id}/join:
     post:
-      tags: [Community]
+      tags: [ Community ]
       summary: Rejoindre un groupe par code d'invitation
       parameters:
         - name: id
@@ -763,9 +763,9 @@ paths:
 
   /community/certified-wall:
     get:
-      tags: [Community]
+      tags: [ Community ]
       summary: Mur des certifiés
-      security: []
+      security: [ ]
       parameters:
         - name: certificationId
           in: query
@@ -792,7 +792,7 @@ paths:
 
   /interview/sessions:
     post:
-      tags: [Interview]
+      tags: [ Interview ]
       summary: Démarrer une session de simulation d'entretien
       requestBody:
         required: true
@@ -800,13 +800,13 @@ paths:
           application/json:
             schema:
               type: object
-              required: [certificationId]
+              required: [ certificationId ]
               properties:
                 certificationId:
                   type: string
                 mode:
                   type: string
-                  enum: [TEXT, VOICE, MIXED]
+                  enum: [ TEXT, VOICE, MIXED ]
                   default: TEXT
       responses:
         '201':
@@ -820,7 +820,7 @@ paths:
 
   /interview/sessions/{id}/answer:
     post:
-      tags: [Interview]
+      tags: [ Interview ]
       summary: Soumettre une réponse d'entretien
       parameters:
         - name: id
@@ -845,7 +845,7 @@ paths:
 
   /interview/sessions/{id}/feedback:
     get:
-      tags: [Interview]
+      tags: [ Interview ]
       summary: Rapport complet de la session d'entretien
       parameters:
         - name: id
@@ -866,7 +866,7 @@ paths:
 
   /ai/chat:
     post:
-      tags: [AI]
+      tags: [ AI ]
       summary: Message à l'assistant IA conversationnel (RAG)
       requestBody:
         required: true
@@ -894,7 +894,7 @@ paths:
 
   /ai/explain/{questionId}:
     get:
-      tags: [AI]
+      tags: [ AI ]
       summary: Explication détaillée d'une question par l'IA
       parameters:
         - name: questionId
@@ -920,7 +920,7 @@ paths:
 
   /ai/generate-flashcards/{courseId}:
     post:
-      tags: [AI]
+      tags: [ AI ]
       summary: Générer des flashcards pour un cours (IA)
       parameters:
         - name: courseId
@@ -943,10 +943,10 @@ paths:
 
   /admin/questions/import:
     post:
-      tags: [Admin]
+      tags: [ Admin ]
       summary: Import de questions JSON (admin)
       security:
-        - BearerAuth: []
+        - BearerAuth: [ ]
       requestBody:
         required: true
         content:
@@ -964,14 +964,14 @@ paths:
 
   /admin/questions:
     get:
-      tags: [Admin]
+      tags: [ Admin ]
       summary: Liste des questions avec filtre sur statut d'enrichissement
       parameters:
         - name: status
           in: query
           schema:
             type: string
-            enum: [ORIGINAL, AI_DRAFT, HUMAN_VALIDATED]
+            enum: [ ORIGINAL, AI_DRAFT, HUMAN_VALIDATED ]
         - name: certificationId
           in: query
           schema:
@@ -992,7 +992,7 @@ paths:
 
   /admin/questions/{id}/enrich:
     post:
-      tags: [Admin]
+      tags: [ Admin ]
       summary: Enrichir une question via IA (génère AI_DRAFT, validation humaine requise)
       parameters:
         - name: id
@@ -1018,7 +1018,7 @@ paths:
 
   /admin/challenges:
     post:
-      tags: [Admin]
+      tags: [ Admin ]
       summary: Publier un challenge hebdomadaire
       requestBody:
         required: true
@@ -1039,9 +1039,9 @@ paths:
 
   /webhooks/stripe:
     post:
-      tags: [Webhooks]
+      tags: [ Webhooks ]
       summary: Webhook Stripe (paiement, abonnement)
-      security: []
+      security: [ ]
       parameters:
         - name: Stripe-Signature
           in: header
@@ -1106,7 +1106,7 @@ components:
     # --- Auth ---
     RegisterRequest:
       type: object
-      required: [email, password]
+      required: [ email, password ]
       properties:
         email:
           type: string
@@ -1126,7 +1126,7 @@ components:
 
     LoginRequest:
       type: object
-      required: [email, password]
+      required: [ email, password ]
       properties:
         email:
           type: string
@@ -1160,10 +1160,10 @@ components:
           type: string
         role:
           type: string
-          enum: [USER, ADMIN, PARTNER]
+          enum: [ USER, ADMIN, PARTNER ]
         subscriptionTier:
           type: string
-          enum: [FREE, PRO, PACK]
+          enum: [ FREE, PRO, PACK ]
         locale:
           type: string
         timezone:
@@ -1185,12 +1185,12 @@ components:
       properties:
         theme:
           type: string
-          enum: [light, dark, system]
+          enum: [ light, dark, system ]
         language:
           type: string
         defaultMode:
           type: string
-          enum: [EXAM, FREE, REVISION]
+          enum: [ EXAM, FREE, REVISION ]
         notificationsEnabled:
           type: boolean
         lastCertificationId:
@@ -1201,12 +1201,12 @@ components:
       properties:
         theme:
           type: string
-          enum: [light, dark, system]
+          enum: [ light, dark, system ]
         language:
           type: string
         defaultMode:
           type: string
-          enum: [EXAM, FREE, REVISION]
+          enum: [ EXAM, FREE, REVISION ]
         notificationsEnabled:
           type: boolean
 
@@ -1230,7 +1230,7 @@ components:
           type: integer
         examType:
           type: string
-          enum: [MCQ, PRACTICAL, MIXED]
+          enum: [ MCQ, PRACTICAL, MIXED ]
 
     CertificationDetailDto:
       allOf:
@@ -1264,13 +1264,13 @@ components:
     # --- Exams ---
     StartExamRequest:
       type: object
-      required: [certificationId, mode]
+      required: [ certificationId, mode ]
       properties:
         certificationId:
           type: string
         mode:
           type: string
-          enum: [EXAM, FREE, REVISION]
+          enum: [ EXAM, FREE, REVISION ]
         selectedThemes:
           type: array
           items:
@@ -1296,7 +1296,7 @@ components:
           type: string
         mode:
           type: string
-          enum: [EXAM, FREE, REVISION]
+          enum: [ EXAM, FREE, REVISION ]
         questions:
           type: array
           items:
@@ -1324,7 +1324,7 @@ components:
           type: string
         difficulty:
           type: string
-          enum: [easy, medium, hard]
+          enum: [ easy, medium, hard ]
 
     QuestionOptionDto:
       type: object
@@ -1340,7 +1340,7 @@ components:
 
     SubmitAnswerRequest:
       type: object
-      required: [questionId]
+      required: [ questionId ]
       properties:
         questionId:
           type: string
@@ -1392,7 +1392,7 @@ components:
           type: string
         mode:
           type: string
-          enum: [EXAM, FREE, REVISION]
+          enum: [ EXAM, FREE, REVISION ]
         startedAt:
           type: string
           format: date-time
@@ -1487,7 +1487,7 @@ components:
 
     ReviewFlashcardRequest:
       type: object
-      required: [rating]
+      required: [ rating ]
       properties:
         rating:
           type: integer
@@ -1535,7 +1535,7 @@ components:
     # --- Coaching ---
     DiagnosticSubmitRequest:
       type: object
-      required: [sessionId, answers]
+      required: [ sessionId, answers ]
       properties:
         sessionId:
           type: string
@@ -1703,7 +1703,7 @@ components:
 
     CreateGroupRequest:
       type: object
-      required: [name, certificationId]
+      required: [ name, certificationId ]
       properties:
         name:
           type: string
@@ -1721,7 +1721,7 @@ components:
 
     JoinGroupRequest:
       type: object
-      required: [inviteCode]
+      required: [ inviteCode ]
       properties:
         inviteCode:
           type: string
@@ -1765,7 +1765,7 @@ components:
           type: string
         mode:
           type: string
-          enum: [TEXT, VOICE, MIXED]
+          enum: [ TEXT, VOICE, MIXED ]
         startedAt:
           type: string
           format: date-time
@@ -1777,7 +1777,7 @@ components:
 
     InterviewAnswerRequest:
       type: object
-      required: [questionText, userAnswer, domain]
+      required: [ questionText, userAnswer, domain ]
       properties:
         questionText:
           type: string
@@ -1805,7 +1805,7 @@ components:
     # --- AI ---
     ChatMessageRequest:
       type: object
-      required: [message]
+      required: [ message ]
       properties:
         message:
           type: string
@@ -1818,7 +1818,7 @@ components:
     # --- Admin ---
     ImportQuestionsRequest:
       type: object
-      required: [certificationId, questions]
+      required: [ certificationId, questions ]
       properties:
         certificationId:
           type: string
@@ -1828,7 +1828,7 @@ components:
           maxItems: 500
           items:
             type: object
-            required: [statement, options, correctIndex]
+            required: [ statement, options, correctIndex ]
             properties:
               legacyId:
                 type: string
@@ -1838,7 +1838,7 @@ components:
                 type: string
               difficulty:
                 type: string
-                enum: [easy, medium, hard]
+                enum: [ easy, medium, hard ]
               options:
                 type: array
                 minItems: 2
@@ -1870,7 +1870,7 @@ components:
           properties:
             explanationStatus:
               type: string
-              enum: [ORIGINAL, AI_DRAFT, HUMAN_VALIDATED]
+              enum: [ ORIGINAL, AI_DRAFT, HUMAN_VALIDATED ]
             aiConfidenceScore:
               type: number
               nullable: true
@@ -1881,7 +1881,7 @@ components:
 
     PublishChallengeRequest:
       type: object
-      required: [certificationId, title, questionIds, startsAt, endsAt]
+      required: [ certificationId, title, questionIds, startsAt, endsAt ]
       properties:
         certificationId:
           type: string

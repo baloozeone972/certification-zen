@@ -1,16 +1,13 @@
-```java
 package com.certifapp.domain.model.question;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 public class DifficultyLevelTest {
@@ -70,4 +67,4 @@ public class DifficultyLevelTest {
         assertThat(DifficultyLevel.HARD.toJson()).isEqualTo("hard");
     }
 }
-```
+

@@ -15,13 +15,19 @@ package com.certifapp.domain.model.user;
  */
 public enum SubscriptionTier {
 
-    /** Freemium — limited daily exams and question count. */
+    /**
+     * Freemium — limited daily exams and question count.
+     */
     FREE,
 
-    /** Monthly subscription — 9.99 €/month, unlimited everything. */
+    /**
+     * Monthly subscription — 9.99 €/month, unlimited everything.
+     */
     PRO,
 
-    /** One-time purchase — 4.99 €, single certification, permanent access. */
+    /**
+     * One-time purchase — 4.99 €, single certification, permanent access.
+     */
     PACK;
 
     /**

@@ -18,6 +18,6 @@ public interface CertificationJpaRepository extends JpaRepository<CertificationE
     List<CertificationEntity> findAllWithThemes();
 
     @Query("SELECT c FROM CertificationEntity c LEFT JOIN FETCH c.themes " +
-           "WHERE c.isActive = true ORDER BY c.name")
+            "WHERE c.isActive = true ORDER BY c.name")
     List<CertificationEntity> findAllActiveWithThemes();
 }

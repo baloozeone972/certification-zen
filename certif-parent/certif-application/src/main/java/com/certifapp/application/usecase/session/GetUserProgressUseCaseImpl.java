@@ -2,11 +2,11 @@
 package com.certifapp.application.usecase.session;
 
 import com.certifapp.domain.model.session.ExamSession;
-import com.certifapp.domain.port.input.session.GetSessionHistoryUseCase;
 import com.certifapp.domain.port.output.ExamSessionRepository;
-import com.certifapp.domain.port.output.UserAnswerRepository;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Computes aggregated progress statistics for a user and certification.
@@ -46,16 +46,16 @@ public class GetUserProgressUseCaseImpl {
                     "bestScore", 0.0, "averageScore", 0.0, "passRate", 0.0);
         }
 
-        double best    = finishedSessions.stream().mapToDouble(ExamSession::percentage).max().orElse(0);
-        double avg     = finishedSessions.stream().mapToDouble(ExamSession::percentage).average().orElse(0);
-        long   passed  = finishedSessions.stream().filter(ExamSession::passed).count();
+        double best = finishedSessions.stream().mapToDouble(ExamSession::percentage).max().orElse(0);
+        double avg = finishedSessions.stream().mapToDouble(ExamSession::percentage).average().orElse(0);
+        long passed = finishedSessions.stream().filter(ExamSession::passed).count();
         double passRate = (double) passed / finishedSessions.size() * 100.0;
 
         return Map.of(
                 "totalSessions", (double) finishedSessions.size(),
-                "bestScore",     best,
-                "averageScore",  avg,
-                "passRate",      passRate
+                "bestScore", best,
+                "averageScore", avg,
+                "passRate", passRate
         );
     }
 }

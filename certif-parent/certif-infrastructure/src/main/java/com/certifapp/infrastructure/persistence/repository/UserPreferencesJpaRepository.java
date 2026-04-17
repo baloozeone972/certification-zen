@@ -11,4 +11,5 @@ import java.util.UUID;
  * Spring Data JPA repository for {@link UserPreferencesEntity}.
  */
 @Repository
-public interface UserPreferencesJpaRepository extends JpaRepository<UserPreferencesEntity, UUID> {}
+public interface UserPreferencesJpaRepository extends JpaRepository<UserPreferencesEntity, UUID> {
+}

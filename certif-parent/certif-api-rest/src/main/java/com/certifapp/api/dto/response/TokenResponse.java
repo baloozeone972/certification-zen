@@ -12,7 +12,7 @@ package com.certifapp.api.dto.response;
 public record TokenResponse(
         String accessToken,
         String refreshToken,
-        int    expiresIn,
+        int expiresIn,
         String tokenType
 ) {
     public static TokenResponse of(String access, String refresh) {

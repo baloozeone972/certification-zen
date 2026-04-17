@@ -3,17 +3,22 @@ package com.certifapp.ai.service;
 
 import com.certifapp.domain.model.question.*;
 import dev.langchain4j.model.chat.ChatLanguageModel;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Unit tests for {@link ExplanationEnricher}.
@@ -22,10 +27,25 @@ import static org.mockito.Mockito.*;
 @DisplayName("ExplanationEnricher")
 class ExplanationEnricherTest {
 
-    @Mock private ChatLanguageModel lightModel;
-    @Mock private PromptRenderer    promptRenderer;
+    @Mock
+    private ChatLanguageModel lightModel;
+    @Mock
+    private PromptRenderer promptRenderer;
 
     private ExplanationEnricher enricher;
+
+    private static Question buildQuestion(String legacyId, String statement, String explanation) {
+        UUID qId = UUID.randomUUID();
+        return new Question(qId, legacyId, "ocp21", UUID.randomUUID(),
+                statement, DifficultyLevel.MEDIUM, QuestionType.SINGLE_CHOICE,
+                List.of(new QuestionOption(UUID.randomUUID(), qId, 'A', "Option A", true, 0)),
+                explanation, null, ExplanationStatus.ORIGINAL,
+                null, null, null, true, null);
+    }
+
+    private static java.util.Map<String, Object> anyMap() {
+        return ArgumentMatchers.anyMap();
+    }
 
     @BeforeEach
     void setUp() {
@@ -53,6 +73,8 @@ class ExplanationEnricherTest {
         verify(lightModel).generate(anyString());
     }
 
+    // ── Helpers ───────────────────────────────────────────────────────────────
+
     @Test
     @DisplayName("Falls back to original explanation on AI error")
     void enrich_onError_shouldFallBackToOriginal() {
@@ -73,20 +95,5 @@ class ExplanationEnricherTest {
         when(lightModel.generate(anyString())).thenReturn("Generated explanation");
 
         assertThatCode(() -> enricher.enrich(q)).doesNotThrowAnyException();
-    }
-
-    // ── Helpers ───────────────────────────────────────────────────────────────
-
-    private static Question buildQuestion(String legacyId, String statement, String explanation) {
-        UUID qId = UUID.randomUUID();
-        return new Question(qId, legacyId, "ocp21", UUID.randomUUID(),
-                statement, DifficultyLevel.MEDIUM, QuestionType.SINGLE_CHOICE,
-                List.of(new QuestionOption(UUID.randomUUID(), qId, 'A', "Option A", true, 0)),
-                explanation, null, ExplanationStatus.ORIGINAL,
-                null, null, null, true, null);
-    }
-
-    private static java.util.Map<String, Object> anyMap() {
-        return ArgumentMatchers.anyMap();
     }
 }

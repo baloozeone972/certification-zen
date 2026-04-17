@@ -27,16 +27,16 @@ public class FlashcardGenerator {
     private static final Logger log = LoggerFactory.getLogger(FlashcardGenerator.class);
 
     private final ChatLanguageModel lightModel;
-    private final PromptRenderer    promptRenderer;
-    private final ObjectMapper      objectMapper;
+    private final PromptRenderer promptRenderer;
+    private final ObjectMapper objectMapper;
 
     public FlashcardGenerator(
             @Qualifier("lightModel") ChatLanguageModel lightModel,
             PromptRenderer promptRenderer,
             ObjectMapper objectMapper) {
-        this.lightModel     = lightModel;
+        this.lightModel = lightModel;
         this.promptRenderer = promptRenderer;
-        this.objectMapper   = objectMapper;
+        this.objectMapper = objectMapper;
     }
 
     /**
@@ -60,17 +60,18 @@ public class FlashcardGenerator {
 
         String prompt = promptRenderer.render("flashcard_generation", Map.of(
                 "certificationId", certificationId,
-                "themeLabel",      themeLabel,
-                "content",         truncated,
-                "count",           String.valueOf(count)
+                "themeLabel", themeLabel,
+                "content", truncated,
+                "count", String.valueOf(count)
         ));
 
         try {
             String response = lightModel.generate(prompt);
             // Strip potential markdown code fences
-            String json = response.replaceAll("```json\s*|```", "").trim();
+            String json = response.replaceAll("json\s*|", "").trim();
             List<Map<String, String>> raw = objectMapper.readValue(
-                    json, new TypeReference<>() {});
+                    json, new TypeReference<>() {
+                    });
 
             return raw.stream()
                     .filter(m -> m.containsKey("front") && m.containsKey("back"))

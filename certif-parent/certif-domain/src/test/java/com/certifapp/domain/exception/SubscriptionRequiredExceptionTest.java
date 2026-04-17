@@ -1,8 +1,4 @@
-```java
 package com.certifapp.domain.exception;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,7 +6,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class SubscriptionRequiredExceptionTest {
@@ -41,10 +41,6 @@ public class SubscriptionRequiredExceptionTest {
         assertThat(exception.getFeatureName()).isNull();
     }
 
-    @Test
-    @DisplayName(" error case: should not call any methods on the mocked CertifAppException")
-    public void constructor_noMockedCalls() {
-        verify(mockCertifAppException, never()).anyMethod();
-    }
+
 }
-```
+

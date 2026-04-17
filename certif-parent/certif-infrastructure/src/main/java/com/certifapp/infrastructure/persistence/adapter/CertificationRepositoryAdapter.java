@@ -19,12 +19,12 @@ import java.util.Optional;
 public class CertificationRepositoryAdapter implements CertificationRepository {
 
     private final CertificationJpaRepository jpaRepository;
-    private final CertificationMapper        mapper;
+    private final CertificationMapper mapper;
 
     public CertificationRepositoryAdapter(
             CertificationJpaRepository jpaRepository, CertificationMapper mapper) {
         this.jpaRepository = jpaRepository;
-        this.mapper        = mapper;
+        this.mapper = mapper;
     }
 
     @Override

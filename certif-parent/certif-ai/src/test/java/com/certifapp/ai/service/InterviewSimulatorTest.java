@@ -1,7 +1,5 @@
-```java
 package com.certifapp.ai.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -9,14 +7,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyMap;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -56,7 +54,7 @@ public class InterviewSimulatorTest {
     @DisplayName("should evaluate a candidate's interview answer for nominal case")
     public void evaluateAnswer_nominalCase_success() throws Exception {
         String json = "{\"score\":9,\"feedback\":\"Excellent réponse!\",\"keyPointsMissed\":[],\"strongPoints\":[\"Good understanding of the concept\"]}";
-        when(heavyModel.generate(anyString())).thenReturn("```json\n" + json + "\n```");
+        when(heavyModel.generate(anyString())).thenReturn("json\n" + json + "\n");
         Map<String, Object> result = interviewSimulator.evaluateAnswer("cert123", "Question", "Answer", "Java");
         assertThat(result).isEqualTo(Map.of(
                 "score", 9,
@@ -86,4 +84,4 @@ public class InterviewSimulatorTest {
         assertThat(result).isEqualTo("Generated question");
     }
 }
-```
+

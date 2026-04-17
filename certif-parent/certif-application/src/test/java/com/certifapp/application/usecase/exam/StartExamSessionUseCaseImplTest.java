@@ -12,19 +12,28 @@ import com.certifapp.domain.model.user.SubscriptionTier;
 import com.certifapp.domain.model.user.User;
 import com.certifapp.domain.model.user.UserRole;
 import com.certifapp.domain.port.input.exam.StartExamSessionUseCase;
-import com.certifapp.domain.port.output.*;
+import com.certifapp.domain.port.output.CertificationRepository;
+import com.certifapp.domain.port.output.ExamSessionRepository;
+import com.certifapp.domain.port.output.QuestionRepository;
+import com.certifapp.domain.port.output.UserRepository;
 import com.certifapp.domain.service.FreemiumGuardService;
 import com.certifapp.domain.service.QuestionSelectionService;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
@@ -34,22 +43,55 @@ import static org.mockito.Mockito.*;
 @DisplayName("StartExamSessionUseCaseImpl")
 class StartExamSessionUseCaseImplTest {
 
-    @Mock private CertificationRepository   certificationRepository;
-    @Mock private QuestionRepository        questionRepository;
-    @Mock private ExamSessionRepository     sessionRepository;
-    @Mock private UserRepository            userRepository;
-
-    private FreemiumGuardService      freemiumGuardService;
-    private QuestionSelectionService  questionSelectionService;
-    private StartExamSessionUseCaseImpl useCase;
-
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID SESSION_ID = UUID.randomUUID();
     private static final String CERT_ID = "ocp21";
+    @Mock
+    private CertificationRepository certificationRepository;
+    @Mock
+    private QuestionRepository questionRepository;
+    @Mock
+    private ExamSessionRepository sessionRepository;
+    @Mock
+    private UserRepository userRepository;
+    private FreemiumGuardService freemiumGuardService;
+    private QuestionSelectionService questionSelectionService;
+    private StartExamSessionUseCaseImpl useCase;
+
+    private static User buildUser(SubscriptionTier tier) {
+        return new User(USER_ID, "user@test.com", "$2b$12$hash",
+                UserRole.USER, tier, "fr", "Europe/Paris",
+                null, true, OffsetDateTime.now(), OffsetDateTime.now());
+    }
+
+    private static Certification buildCertification(int examCount, int durationMin, int passing) {
+        return new Certification(CERT_ID, "1Z0-830", "OCP Java 21",
+                "Description", 500, examCount, durationMin, passing,
+                "MCQ", List.of(), true);
+    }
+
+    private static List<Question> buildQuestions(int count) {
+        List<Question> list = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            UUID qId = UUID.randomUUID();
+            UUID oId = UUID.randomUUID();
+            list.add(new com.certifapp.domain.model.question.Question(
+                    qId, "LEG-" + i, CERT_ID, UUID.randomUUID(),
+                    "Question " + i,
+                    com.certifapp.domain.model.question.DifficultyLevel.MEDIUM,
+                    com.certifapp.domain.model.question.QuestionType.SINGLE_CHOICE,
+                    List.of(new com.certifapp.domain.model.question.QuestionOption(
+                            oId, qId, 'A', "Option A", true, 0)),
+                    "Explanation", null,
+                    com.certifapp.domain.model.question.ExplanationStatus.ORIGINAL,
+                    null, null, null, true, null));
+        }
+        return list;
+    }
 
     @BeforeEach
     void setUp() {
-        freemiumGuardService     = new FreemiumGuardService();
+        freemiumGuardService = new FreemiumGuardService();
         questionSelectionService = new QuestionSelectionService();
         useCase = new StartExamSessionUseCaseImpl(
                 certificationRepository, questionRepository,
@@ -82,6 +124,8 @@ class StartExamSessionUseCaseImplTest {
         assertThat(result.certificationId()).isEqualTo(CERT_ID);
         verify(sessionRepository).save(any(ExamSession.class));
     }
+
+    // ── Helpers ──────────────────────────────────────────────────────────────
 
     @Test
     @DisplayName("FREE user exceeds daily exam limit — throws FreemiumLimitExceededException")
@@ -143,38 +187,5 @@ class StartExamSessionUseCaseImplTest {
         // Act + Assert
         assertThatThrownBy(() -> useCase.execute(cmd))
                 .isInstanceOf(CertificationNotFoundException.class);
-    }
-
-    // ── Helpers ──────────────────────────────────────────────────────────────
-
-    private static User buildUser(SubscriptionTier tier) {
-        return new User(USER_ID, "user@test.com", "$2b$12$hash",
-                UserRole.USER, tier, "fr", "Europe/Paris",
-                null, true, OffsetDateTime.now(), OffsetDateTime.now());
-    }
-
-    private static Certification buildCertification(int examCount, int durationMin, int passing) {
-        return new Certification(CERT_ID, "1Z0-830", "OCP Java 21",
-                "Description", 500, examCount, durationMin, passing,
-                "MCQ", List.of(), true);
-    }
-
-    private static List<Question> buildQuestions(int count) {
-        List<Question> list = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            UUID qId = UUID.randomUUID();
-            UUID oId = UUID.randomUUID();
-            list.add(new com.certifapp.domain.model.question.Question(
-                    qId, "LEG-" + i, CERT_ID, UUID.randomUUID(),
-                    "Question " + i,
-                    com.certifapp.domain.model.question.DifficultyLevel.MEDIUM,
-                    com.certifapp.domain.model.question.QuestionType.SINGLE_CHOICE,
-                    List.of(new com.certifapp.domain.model.question.QuestionOption(
-                            oId, qId, 'A', "Option A", true, 0)),
-                    "Explanation", null,
-                    com.certifapp.domain.model.question.ExplanationStatus.ORIGINAL,
-                    null, null, null, true, null));
-        }
-        return list;
     }
 }

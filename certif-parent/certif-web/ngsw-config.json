@@ -6,7 +6,13 @@
       "name": "app-shell",
       "installMode": "prefetch",
       "resources": {
-        "files": ["/favicon.ico", "/index.html", "/manifest.webmanifest", "/*.css", "/*.js"]
+        "files": [
+          "/favicon.ico",
+          "/index.html",
+          "/manifest.webmanifest",
+          "/*.css",
+          "/*.js"
+        ]
       }
     },
     {
@@ -14,14 +20,18 @@
       "installMode": "lazy",
       "updateMode": "prefetch",
       "resources": {
-        "files": ["/assets/**"]
+        "files": [
+          "/assets/**"
+        ]
       }
     }
   ],
   "dataGroups": [
     {
       "name": "certifications-api",
-      "urls": ["/api/v1/certifications/**"],
+      "urls": [
+        "/api/v1/certifications/**"
+      ],
       "cacheConfig": {
         "strategy": "freshness",
         "maxSize": 50,
@@ -31,7 +41,9 @@
     },
     {
       "name": "exam-api",
-      "urls": ["/api/v1/exams/**"],
+      "urls": [
+        "/api/v1/exams/**"
+      ],
       "cacheConfig": {
         "strategy": "freshness",
         "maxSize": 20,

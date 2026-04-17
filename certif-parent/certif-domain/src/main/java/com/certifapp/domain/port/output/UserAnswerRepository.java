@@ -2,12 +2,17 @@
 package com.certifapp.domain.port.output;
 
 import com.certifapp.domain.model.session.UserAnswer;
+
 import java.util.List;
 import java.util.UUID;
 
-/** Output port: persistence of individual user answers. */
+/**
+ * Output port: persistence of individual user answers.
+ */
 public interface UserAnswerRepository {
-    UserAnswer        save(UserAnswer answer);
-    List<UserAnswer>  saveAll(List<UserAnswer> answers);
-    List<UserAnswer>  findBySessionId(UUID sessionId);
+    UserAnswer save(UserAnswer answer);
+
+    List<UserAnswer> saveAll(List<UserAnswer> answers);
+
+    List<UserAnswer> findBySessionId(UUID sessionId);
 }

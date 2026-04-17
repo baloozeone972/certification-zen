@@ -1,35 +1,36 @@
-```java
 package com.certifapp.application.usecase.exam;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
-import java.time.OffsetDateTime;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 import com.certifapp.domain.exception.CertificationNotFoundException;
 import com.certifapp.domain.exception.ExamAlreadyCompletedException;
 import com.certifapp.domain.exception.ExamSessionNotFoundException;
 import com.certifapp.domain.model.certification.Certification;
 import com.certifapp.domain.model.question.Question;
-import com.certifapp.domain.model.session.*;
-import com.certifapp.domain.port.input.exam.SubmitExamUseCase;
-import com.certifapp.domain.port.output.*;
+import com.certifapp.domain.model.session.ExamSession;
+import com.certifapp.domain.model.session.SessionStatus;
+import com.certifapp.domain.model.session.UserAnswer;
+import com.certifapp.domain.port.output.CertificationRepository;
+import com.certifapp.domain.port.output.ExamSessionRepository;
+import com.certifapp.domain.port.output.QuestionRepository;
+import com.certifapp.domain.port.output.UserAnswerRepository;
 import com.certifapp.domain.service.ScoringService;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.time.OffsetDateTime;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class SubmitExamUseCaseImplTest {
@@ -108,8 +109,8 @@ public class SubmitExamUseCaseImplTest {
         when(sessionRepository.findById(sessionId))
                 .thenReturn(Optional.empty());
 
-        assertThrows(ExamSessionNotFoundException.class, () -> 
-            submitExamUseCase.execute(sessionId, userId));
+        assertThrows(ExamSessionNotFoundException.class, () ->
+                submitExamUseCase.execute(sessionId, userId));
     }
 
     @Test
@@ -122,8 +123,8 @@ public class SubmitExamUseCaseImplTest {
                         OffsetDateTime.now(), null, 0, 10, 5, 85.0, true,
                         Collections.emptyList())));
 
-        assertThrows(ExamSessionNotFoundException.class, () -> 
-            submitExamUseCase.execute(sessionId, userId));
+        assertThrows(ExamSessionNotFoundException.class, () ->
+                submitExamUseCase.execute(sessionId, userId));
     }
 
     @Test
@@ -136,8 +137,8 @@ public class SubmitExamUseCaseImplTest {
                         OffsetDateTime.now(), null, 0, 10, 5, 85.0, true,
                         Collections.emptyList())));
 
-        assertThrows(ExamAlreadyCompletedException.class, () -> 
-            submitExamUseCase.execute(sessionId, userId));
+        assertThrows(ExamAlreadyCompletedException.class, () ->
+                submitExamUseCase.execute(sessionId, userId));
     }
 
     @Test
@@ -148,8 +149,8 @@ public class SubmitExamUseCaseImplTest {
         when(certificationRepository.findById(session.certificationId()))
                 .thenReturn(Optional.empty());
 
-        assertThrows(CertificationNotFoundException.class, () -> 
-            submitExamUseCase.execute(sessionId, userId));
+        assertThrows(CertificationNotFoundException.class, () ->
+                submitExamUseCase.execute(sessionId, userId));
     }
 
     @Test
@@ -162,8 +163,8 @@ public class SubmitExamUseCaseImplTest {
         when(questionRepository.findById(any(UUID.class)))
                 .thenReturn(Optional.empty());
 
-        assertThrows(ExamSessionNotFoundException.class, () -> 
-            submitExamUseCase.execute(sessionId, userId));
+        assertThrows(ExamSessionNotFoundException.class, () ->
+                submitExamUseCase.execute(sessionId, userId));
     }
 }
-```
+

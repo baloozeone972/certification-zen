@@ -1,17 +1,7 @@
-```java
 package com.certifapp.domain.port.output;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 import com.certifapp.domain.model.question.Question;
 import com.certifapp.domain.model.question.QuestionFilter;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,6 +10,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.*;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 @ExtendWith(MockitoExtension.class)
 public class QuestionRepositoryTest {
 
@@ -27,7 +23,7 @@ public class QuestionRepositoryTest {
     private QuestionRepository questionRepository;
 
     @InjectMocks
-    private QuestionRepositoryImpl questionRepositoryImpl; // Assuming an implementation exists
+    private QuestionRepository questionRepositoryImpl; // Assuming an implementation exists
 
     private UUID testQuestionId;
     private String testLegacyId;
@@ -133,4 +129,4 @@ public class QuestionRepositoryTest {
         verify(questionRepository, times(1)).saveAll(any(List.class));
     }
 }
-```
+

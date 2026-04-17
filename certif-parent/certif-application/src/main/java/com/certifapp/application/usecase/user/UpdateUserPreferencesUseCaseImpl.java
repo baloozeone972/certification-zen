@@ -14,13 +14,13 @@ import com.certifapp.domain.port.output.UserRepository;
  */
 public class UpdateUserPreferencesUseCaseImpl implements UpdateUserPreferencesUseCase {
 
-    private final UserRepository            userRepository;
+    private final UserRepository userRepository;
     private final UserPreferencesRepository preferencesRepository;
 
     public UpdateUserPreferencesUseCaseImpl(
-            UserRepository            userRepository,
+            UserRepository userRepository,
             UserPreferencesRepository preferencesRepository) {
-        this.userRepository        = userRepository;
+        this.userRepository = userRepository;
         this.preferencesRepository = preferencesRepository;
     }
 
@@ -36,9 +36,9 @@ public class UpdateUserPreferencesUseCaseImpl implements UpdateUserPreferencesUs
         // Apply partial update (null = keep current value)
         UserPreferences updated = new UserPreferences(
                 command.userId(),
-                command.theme()                != null ? command.theme()                : current.theme(),
-                command.language()             != null ? command.language()             : current.language(),
-                command.defaultMode()          != null ? command.defaultMode()          : current.defaultMode(),
+                command.theme() != null ? command.theme() : current.theme(),
+                command.language() != null ? command.language() : current.language(),
+                command.defaultMode() != null ? command.defaultMode() : current.defaultMode(),
                 command.notificationsEnabled() != null ? command.notificationsEnabled() : current.notificationsEnabled(),
                 current.lastCertificationId(),
                 current.freeModeQuestionCount(),

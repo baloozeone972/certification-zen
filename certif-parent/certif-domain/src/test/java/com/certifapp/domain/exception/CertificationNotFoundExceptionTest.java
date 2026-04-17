@@ -1,15 +1,20 @@
-```java
 package com.certifapp.domain.exception;
 
+import com.certifapp.domain.model.certification.Certification;
+import com.certifapp.domain.port.output.CertificationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.time.LocalDate;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class CertificationNotFoundExceptionTest {
@@ -32,8 +37,8 @@ public class CertificationNotFoundExceptionTest {
         when(certificationRepository.findById(certificationId)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> certificationService.getCertificationById(certificationId))
-            .isInstanceOf(CertificationNotFoundException.class)
-            .hasMessage("Certification not found: " + certificationId);
+                .isInstanceOf(CertificationNotFoundException.class)
+                .hasMessage("Certification not found: " + certificationId);
     }
 
     @Test
@@ -52,8 +57,8 @@ public class CertificationNotFoundExceptionTest {
     @DisplayName("Should handle null input gracefully")
     public void getCertificationById_nullInput_throwIllegalArgumentException() {
         assertThatThrownBy(() -> certificationService.getCertificationById(null))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Certification ID cannot be null");
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Certification ID cannot be null");
     }
 }
-```
+

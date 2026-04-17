@@ -1,10 +1,4 @@
-```java
 package com.certifapp.application.dto.exam;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verifyNoInteractions;
-
-import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +7,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 @ExtendWith(MockitoExtension.class)
 public class QuestionOptionDtoTest {
@@ -54,7 +53,7 @@ public class QuestionOptionDtoTest {
         String text = "Option A";
 
         assertThatExceptionOfType(NullPointerException.class)
-            .isThrownBy(() -> new QuestionOptionDto(null, label, text));
+                .isThrownBy(() -> new QuestionOptionDto(null, label, text));
     }
 
     @Test
@@ -65,7 +64,7 @@ public class QuestionOptionDtoTest {
         String text = "";
 
         assertThatExceptionOfType(IllegalArgumentException.class)
-            .isThrownBy(() -> new QuestionOptionDto(id, label, text));
+                .isThrownBy(() -> new QuestionOptionDto(id, label, text));
     }
 
     @Test
@@ -76,7 +75,7 @@ public class QuestionOptionDtoTest {
         String text = "Option A";
 
         assertThatExceptionOfType(NullPointerException.class)
-            .isThrownBy(() -> new QuestionOptionDto(id, label.charAt(0), text));
+                .isThrownBy(() -> new QuestionOptionDto(id, label.charAt(0), text));
     }
 }
-```
+

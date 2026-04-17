@@ -10,4 +10,5 @@ import java.util.List;
  * @param skipped  number of questions skipped (duplicates by legacyId)
  * @param errors   list of error messages for invalid questions
  */
-public record ImportResultDto(int imported, int skipped, List<String> errors) {}
+public record ImportResultDto(int imported, int skipped, List<String> errors) {
+}

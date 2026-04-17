@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.model.question;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -6,10 +5,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(MockitoExtension.class)
 public class QuestionOptionTest {
@@ -49,8 +50,8 @@ public class QuestionOptionTest {
 
         // Act & Assert
         assertThatThrownBy(() -> new QuestionOption(UUID.randomUUID(), UUID.randomUUID(), invalidLabel, "Invalid Option", true, 0))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Option label must be one of A-E, got: Z");
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Option label must be one of A-E, got: Z");
     }
 
     @DisplayName("Should throw IllegalArgumentException when displayOrder is out of range")
@@ -61,8 +62,8 @@ public class QuestionOptionTest {
 
         // Act & Assert
         assertThatThrownBy(() -> new QuestionOption(UUID.randomUUID(), UUID.randomUUID(), 'A', "Invalid Display Order", true, invalidDisplayOrder))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("displayOrder must be 0-4, got: 5");
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("displayOrder must be 0-4, got: 5");
     }
 
     @DisplayName("Should throw IllegalArgumentException when text is blank")
@@ -73,8 +74,8 @@ public class QuestionOptionTest {
 
         // Act & Assert
         assertThatThrownBy(() -> new QuestionOption(UUID.randomUUID(), UUID.randomUUID(), 'A', blankText, true, 0))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Option text must not be blank");
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Option text must not be blank");
     }
 
     @DisplayName("Should correctly convert character to uppercase")
@@ -91,4 +92,4 @@ public class QuestionOptionTest {
         assertThat(questionOption.label()).isEqualTo('A');
     }
 }
-```
+

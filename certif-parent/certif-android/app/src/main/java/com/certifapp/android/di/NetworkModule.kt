@@ -30,13 +30,15 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("c
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun provideJson(): Json = Json {
         ignoreUnknownKeys = true
         isLenient = true
     }
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun provideOkHttpClient(
         @ApplicationContext context: Context
     ): OkHttpClient {
@@ -61,7 +63,8 @@ object NetworkModule {
             .build()
     }
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient, json: Json): Retrofit =
         Retrofit.Builder()
             .baseUrl(BuildConfig.API_BASE_URL)
@@ -69,23 +72,28 @@ object NetworkModule {
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun provideAuthApi(retrofit: Retrofit): AuthApi =
         retrofit.create(AuthApi::class.java)
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun provideCertificationApi(retrofit: Retrofit): CertificationApi =
         retrofit.create(CertificationApi::class.java)
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun provideExamApi(retrofit: Retrofit): ExamApi =
         retrofit.create(ExamApi::class.java)
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun provideLearningApi(retrofit: Retrofit): LearningApi =
         retrofit.create(LearningApi::class.java)
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun provideDataStore(@ApplicationContext context: Context): DataStore<Preferences> =
         context.dataStore
 }

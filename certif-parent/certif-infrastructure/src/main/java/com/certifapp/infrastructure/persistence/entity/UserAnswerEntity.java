@@ -2,6 +2,7 @@
 package com.certifapp.infrastructure.persistence.entity;
 
 import jakarta.persistence.*;
+
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -10,8 +11,8 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "user_answers",
-    uniqueConstraints = @UniqueConstraint(columnNames = {"session_id", "question_id"}),
-    indexes = { @Index(name = "idx_answers_session", columnList = "session_id") })
+        uniqueConstraints = @UniqueConstraint(columnNames = {"session_id", "question_id"}),
+        indexes = {@Index(name = "idx_answers_session", columnList = "session_id")})
 public class UserAnswerEntity {
 
     @Id
@@ -41,22 +42,71 @@ public class UserAnswerEntity {
     private OffsetDateTime answeredAt;
 
     @PrePersist
-    protected void onCreate() { if (answeredAt == null) answeredAt = OffsetDateTime.now(); }
+    protected void onCreate() {
+        if (answeredAt == null) answeredAt = OffsetDateTime.now();
+    }
 
-    public UUID getId()                          { return id; }
-    public void setId(UUID id)                   { this.id = id; }
-    public UUID getSessionId()                   { return sessionId; }
-    public void setSessionId(UUID s)             { this.sessionId = s; }
-    public UUID getQuestionId()                  { return questionId; }
-    public void setQuestionId(UUID q)            { this.questionId = q; }
-    public UUID getSelectedOption()              { return selectedOption; }
-    public void setSelectedOption(UUID o)        { this.selectedOption = o; }
-    public boolean isCorrect()                   { return isCorrect; }
-    public void setCorrect(boolean c)            { this.isCorrect = c; }
-    public boolean isSkipped()                   { return isSkipped; }
-    public void setSkipped(boolean s)            { this.isSkipped = s; }
-    public Long getResponseTimeMs()              { return responseTimeMs; }
-    public void setResponseTimeMs(Long r)        { this.responseTimeMs = r; }
-    public OffsetDateTime getAnsweredAt()        { return answeredAt; }
-    public void setAnsweredAt(OffsetDateTime t)  { this.answeredAt = t; }
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public UUID getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(UUID s) {
+        this.sessionId = s;
+    }
+
+    public UUID getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(UUID q) {
+        this.questionId = q;
+    }
+
+    public UUID getSelectedOption() {
+        return selectedOption;
+    }
+
+    public void setSelectedOption(UUID o) {
+        this.selectedOption = o;
+    }
+
+    public boolean isCorrect() {
+        return isCorrect;
+    }
+
+    public void setCorrect(boolean c) {
+        this.isCorrect = c;
+    }
+
+    public boolean isSkipped() {
+        return isSkipped;
+    }
+
+    public void setSkipped(boolean s) {
+        this.isSkipped = s;
+    }
+
+    public Long getResponseTimeMs() {
+        return responseTimeMs;
+    }
+
+    public void setResponseTimeMs(Long r) {
+        this.responseTimeMs = r;
+    }
+
+    public OffsetDateTime getAnsweredAt() {
+        return answeredAt;
+    }
+
+    public void setAnsweredAt(OffsetDateTime t) {
+        this.answeredAt = t;
+    }
 }

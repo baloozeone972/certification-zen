@@ -8,4 +8,5 @@ import jakarta.validation.constraints.NotBlank;
  *
  * @param refreshToken the long-lived JWT refresh token
  */
-public record RefreshTokenRequest(@NotBlank String refreshToken) {}
+public record RefreshTokenRequest(@NotBlank String refreshToken) {
+}

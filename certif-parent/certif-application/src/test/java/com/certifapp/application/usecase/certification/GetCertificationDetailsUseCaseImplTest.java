@@ -1,22 +1,19 @@
-```java
 package com.certifapp.application.usecase.certification;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
 
 import com.certifapp.domain.exception.CertificationNotFoundException;
 import com.certifapp.domain.model.certification.Certification;
-import com.certifapp.domain.port.input.certification.GetCertificationDetailsUseCase;
 import com.certifapp.domain.port.output.CertificationRepository;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class GetCertificationDetailsUseCaseImplTest {
@@ -65,4 +62,4 @@ public class GetCertificationDetailsUseCaseImplTest {
                 .hasMessage("null");
     }
 }
-```
+

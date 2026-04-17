@@ -22,9 +22,9 @@ import static org.assertj.core.api.Assertions.*;
 @DisplayName("SM2AlgorithmService")
 class SM2AlgorithmServiceTest {
 
-    private SM2AlgorithmService sm2Service;
-    private static final UUID USER_ID     = UUID.randomUUID();
+    private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID QUESTION_ID = UUID.randomUUID();
+    private SM2AlgorithmService sm2Service;
 
     @BeforeEach
     void setUp() {
@@ -32,6 +32,20 @@ class SM2AlgorithmServiceTest {
     }
 
     // ─── review() ────────────────────────────────────────────────────────────
+
+    @Test
+    @DisplayName("initialSchedule() creates due today with default EF=2.5 and rep=0")
+    void initialSchedule_shouldHaveCorrectDefaults() {
+        SM2Schedule schedule = sm2Service.initialSchedule(USER_ID, QUESTION_ID);
+
+        assertThat(schedule.userId()).isEqualTo(USER_ID);
+        assertThat(schedule.questionId()).isEqualTo(QUESTION_ID);
+        assertThat(schedule.easeFactor()).isEqualTo(SM2Schedule.DEFAULT_EASE_FACTOR);
+        assertThat(schedule.repetitions()).isEqualTo(0);
+        assertThat(schedule.intervalDays()).isEqualTo(0);
+        assertThat(schedule.dueDate()).isEqualTo(LocalDate.now());
+        assertThat(schedule.isDueToday()).isTrue();
+    }
 
     @Nested
     @DisplayName("review() — correct answers (quality >= 3)")
@@ -126,6 +140,8 @@ class SM2AlgorithmServiceTest {
         }
     }
 
+    // ─── computeNewEaseFactor() ───────────────────────────────────────────────
+
     @Nested
     @DisplayName("review() — edge cases")
     class EdgeCaseTests {
@@ -136,8 +152,8 @@ class SM2AlgorithmServiceTest {
             SM2Schedule initial = SM2Schedule.initial(USER_ID, QUESTION_ID);
 
             assertThatThrownBy(() -> sm2Service.review(initial, 6))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("SM-2 quality must be 0-5");
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessageContaining("SM-2 quality must be 0-5");
         }
 
         @Test
@@ -146,7 +162,7 @@ class SM2AlgorithmServiceTest {
             SM2Schedule initial = SM2Schedule.initial(USER_ID, QUESTION_ID);
 
             assertThatThrownBy(() -> sm2Service.review(initial, -1))
-                .isInstanceOf(IllegalArgumentException.class);
+                    .isInstanceOf(IllegalArgumentException.class);
         }
 
         @Test
@@ -169,11 +185,11 @@ class SM2AlgorithmServiceTest {
             SM2Schedule result = sm2Service.review(initial, 4);
 
             assertThat(result.dueDate())
-                .isEqualTo(LocalDate.now().plusDays(result.intervalDays()));
+                    .isEqualTo(LocalDate.now().plusDays(result.intervalDays()));
         }
     }
 
-    // ─── computeNewEaseFactor() ───────────────────────────────────────────────
+    // ─── initialSchedule() ───────────────────────────────────────────────────
 
     @Nested
     @DisplayName("computeNewEaseFactor()")
@@ -199,21 +215,5 @@ class SM2AlgorithmServiceTest {
             double result = sm2Service.computeNewEaseFactor(2.5, 3);
             assertThat(result).isCloseTo(2.36, within(0.001));
         }
-    }
-
-    // ─── initialSchedule() ───────────────────────────────────────────────────
-
-    @Test
-    @DisplayName("initialSchedule() creates due today with default EF=2.5 and rep=0")
-    void initialSchedule_shouldHaveCorrectDefaults() {
-        SM2Schedule schedule = sm2Service.initialSchedule(USER_ID, QUESTION_ID);
-
-        assertThat(schedule.userId()).isEqualTo(USER_ID);
-        assertThat(schedule.questionId()).isEqualTo(QUESTION_ID);
-        assertThat(schedule.easeFactor()).isEqualTo(SM2Schedule.DEFAULT_EASE_FACTOR);
-        assertThat(schedule.repetitions()).isEqualTo(0);
-        assertThat(schedule.intervalDays()).isEqualTo(0);
-        assertThat(schedule.dueDate()).isEqualTo(LocalDate.now());
-        assertThat(schedule.isDueToday()).isTrue();
     }
 }

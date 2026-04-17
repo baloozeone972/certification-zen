@@ -2,7 +2,10 @@
 package com.certifapp.application.usecase.user;
 
 import com.certifapp.domain.exception.DuplicateEmailException;
-import com.certifapp.domain.model.user.*;
+import com.certifapp.domain.model.user.SubscriptionTier;
+import com.certifapp.domain.model.user.User;
+import com.certifapp.domain.model.user.UserPreferences;
+import com.certifapp.domain.model.user.UserRole;
 import com.certifapp.domain.port.input.user.RegisterUserUseCase;
 import com.certifapp.domain.port.output.UserPreferencesRepository;
 import com.certifapp.domain.port.output.UserRepository;
@@ -20,18 +23,20 @@ import java.util.function.Function;
  */
 public class RegisterUserUseCaseImpl implements RegisterUserUseCase {
 
-    private final UserRepository            userRepository;
+    private final UserRepository userRepository;
     private final UserPreferencesRepository preferencesRepository;
-    /** BCrypt encoder injected from infrastructure — avoids Spring Security in domain. */
-    private final Function<String, String>  passwordEncoder;
+    /**
+     * BCrypt encoder injected from infrastructure — avoids Spring Security in domain.
+     */
+    private final Function<String, String> passwordEncoder;
 
     public RegisterUserUseCaseImpl(
-            UserRepository            userRepository,
+            UserRepository userRepository,
             UserPreferencesRepository preferencesRepository,
-            Function<String, String>  passwordEncoder) {
-        this.userRepository       = userRepository;
+            Function<String, String> passwordEncoder) {
+        this.userRepository = userRepository;
         this.preferencesRepository = preferencesRepository;
-        this.passwordEncoder      = passwordEncoder;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -42,8 +47,8 @@ public class RegisterUserUseCaseImpl implements RegisterUserUseCase {
 
         String hash = passwordEncoder.apply(command.password());
 
-        String locale   = (command.locale()   != null && !command.locale().isBlank())
-                ? command.locale()   : User.DEFAULT_LOCALE;
+        String locale = (command.locale() != null && !command.locale().isBlank())
+                ? command.locale() : User.DEFAULT_LOCALE;
         String timezone = (command.timezone() != null && !command.timezone().isBlank())
                 ? command.timezone() : User.DEFAULT_TIMEZONE;
 

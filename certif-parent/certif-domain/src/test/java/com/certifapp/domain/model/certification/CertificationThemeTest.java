@@ -1,19 +1,14 @@
-```java
 package com.certifapp.domain.model.certification;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoExtension;
-import org.assertj.core.api.Assertions;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
-
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class CertificationThemeTest {
@@ -53,13 +48,13 @@ public class CertificationThemeTest {
     @DisplayName("Should throw IllegalArgumentException for blank certificationId")
     public void constructor_stateUnderTest_expectedBehavior() {
         Assertions.assertThatThrownBy(() -> new CertificationTheme(
-                UUID.randomUUID(),
-                "",
-                "virtual_threads",
-                "Virtual Threads",
-                60,
-                null,
-                0))
+                        UUID.randomUUID(),
+                        "",
+                        "virtual_threads",
+                        "Virtual Threads",
+                        60,
+                        null,
+                        0))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("certificationId must not be blank");
     }
@@ -68,13 +63,13 @@ public class CertificationThemeTest {
     @DisplayName("Should throw IllegalArgumentException for blank code")
     public void constructor_stateUnderTest_expectedBehavior() {
         Assertions.assertThatThrownBy(() -> new CertificationTheme(
-                UUID.randomUUID(),
-                "ocp21",
-                "",
-                "Virtual Threads",
-                60,
-                null,
-                0))
+                        UUID.randomUUID(),
+                        "ocp21",
+                        "",
+                        "Virtual Threads",
+                        60,
+                        null,
+                        0))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("code must not be blank");
     }
@@ -83,13 +78,13 @@ public class CertificationThemeTest {
     @DisplayName("Should throw IllegalArgumentException for blank label")
     public void constructor_stateUnderTest_expectedBehavior() {
         Assertions.assertThatThrownBy(() -> new CertificationTheme(
-                UUID.randomUUID(),
-                "ocp21",
-                "virtual_threads",
-                "",
-                60,
-                null,
-                0))
+                        UUID.randomUUID(),
+                        "ocp21",
+                        "virtual_threads",
+                        "",
+                        60,
+                        null,
+                        0))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("label must not be blank");
     }
@@ -98,13 +93,13 @@ public class CertificationThemeTest {
     @DisplayName("Should throw IllegalArgumentException for negative questionCount")
     public void constructor_stateUnderTest_expectedBehavior() {
         Assertions.assertThatThrownBy(() -> new CertificationTheme(
-                UUID.randomUUID(),
-                "ocp21",
-                "virtual_threads",
-                "Virtual Threads",
-                -1,
-                null,
-                0))
+                        UUID.randomUUID(),
+                        "ocp21",
+                        "virtual_threads",
+                        "Virtual Threads",
+                        -1,
+                        null,
+                        0))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("questionCount must be >= 0, got: -1");
     }
@@ -113,13 +108,13 @@ public class CertificationThemeTest {
     @DisplayName("Should throw IllegalArgumentException for weightPercent < 0")
     public void constructor_stateUnderTest_expectedBehavior() {
         Assertions.assertThatThrownBy(() -> new CertificationTheme(
-                UUID.randomUUID(),
-                "ocp21",
-                "virtual_threads",
-                "Virtual Threads",
-                60,
-                -1.0,
-                0))
+                        UUID.randomUUID(),
+                        "ocp21",
+                        "virtual_threads",
+                        "Virtual Threads",
+                        60,
+                        -1.0,
+                        0))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("weightPercent must be between 0 and 100, got: -1.0");
     }
@@ -128,15 +123,15 @@ public class CertificationThemeTest {
     @DisplayName("Should throw IllegalArgumentException for weightPercent > 100")
     public void constructor_stateUnderTest_expectedBehavior() {
         Assertions.assertThatThrownBy(() -> new CertificationTheme(
-                UUID.randomUUID(),
-                "ocp21",
-                "virtual_threads",
-                "Virtual Threads",
-                60,
-                101.0,
-                0))
+                        UUID.randomUUID(),
+                        "ocp21",
+                        "virtual_threads",
+                        "Virtual Threads",
+                        60,
+                        101.0,
+                        0))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("weightPercent must be between 0 and 100, got: 101.0");
     }
 }
-```
+

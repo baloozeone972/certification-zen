@@ -13,7 +13,6 @@ import com.certifapp.infrastructure.persistence.repository.QuestionJpaRepository
 import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Adapter implementing {@link QuestionRepository}.
@@ -27,12 +26,12 @@ public class QuestionRepositoryAdapter implements QuestionRepository {
     private final QuestionMapper mapper;
 
     public QuestionRepositoryAdapter(
-            QuestionJpaRepository    jpaRepository,
-            CertificationRepository  certificationRepository,
-            QuestionMapper           mapper) {
-        this.jpaRepository           = jpaRepository;
+            QuestionJpaRepository jpaRepository,
+            CertificationRepository certificationRepository,
+            QuestionMapper mapper) {
+        this.jpaRepository = jpaRepository;
         this.certificationRepository = certificationRepository;
-        this.mapper                  = mapper;
+        this.mapper = mapper;
     }
 
     @Override
@@ -72,7 +71,7 @@ public class QuestionRepositoryAdapter implements QuestionRepository {
         Map<String, Integer> result = new LinkedHashMap<>();
         for (Object[] row : raw) {
             UUID themeId = (UUID) row[0];
-            Long count   = (Long) row[1];
+            Long count = (Long) row[1];
             result.put(themeId.toString(), count.intValue());
         }
         return result;

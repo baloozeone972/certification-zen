@@ -20,15 +20,17 @@ import java.util.UUID;
  * @param displayOrder 0-based order matching the original JSON {@code options[]} array index
  */
 public record QuestionOption(
-        UUID    id,
-        UUID    questionId,
-        char    label,
-        String  text,
+        UUID id,
+        UUID questionId,
+        char label,
+        String text,
         boolean isCorrect,
-        int     displayOrder
+        int displayOrder
 ) {
 
-    /** Valid option labels. */
+    /**
+     * Valid option labels.
+     */
     private static final String VALID_LABELS = "ABCDE";
 
     /**
@@ -37,11 +39,11 @@ public record QuestionOption(
     public QuestionOption {
         if (VALID_LABELS.indexOf(Character.toUpperCase(label)) < 0) {
             throw new IllegalArgumentException(
-                "Option label must be one of A-E, got: " + label);
+                    "Option label must be one of A-E, got: " + label);
         }
         if (displayOrder < 0 || displayOrder > 4) {
             throw new IllegalArgumentException(
-                "displayOrder must be 0-4, got: " + displayOrder);
+                    "displayOrder must be 0-4, got: " + displayOrder);
         }
         if (text == null || text.isBlank()) {
             throw new IllegalArgumentException("Option text must not be blank");

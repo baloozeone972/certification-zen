@@ -1,4 +1,3 @@
-```java
 package com.certifapp.application.dto.learning;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -9,30 +8,25 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CourseSummaryDtoTest {
+
+    @InjectMocks
+    private CourseSummaryDto courseSummaryDto;
+    @Mock
+    private UUID id;
+    @Mock
+    private String themeCode;
+    @Mock
+    private String title;
+    @Mock
+    private String aiStatus;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
-
-    @InjectMocks
-    private CourseSummaryDto courseSummaryDto;
-
-    @Mock
-    private UUID id;
-
-    @Mock
-    private String themeCode;
-
-    @Mock
-    private String title;
-
-    @Mock
-    private String aiStatus;
 
     @Test
     @DisplayName("Should create a valid CourseSummaryDto with all parameters")
@@ -72,4 +66,4 @@ public class CourseSummaryDtoTest {
         assertThat(dto.aiStatus()).isEmpty();
     }
 }
-```
+

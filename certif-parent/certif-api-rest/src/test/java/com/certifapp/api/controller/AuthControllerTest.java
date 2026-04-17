@@ -1,25 +1,27 @@
 package com.certifapp.api.controller;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
-import com.certifapp.api.dto.request.*;
-import com.certifapp.api.dto.response.*;
+import com.certifapp.api.dto.request.LoginRequest;
+import com.certifapp.api.dto.request.RefreshTokenRequest;
+import com.certifapp.api.dto.request.RegisterRequest;
+import com.certifapp.api.dto.response.ApiResponse;
+import com.certifapp.api.dto.response.TokenResponse;
 import com.certifapp.domain.model.user.User;
-import com.certifapp.domain.port.input.user.*;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
+import com.certifapp.domain.port.input.user.AuthenticateUserUseCase;
+import com.certifapp.domain.port.input.user.RegisterUserUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthControllerTest {

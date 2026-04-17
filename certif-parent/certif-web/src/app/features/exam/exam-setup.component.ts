@@ -1,18 +1,18 @@
 // certif-parent/certif-web/src/app/features/exam/exam-setup.component.ts
-import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from "@angular/core";
-import { Router, ActivatedRoute } from "@angular/router";
-import { CommonModule } from "@angular/common";
-import { FormsModule } from "@angular/forms";
-import { CertificationService } from "../../core/services/certification.service";
-import { ExamService } from "../../core/services/exam.service";
-import { Certification } from "../../core/models/certification.models";
+import {ChangeDetectionStrategy, Component, inject, OnInit, signal} from "@angular/core";
+import {ActivatedRoute, Router} from "@angular/router";
+import {CommonModule} from "@angular/common";
+import {FormsModule} from "@angular/forms";
+import {CertificationService} from "../../core/services/certification.service";
+import {ExamService} from "../../core/services/exam.service";
+import {Certification} from "../../core/models/certification.models";
 
 @Component({
-  selector: "app-exam-setup",
-  standalone: true,
-  imports: [CommonModule, FormsModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    selector: "app-exam-setup",
+    standalone: true,
+    imports: [CommonModule, FormsModule],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <div class="setup container">
       <h1>Configurer l'examen</h1>
 
@@ -47,7 +47,7 @@ import { Certification } from "../../core/models/certification.models";
       }
     </div>
   `,
-  styles: [`
+    styles: [`
     .setup { max-width: 700px; padding: 2rem 1rem; }
     .setup h1 { font-size: 1.75rem; margin-bottom: 1.5rem; }
     .setup__cert, .setup__mode { margin-bottom: 1.5rem; }
@@ -66,37 +66,41 @@ import { Certification } from "../../core/models/certification.models";
   `]
 })
 export class ExamSetupComponent implements OnInit {
-  private readonly certService = inject(CertificationService);
-  private readonly examService = inject(ExamService);
-  private readonly router      = inject(Router);
-  private readonly route       = inject(ActivatedRoute);
+    readonly cert = signal<Certification | null>(null);
+    readonly selectedMode = signal<"EXAM" | "FREE" | "REVISION">("EXAM");
+    readonly starting = signal(false);
+    readonly modes = [
+        {
+            value: "EXAM" as const, icon: "📝", label: "Examen officiel",
+            desc: "Conditions réelles, timer, correction à la fin"
+        },
+        {
+            value: "FREE" as const, icon: "🎯", label: "Mode libre",
+            desc: "Choisissez les thèmes, timer optionnel"
+        },
+        {
+            value: "REVISION" as const, icon: "📚", label: "Révision",
+            desc: "Correction immédiate après chaque réponse"
+        }
+    ];
+    private readonly certService = inject(CertificationService);
+    private readonly examService = inject(ExamService);
+    private readonly router = inject(Router);
+    private readonly route = inject(ActivatedRoute);
 
-  readonly cert         = signal<Certification | null>(null);
-  readonly selectedMode = signal<"EXAM" | "FREE" | "REVISION">("EXAM");
-  readonly starting     = signal(false);
-
-  readonly modes = [
-    { value: "EXAM" as const, icon: "📝", label: "Examen officiel",
-      desc: "Conditions réelles, timer, correction à la fin" },
-    { value: "FREE" as const, icon: "🎯", label: "Mode libre",
-      desc: "Choisissez les thèmes, timer optionnel" },
-    { value: "REVISION" as const, icon: "📚", label: "Révision",
-      desc: "Correction immédiate après chaque réponse" }
-  ];
-
-  ngOnInit(): void {
-    const certId = this.route.snapshot.queryParamMap.get("certId") ?? "";
-    if (certId) {
-      this.certService.getById(certId).subscribe(c => this.cert.set(c));
+    ngOnInit(): void {
+        const certId = this.route.snapshot.queryParamMap.get("certId") ?? "";
+        if (certId) {
+            this.certService.getById(certId).subscribe(c => this.cert.set(c));
+        }
     }
-  }
 
-  startExam(): void {
-    if (!this.cert()) return;
-    this.starting.set(true);
-    this.examService.start(this.cert()!.id, this.selectedMode()).subscribe({
-      next: session => this.router.navigate(["/exam/session", session.id]),
-      error: () => this.starting.set(false)
-    });
-  }
+    startExam(): void {
+        if (!this.cert()) return;
+        this.starting.set(true);
+        this.examService.start(this.cert()!.id, this.selectedMode()).subscribe({
+            next: session => this.router.navigate(["/exam/session", session.id]),
+            error: () => this.starting.set(false)
+        });
+    }
 }

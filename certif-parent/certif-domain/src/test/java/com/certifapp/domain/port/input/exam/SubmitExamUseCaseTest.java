@@ -1,11 +1,4 @@
-```java
 package com.certifapp.domain.port.input.exam;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
-import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,7 +6,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.UUID;
+
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class SubmitExamUseCaseTest {
@@ -56,7 +54,7 @@ public class SubmitExamUseCaseTest {
         when(examSessionRepository.findById(sessionId)).thenReturn(java.util.Optional.empty());
 
         assertThatThrownBy(() -> submitExamUseCase.execute(sessionId, userId))
-            .isInstanceOf(ExamSessionNotFoundException.class);
+                .isInstanceOf(ExamSessionNotFoundException.class);
     }
 
     @DisplayName("execute_examAlreadyCompleted_throwsExamAlreadyCompletedException")
@@ -73,7 +71,7 @@ public class SubmitExamUseCaseTest {
         when(examSessionRepository.findById(sessionId)).thenReturn(java.util.Optional.of(examSession));
 
         assertThatThrownBy(() -> submitExamUseCase.execute(sessionId, userId))
-            .isInstanceOf(ExamAlreadyCompletedException.class);
+                .isInstanceOf(ExamAlreadyCompletedException.class);
     }
 
     @DisplayName("execute_userNotOwner_throwsSecurityException")
@@ -89,7 +87,7 @@ public class SubmitExamUseCaseTest {
         when(examSessionRepository.findById(sessionId)).thenReturn(java.util.Optional.of(examSession));
 
         assertThatThrownBy(() -> submitExamUseCase.execute(sessionId, userId))
-            .isInstanceOf(SecurityException.class);
+                .isInstanceOf(SecurityException.class);
     }
 }
-```
+

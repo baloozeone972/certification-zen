@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-    basePackages = "com.certifapp.infrastructure.persistence.repository"
+        basePackages = "com.certifapp.infrastructure.persistence.repository"
 )
-public class JpaConfig {}
+public class JpaConfig {
+}

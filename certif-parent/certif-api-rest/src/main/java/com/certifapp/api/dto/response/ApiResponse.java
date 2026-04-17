@@ -15,12 +15,16 @@ import java.time.OffsetDateTime;
  */
 public record ApiResponse<T>(T data, String message, OffsetDateTime timestamp) {
 
-    /** Convenience factory for successful responses. */
+    /**
+     * Convenience factory for successful responses.
+     */
     public static <T> ApiResponse<T> ok(T data) {
         return new ApiResponse<>(data, "OK", OffsetDateTime.now());
     }
 
-    /** Convenience factory for created responses. */
+    /**
+     * Convenience factory for created responses.
+     */
     public static <T> ApiResponse<T> created(T data) {
         return new ApiResponse<>(data, "Created", OffsetDateTime.now());
     }

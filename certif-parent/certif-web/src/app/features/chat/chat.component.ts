@@ -1,17 +1,20 @@
 // certif-parent/certif-web/src/app/features/chat/chat.component.ts
-import { Component, inject, signal, ElementRef, ViewChild, ChangeDetectionStrategy } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { FormsModule } from "@angular/forms";
-import { AiService } from "../../core/services/ai.service";
+import {ChangeDetectionStrategy, Component, inject, signal} from "@angular/core";
+import {CommonModule} from "@angular/common";
+import {FormsModule} from "@angular/forms";
+import {AiService} from "../../core/services/ai.service";
 
-interface ChatMessage { role: "user" | "assistant"; content: string; }
+interface ChatMessage {
+    role: "user" | "assistant";
+    content: string;
+}
 
 @Component({
-  selector: "app-chat",
-  standalone: true,
-  imports: [CommonModule, FormsModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    selector: "app-chat",
+    standalone: true,
+    imports: [CommonModule, FormsModule],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <div class="chat">
       <div class="chat__header">
         <h1>🤖 Assistant IA</h1>
@@ -39,7 +42,7 @@ interface ChatMessage { role: "user" | "assistant"; content: string; }
       </div>
     </div>
   `,
-  styles: [`
+    styles: [`
     .chat { display: flex; flex-direction: column; height: calc(100vh - 60px); max-width: 800px; margin: 0 auto; }
     .chat__header { padding: 1.5rem; border-bottom: 1px solid var(--color-border);
                      background: var(--color-surface); }
@@ -64,35 +67,34 @@ interface ChatMessage { role: "user" | "assistant"; content: string; }
   `]
 })
 export class ChatComponent {
-  private readonly aiService = inject(AiService);
+    readonly messages = signal<ChatMessage[]>([{
+        role: "assistant",
+        content: "Bonjour ! Je suis votre assistant CertifApp. Posez-moi des questions sur vos certifications Java, AWS, Kubernetes et bien d'autres."
+    }]);
+    readonly inputText = signal("");
+    readonly loading = signal(false);
+    private readonly aiService = inject(AiService);
 
-  readonly messages  = signal<ChatMessage[]>([{
-    role: "assistant",
-    content: "Bonjour ! Je suis votre assistant CertifApp. Posez-moi des questions sur vos certifications Java, AWS, Kubernetes et bien d'autres."
-  }]);
-  readonly inputText = signal("");
-  readonly loading   = signal(false);
+    send(): void {
+        const text = this.inputText().trim();
+        if (!text) return;
 
-  send(): void {
-    const text = this.inputText().trim();
-    if (!text) return;
+        this.messages.update(m => [...m, {role: "user", content: text}]);
+        this.inputText.set("");
+        this.loading.set(true);
 
-    this.messages.update(m => [...m, { role: "user", content: text }]);
-    this.inputText.set("");
-    this.loading.set(true);
-
-    this.aiService.chat(text).subscribe({
-      next: res => {
-        this.messages.update(m => [...m, { role: "assistant", content: res.message }]);
-        this.loading.set(false);
-      },
-      error: () => {
-        this.messages.update(m => [...m, {
-          role: "assistant",
-          content: "Désolé, une erreur s'est produite. Veuillez réessayer."
-        }]);
-        this.loading.set(false);
-      }
-    });
-  }
+        this.aiService.chat(text).subscribe({
+            next: res => {
+                this.messages.update(m => [...m, {role: "assistant", content: res.message}]);
+                this.loading.set(false);
+            },
+            error: () => {
+                this.messages.update(m => [...m, {
+                    role: "assistant",
+                    content: "Désolé, une erreur s'est produite. Veuillez réessayer."
+                }]);
+                this.loading.set(false);
+            }
+        });
+    }
 }

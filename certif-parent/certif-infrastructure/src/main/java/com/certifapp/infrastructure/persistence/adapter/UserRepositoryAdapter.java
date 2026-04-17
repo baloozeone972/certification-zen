@@ -19,11 +19,11 @@ import java.util.UUID;
 public class UserRepositoryAdapter implements UserRepository {
 
     private final UserJpaRepository jpaRepository;
-    private final UserMapper        mapper;
+    private final UserMapper mapper;
 
     public UserRepositoryAdapter(UserJpaRepository jpaRepository, UserMapper mapper) {
         this.jpaRepository = jpaRepository;
-        this.mapper        = mapper;
+        this.mapper = mapper;
     }
 
     @Override

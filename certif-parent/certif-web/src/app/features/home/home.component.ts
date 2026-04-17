@@ -1,20 +1,19 @@
 // certif-parent/certif-web/src/app/features/home/home.component.ts
-import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from "@angular/core";
-import { RouterLink } from "@angular/router";
-import { CommonModule } from "@angular/common";
-import { CertificationService } from "../../core/services/certification.service";
-import { AuthService } from "../../core/auth/auth.service";
-import { Certification } from "../../core/models/certification.models";
+import {ChangeDetectionStrategy, Component, inject, OnInit} from "@angular/core";
+import {RouterLink} from "@angular/router";
+import {CommonModule} from "@angular/common";
+import {CertificationService} from "../../core/services/certification.service";
+import {AuthService} from "../../core/auth/auth.service";
 
 /**
  * Home page — certification catalogue + hero section.
  */
 @Component({
-  selector: "app-home",
-  standalone: true,
-  imports: [RouterLink, CommonModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    selector: "app-home",
+    standalone: true,
+    imports: [RouterLink, CommonModule],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <section class="hero">
       <div class="container">
         <h1>Préparez vos certifications<br><span>avec l'IA</span></h1>
@@ -54,7 +53,7 @@ import { Certification } from "../../core/models/certification.models";
       }
     </section>
   `,
-  styles: [`
+    styles: [`
     .hero { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
              color: white; padding: 5rem 0; text-align: center; }
     .hero h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem; line-height: 1.2; }
@@ -73,10 +72,12 @@ import { Certification } from "../../core/models/certification.models";
   `]
 })
 export class HomeComponent implements OnInit {
-  readonly certService  = inject(CertificationService);
-  readonly authService  = inject(AuthService);
-  readonly certifications = this.certService.certifications;
-  readonly loading        = this.certService.loading;
+    readonly certService = inject(CertificationService);
+    readonly authService = inject(AuthService);
+    readonly certifications = this.certService.certifications;
+    readonly loading = this.certService.loading;
 
-  ngOnInit(): void { this.certService.loadAll().subscribe(); }
+    ngOnInit(): void {
+        this.certService.loadAll().subscribe();
+    }
 }

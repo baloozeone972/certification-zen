@@ -2,6 +2,7 @@
 package com.certifapp.infrastructure.persistence.entity;
 
 import jakarta.persistence.*;
+
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -10,7 +11,7 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "certification_themes",
-    uniqueConstraints = @UniqueConstraint(columnNames = {"certification_id", "code"}))
+        uniqueConstraints = @UniqueConstraint(columnNames = {"certification_id", "code"}))
 public class CertificationThemeEntity {
 
     @Id
@@ -41,22 +42,71 @@ public class CertificationThemeEntity {
     private OffsetDateTime createdAt;
 
     @PrePersist
-    protected void onCreate() { if (createdAt == null) createdAt = OffsetDateTime.now(); }
+    protected void onCreate() {
+        if (createdAt == null) createdAt = OffsetDateTime.now();
+    }
 
-    public UUID getId()                            { return id; }
-    public void setId(UUID id)                     { this.id = id; }
-    public CertificationEntity getCertification()  { return certification; }
-    public void setCertification(CertificationEntity c) { this.certification = c; }
-    public String getCode()                        { return code; }
-    public void setCode(String code)               { this.code = code; }
-    public String getLabel()                       { return label; }
-    public void setLabel(String label)             { this.label = label; }
-    public int getQuestionCount()                  { return questionCount; }
-    public void setQuestionCount(int n)            { this.questionCount = n; }
-    public Double getWeightPercent()               { return weightPercent; }
-    public void setWeightPercent(Double w)         { this.weightPercent = w; }
-    public int getDisplayOrder()                   { return displayOrder; }
-    public void setDisplayOrder(int o)             { this.displayOrder = o; }
-    public OffsetDateTime getCreatedAt()           { return createdAt; }
-    public void setCreatedAt(OffsetDateTime t)     { this.createdAt = t; }
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public CertificationEntity getCertification() {
+        return certification;
+    }
+
+    public void setCertification(CertificationEntity c) {
+        this.certification = c;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public int getQuestionCount() {
+        return questionCount;
+    }
+
+    public void setQuestionCount(int n) {
+        this.questionCount = n;
+    }
+
+    public Double getWeightPercent() {
+        return weightPercent;
+    }
+
+    public void setWeightPercent(Double w) {
+        this.weightPercent = w;
+    }
+
+    public int getDisplayOrder() {
+        return displayOrder;
+    }
+
+    public void setDisplayOrder(int o) {
+        this.displayOrder = o;
+    }
+
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(OffsetDateTime t) {
+        this.createdAt = t;
+    }
 }

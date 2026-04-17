@@ -1,13 +1,24 @@
 // certif-parent/certif-api-rest/src/main/java/com/certifapp/api/config/ApplicationBeansConfig.java
 package com.certifapp.api.config;
 
-import com.certifapp.application.usecase.certification.*;
-import com.certifapp.application.usecase.exam.*;
-import com.certifapp.application.usecase.learning.*;
-import com.certifapp.application.usecase.session.*;
-import com.certifapp.application.usecase.user.*;
+import com.certifapp.application.usecase.certification.GetCertificationDetailsUseCaseImpl;
+import com.certifapp.application.usecase.certification.ListCertificationsUseCaseImpl;
+import com.certifapp.application.usecase.exam.GetExamResultsUseCaseImpl;
+import com.certifapp.application.usecase.exam.StartExamSessionUseCaseImpl;
+import com.certifapp.application.usecase.exam.SubmitAnswerUseCaseImpl;
+import com.certifapp.application.usecase.exam.SubmitExamUseCaseImpl;
+import com.certifapp.application.usecase.learning.GetFlashcardsUseCaseImpl;
+import com.certifapp.application.usecase.learning.ReviewFlashcardUseCaseImpl;
+import com.certifapp.application.usecase.session.ExportSessionPdfUseCaseImpl;
+import com.certifapp.application.usecase.session.GetSessionHistoryUseCaseImpl;
+import com.certifapp.application.usecase.user.AuthenticateUserUseCaseImpl;
+import com.certifapp.application.usecase.user.RegisterUserUseCaseImpl;
+import com.certifapp.application.usecase.user.UpdateUserPreferencesUseCaseImpl;
 import com.certifapp.domain.port.output.*;
-import com.certifapp.domain.service.*;
+import com.certifapp.domain.service.FreemiumGuardService;
+import com.certifapp.domain.service.QuestionSelectionService;
+import com.certifapp.domain.service.SM2AlgorithmService;
+import com.certifapp.domain.service.ScoringService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -59,11 +70,11 @@ public class ApplicationBeansConfig {
 
     @Bean
     public StartExamSessionUseCaseImpl startExamSessionUseCase(
-            CertificationRepository  certificationRepository,
-            QuestionRepository       questionRepository,
-            ExamSessionRepository    sessionRepository,
-            UserRepository           userRepository,
-            FreemiumGuardService     freemiumGuardService,
+            CertificationRepository certificationRepository,
+            QuestionRepository questionRepository,
+            ExamSessionRepository sessionRepository,
+            UserRepository userRepository,
+            FreemiumGuardService freemiumGuardService,
             QuestionSelectionService questionSelectionService) {
         return new StartExamSessionUseCaseImpl(
                 certificationRepository, questionRepository, sessionRepository,
@@ -73,20 +84,20 @@ public class ApplicationBeansConfig {
     @Bean
     public SubmitAnswerUseCaseImpl submitAnswerUseCase(
             ExamSessionRepository sessionRepository,
-            QuestionRepository    questionRepository,
-            UserAnswerRepository  answerRepository,
-            ScoringService        scoringService) {
+            QuestionRepository questionRepository,
+            UserAnswerRepository answerRepository,
+            ScoringService scoringService) {
         return new SubmitAnswerUseCaseImpl(
                 sessionRepository, questionRepository, answerRepository, scoringService);
     }
 
     @Bean
     public SubmitExamUseCaseImpl submitExamUseCase(
-            ExamSessionRepository   sessionRepository,
-            UserAnswerRepository    answerRepository,
-            QuestionRepository      questionRepository,
+            ExamSessionRepository sessionRepository,
+            UserAnswerRepository answerRepository,
+            QuestionRepository questionRepository,
             CertificationRepository certificationRepository,
-            ScoringService          scoringService) {
+            ScoringService scoringService) {
         return new SubmitExamUseCaseImpl(
                 sessionRepository, answerRepository, questionRepository,
                 certificationRepository, scoringService);
@@ -105,12 +116,12 @@ public class ApplicationBeansConfig {
     @Bean
     public ExportSessionPdfUseCaseImpl exportSessionPdfUseCase(
             ExamSessionRepository sessionRepository,
-            QuestionRepository    questionRepository,
-            UserRepository        userRepository,
-            UserAnswerRepository  answerRepository,
-            PdfExportPort         pdfExportPort,
-            FreemiumGuardService  freemiumGuardService,
-            ScoringService        scoringService) {
+            QuestionRepository questionRepository,
+            UserRepository userRepository,
+            UserAnswerRepository answerRepository,
+            PdfExportPort pdfExportPort,
+            FreemiumGuardService freemiumGuardService,
+            ScoringService scoringService) {
         return new ExportSessionPdfUseCaseImpl(
                 sessionRepository, questionRepository, userRepository,
                 answerRepository, pdfExportPort, freemiumGuardService, scoringService);
@@ -118,8 +129,8 @@ public class ApplicationBeansConfig {
 
     @Bean
     public GetFlashcardsUseCaseImpl getFlashcardsUseCase(
-            FlashcardRepository  flashcardRepository,
-            UserRepository       userRepository,
+            FlashcardRepository flashcardRepository,
+            UserRepository userRepository,
             FreemiumGuardService freemiumGuardService) {
         return new GetFlashcardsUseCaseImpl(flashcardRepository, userRepository, freemiumGuardService);
     }
@@ -127,22 +138,22 @@ public class ApplicationBeansConfig {
     @Bean
     public ReviewFlashcardUseCaseImpl reviewFlashcardUseCase(
             SM2ScheduleRepository sm2Repository,
-            SM2AlgorithmService   sm2Service) {
+            SM2AlgorithmService sm2Service) {
         return new ReviewFlashcardUseCaseImpl(sm2Repository, sm2Service);
     }
 
     @Bean
     public RegisterUserUseCaseImpl registerUserUseCase(
-            UserRepository            userRepository,
+            UserRepository userRepository,
             UserPreferencesRepository preferencesRepository,
-            PasswordEncoder           passwordEncoder) {
+            PasswordEncoder passwordEncoder) {
         return new RegisterUserUseCaseImpl(
                 userRepository, preferencesRepository, passwordEncoder::encode);
     }
 
     @Bean
     public AuthenticateUserUseCaseImpl authenticateUserUseCase(
-            UserRepository  userRepository,
+            UserRepository userRepository,
             PasswordEncoder passwordEncoder) {
         return new AuthenticateUserUseCaseImpl(
                 userRepository, passwordEncoder::matches);
@@ -150,7 +161,7 @@ public class ApplicationBeansConfig {
 
     @Bean
     public UpdateUserPreferencesUseCaseImpl updateUserPreferencesUseCase(
-            UserRepository            userRepository,
+            UserRepository userRepository,
             UserPreferencesRepository preferencesRepository) {
         return new UpdateUserPreferencesUseCaseImpl(userRepository, preferencesRepository);
     }

@@ -3,6 +3,7 @@ package com.certifapp.domain.port.input.session;
 
 import com.certifapp.domain.model.session.ExamMode;
 import com.certifapp.domain.model.session.ExamSession;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -11,6 +12,15 @@ import java.util.UUID;
  * Use case: retrieve paginated exam session history for one user.
  */
 public interface GetSessionHistoryUseCase {
+
+    /**
+     * @param userId the user whose history is requested
+     * @param filter optional filter criteria
+     * @param page   0-based page number
+     * @param size   page size (max 100)
+     * @return page of sessions ordered by startedAt descending
+     */
+    List<ExamSession> execute(UUID userId, HistoryFilter filter, int page, int size);
 
     /**
      * Optional filter criteria for session history.
@@ -25,13 +35,4 @@ public interface GetSessionHistoryUseCase {
             return new HistoryFilter(null, null, null, null);
         }
     }
-
-    /**
-     * @param userId   the user whose history is requested
-     * @param filter   optional filter criteria
-     * @param page     0-based page number
-     * @param size     page size (max 100)
-     * @return page of sessions ordered by startedAt descending
-     */
-    List<ExamSession> execute(UUID userId, HistoryFilter filter, int page, int size);
 }

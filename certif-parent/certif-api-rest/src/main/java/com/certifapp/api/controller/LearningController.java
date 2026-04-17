@@ -4,8 +4,10 @@ package com.certifapp.api.controller;
 import com.certifapp.api.dto.request.ReviewFlashcardRequest;
 import com.certifapp.api.dto.response.ApiResponse;
 import com.certifapp.api.security.CurrentUser;
-import com.certifapp.domain.model.learning.*;
-import com.certifapp.domain.port.input.learning.*;
+import com.certifapp.domain.model.learning.Flashcard;
+import com.certifapp.domain.model.learning.SM2Schedule;
+import com.certifapp.domain.port.input.learning.GetFlashcardsUseCase;
+import com.certifapp.domain.port.input.learning.ReviewFlashcardUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,14 +27,14 @@ import java.util.UUID;
 @SecurityRequirement(name = "BearerAuth")
 public class LearningController {
 
-    private final GetFlashcardsUseCase    getFlashcardsUseCase;
-    private final ReviewFlashcardUseCase  reviewUseCase;
+    private final GetFlashcardsUseCase getFlashcardsUseCase;
+    private final ReviewFlashcardUseCase reviewUseCase;
 
     public LearningController(
-            GetFlashcardsUseCase   getFlashcardsUseCase,
+            GetFlashcardsUseCase getFlashcardsUseCase,
             ReviewFlashcardUseCase reviewUseCase) {
         this.getFlashcardsUseCase = getFlashcardsUseCase;
-        this.reviewUseCase        = reviewUseCase;
+        this.reviewUseCase = reviewUseCase;
     }
 
     /**

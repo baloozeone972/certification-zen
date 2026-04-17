@@ -1,4 +1,3 @@
-```java
 package com.certifapp.application.dto.learning;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -6,13 +5,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 public class AdaptivePlanDtoTest {
@@ -144,4 +143,4 @@ public class AdaptivePlanDtoTest {
                 .withMessage("predictedScore must be between 0 and 100");
     }
 }
-```
+

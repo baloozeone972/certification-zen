@@ -6,7 +6,6 @@ import com.certifapp.domain.model.question.Question;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -37,7 +36,7 @@ public class DocumentIngester {
      * Ingests a list of questions into the vector store.
      * Each question's statement is embedded with its certification and theme metadata.
      *
-     * @param questions list of questions to ingest
+     * @param questions       list of questions to ingest
      * @param certificationId the certification these questions belong to
      */
     public void ingestQuestions(List<Question> questions, String certificationId) {
@@ -47,11 +46,11 @@ public class DocumentIngester {
             try {
                 String text = buildQuestionText(q);
                 Map<String, String> metadata = Map.of(
-                        "source",          "question",
+                        "source", "question",
                         "certificationId", certificationId,
-                        "questionId",      q.id() != null ? q.id().toString() : "",
-                        "themeCode",       q.themeId() != null ? q.themeId().toString() : "",
-                        "difficulty",      q.difficulty().toJson()
+                        "questionId", q.id() != null ? q.id().toString() : "",
+                        "themeCode", q.themeId() != null ? q.themeId().toString() : "",
+                        "difficulty", q.difficulty().toJson()
                 );
                 vectorStore.store(text, metadata);
                 count++;
@@ -81,11 +80,11 @@ public class DocumentIngester {
         for (String paragraph : paragraphs) {
             if (paragraph.trim().length() < 30) continue; // Skip too-short chunks
             Map<String, String> metadata = Map.of(
-                    "source",          "course",
+                    "source", "course",
                     "certificationId", course.certificationId(),
-                    "courseId",        course.id() != null ? course.id().toString() : "",
-                    "themeId",         course.themeId() != null ? course.themeId().toString() : "",
-                    "title",           course.title()
+                    "courseId", course.id() != null ? course.id().toString() : "",
+                    "themeId", course.themeId() != null ? course.themeId().toString() : "",
+                    "title", course.title()
             );
             vectorStore.store(paragraph.trim(), metadata);
         }
@@ -96,13 +95,13 @@ public class DocumentIngester {
     private String buildQuestionText(Question q) {
         StringBuilder sb = new StringBuilder();
         sb.append(q.statement()).append("
-");
+                ");
         if (q.explanationOriginal() != null && !q.explanationOriginal().isBlank()) {
             sb.append("Explanation: ").append(q.explanationOriginal());
         }
         q.correctOption().ifPresent(opt ->
-            sb.append("
-Correct answer: ").append(opt.text()));
+                sb.append("
+                        Correct answer:").append(opt.text()));
         return sb.toString();
     }
 }

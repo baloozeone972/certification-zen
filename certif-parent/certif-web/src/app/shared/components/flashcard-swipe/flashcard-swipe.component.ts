@@ -1,7 +1,7 @@
 // certif-parent/certif-web/src/app/shared/components/flashcard-swipe/flashcard-swipe.component.ts
-import { Component, Input, Output, EventEmitter, signal, ChangeDetectionStrategy } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { Flashcard } from "../../../core/models/learning.models";
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output, signal} from "@angular/core";
+import {CommonModule} from "@angular/common";
+import {Flashcard} from "../../../core/models/learning.models";
 
 /**
  * Flashcard swipe component for SM-2 review.
@@ -9,11 +9,11 @@ import { Flashcard } from "../../../core/models/learning.models";
  * Emits (rated) with the SM-2 quality rating.
  */
 @Component({
-  selector: "app-flashcard-swipe",
-  standalone: true,
-  imports: [CommonModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    selector: "app-flashcard-swipe",
+    standalone: true,
+    imports: [CommonModule],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <div class="fc-container">
       <div class="fc-card" [class.fc-card--flipped]="flipped()" (click)="flip()">
         <div class="fc-front">
@@ -43,7 +43,7 @@ import { Flashcard } from "../../../core/models/learning.models";
       }
     </div>
   `,
-  styles: [`
+    styles: [`
     .fc-container { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
     .fc-card {
       width: 100%; max-width: 600px; min-height: 200px;
@@ -75,23 +75,25 @@ import { Flashcard } from "../../../core/models/learning.models";
   `]
 })
 export class FlashcardSwipeComponent {
-  @Input({ required: true }) flashcard!: Flashcard;
-  @Output() rated = new EventEmitter<number>();
+    @Input({required: true}) flashcard!: Flashcard;
+    @Output() rated = new EventEmitter<number>();
 
-  readonly flipped = signal(false);
+    readonly flipped = signal(false);
 
-  readonly ratingButtons = [
-    { value: 0, label: "0 — Oublié",   color: "red"    },
-    { value: 1, label: "1 — Difficile", color: "orange" },
-    { value: 3, label: "3 — Correct",   color: "yellow" },
-    { value: 4, label: "4 — Facile",    color: "green"  },
-    { value: 5, label: "5 — Parfait",   color: "green"  }
-  ];
+    readonly ratingButtons = [
+        {value: 0, label: "0 — Oublié", color: "red"},
+        {value: 1, label: "1 — Difficile", color: "orange"},
+        {value: 3, label: "3 — Correct", color: "yellow"},
+        {value: 4, label: "4 — Facile", color: "green"},
+        {value: 5, label: "5 — Parfait", color: "green"}
+    ];
 
-  flip(): void { this.flipped.set(!this.flipped()); }
+    flip(): void {
+        this.flipped.set(!this.flipped());
+    }
 
-  rate(value: number): void {
-    this.rated.emit(value);
-    this.flipped.set(false);
-  }
+    rate(value: number): void {
+        this.rated.emit(value);
+        this.flipped.set(false);
+    }
 }

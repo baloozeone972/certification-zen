@@ -9,10 +9,14 @@ import retrofit2.http.*
 /** Retrofit interface for learning endpoints. */
 interface LearningApi {
     @GET("learning/flashcards/{certId}")
-    suspend fun getFlashcardsDue(@Path("certId") certId: String,
-                                  @Query("limit") limit: Int = 20): ApiResponse<List<FlashcardDto>>
+    suspend fun getFlashcardsDue(
+        @Path("certId") certId: String,
+        @Query("limit") limit: Int = 20
+    ): ApiResponse<List<FlashcardDto>>
 
     @POST("learning/flashcards/{id}/review")
-    suspend fun reviewFlashcard(@Path("id") id: String,
-                                 @Body request: ReviewFlashcardRequest): ApiResponse<Any>
+    suspend fun reviewFlashcard(
+        @Path("id") id: String,
+        @Body request: ReviewFlashcardRequest
+    ): ApiResponse<Any>
 }

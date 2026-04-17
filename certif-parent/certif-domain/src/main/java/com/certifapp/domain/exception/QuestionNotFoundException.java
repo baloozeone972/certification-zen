@@ -7,9 +7,13 @@ package com.certifapp.domain.exception;
 public class QuestionNotFoundException extends CertifAppException {
 
     private final java.util.UUID questionId;
+
     public QuestionNotFoundException(java.util.UUID questionId) {
         super("Question not found: " + questionId);
         this.questionId = questionId;
     }
-    public java.util.UUID getQuestionId() { return questionId; }
+
+    public java.util.UUID getQuestionId() {
+        return questionId;
+    }
 }

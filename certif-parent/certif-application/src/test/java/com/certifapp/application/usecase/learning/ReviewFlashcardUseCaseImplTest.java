@@ -5,18 +5,22 @@ import com.certifapp.domain.model.learning.SM2Schedule;
 import com.certifapp.domain.port.input.learning.ReviewFlashcardUseCase;
 import com.certifapp.domain.port.output.SM2ScheduleRepository;
 import com.certifapp.domain.service.SM2AlgorithmService;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Unit tests for {@link ReviewFlashcardUseCaseImpl}.
@@ -25,18 +29,17 @@ import static org.mockito.Mockito.*;
 @DisplayName("ReviewFlashcardUseCaseImpl")
 class ReviewFlashcardUseCaseImplTest {
 
-    @Mock private SM2ScheduleRepository sm2Repository;
-
-    private SM2AlgorithmService   sm2Service;
-    private ReviewFlashcardUseCaseImpl useCase;
-
-    private static final UUID USER_ID     = UUID.randomUUID();
+    private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID FLASHCARD_ID = UUID.randomUUID();
+    @Mock
+    private SM2ScheduleRepository sm2Repository;
+    private SM2AlgorithmService sm2Service;
+    private ReviewFlashcardUseCaseImpl useCase;
 
     @BeforeEach
     void setUp() {
         sm2Service = new SM2AlgorithmService();
-        useCase    = new ReviewFlashcardUseCaseImpl(sm2Repository, sm2Service);
+        useCase = new ReviewFlashcardUseCaseImpl(sm2Repository, sm2Service);
     }
 
     @Test

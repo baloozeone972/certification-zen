@@ -11,13 +11,15 @@ import java.time.LocalDate
 interface FlashcardDao {
 
     /** Returns flashcards due today or overdue for a given certification. */
-    @Query("""
+    @Query(
+        """
         SELECT * FROM flashcards
         WHERE certificationId = :certId
         AND nextReviewDate <= :today
         ORDER BY nextReviewDate ASC
         LIMIT :limit
-    """)
+    """
+    )
     fun getDue(certId: String, today: String, limit: Int = 20): Flow<List<FlashcardEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

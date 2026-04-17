@@ -1,10 +1,8 @@
-```java
 package com.certifapp.application.usecase.learning;
 
 import com.certifapp.domain.exception.SubscriptionRequiredException;
 import com.certifapp.domain.model.learning.Flashcard;
 import com.certifapp.domain.model.user.SubscriptionTier;
-import com.certifapp.domain.port.input.learning.GetFlashcardsUseCase;
 import com.certifapp.domain.port.output.FlashcardRepository;
 import com.certifapp.domain.port.output.UserRepository;
 import com.certifapp.domain.service.FreemiumGuardService;
@@ -14,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
@@ -115,4 +113,4 @@ public class GetFlashcardsUseCaseImplTest {
         return user;
     }
 }
-```
+

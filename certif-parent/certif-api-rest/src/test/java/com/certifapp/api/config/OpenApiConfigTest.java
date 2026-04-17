@@ -1,4 +1,3 @@
-```java
 package com.certifapp.api.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
@@ -7,13 +6,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoExtension;
-import org.springframework.context.annotation.Bean;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static io.swagger.v3.oas.models.security.SecurityScheme.Type.HTTP;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class OpenApiConfigTest {
@@ -160,4 +157,4 @@ public class OpenApiConfigTest {
                 .containsEntry("BearerAuth", List.of());
     }
 }
-```
+

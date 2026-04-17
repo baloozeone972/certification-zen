@@ -1,7 +1,8 @@
 // certif-parent/certif-api-rest/src/main/java/com/certifapp/api/websocket/ChallengeWebSocketController.java
 package com.certifapp.api.websocket;
 
-import org.springframework.messaging.handler.annotation.*;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 

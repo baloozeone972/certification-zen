@@ -11,4 +11,5 @@ import java.util.UUID;
  * @param title     course title
  * @param aiStatus  DRAFT | AI_GENERATED | HUMAN_REVIEWED | PUBLISHED
  */
-public record CourseSummaryDto(UUID id, String themeCode, String title, String aiStatus) {}
+public record CourseSummaryDto(UUID id, String themeCode, String title, String aiStatus) {
+}

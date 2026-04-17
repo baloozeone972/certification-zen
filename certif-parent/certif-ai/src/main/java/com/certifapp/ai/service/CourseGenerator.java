@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 
 /**
  * AI service generating preparatory course content in Markdown.
@@ -27,12 +27,12 @@ public class CourseGenerator {
     private static final Logger log = LoggerFactory.getLogger(CourseGenerator.class);
 
     private final ChatLanguageModel lightModel;
-    private final PromptRenderer    promptRenderer;
+    private final PromptRenderer promptRenderer;
 
     public CourseGenerator(
             @Qualifier("lightModel") ChatLanguageModel lightModel,
             PromptRenderer promptRenderer) {
-        this.lightModel    = lightModel;
+        this.lightModel = lightModel;
         this.promptRenderer = promptRenderer;
     }
 
@@ -45,7 +45,7 @@ public class CourseGenerator {
      * @return Markdown-formatted course content
      */
     public String generateCourse(String certificationId, String themeLabel,
-                                  List<String> sampleQuestions) {
+                                 List<String> sampleQuestions) {
 
         log.info("Generating course: {} / {}", certificationId, themeLabel);
 
@@ -56,8 +56,8 @@ public class CourseGenerator {
 
         Map<String, Object> vars = new HashMap<>();
         vars.put("certificationId", certificationId);
-        vars.put("themeLabel",      themeLabel);
-        vars.put("questions",       qList);
+        vars.put("themeLabel", themeLabel);
+        vars.put("questions", qList);
 
         String prompt = promptRenderer.render("course_generation", vars);
 
@@ -71,7 +71,7 @@ public class CourseGenerator {
                     certificationId, themeLabel, e.getMessage());
             return "# " + themeLabel + "
 
-Contenu en cours de génération...";
+            Contenu en cours de génération...";
         }
     }
 }

@@ -14,9 +14,10 @@ import java.util.UUID;
  * @param difficulty easy | medium | hard
  */
 public record QuestionDto(
-        UUID                 id,
-        String               statement,
+        UUID id,
+        String statement,
         List<QuestionOptionDto> options,
-        String               themeCode,
-        String               difficulty
-) {}
+        String themeCode,
+        String difficulty
+) {
+}

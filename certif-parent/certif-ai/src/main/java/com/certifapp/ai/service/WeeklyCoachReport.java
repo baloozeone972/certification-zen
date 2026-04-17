@@ -23,26 +23,26 @@ public class WeeklyCoachReport {
     private static final Logger log = LoggerFactory.getLogger(WeeklyCoachReport.class);
 
     private final ChatLanguageModel heavyModel;
-    private final PromptRenderer    promptRenderer;
+    private final PromptRenderer promptRenderer;
 
     public WeeklyCoachReport(
             @Qualifier("heavyModel") ChatLanguageModel heavyModel,
             PromptRenderer promptRenderer) {
-        this.heavyModel    = heavyModel;
+        this.heavyModel = heavyModel;
         this.promptRenderer = promptRenderer;
     }
 
     /**
      * Generates a personalized weekly coach report in Markdown.
      *
-     * @param weekStart        the Monday date string (ISO format)
-     * @param certificationId  the certification the user is preparing
-     * @param sessionsCount    number of sessions completed this week
-     * @param averageScore     average score percentage
-     * @param bestScore        best score percentage
-     * @param themeStats       list of theme performance maps
-     * @param cardsDueToday    number of SM-2 cards due today
-     * @param cardsReviewed    number of cards reviewed this week
+     * @param weekStart         the Monday date string (ISO format)
+     * @param certificationId   the certification the user is preparing
+     * @param sessionsCount     number of sessions completed this week
+     * @param averageScore      average score percentage
+     * @param bestScore         best score percentage
+     * @param themeStats        list of theme performance maps
+     * @param cardsDueToday     number of SM-2 cards due today
+     * @param cardsReviewed     number of cards reviewed this week
      * @param averageEaseFactor average SM-2 ease factor
      * @return Markdown-formatted coach report
      */
@@ -54,15 +54,15 @@ public class WeeklyCoachReport {
         log.info("Generating weekly coach report for week {} / {}", weekStart, certificationId);
 
         Map<String, Object> vars = Map.of(
-                "weekStart",          weekStart,
-                "certificationId",    certificationId,
-                "sessionsCount",      sessionsCount,
-                "averageScore",       String.format("%.1f", averageScore),
-                "bestScore",          String.format("%.1f", bestScore),
-                "themeStats",         themeStats,
-                "cardsDueToday",      cardsDueToday,
-                "cardsReviewed",      cardsReviewed,
-                "averageEaseFactor",  String.format("%.2f", averageEaseFactor)
+                "weekStart", weekStart,
+                "certificationId", certificationId,
+                "sessionsCount", sessionsCount,
+                "averageScore", String.format("%.1f", averageScore),
+                "bestScore", String.format("%.1f", bestScore),
+                "themeStats", themeStats,
+                "cardsDueToday", cardsDueToday,
+                "cardsReviewed", cardsReviewed,
+                "averageEaseFactor", String.format("%.2f", averageEaseFactor)
         );
 
         String prompt = promptRenderer.render("weekly_coach_report", vars);
@@ -73,7 +73,7 @@ public class WeeklyCoachReport {
             log.error("Failed to generate weekly report for {}: {}", weekStart, e.getMessage());
             return "# Rapport hebdomadaire
 
-Erreur lors de la génération du rapport. "
+            Erreur lors de la génération du rapport."
                     + "Continuez vos révisions !";
         }
     }

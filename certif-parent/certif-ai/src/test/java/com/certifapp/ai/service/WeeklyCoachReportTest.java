@@ -1,4 +1,3 @@
-```java
 package com.certifapp.ai.service;
 
 import dev.langchain4j.model.chat.ChatLanguageModel;
@@ -8,7 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -198,10 +198,10 @@ public class WeeklyCoachReportTest {
 
         assertThat(result).isEqualTo("# Rapport hebdomadaire
 
-Erreur lors de la génération du rapport. "
-                + "Continuez vos révisions !");
+                Erreur lors de la génération du rapport."
+                        + "Continuez vos révisions !");
 
         verify(heavyModel, times(1)).generate(anyString());
     }
 }
-```
+

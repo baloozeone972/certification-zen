@@ -1,18 +1,18 @@
 // certif-parent/certif-web/src/app/features/results/results.component.ts
-import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from "@angular/core";
-import { ActivatedRoute, RouterLink } from "@angular/router";
-import { CommonModule, DecimalPipe } from "@angular/common";
-import { ExamService } from "../../core/services/exam.service";
-import { ExamResult } from "../../core/models/exam.models";
-import { ScoreWidgetComponent } from "../../shared/components/score-widget/score-widget.component";
-import { DurationPipe } from "../../shared/pipes/duration.pipe";
+import {ChangeDetectionStrategy, Component, inject, OnInit, signal} from "@angular/core";
+import {ActivatedRoute, RouterLink} from "@angular/router";
+import {CommonModule, DecimalPipe} from "@angular/common";
+import {ExamService} from "../../core/services/exam.service";
+import {ExamResult} from "../../core/models/exam.models";
+import {ScoreWidgetComponent} from "../../shared/components/score-widget/score-widget.component";
+import {DurationPipe} from "../../shared/pipes/duration.pipe";
 
 @Component({
-  selector: "app-results",
-  standalone: true,
-  imports: [CommonModule, RouterLink, ScoreWidgetComponent, DurationPipe, DecimalPipe],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    selector: "app-results",
+    standalone: true,
+    imports: [CommonModule, RouterLink, ScoreWidgetComponent, DurationPipe, DecimalPipe],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <div class="results container">
       @if (result()) {
         <div class="results__hero" [class.results__hero--pass]="result()!.passed"
@@ -60,7 +60,7 @@ import { DurationPipe } from "../../shared/pipes/duration.pipe";
       }
     </div>
   `,
-  styles: [`
+    styles: [`
     .results { padding: 2rem 1rem; max-width: 900px; }
     .results__hero { display: flex; gap: 2rem; align-items: center; padding: 2rem;
                       border-radius: var(--radius-lg); margin-bottom: 2rem; flex-wrap: wrap; }
@@ -76,23 +76,25 @@ import { DurationPipe } from "../../shared/pipes/duration.pipe";
   `]
 })
 export class ResultsComponent implements OnInit {
-  private readonly examService = inject(ExamService);
-  private readonly route       = inject(ActivatedRoute);
-  readonly result = signal<ExamResult | null>(null);
+    readonly result = signal<ExamResult | null>(null);
+    private readonly examService = inject(ExamService);
+    private readonly route = inject(ActivatedRoute);
 
-  ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get("sessionId") ?? "";
-    this.examService.getResults(id).subscribe(r => this.result.set(r));
-  }
+    ngOnInit(): void {
+        const id = this.route.snapshot.paramMap.get("sessionId") ?? "";
+        this.examService.getResults(id).subscribe(r => this.result.set(r));
+    }
 
-  exportPdf(): void {
-    const id = this.result()?.sessionId;
-    if (!id) return;
-    this.examService.exportPdf(id).subscribe(blob => {
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url; a.download = `results-${id}.pdf`; a.click();
-      URL.revokeObjectURL(url);
-    });
-  }
+    exportPdf(): void {
+        const id = this.result()?.sessionId;
+        if (!id) return;
+        this.examService.exportPdf(id).subscribe(blob => {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `results-${id}.pdf`;
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+    }
 }

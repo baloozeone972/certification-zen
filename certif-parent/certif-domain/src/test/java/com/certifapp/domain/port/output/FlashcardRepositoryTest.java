@@ -1,22 +1,22 @@
-```java
 package com.certifapp.domain.port.output;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
 import com.certifapp.domain.model.learning.Flashcard;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class FlashcardRepositoryTest {
@@ -76,8 +76,8 @@ public class FlashcardRepositoryTest {
         String certificationId = "cert123";
         int limit = 5;
 
-        assertThrows(NullPointerException.class, () -> 
-            flashcardRepositoryImpl.findDueByUserAndCertification(userId, certificationId, limit)
+        assertThrows(NullPointerException.class, () ->
+                flashcardRepositoryImpl.findDueByUserAndCertification(userId, certificationId, limit)
         );
     }
 
@@ -99,8 +99,8 @@ public class FlashcardRepositoryTest {
     public void save_nullFlashcard() {
         Flashcard flashcard = null;
 
-        assertThrows(NullPointerException.class, () -> 
-            flashcardRepositoryImpl.save(flashcard)
+        assertThrows(NullPointerException.class, () ->
+                flashcardRepositoryImpl.save(flashcard)
         );
     }
 
@@ -135,8 +135,8 @@ public class FlashcardRepositoryTest {
     public void saveAll_nullList() {
         List<Flashcard> flashcards = null;
 
-        assertThrows(NullPointerException.class, () -> 
-            flashcardRepositoryImpl.saveAll(flashcards)
+        assertThrows(NullPointerException.class, () ->
+                flashcardRepositoryImpl.saveAll(flashcards)
         );
     }
 }
@@ -161,4 +161,4 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
         return null;
     }
 }
-```
+

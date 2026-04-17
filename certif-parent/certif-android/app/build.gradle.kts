@@ -9,30 +9,32 @@ plugins {
 }
 
 android {
-    namespace         = "com.certifapp.android"
-    compileSdk        = 35
+    namespace = "com.certifapp.android"
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.certifapp.android"
-        minSdk        = 26
-        targetSdk     = 35
-        versionCode   = 1
-        versionName   = "1.0.0"
+        minSdk = 26
+        targetSdk = 35
+        versionCode = 1
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "API_BASE_URL", ""https://api.certifapp.com/api/v1/"")
+        buildConfigField("String", "API_BASE_URL", "" https ://api.certifapp.com/api/v1/"")
     }
 
     buildTypes {
         debug {
             isMinifyEnabled = false
-            buildConfigField("String", "API_BASE_URL", ""http://10.0.2.2:8080/api/v1/"")
+            buildConfigField("String", "API_BASE_URL", "" http ://10.0.2.2:8080/api/v1/"")
         }
         release {
             isMinifyEnabled = true
             isShrinkResources = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"),
-                         "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 
@@ -43,7 +45,7 @@ android {
     kotlinOptions { jvmTarget = "21" }
 
     buildFeatures {
-        compose     = true
+        compose = true
         buildConfig = true
     }
 }

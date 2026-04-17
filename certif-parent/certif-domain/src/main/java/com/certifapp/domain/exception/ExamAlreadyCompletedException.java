@@ -7,9 +7,13 @@ package com.certifapp.domain.exception;
 public class ExamAlreadyCompletedException extends CertifAppException {
 
     private final java.util.UUID sessionId;
+
     public ExamAlreadyCompletedException(java.util.UUID sessionId) {
         super("Exam session already completed: " + sessionId);
         this.sessionId = sessionId;
     }
-    public java.util.UUID getSessionId() { return sessionId; }
+
+    public java.util.UUID getSessionId() {
+        return sessionId;
+    }
 }

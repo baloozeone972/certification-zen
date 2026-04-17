@@ -13,7 +13,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.*;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
@@ -37,32 +39,32 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-            // Stateless REST — no sessions
-            .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            // CSRF disabled — JWT provides CSRF protection for REST APIs
-            .csrf(AbstractHttpConfigurer::disable)
-            // CORS configured separately
-            .cors(c -> c.configurationSource(corsConfigurationSource()))
-            // Authorization rules
-            .authorizeHttpRequests(auth -> auth
-                // Public endpoints
-                .requestMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
-                .requestMatchers(HttpMethod.GET,  "/api/v1/certifications/**").permitAll()
-                .requestMatchers(HttpMethod.GET,  "/api/v1/community/certified-wall").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/v1/webhooks/stripe").permitAll()
-                // Swagger / Actuator
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**",
-                                 "/actuator/health", "/actuator/info").permitAll()
-                // WebSocket handshake
-                .requestMatchers("/ws/**").permitAll()
-                // Admin endpoints — ADMIN role required
-                .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
-                // All other endpoints require authentication
-                .anyRequest().authenticated()
-            )
-            // JWT filter before UsernamePasswordAuthenticationFilter
-            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-            .build();
+                // Stateless REST — no sessions
+                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // CSRF disabled — JWT provides CSRF protection for REST APIs
+                .csrf(AbstractHttpConfigurer::disable)
+                // CORS configured separately
+                .cors(c -> c.configurationSource(corsConfigurationSource()))
+                // Authorization rules
+                .authorizeHttpRequests(auth -> auth
+                        // Public endpoints
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/certifications/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/community/certified-wall").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/webhooks/stripe").permitAll()
+                        // Swagger / Actuator
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**",
+                                "/actuator/health", "/actuator/info").permitAll()
+                        // WebSocket handshake
+                        .requestMatchers("/ws/**").permitAll()
+                        // Admin endpoints — ADMIN role required
+                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+                        // All other endpoints require authentication
+                        .anyRequest().authenticated()
+                )
+                // JWT filter before UsernamePasswordAuthenticationFilter
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 
     @Bean
@@ -74,13 +76,13 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOriginPatterns(List.of(
-            "http://localhost:4200",        // Angular dev
-            "https://certifapp.com",        // Production
-            "https://*.certifapp.com"       // Subdomains
+                "http://localhost:4200",        // Angular dev
+                "https://certifapp.com",        // Production
+                "https://*.certifapp.com"       // Subdomains
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept",
-                                         "X-Requested-With"));
+                "X-Requested-With"));
         config.setExposedHeaders(List.of("Authorization"));
         config.setAllowCredentials(true);
         config.setMaxAge(3600L);

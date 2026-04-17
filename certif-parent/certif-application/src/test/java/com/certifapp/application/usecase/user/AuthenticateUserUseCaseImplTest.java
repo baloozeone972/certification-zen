@@ -2,19 +2,24 @@
 package com.certifapp.application.usecase.user;
 
 import com.certifapp.domain.exception.InvalidCredentialsException;
-import com.certifapp.domain.model.user.*;
+import com.certifapp.domain.model.user.SubscriptionTier;
+import com.certifapp.domain.model.user.User;
+import com.certifapp.domain.model.user.UserRole;
 import com.certifapp.domain.port.output.UserRepository;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.when;
 
 /**
  * Unit tests for {@link AuthenticateUserUseCaseImpl}.
@@ -23,7 +28,8 @@ import static org.mockito.Mockito.*;
 @DisplayName("AuthenticateUserUseCaseImpl")
 class AuthenticateUserUseCaseImplTest {
 
-    @Mock private UserRepository userRepository;
+    @Mock
+    private UserRepository userRepository;
     private AuthenticateUserUseCaseImpl useCase;
 
     @BeforeEach

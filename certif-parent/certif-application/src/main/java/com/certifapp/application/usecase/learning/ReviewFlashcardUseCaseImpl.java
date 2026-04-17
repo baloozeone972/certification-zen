@@ -17,13 +17,13 @@ import java.util.UUID;
 public class ReviewFlashcardUseCaseImpl implements ReviewFlashcardUseCase {
 
     private final SM2ScheduleRepository sm2Repository;
-    private final SM2AlgorithmService   sm2Service;
+    private final SM2AlgorithmService sm2Service;
 
     public ReviewFlashcardUseCaseImpl(
             SM2ScheduleRepository sm2Repository,
-            SM2AlgorithmService   sm2Service) {
+            SM2AlgorithmService sm2Service) {
         this.sm2Repository = sm2Repository;
-        this.sm2Service    = sm2Service;
+        this.sm2Service = sm2Service;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class ReviewFlashcardUseCaseImpl implements ReviewFlashcardUseCase {
         // Flashcard UUID ≠ question UUID — we schedule by flashcard
         // Treat flashcard UUID as the "questionId" in the SM2 schedule
         UUID flashcardId = command.flashcardId();
-        UUID userId      = command.userId();
+        UUID userId = command.userId();
 
         SM2Schedule current = sm2Repository
                 .findByUserAndQuestion(userId, flashcardId)

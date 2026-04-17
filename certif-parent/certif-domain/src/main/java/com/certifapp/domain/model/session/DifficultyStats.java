@@ -16,8 +16,8 @@ import com.certifapp.domain.model.question.DifficultyLevel;
  */
 public record DifficultyStats(
         DifficultyLevel difficulty,
-        int             correct,
-        int             total
+        int correct,
+        int total
 ) {
 
     /**
@@ -26,10 +26,10 @@ public record DifficultyStats(
     public DifficultyStats {
         if (difficulty == null) throw new IllegalArgumentException("difficulty must not be null");
         if (correct < 0) throw new IllegalArgumentException("correct must be >= 0");
-        if (total   < 0) throw new IllegalArgumentException("total must be >= 0");
+        if (total < 0) throw new IllegalArgumentException("total must be >= 0");
         if (correct > total) {
             throw new IllegalArgumentException(
-                "correct (%d) cannot exceed total (%d)".formatted(correct, total));
+                    "correct (%d) cannot exceed total (%d)".formatted(correct, total));
         }
     }
 

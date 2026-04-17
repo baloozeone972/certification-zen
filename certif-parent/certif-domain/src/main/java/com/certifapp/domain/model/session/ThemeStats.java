@@ -16,9 +16,9 @@ package com.certifapp.domain.model.session;
 public record ThemeStats(
         String themeCode,
         String themeLabel,
-        int    correct,
-        int    wrong,
-        int    skipped
+        int correct,
+        int wrong,
+        int skipped
 ) {
 
     /**
@@ -26,7 +26,7 @@ public record ThemeStats(
      */
     public ThemeStats {
         if (correct < 0) throw new IllegalArgumentException("correct must be >= 0");
-        if (wrong   < 0) throw new IllegalArgumentException("wrong must be >= 0");
+        if (wrong < 0) throw new IllegalArgumentException("wrong must be >= 0");
         if (skipped < 0) throw new IllegalArgumentException("skipped must be >= 0");
     }
 

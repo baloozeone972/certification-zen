@@ -8,13 +8,19 @@ package com.certifapp.domain.model.session;
  */
 public enum SessionStatus {
 
-    /** Session started — questions served, answers being collected. */
+    /**
+     * Session started — questions served, answers being collected.
+     */
     IN_PROGRESS,
 
-    /** Session explicitly submitted by the user or by the server after timer expiry. */
+    /**
+     * Session explicitly submitted by the user or by the server after timer expiry.
+     */
     COMPLETED,
 
-    /** User left the session without submitting — score not calculated. */
+    /**
+     * User left the session without submitting — score not calculated.
+     */
     ABANDONED,
 
     /**
@@ -29,6 +35,9 @@ public enum SessionStatus {
      * @return {@code true} for {@code COMPLETED} and {@code EXPIRED}
      */
     public boolean isFinished() {
-        return this == COMPLETED || this == EXPIRED;
+        return switch (this) {
+            case COMPLETED, EXPIRED -> true;
+            case IN_PROGRESS, ABANDONED -> false;
+        };
     }
 }

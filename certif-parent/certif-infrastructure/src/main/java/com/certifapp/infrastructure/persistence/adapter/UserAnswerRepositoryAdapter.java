@@ -17,12 +17,12 @@ import java.util.UUID;
 public class UserAnswerRepositoryAdapter implements UserAnswerRepository {
 
     private final UserAnswerJpaRepository jpaRepository;
-    private final ExamSessionMapper       mapper;
+    private final ExamSessionMapper mapper;
 
     public UserAnswerRepositoryAdapter(
             UserAnswerJpaRepository jpaRepository, ExamSessionMapper mapper) {
         this.jpaRepository = jpaRepository;
-        this.mapper        = mapper;
+        this.mapper = mapper;
     }
 
     @Override

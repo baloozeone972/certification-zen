@@ -3,7 +3,9 @@ package com.certifapp.domain.service;
 
 import com.certifapp.domain.model.question.DifficultyLevel;
 import com.certifapp.domain.model.question.Question;
-import com.certifapp.domain.model.session.*;
+import com.certifapp.domain.model.session.DifficultyStats;
+import com.certifapp.domain.model.session.ThemeStats;
+import com.certifapp.domain.model.session.UserAnswer;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -25,36 +27,19 @@ import java.util.stream.Collectors;
 public class ScoringService {
 
     /**
-     * Result of a scoring operation.
-     *
-     * @param correctCount number of correct answers
-     * @param percentage   score percentage 0.0-100.0
-     * @param passed       whether the passing threshold was met
-     * @param themeStats   per-theme breakdown
-     * @param diffStats    per-difficulty breakdown
-     */
-    public record ScoringResult(
-            int                  correctCount,
-            double               percentage,
-            boolean              passed,
-            List<ThemeStats>     themeStats,
-            List<DifficultyStats> diffStats
-    ) {}
-
-    /**
      * Evaluates all answers against the question corpus and computes the full score.
      *
-     * @param answers         list of user answers for the session
-     * @param questions       all questions drawn for the session (with options including isCorrect)
-     * @param passingScore    minimum percentage to pass (e.g. 68 for OCP21)
-     * @param totalQuestions  total question count for percentage denominator
+     * @param answers        list of user answers for the session
+     * @param questions      all questions drawn for the session (with options including isCorrect)
+     * @param passingScore   minimum percentage to pass (e.g. 68 for OCP21)
+     * @param totalQuestions total question count for percentage denominator
      * @return complete {@link ScoringResult}
      */
     public ScoringResult score(
             List<UserAnswer> answers,
-            List<Question>   questions,
-            int              passingScore,
-            int              totalQuestions) {
+            List<Question> questions,
+            int passingScore,
+            int totalQuestions) {
 
         Map<UUID, Question> questionMap = questions.stream()
                 .collect(Collectors.toMap(Question::id, q -> q));
@@ -70,8 +55,8 @@ public class ScoringService {
                 : 0.0;
         boolean passed = percentage >= passingScore;
 
-        List<ThemeStats>      themeStats = calculateThemeStats(evaluated, questionMap);
-        List<DifficultyStats> diffStats  = calculateDifficultyStats(evaluated, questionMap);
+        List<ThemeStats> themeStats = calculateThemeStats(evaluated, questionMap);
+        List<DifficultyStats> diffStats = calculateDifficultyStats(evaluated, questionMap);
 
         return new ScoringResult((int) correctCount, percentage, passed, themeStats, diffStats);
     }
@@ -185,5 +170,23 @@ public class ScoringService {
                 .map(a -> questionMap.get(a.questionId()))
                 .filter(Objects::nonNull)
                 .toList();
+    }
+
+    /**
+     * Result of a scoring operation.
+     *
+     * @param correctCount number of correct answers
+     * @param percentage   score percentage 0.0-100.0
+     * @param passed       whether the passing threshold was met
+     * @param themeStats   per-theme breakdown
+     * @param diffStats    per-difficulty breakdown
+     */
+    public record ScoringResult(
+            int correctCount,
+            double percentage,
+            boolean passed,
+            List<ThemeStats> themeStats,
+            List<DifficultyStats> diffStats
+    ) {
     }
 }

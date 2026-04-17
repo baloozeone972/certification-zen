@@ -16,7 +16,7 @@ import org.json.JSONObject
 import android.util.Base64
 import javax.inject.Inject
 
-private val KEY_ACCESS  = stringPreferencesKey("access_token")
+private val KEY_ACCESS = stringPreferencesKey("access_token")
 private val KEY_REFRESH = stringPreferencesKey("refresh_token")
 
 /**
@@ -57,12 +57,14 @@ class AuthRepositoryImpl @Inject constructor(
             val payload = decodePayload(token)
             val exp = payload.optLong("exp", 0L)
             exp > System.currentTimeMillis() / 1000
-        } catch (e: Exception) { false }
+        } catch (e: Exception) {
+            false
+        }
     }
 
     private suspend fun saveTokens(access: String, refresh: String) {
         dataStore.edit { prefs ->
-            prefs[KEY_ACCESS]  = access
+            prefs[KEY_ACCESS] = access
             prefs[KEY_REFRESH] = refresh
         }
     }
@@ -70,17 +72,19 @@ class AuthRepositoryImpl @Inject constructor(
     private fun decodeUserFromToken(token: String): User? = try {
         val payload = decodePayload(token)
         User(
-            id               = payload.getString("sub"),
-            email            = payload.optString("email", ""),
-            role             = payload.optString("role", "USER"),
+            id = payload.getString("sub"),
+            email = payload.optString("email", ""),
+            role = payload.optString("role", "USER"),
             subscriptionTier = SubscriptionTier.valueOf(payload.optString("tier", "FREE")),
-            locale           = payload.optString("locale", "fr"),
-            timezone         = payload.optString("timezone", "Europe/Paris")
+            locale = payload.optString("locale", "fr"),
+            timezone = payload.optString("timezone", "Europe/Paris")
         )
-    } catch (e: Exception) { null }
+    } catch (e: Exception) {
+        null
+    }
 
     private fun decodePayload(token: String): JSONObject {
-        val parts   = token.split(".")
+        val parts = token.split(".")
         val decoded = Base64.decode(parts[1], Base64.URL_SAFE or Base64.NO_PADDING)
         return JSONObject(String(decoded))
     }

@@ -14,9 +14,10 @@ import java.util.UUID;
  * @param repetitions    updated repetition count
  */
 public record SM2ProgressDto(
-        UUID      flashcardId,
+        UUID flashcardId,
         LocalDate nextReviewDate,
-        int       intervalDays,
-        double    easeFactor,
-        int       repetitions
-) {}
+        int intervalDays,
+        double easeFactor,
+        int repetitions
+) {
+}

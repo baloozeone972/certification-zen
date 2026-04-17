@@ -25,7 +25,9 @@ public enum QuestionType {
      */
     MULTIPLE_CHOICE,
 
-    /** True or False question with exactly two options. */
+    /**
+     * True or False question with exactly two options.
+     */
     TRUE_FALSE;
 
     /**

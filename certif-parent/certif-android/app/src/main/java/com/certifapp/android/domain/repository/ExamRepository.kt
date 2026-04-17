@@ -7,8 +7,11 @@ import com.certifapp.android.domain.model.ExamMode
 /** Domain port for exam session operations. */
 interface ExamRepository {
     suspend fun startSession(certificationId: String, mode: ExamMode): ExamSession
-    suspend fun submitAnswer(sessionId: String, questionId: String,
-                             selectedOptionId: String?, responseTimeMs: Long)
+    suspend fun submitAnswer(
+        sessionId: String, questionId: String,
+        selectedOptionId: String?, responseTimeMs: Long
+    )
+
     suspend fun submitExam(sessionId: String): ExamSession
     suspend fun getResults(sessionId: String): ExamSession
 }

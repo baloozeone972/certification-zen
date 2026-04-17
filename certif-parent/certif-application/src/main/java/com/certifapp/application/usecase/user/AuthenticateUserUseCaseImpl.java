@@ -17,14 +17,16 @@ import java.util.function.BiFunction;
  */
 public class AuthenticateUserUseCaseImpl implements AuthenticateUserUseCase {
 
-    private final UserRepository              userRepository;
-    /** BCrypt matcher: (rawPassword, encodedHash) → matches. */
+    private final UserRepository userRepository;
+    /**
+     * BCrypt matcher: (rawPassword, encodedHash) → matches.
+     */
     private final BiFunction<String, String, Boolean> passwordMatcher;
 
     public AuthenticateUserUseCaseImpl(
-            UserRepository                    userRepository,
+            UserRepository userRepository,
             BiFunction<String, String, Boolean> passwordMatcher) {
-        this.userRepository  = userRepository;
+        this.userRepository = userRepository;
         this.passwordMatcher = passwordMatcher;
     }
 

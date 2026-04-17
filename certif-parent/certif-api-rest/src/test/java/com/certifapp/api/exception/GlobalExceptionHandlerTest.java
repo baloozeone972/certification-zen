@@ -1,21 +1,19 @@
-```java
 package com.certifapp.api.exception;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
 import com.certifapp.api.dto.response.ErrorResponse;
 import com.certifapp.domain.exception.*;
 import io.jsonwebtoken.JwtException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class GlobalExceptionHandlerTest {
@@ -216,4 +214,4 @@ public class GlobalExceptionHandlerTest {
         assertThat(response.getBody().getMessage()).isEqualTo("An unexpected error occurred");
     }
 }
-```
+

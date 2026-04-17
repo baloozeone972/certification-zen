@@ -36,7 +36,7 @@ fun ResultsScreen(
     ) { padding ->
         when (val state = uiState) {
             is ResultsUiState.Loading -> CenteredLoading()
-            is ResultsUiState.Error   -> Text(state.message, Modifier.padding(padding))
+            is ResultsUiState.Error -> Text(state.message, Modifier.padding(padding))
             is ResultsUiState.Success -> ResultsContent(state.session, Modifier.padding(padding))
         }
     }
@@ -44,23 +44,33 @@ fun ResultsScreen(
 
 @Composable
 private fun ResultsContent(session: ExamSession, modifier: Modifier = Modifier) {
-    LazyColumn(modifier = modifier.fillMaxSize(), contentPadding = PaddingValues(16.dp),
-               verticalArrangement = Arrangement.spacedBy(12.dp)) {
+    LazyColumn(
+        modifier = modifier.fillMaxSize(), contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
 
         item {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(16.dp)) {
                     ScoreIndicator(session.percentage, session.passed)
                     Spacer(Modifier.height(8.dp))
-                    Text("${session.correctCount} / ${session.totalQuestions} questions",
-                        fontWeight = FontWeight.Medium)
-                    Text(session.certificationId,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                    Text(
+                        "${session.correctCount} / ${session.totalQuestions} questions",
+                        fontWeight = FontWeight.Medium
+                    )
+                    Text(
+                        session.certificationId,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    )
                 }
             }
         }
 
-        item { Text("Résultats par thème", fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.padding(top = 8.dp)) }
+        item {
+            Text(
+                "Résultats par thème", fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        }
     }
 }

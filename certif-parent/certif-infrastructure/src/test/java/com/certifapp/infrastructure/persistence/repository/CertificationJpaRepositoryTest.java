@@ -1,24 +1,24 @@
-```java
 package com.certifapp.infrastructure.persistence.repository;
 
-import static org.mockito.Mockito.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class CertificationJpaRepositoryTest {
 
     @Mock
     private CertificationEntity mockCertificationEntity1;
-    
+
     @Mock
     private CertificationEntity mockCertificationEntity2;
 
@@ -29,7 +29,7 @@ public class CertificationJpaRepositoryTest {
     public void setUp() {
         when(mockCertificationEntity1.getName()).thenReturn("Cert1");
         when(mockCertificationEntity1.isActive()).thenReturn(true);
-        
+
         when(mockCertificationEntity2.getName()).thenReturn("Cert2");
         when(mockCertificationEntity2.isActive()).thenReturn(false);
     }
@@ -100,4 +100,4 @@ public class CertificationJpaRepositoryTest {
     }
 
 }
-```
+

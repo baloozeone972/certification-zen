@@ -9,7 +9,10 @@ import com.certifapp.infrastructure.persistence.repository.ExamSessionJpaReposit
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
-import java.time.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,12 +24,12 @@ import java.util.UUID;
 public class ExamSessionRepositoryAdapter implements ExamSessionRepository {
 
     private final ExamSessionJpaRepository jpaRepository;
-    private final ExamSessionMapper        mapper;
+    private final ExamSessionMapper mapper;
 
     public ExamSessionRepositoryAdapter(
             ExamSessionJpaRepository jpaRepository, ExamSessionMapper mapper) {
         this.jpaRepository = jpaRepository;
-        this.mapper        = mapper;
+        this.mapper = mapper;
     }
 
     @Override
@@ -47,12 +50,12 @@ public class ExamSessionRepositoryAdapter implements ExamSessionRepository {
                                           ExamMode mode, java.time.LocalDate from,
                                           java.time.LocalDate to, int page, int size) {
         OffsetDateTime fromDt = from != null ? from.atStartOfDay().atOffset(ZoneOffset.UTC) : null;
-        OffsetDateTime toDt   = to   != null ? to.atTime(LocalTime.MAX).atOffset(ZoneOffset.UTC) : null;
+        OffsetDateTime toDt = to != null ? to.atTime(LocalTime.MAX).atOffset(ZoneOffset.UTC) : null;
         String modeStr = mode != null ? mode.name() : null;
 
         return jpaRepository.findByUserIdWithFilters(
-                userId, certificationId, modeStr, fromDt, toDt,
-                PageRequest.of(page, size))
+                        userId, certificationId, modeStr, fromDt, toDt,
+                        PageRequest.of(page, size))
                 .map(mapper::toDomain)
                 .toList();
     }

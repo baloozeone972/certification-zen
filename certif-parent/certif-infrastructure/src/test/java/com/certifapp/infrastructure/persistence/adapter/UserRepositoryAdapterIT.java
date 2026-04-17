@@ -1,9 +1,11 @@
 // certif-parent/certif-infrastructure/src/test/java/com/certifapp/infrastructure/persistence/adapter/UserRepositoryAdapterIT.java
 package com.certifapp.infrastructure.persistence.adapter;
 
-import com.certifapp.domain.exception.DuplicateEmailException;
-import com.certifapp.domain.model.user.*;
-import org.junit.jupiter.api.*;
+import com.certifapp.domain.model.user.SubscriptionTier;
+import com.certifapp.domain.model.user.User;
+import com.certifapp.domain.model.user.UserRole;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
@@ -16,7 +18,7 @@ import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Integration test for {@link UserRepositoryAdapter} using Testcontainers PostgreSQL.
@@ -28,7 +30,7 @@ import static org.assertj.core.api.Assertions.*;
 @DataJpaTest
 @ActiveProfiles("test")
 @Import({UserRepositoryAdapter.class,
-         com.certifapp.infrastructure.persistence.mapper.UserMapperImpl.class})
+        com.certifapp.infrastructure.persistence.mapper.UserMapperImpl.class})
 @DisplayName("UserRepositoryAdapter — Integration Tests")
 class UserRepositoryAdapterIT {
 
@@ -42,6 +44,13 @@ class UserRepositoryAdapterIT {
     @Autowired
     private UserRepositoryAdapter userRepositoryAdapter;
 
+    private static User buildUser(String email) {
+        OffsetDateTime now = OffsetDateTime.now();
+        return new User(null, email, "$2b$12$test_hash",
+                UserRole.USER, SubscriptionTier.FREE,
+                "fr", "Europe/Paris", null, true, now, now);
+    }
+
     @Test
     @DisplayName("save() and findByEmail() — round trip")
     void saveAndFindByEmail_shouldRoundTrip() {
@@ -49,7 +58,7 @@ class UserRepositoryAdapterIT {
         User user = buildUser("test@example.com");
 
         // Act
-        User saved  = userRepositoryAdapter.save(user);
+        User saved = userRepositoryAdapter.save(user);
         Optional<User> found = userRepositoryAdapter.findByEmail("test@example.com");
 
         // Assert
@@ -79,20 +88,13 @@ class UserRepositoryAdapterIT {
         assertThat(userRepositoryAdapter.findById(UUID.randomUUID())).isEmpty();
     }
 
+    // ── Helpers ──────────────────────────────────────────────────────────────
+
     @Test
     @DisplayName("deleteById() removes the user")
     void deleteById_shouldRemoveUser() {
         User saved = userRepositoryAdapter.save(buildUser("delete@example.com"));
         userRepositoryAdapter.deleteById(saved.id());
         assertThat(userRepositoryAdapter.findById(saved.id())).isEmpty();
-    }
-
-    // ── Helpers ──────────────────────────────────────────────────────────────
-
-    private static User buildUser(String email) {
-        OffsetDateTime now = OffsetDateTime.now();
-        return new User(null, email, "$2b$12$test_hash",
-                UserRole.USER, SubscriptionTier.FREE,
-                "fr", "Europe/Paris", null, true, now, now);
     }
 }

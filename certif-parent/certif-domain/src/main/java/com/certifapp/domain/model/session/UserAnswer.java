@@ -24,13 +24,13 @@ import java.util.UUID;
  * @param answeredAt       server timestamp when the answer was recorded
  */
 public record UserAnswer(
-        UUID           id,
-        UUID           sessionId,
-        UUID           questionId,
-        UUID           selectedOptionId,
-        boolean        isCorrect,
-        boolean        isSkipped,
-        Long           responseTimeMs,
+        UUID id,
+        UUID sessionId,
+        UUID questionId,
+        UUID selectedOptionId,
+        boolean isCorrect,
+        boolean isSkipped,
+        Long responseTimeMs,
         OffsetDateTime answeredAt
 ) {
 
@@ -44,11 +44,11 @@ public record UserAnswer(
         }
         if (selectedOptionId != null && isSkipped) {
             throw new IllegalArgumentException(
-                "selectedOptionId must be null when isSkipped is true");
+                    "selectedOptionId must be null when isSkipped is true");
         }
         if (responseTimeMs != null && responseTimeMs < 0) {
             throw new IllegalArgumentException(
-                "responseTimeMs must be >= 0, got: " + responseTimeMs);
+                    "responseTimeMs must be >= 0, got: " + responseTimeMs);
         }
     }
 
@@ -75,7 +75,7 @@ public record UserAnswer(
     public static UserAnswer answered(
             UUID sessionId, UUID questionId, UUID selectedOptionId, long responseTimeMs) {
         return new UserAnswer(
-            null, sessionId, questionId, selectedOptionId,
-            false, false, responseTimeMs, OffsetDateTime.now());
+                null, sessionId, questionId, selectedOptionId,
+                false, false, responseTimeMs, OffsetDateTime.now());
     }
 }

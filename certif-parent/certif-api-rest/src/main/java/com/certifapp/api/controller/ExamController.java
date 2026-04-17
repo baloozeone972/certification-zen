@@ -1,17 +1,27 @@
 // certif-parent/certif-api-rest/src/main/java/com/certifapp/api/controller/ExamController.java
 package com.certifapp.api.controller;
 
-import com.certifapp.api.dto.request.*;
+import com.certifapp.api.dto.request.StartExamRequest;
+import com.certifapp.api.dto.request.SubmitAnswerRequest;
 import com.certifapp.api.dto.response.ApiResponse;
 import com.certifapp.api.security.CurrentUser;
-import com.certifapp.domain.model.session.*;
-import com.certifapp.domain.port.input.exam.*;
-import com.certifapp.domain.port.input.session.*;
+import com.certifapp.domain.model.session.ExamMode;
+import com.certifapp.domain.model.session.ExamSession;
+import com.certifapp.domain.model.session.UserAnswer;
+import com.certifapp.domain.port.input.exam.GetExamResultsUseCase;
+import com.certifapp.domain.port.input.exam.StartExamSessionUseCase;
+import com.certifapp.domain.port.input.exam.SubmitAnswerUseCase;
+import com.certifapp.domain.port.input.exam.SubmitExamUseCase;
+import com.certifapp.domain.port.input.session.ExportSessionPdfUseCase;
+import com.certifapp.domain.port.input.session.GetSessionHistoryUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.http.*;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,26 +38,26 @@ import java.util.UUID;
 @SecurityRequirement(name = "BearerAuth")
 public class ExamController {
 
-    private final StartExamSessionUseCase  startUseCase;
-    private final SubmitAnswerUseCase      submitAnswerUseCase;
-    private final SubmitExamUseCase        submitExamUseCase;
-    private final GetExamResultsUseCase    resultsUseCase;
+    private final StartExamSessionUseCase startUseCase;
+    private final SubmitAnswerUseCase submitAnswerUseCase;
+    private final SubmitExamUseCase submitExamUseCase;
+    private final GetExamResultsUseCase resultsUseCase;
     private final GetSessionHistoryUseCase historyUseCase;
-    private final ExportSessionPdfUseCase  pdfUseCase;
+    private final ExportSessionPdfUseCase pdfUseCase;
 
     public ExamController(
-            StartExamSessionUseCase  startUseCase,
-            SubmitAnswerUseCase      submitAnswerUseCase,
-            SubmitExamUseCase        submitExamUseCase,
-            GetExamResultsUseCase    resultsUseCase,
+            StartExamSessionUseCase startUseCase,
+            SubmitAnswerUseCase submitAnswerUseCase,
+            SubmitExamUseCase submitExamUseCase,
+            GetExamResultsUseCase resultsUseCase,
             GetSessionHistoryUseCase historyUseCase,
-            ExportSessionPdfUseCase  pdfUseCase) {
-        this.startUseCase        = startUseCase;
+            ExportSessionPdfUseCase pdfUseCase) {
+        this.startUseCase = startUseCase;
         this.submitAnswerUseCase = submitAnswerUseCase;
-        this.submitExamUseCase   = submitExamUseCase;
-        this.resultsUseCase      = resultsUseCase;
-        this.historyUseCase      = historyUseCase;
-        this.pdfUseCase          = pdfUseCase;
+        this.submitExamUseCase = submitExamUseCase;
+        this.resultsUseCase = resultsUseCase;
+        this.historyUseCase = historyUseCase;
+        this.pdfUseCase = pdfUseCase;
     }
 
     /**
@@ -134,7 +144,7 @@ public class ExamController {
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_PDF)
                 .header(HttpHeaders.CONTENT_DISPOSITION,
-                        "attachment; filename="certifapp_results_" + id + ".pdf"")
+                        "attachment; filename=" certifapp_results_" + id + ".pdf"")
                 .body(pdf);
     }
 

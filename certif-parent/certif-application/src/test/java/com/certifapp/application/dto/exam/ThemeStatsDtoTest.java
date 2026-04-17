@@ -1,15 +1,12 @@
-```java
 package com.certifapp.application.dto.exam;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
 public class ThemeStatsDtoTest {
 
@@ -25,7 +22,7 @@ public class ThemeStatsDtoTest {
     @DisplayName("Nominal case: Verify getters return expected values")
     public void testGetters_nominalCase() {
         ThemeStatsDto dto = new ThemeStatsDto("TC1", "Theme 1", 5, 3, 2, 10, 50.0);
-        
+
         assertThat(dto.themeCode()).isEqualTo("TC1");
         assertThat(dto.themeLabel()).isEqualTo("Theme 1");
         assertThat(dto.correct()).isEqualTo(5);
@@ -39,7 +36,7 @@ public class ThemeStatsDtoTest {
     @DisplayName("Edge case: Verify percentage is correctly calculated when total is zero")
     public void testGetters_edgeCaseTotalZero() {
         ThemeStatsDto dto = new ThemeStatsDto("TC2", "Theme 2", 0, 0, 0, 0, 0.0);
-        
+
         assertThat(dto.percentage()).isEqualTo(0.0);
     }
 
@@ -73,4 +70,4 @@ public class ThemeStatsDtoTest {
         }
     }
 }
-```
+

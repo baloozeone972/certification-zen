@@ -14,8 +14,8 @@ services:
     container_name: certifapp-db
     restart: unless-stopped
     environment:
-      POSTGRES_DB:       certifapp
-      POSTGRES_USER:     certifapp
+      POSTGRES_DB: certifapp
+      POSTGRES_USER: certifapp
       POSTGRES_PASSWORD: certifapp_dev_password
     ports:
       - "5432:5432"
@@ -23,7 +23,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./certif-infrastructure/src/main/resources/db/init:/docker-entrypoint-initdb.d:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U certifapp -d certifapp"]
+      test: [ "CMD-SHELL", "pg_isready -U certifapp -d certifapp" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -43,7 +43,7 @@ services:
     volumes:
       - redis_data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "-a", "certifapp_redis_dev", "ping"]
+      test: [ "CMD", "redis-cli", "-a", "certifapp_redis_dev", "ping" ]
       interval: 10s
       timeout: 3s
       retries: 5
@@ -75,7 +75,7 @@ services:
     #           count: 1
     #           capabilities: [gpu]
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:11434/api/version || exit 1"]
+      test: [ "CMD-SHELL", "curl -f http://localhost:11434/api/version || exit 1" ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -134,7 +134,7 @@ services:
     volumes:
       - app_logs:/app/logs
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1"]
+      test: [ "CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1" ]
       interval: 30s
       timeout: 10s
       retries: 5

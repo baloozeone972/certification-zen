@@ -1,17 +1,24 @@
 // certif-parent/certif-api-rest/src/main/java/com/certifapp/api/controller/AuthController.java
 package com.certifapp.api.controller;
 
-import com.certifapp.api.dto.request.*;
-import com.certifapp.api.dto.response.*;
+import com.certifapp.api.dto.request.LoginRequest;
+import com.certifapp.api.dto.request.RefreshTokenRequest;
+import com.certifapp.api.dto.request.RegisterRequest;
+import com.certifapp.api.dto.response.ApiResponse;
+import com.certifapp.api.dto.response.TokenResponse;
 import com.certifapp.api.security.JwtTokenProvider;
 import com.certifapp.domain.model.user.User;
-import com.certifapp.domain.port.input.user.*;
+import com.certifapp.domain.port.input.user.AuthenticateUserUseCase;
+import com.certifapp.domain.port.input.user.RegisterUserUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * REST controller for authentication endpoints.
@@ -23,17 +30,17 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Auth", description = "Registration, login and token refresh")
 public class AuthController {
 
-    private final RegisterUserUseCase     registerUseCase;
+    private final RegisterUserUseCase registerUseCase;
     private final AuthenticateUserUseCase authUseCase;
-    private final JwtTokenProvider        tokenProvider;
+    private final JwtTokenProvider tokenProvider;
 
     public AuthController(
-            RegisterUserUseCase     registerUseCase,
+            RegisterUserUseCase registerUseCase,
             AuthenticateUserUseCase authUseCase,
-            JwtTokenProvider        tokenProvider) {
+            JwtTokenProvider tokenProvider) {
         this.registerUseCase = registerUseCase;
-        this.authUseCase     = authUseCase;
-        this.tokenProvider   = tokenProvider;
+        this.authUseCase = authUseCase;
+        this.tokenProvider = tokenProvider;
     }
 
     /**
@@ -87,7 +94,7 @@ public class AuthController {
 
         var userId = tokenProvider.extractUserId(request.refreshToken());
         // Reissue — role re-read from claims if needed; simplified here
-        String access  = tokenProvider.generateAccessToken(userId, "USER");
+        String access = tokenProvider.generateAccessToken(userId, "USER");
         String refresh = tokenProvider.generateRefreshToken(userId);
         return ResponseEntity.ok(ApiResponse.ok(TokenResponse.of(access, refresh)));
     }
@@ -95,7 +102,7 @@ public class AuthController {
     // ── Helper ────────────────────────────────────────────────────────────────
 
     private TokenResponse issueTokens(User user) {
-        String access  = tokenProvider.generateAccessToken(user.id(), user.role().name());
+        String access = tokenProvider.generateAccessToken(user.id(), user.role().name());
         String refresh = tokenProvider.generateRefreshToken(user.id());
         return TokenResponse.of(access, refresh);
     }

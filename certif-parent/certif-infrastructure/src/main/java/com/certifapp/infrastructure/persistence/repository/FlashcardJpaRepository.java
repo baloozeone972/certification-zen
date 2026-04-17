@@ -22,18 +22,18 @@ public interface FlashcardJpaRepository extends JpaRepository<FlashcardEntity, U
      * Joins with SM-2 schedule to filter by due date.
      */
     @Query("""
-        SELECT f FROM FlashcardEntity f
-        JOIN SM2ScheduleEntity s ON s.questionId = f.id
-        WHERE s.userId = :userId
-        AND f.questionId IN (
-            SELECT q.id FROM QuestionEntity q WHERE q.certificationId = :certId
-        )
-        AND s.dueDate <= :today
-        ORDER BY s.dueDate ASC
-        """)
+            SELECT f FROM FlashcardEntity f
+            JOIN SM2ScheduleEntity s ON s.questionId = f.id
+            WHERE s.userId = :userId
+            AND f.questionId IN (
+                SELECT q.id FROM QuestionEntity q WHERE q.certificationId = :certId
+            )
+            AND s.dueDate <= :today
+            ORDER BY s.dueDate ASC
+            """)
     List<FlashcardEntity> findDueByUserAndCertification(
-            @Param("userId")  UUID userId,
-            @Param("certId")  String certId,
-            @Param("today")   LocalDate today,
+            @Param("userId") UUID userId,
+            @Param("certId") String certId,
+            @Param("today") LocalDate today,
             org.springframework.data.domain.Pageable pageable);
 }

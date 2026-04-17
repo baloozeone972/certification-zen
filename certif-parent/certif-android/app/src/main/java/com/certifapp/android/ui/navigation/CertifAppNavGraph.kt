@@ -17,22 +17,26 @@ import com.certifapp.android.ui.screen.results.ResultsScreen
 
 /** Sealed class for type-safe navigation routes. */
 sealed class Screen(val route: String) {
-    object Home          : Screen("home")
-    object Login         : Screen("auth/login")
-    object Register      : Screen("auth/register")
-    object ExamSetup     : Screen("exam/setup/{certId}") {
+    object Home : Screen("home")
+    object Login : Screen("auth/login")
+    object Register : Screen("auth/register")
+    object ExamSetup : Screen("exam/setup/{certId}") {
         fun createRoute(certId: String) = "exam/setup/$certId"
     }
-    object ExamEngine    : Screen("exam/session/{sessionId}") {
+
+    object ExamEngine : Screen("exam/session/{sessionId}") {
         fun createRoute(sessionId: String) = "exam/session/$sessionId"
     }
-    object Results       : Screen("results/{sessionId}") {
+
+    object Results : Screen("results/{sessionId}") {
         fun createRoute(sessionId: String) = "results/$sessionId"
     }
+
     object FlashcardDeck : Screen("learning/flashcards/{certId}") {
         fun createRoute(certId: String) = "learning/flashcards/$certId"
     }
-    object Profile       : Screen("profile")
+
+    object Profile : Screen("profile")
 }
 
 /**
@@ -47,15 +51,15 @@ fun CertifAppNavGraph() {
 
         composable(Screen.Home.route) {
             HomeScreen(
-                onNavigateToExamSetup  = { certId -> navController.navigate(Screen.ExamSetup.createRoute(certId)) },
-                onNavigateToLogin      = { navController.navigate(Screen.Login.route) },
-                onNavigateToProfile    = { navController.navigate(Screen.Profile.route) }
+                onNavigateToExamSetup = { certId -> navController.navigate(Screen.ExamSetup.createRoute(certId)) },
+                onNavigateToLogin = { navController.navigate(Screen.Login.route) },
+                onNavigateToProfile = { navController.navigate(Screen.Profile.route) }
             )
         }
 
         composable(Screen.Login.route) {
             LoginScreen(
-                onLoginSuccess  = { navController.navigate(Screen.Home.route) { popUpTo(0) } },
+                onLoginSuccess = { navController.navigate(Screen.Home.route) { popUpTo(0) } },
                 onNavigateToRegister = { navController.navigate(Screen.Register.route) }
             )
         }
@@ -84,7 +88,13 @@ fun CertifAppNavGraph() {
         ) { back ->
             ExamEngineScreen(
                 sessionId = back.arguments?.getString("sessionId") ?: "",
-                onExamFinished = { sessionId -> navController.navigate(Screen.Results.createRoute(sessionId)) { popUpTo(Screen.Home.route) } }
+                onExamFinished = { sessionId ->
+                    navController.navigate(Screen.Results.createRoute(sessionId)) {
+                        popUpTo(
+                            Screen.Home.route
+                        )
+                    }
+                }
             )
         }
 

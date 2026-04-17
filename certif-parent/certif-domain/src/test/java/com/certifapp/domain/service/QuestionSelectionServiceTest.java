@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.service;
 
 import com.certifapp.domain.model.question.Question;
@@ -8,11 +7,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.*;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
-import java.util.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class QuestionSelectionServiceTest {
@@ -95,4 +96,4 @@ public class QuestionSelectionServiceTest {
         assertThat(result).isEqualTo(allQuestions);
     }
 }
-```
+

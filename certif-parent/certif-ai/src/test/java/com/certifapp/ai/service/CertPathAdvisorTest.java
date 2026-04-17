@@ -1,8 +1,5 @@
-```java
 package com.certifapp.ai.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,9 +31,9 @@ public class CertPathAdvisorTest {
 
     @BeforeEach
     public void setUp() {
-        when(lightModel.generate(anyString())).thenReturn("```json\n" +
+        when(lightModel.generate(anyString())).thenReturn("json\n" +
                 "{\"steps\":[\"Cert1\",\"Cert2\"], \"aiRationale\":\"Reasons here\"}\n" +
-                "```");
+                "");
         when(promptRenderer.render(anyString(), anyMap())).thenReturn("{\"renderedPrompt\":\"prompt\"}");
     }
 
@@ -146,4 +143,4 @@ public class CertPathAdvisorTest {
         verify(lightModel).generate(anyString());
     }
 }
-```
+

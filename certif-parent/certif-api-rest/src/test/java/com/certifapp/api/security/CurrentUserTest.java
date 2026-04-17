@@ -1,4 +1,3 @@
-```java
 package com.certifapp.api.security;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -7,16 +6,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class CurrentUserTest {
@@ -78,4 +76,4 @@ public class CurrentUserTest {
         assertThrows(IllegalStateException.class, () -> currentUser.id());
     }
 }
-```
+

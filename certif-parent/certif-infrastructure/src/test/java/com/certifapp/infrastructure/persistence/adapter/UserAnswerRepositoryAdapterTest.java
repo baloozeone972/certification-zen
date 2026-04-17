@@ -1,8 +1,6 @@
-```java
 package com.certifapp.infrastructure.persistence.adapter;
 
 import com.certifapp.domain.model.session.UserAnswer;
-import com.certifapp.domain.port.output.UserAnswerRepository;
 import com.certifapp.infrastructure.persistence.entity.ExamSessionEntity;
 import com.certifapp.infrastructure.persistence.mapper.ExamSessionMapper;
 import com.certifapp.infrastructure.persistence.repository.UserAnswerJpaRepository;
@@ -13,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.UUID;
@@ -28,20 +26,17 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class UserAnswerRepositoryAdapterTest {
 
-    @Mock
-    private UserAnswerJpaRepository jpaRepository;
-
-    @Mock
-    private ExamSessionMapper mapper;
-
-    @InjectMocks
-    private UserAnswerRepositoryAdapter userAnswerRepositoryAdapter;
-
     private final UUID sessionId = UUID.randomUUID();
     private final UserAnswer userAnswer1 = new UserAnswer(sessionId, 1, "optionA");
     private final UserAnswer userAnswer2 = new UserAnswer(sessionId, 2, "optionB");
     private final ExamSessionEntity examSessionEntity1 = new ExamSessionEntity(sessionId, null);
     private final ExamSessionEntity examSessionEntity2 = new ExamSessionEntity(sessionId, null);
+    @Mock
+    private UserAnswerJpaRepository jpaRepository;
+    @Mock
+    private ExamSessionMapper mapper;
+    @InjectMocks
+    private UserAnswerRepositoryAdapter userAnswerRepositoryAdapter;
 
     @BeforeEach
     public void setUp() {
@@ -104,4 +99,4 @@ public class UserAnswerRepositoryAdapterTest {
         verify(jpaRepository, never()).findBySessionIdOrderByAnsweredAt(any(UUID.class));
     }
 }
-```
+

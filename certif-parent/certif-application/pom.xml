@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- certif-parent/certif-application/pom.xml -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
          https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>com.certifapp</groupId>
-    <artifactId>certif-parent</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
-  </parent>
+    <parent>
+        <groupId>com.certifapp</groupId>
+        <artifactId>certif-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
 
-  <artifactId>certif-application</artifactId>
-  <name>certif-application</name>
-  <description>
-    Application module — use case implementations and DTOs.
-    No Spring annotations allowed here; BCrypt injected via Function interfaces.
-  </description>
+    <artifactId>certif-application</artifactId>
+    <name>certif-application</name>
+    <description>
+        Application module — use case implementations and DTOs.
+        No Spring annotations allowed here; BCrypt injected via Function interfaces.
+    </description>
 
-  <dependencies>
-    <!-- Domain module -->
-    <dependency>
-      <groupId>com.certifapp</groupId>
-      <artifactId>certif-domain</artifactId>
-      <version>${project.version}</version>
-    </dependency>
+    <dependencies>
+        <!-- Domain module -->
+        <dependency>
+            <groupId>com.certifapp</groupId>
+            <artifactId>certif-domain</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
-    <!-- Jackson for DTO serialization helpers (no Spring context) -->
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-    </dependency>
+        <!-- Jackson for DTO serialization helpers (no Spring context) -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
 
-    <!-- Test -->
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.assertj</groupId>
-      <artifactId>assertj-core</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-junit-jupiter</artifactId>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+        <!-- Test -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>

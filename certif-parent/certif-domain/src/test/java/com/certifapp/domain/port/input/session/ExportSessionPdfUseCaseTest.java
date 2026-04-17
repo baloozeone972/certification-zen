@@ -1,11 +1,4 @@
-```java
 package com.certifapp.domain.port.input.session;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
-import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,6 +7,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ExportSessionPdfUseCaseTest {
@@ -54,7 +53,7 @@ public class ExportSessionPdfUseCaseTest {
         Exception exception = catchThrowable(() -> exportSessionPdfUseCase.execute(sessionId, userId));
 
         assertThat(exception).isInstanceOf(ExamSessionNotFoundException.class)
-                            .hasMessage("Exam session not found");
+                .hasMessage("Exam session not found");
         verify(sessionRepository, times(1)).findById(sessionId);
     }
 
@@ -69,8 +68,8 @@ public class ExportSessionPdfUseCaseTest {
         Exception exception = catchThrowable(() -> exportSessionPdfUseCase.execute(sessionId, userId));
 
         assertThat(exception).isInstanceOf(SubscriptionRequiredException.class)
-                            .hasMessage("Subscription required");
+                .hasMessage("Subscription required");
         verify(sessionRepository, times(1)).findById(sessionId);
     }
 }
-```
+

@@ -48,11 +48,11 @@ fun HomeScreen(
     ) { padding ->
         when (val state = uiState) {
             is HomeUiState.Loading -> CenteredLoading()
-            is HomeUiState.Error   -> ErrorState(state.message) { viewModel.loadCertifications() }
+            is HomeUiState.Error -> ErrorState(state.message) { viewModel.loadCertifications() }
             is HomeUiState.Success -> CertificationList(
                 certifications = state.certifications,
-                onCertClick    = onNavigateToExamSetup,
-                modifier       = Modifier.padding(padding)
+                onCertClick = onNavigateToExamSetup,
+                modifier = Modifier.padding(padding)
             )
         }
     }
@@ -65,13 +65,15 @@ private fun CertificationList(
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
-        modifier            = modifier.fillMaxSize(),
-        contentPadding      = PaddingValues(16.dp),
+        modifier = modifier.fillMaxSize(),
+        contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         item {
-            Text("Certifications disponibles", fontSize = 20.sp, fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 4.dp))
+            Text(
+                "Certifications disponibles", fontSize = 20.sp, fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 4.dp)
+            )
         }
         items(certifications) { cert ->
             CertificationCard(cert = cert, onClick = { onCertClick(cert.id) })
@@ -82,14 +84,16 @@ private fun CertificationList(
 @Composable
 private fun CertificationCard(cert: Certification, onClick: () -> Unit) {
     Card(
-        modifier  = Modifier.fillMaxWidth().clickable(onClick = onClick),
+        modifier = Modifier.fillMaxWidth().clickable(onClick = onClick),
         elevation = CardDefaults.cardElevation(2.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = cert.name, fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
-            Text(text = cert.code, fontSize = 13.sp,
+            Text(
+                text = cert.code, fontSize = 13.sp,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-                modifier = Modifier.padding(top = 2.dp, bottom = 8.dp))
+                modifier = Modifier.padding(top = 2.dp, bottom = 8.dp)
+            )
             Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 InfoChip("${cert.totalQuestions} questions")
                 InfoChip("${cert.passingScore}% requis")

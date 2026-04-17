@@ -54,7 +54,10 @@ public enum ExamMode {
      * @return {@code true} for {@code EXAM} (always) and {@code FREE} (when duration &gt; 0)
      */
     public boolean supportsTimer() {
-        return this == EXAM || this == FREE;
+        return switch (this) {
+            case COMPLETED, EXPIRED -> true;
+            case IN_PROGRESS, ABANDONED -> false;
+        };
     }
 
     /**

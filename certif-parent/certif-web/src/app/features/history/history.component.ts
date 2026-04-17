@@ -1,17 +1,17 @@
 // certif-parent/certif-web/src/app/features/history/history.component.ts
-import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from "@angular/core";
-import { RouterLink } from "@angular/router";
-import { CommonModule, DecimalPipe } from "@angular/common";
-import { ExamService } from "../../core/services/exam.service";
-import { ExamSessionSummary } from "../../core/models/exam.models";
-import { DurationPipe } from "../../shared/pipes/duration.pipe";
+import {ChangeDetectionStrategy, Component, inject, OnInit, signal} from "@angular/core";
+import {RouterLink} from "@angular/router";
+import {CommonModule, DecimalPipe} from "@angular/common";
+import {ExamService} from "../../core/services/exam.service";
+import {ExamSessionSummary} from "../../core/models/exam.models";
+import {DurationPipe} from "../../shared/pipes/duration.pipe";
 
 @Component({
-  selector: "app-history",
-  standalone: true,
-  imports: [CommonModule, RouterLink, DurationPipe, DecimalPipe],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    selector: "app-history",
+    standalone: true,
+    imports: [CommonModule, RouterLink, DurationPipe, DecimalPipe],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <div class="history container">
       <h1>Historique des examens</h1>
       @if (sessions().length === 0) {
@@ -42,7 +42,7 @@ import { DurationPipe } from "../../shared/pipes/duration.pipe";
       }
     </div>
   `,
-  styles: [`
+    styles: [`
     .history { padding: 2rem 1rem; max-width: 900px; }
     .history h1 { font-size: 1.75rem; margin-bottom: 1.5rem; }
     .history__list { display: flex; flex-direction: column; gap: 1rem; }
@@ -54,10 +54,10 @@ import { DurationPipe } from "../../shared/pipes/duration.pipe";
   `]
 })
 export class HistoryComponent implements OnInit {
-  private readonly examService = inject(ExamService);
-  readonly sessions = signal<ExamSessionSummary[]>([]);
+    readonly sessions = signal<ExamSessionSummary[]>([]);
+    private readonly examService = inject(ExamService);
 
-  ngOnInit(): void {
-    this.examService.getHistory().subscribe(s => this.sessions.set(s));
-  }
+    ngOnInit(): void {
+        this.examService.getHistory().subscribe(s => this.sessions.set(s));
+    }
 }

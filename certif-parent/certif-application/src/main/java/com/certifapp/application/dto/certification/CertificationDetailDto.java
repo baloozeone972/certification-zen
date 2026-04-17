@@ -18,14 +18,15 @@ import java.util.List;
  * @param themes            ordered list of themes
  */
 public record CertificationDetailDto(
-        String                  id,
-        String                  code,
-        String                  name,
-        String                  description,
-        int                     totalQuestions,
-        int                     examQuestionCount,
-        int                     passingScore,
-        int                     examDurationMin,
-        String                  examType,
+        String id,
+        String code,
+        String name,
+        String description,
+        int totalQuestions,
+        int examQuestionCount,
+        int passingScore,
+        int examDurationMin,
+        String examType,
         List<CertificationThemeDto> themes
-) {}
+) {
+}

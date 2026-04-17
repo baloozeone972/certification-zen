@@ -1,16 +1,16 @@
 // certif-parent/certif-web/src/app/features/auth/register.component.ts
-import { Component, inject, signal, ChangeDetectionStrategy } from "@angular/core";
-import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
-import { Router, RouterLink } from "@angular/router";
-import { CommonModule } from "@angular/common";
-import { AuthService } from "../../core/auth/auth.service";
+import {ChangeDetectionStrategy, Component, inject, signal} from "@angular/core";
+import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
+import {Router, RouterLink} from "@angular/router";
+import {CommonModule} from "@angular/common";
+import {AuthService} from "../../core/auth/auth.service";
 
 @Component({
-  selector: "app-register",
-  standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, CommonModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    selector: "app-register",
+    standalone: true,
+    imports: [ReactiveFormsModule, RouterLink, CommonModule],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <div class="auth-page">
       <div class="auth-card card">
         <h1>Créer un compte</h1>
@@ -36,7 +36,7 @@ import { AuthService } from "../../core/auth/auth.service";
       </div>
     </div>
   `,
-  styles: [`
+    styles: [`
     .auth-page { display: flex; justify-content: center; align-items: center;
                   min-height: calc(100vh - 60px); padding: 2rem; }
     .auth-card { width: 100%; max-width: 420px; }
@@ -54,30 +54,28 @@ import { AuthService } from "../../core/auth/auth.service";
   `]
 })
 export class RegisterComponent {
-  private readonly auth   = inject(AuthService);
-  private readonly router = inject(Router);
-  private readonly fb     = inject(FormBuilder);
-
-  readonly loading = signal(false);
-  readonly error   = signal<string | null>(null);
-
-  readonly form = this.fb.group({
-    email:    ["", [Validators.required, Validators.email]],
-    password: ["", [Validators.required, Validators.minLength(8)]]
-  });
-
-  submit(): void {
-    if (this.form.invalid) return;
-    this.loading.set(true);
-    this.error.set(null);
-    const { email, password } = this.form.value;
-
-    this.auth.register(email!, password!).subscribe({
-      next: () => this.router.navigate(["/"]),
-      error: (err) => {
-        this.error.set(err?.error?.message ?? "Une erreur est survenue.");
-        this.loading.set(false);
-      }
+    readonly loading = signal(false);
+    readonly error = signal<string | null>(null);
+    private readonly auth = inject(AuthService);
+    private readonly router = inject(Router);
+    private readonly fb = inject(FormBuilder);
+    readonly form = this.fb.group({
+        email: ["", [Validators.required, Validators.email]],
+        password: ["", [Validators.required, Validators.minLength(8)]]
     });
-  }
+
+    submit(): void {
+        if (this.form.invalid) return;
+        this.loading.set(true);
+        this.error.set(null);
+        const {email, password} = this.form.value;
+
+        this.auth.register(email!, password!).subscribe({
+            next: () => this.router.navigate(["/"]),
+            error: (err) => {
+                this.error.set(err?.error?.message ?? "Une erreur est survenue.");
+                this.loading.set(false);
+            }
+        });
+    }
 }

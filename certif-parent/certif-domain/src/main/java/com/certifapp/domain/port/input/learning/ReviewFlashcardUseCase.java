@@ -2,12 +2,19 @@
 package com.certifapp.domain.port.input.learning;
 
 import com.certifapp.domain.model.learning.SM2Schedule;
+
 import java.util.UUID;
 
 /**
  * Use case: record the result of a flashcard review and update the SM-2 schedule.
  */
 public interface ReviewFlashcardUseCase {
+
+    /**
+     * @param command review data
+     * @return the updated {@link SM2Schedule} with new due date
+     */
+    SM2Schedule execute(ReviewFlashcardCommand command);
 
     /**
      * SM-2 review command.
@@ -24,10 +31,4 @@ public interface ReviewFlashcardUseCase {
                 throw new IllegalArgumentException("SM-2 rating must be 0-5, got: " + rating);
         }
     }
-
-    /**
-     * @param command review data
-     * @return the updated {@link SM2Schedule} with new due date
-     */
-    SM2Schedule execute(ReviewFlashcardCommand command);
 }

@@ -9,7 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * AI service recommending personalized certification learning paths.
@@ -23,16 +25,16 @@ public class CertPathAdvisor {
     private static final Logger log = LoggerFactory.getLogger(CertPathAdvisor.class);
 
     private final ChatLanguageModel lightModel;
-    private final PromptRenderer    promptRenderer;
-    private final ObjectMapper      objectMapper;
+    private final PromptRenderer promptRenderer;
+    private final ObjectMapper objectMapper;
 
     public CertPathAdvisor(
             @Qualifier("lightModel") ChatLanguageModel lightModel,
             PromptRenderer promptRenderer,
             ObjectMapper objectMapper) {
-        this.lightModel    = lightModel;
+        this.lightModel = lightModel;
         this.promptRenderer = promptRenderer;
-        this.objectMapper  = objectMapper;
+        this.objectMapper = objectMapper;
     }
 
     /**
@@ -57,17 +59,18 @@ public class CertPathAdvisor {
                 .toList();
 
         Map<String, Object> vars = new HashMap<>();
-        vars.put("roleType",        roleType != null ? roleType : "Software Developer");
-        vars.put("projectGoal",     projectGoal != null ? projectGoal : "Improve technical skills");
-        vars.put("skillMap",        skillList);
-        vars.put("certifications",  certifications);
+        vars.put("roleType", roleType != null ? roleType : "Software Developer");
+        vars.put("projectGoal", projectGoal != null ? projectGoal : "Improve technical skills");
+        vars.put("skillMap", skillList);
+        vars.put("certifications", certifications);
 
         String prompt = promptRenderer.render("cert_path_advisor", vars);
 
         try {
             String response = lightModel.generate(prompt);
-            String json = response.replaceAll("```json\s*|```", "").trim();
-            return objectMapper.readValue(json, new TypeReference<>() {});
+            String json = response.replaceAll("json\s*|", "").trim();
+            return objectMapper.readValue(json, new TypeReference<>() {
+            });
         } catch (Exception e) {
             log.error("Failed to generate cert path: {}", e.getMessage());
             return Map.of("steps", List.of(), "aiRationale", "");

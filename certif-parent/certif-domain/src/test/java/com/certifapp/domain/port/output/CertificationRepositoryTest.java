@@ -1,34 +1,27 @@
-```java
 package com.certifapp.domain.port.output;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import com.certifapp.domain.model.certification.Certification;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import com.certifapp.domain.model.certification.Certification;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoExtension;
-
-@ExtendWith(MockitoExtension.class)
 public class CertificationRepositoryTest {
-
-    @Mock
-    private CertificationRepository certificationRepository;
-
-    @InjectMocks
-    private CertificationService certificationService;
 
     private static final String CERT_ID = "12345";
     private static final Certification SAMPLE_CERTIFICATION = new Certification(CERT_ID, "Java Developer");
+    @Mock
+    private CertificationRepository certificationRepository;
+    @InjectMocks
+    private CertificationService certificationService;
 
     @BeforeEach
     public void setUp() {
@@ -101,8 +94,8 @@ public class CertificationRepositoryTest {
         String nullId = null;
 
         assertThatExceptionOfType(IllegalArgumentException.class)
-            .isThrownBy(() -> certificationService.findById(nullId))
-            .withMessage("Invalid id: null");
+                .isThrownBy(() -> certificationService.findById(nullId))
+                .withMessage("Invalid id: null");
 
         verify(certificationRepository, never()).findById(anyString());
     }
@@ -113,12 +106,9 @@ public class CertificationRepositoryTest {
         Certification nullCertification = null;
 
         assertThatExceptionOfType(IllegalArgumentException.class)
-            .isThrownBy(() -> certificationService.save(nullCertification))
-            .withMessage("Invalid certification: null");
+                .isThrownBy(() -> certificationService.save(nullCertification))
+                .withMessage("Invalid certification: null");
 
         verify(certificationRepository, never()).save(any(Certification.class));
     }
 }
-```
-
-Please note that `CertificationService` is assumed to be using the `certificationRepository` for persistence operations. Make sure that it's implemented correctly and included in your test classpath if you are running these tests successfully.

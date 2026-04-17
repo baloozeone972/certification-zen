@@ -1,12 +1,4 @@
-```java
 package com.certifapp.domain.port.output;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
-import java.util.Optional;
-import java.util.UUID;
 
 import com.certifapp.domain.model.learning.SM2Schedule;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +7,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class SM2ScheduleRepositoryTest {
@@ -24,7 +23,7 @@ public class SM2ScheduleRepositoryTest {
     private SM2ScheduleRepository repository;
 
     @InjectMocks
-    private SM2ScheduleRepositoryImpl sm2ScheduleRepositoryImpl;
+    private SM2ScheduleRepository sm2ScheduleRepositoryImpl;
 
     private UUID userId;
     private UUID questionId;
@@ -81,4 +80,4 @@ public class SM2ScheduleRepositoryTest {
         verify(repository, never()).save(any(SM2Schedule.class));
     }
 }
-```
+

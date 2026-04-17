@@ -1,17 +1,17 @@
 // certif-parent/certif-web/src/app/shared/components/score-widget/score-widget.component.ts
-import { Component, Input, computed, signal, ChangeDetectionStrategy } from "@angular/core";
-import { CommonModule } from "@angular/common";
+import {ChangeDetectionStrategy, Component, computed, Input} from "@angular/core";
+import {CommonModule} from "@angular/common";
 
 /**
  * Circular score display widget.
  * Shows percentage with a color-coded ring: green (pass), red (fail).
  */
 @Component({
-  selector: "app-score-widget",
-  standalone: true,
-  imports: [CommonModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    selector: "app-score-widget",
+    standalone: true,
+    imports: [CommonModule],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <div class="score-widget" [class.score-widget--passed]="passed()" [class.score-widget--failed]="!passed()">
       <svg viewBox="0 0 120 120" class="score-widget__ring">
         <circle cx="60" cy="60" r="50" fill="none" stroke="#e9ecef" stroke-width="10"/>
@@ -29,7 +29,7 @@ import { CommonModule } from "@angular/common";
       </div>
     </div>
   `,
-  styles: [`
+    styles: [`
     .score-widget { position: relative; width: 160px; height: 160px; }
     .score-widget__ring { width: 100%; height: 100%; }
     .score-widget__content {
@@ -46,10 +46,10 @@ import { CommonModule } from "@angular/common";
   `]
 })
 export class ScoreWidgetComponent {
-  @Input({ required: true }) percentage = 0;
-  @Input() passingScore = 68;
+    @Input({required: true}) percentage = 0;
+    @Input() passingScore = 68;
 
-  readonly passed    = computed(() => this.percentage >= this.passingScore);
-  readonly ringColor = computed(() => this.passed() ? "#27ae60" : "#e74c3c");
-  readonly dashOffset = computed(() => 314 - (314 * this.percentage / 100));
+    readonly passed = computed(() => this.percentage >= this.passingScore);
+    readonly ringColor = computed(() => this.passed() ? "#27ae60" : "#e74c3c");
+    readonly dashOffset = computed(() => 314 - (314 * this.percentage / 100));
 }

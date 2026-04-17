@@ -55,23 +55,23 @@ public class SM2AlgorithmService {
         }
 
         double newEaseFactor;
-        int    newInterval;
-        int    newRepetitions;
+        int newInterval;
+        int newRepetitions;
 
         if (quality >= 3) {
             // Correct answer
             newInterval = switch (current.repetitions()) {
-                case 0  -> 1;
-                case 1  -> 6;
+                case 0 -> 1;
+                case 1 -> 6;
                 default -> (int) Math.round(current.intervalDays() * current.easeFactor());
             };
             newRepetitions = current.repetitions() + 1;
-            newEaseFactor  = computeNewEaseFactor(current.easeFactor(), quality);
+            newEaseFactor = computeNewEaseFactor(current.easeFactor(), quality);
         } else {
             // Incorrect — reset to beginning
-            newInterval    = 1;
+            newInterval = 1;
             newRepetitions = 0;
-            newEaseFactor  = current.easeFactor(); // EF unchanged on failure per SM-2 spec
+            newEaseFactor = current.easeFactor(); // EF unchanged on failure per SM-2 spec
         }
 
         LocalDate newDueDate = LocalDate.now().plusDays(newInterval);

@@ -1,8 +1,4 @@
-```java
 package com.certifapp.domain.port.input.user;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
 import com.certifapp.domain.exception.InvalidCredentialsException;
 import com.certifapp.domain.model.user.User;
@@ -12,7 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthenticateUserUseCaseTest {
@@ -71,4 +71,4 @@ public class AuthenticateUserUseCaseTest {
                 .hasMessage("Invalid credentials");
     }
 }
-```
+

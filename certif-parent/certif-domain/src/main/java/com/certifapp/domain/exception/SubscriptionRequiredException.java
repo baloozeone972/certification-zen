@@ -7,9 +7,13 @@ package com.certifapp.domain.exception;
 public class SubscriptionRequiredException extends CertifAppException {
 
     private final String featureName;
+
     public SubscriptionRequiredException(String featureName) {
         super("Feature \"" + featureName + "\" requires a PRO subscription");
         this.featureName = featureName;
     }
-    public String getFeatureName() { return featureName; }
+
+    public String getFeatureName() {
+        return featureName;
+    }
 }

@@ -6,9 +6,14 @@ import com.certifapp.domain.exception.ExamAlreadyCompletedException;
 import com.certifapp.domain.exception.ExamSessionNotFoundException;
 import com.certifapp.domain.model.certification.Certification;
 import com.certifapp.domain.model.question.Question;
-import com.certifapp.domain.model.session.*;
+import com.certifapp.domain.model.session.ExamSession;
+import com.certifapp.domain.model.session.SessionStatus;
+import com.certifapp.domain.model.session.UserAnswer;
 import com.certifapp.domain.port.input.exam.SubmitExamUseCase;
-import com.certifapp.domain.port.output.*;
+import com.certifapp.domain.port.output.CertificationRepository;
+import com.certifapp.domain.port.output.ExamSessionRepository;
+import com.certifapp.domain.port.output.QuestionRepository;
+import com.certifapp.domain.port.output.UserAnswerRepository;
 import com.certifapp.domain.service.ScoringService;
 
 import java.time.OffsetDateTime;
@@ -26,23 +31,23 @@ import java.util.stream.Collectors;
  */
 public class SubmitExamUseCaseImpl implements SubmitExamUseCase {
 
-    private final ExamSessionRepository  sessionRepository;
-    private final UserAnswerRepository   answerRepository;
-    private final QuestionRepository     questionRepository;
+    private final ExamSessionRepository sessionRepository;
+    private final UserAnswerRepository answerRepository;
+    private final QuestionRepository questionRepository;
     private final CertificationRepository certificationRepository;
-    private final ScoringService         scoringService;
+    private final ScoringService scoringService;
 
     public SubmitExamUseCaseImpl(
-            ExamSessionRepository   sessionRepository,
-            UserAnswerRepository    answerRepository,
-            QuestionRepository      questionRepository,
+            ExamSessionRepository sessionRepository,
+            UserAnswerRepository answerRepository,
+            QuestionRepository questionRepository,
             CertificationRepository certificationRepository,
-            ScoringService          scoringService) {
-        this.sessionRepository      = sessionRepository;
-        this.answerRepository       = answerRepository;
-        this.questionRepository     = questionRepository;
+            ScoringService scoringService) {
+        this.sessionRepository = sessionRepository;
+        this.answerRepository = answerRepository;
+        this.questionRepository = questionRepository;
         this.certificationRepository = certificationRepository;
-        this.scoringService         = scoringService;
+        this.scoringService = scoringService;
     }
 
     @Override

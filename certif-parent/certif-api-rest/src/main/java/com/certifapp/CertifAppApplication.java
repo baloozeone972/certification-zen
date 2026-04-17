@@ -15,10 +15,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * <p>Entity scanning is explicit to cover the multi-module Maven structure.</p>
  */
 @SpringBootApplication(scanBasePackages = {
-    "com.certifapp.api",
-    "com.certifapp.application",
-    "com.certifapp.infrastructure",
-    "com.certifapp.ai"
+        "com.certifapp.api",
+        "com.certifapp.application",
+        "com.certifapp.infrastructure",
+        "com.certifapp.ai"
 })
 @EntityScan("com.certifapp.infrastructure.persistence.entity")
 @EnableScheduling

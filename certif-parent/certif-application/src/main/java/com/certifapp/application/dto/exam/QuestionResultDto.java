@@ -22,16 +22,17 @@ import java.util.UUID;
  * @param difficulty          question difficulty
  */
 public record QuestionResultDto(
-        UUID                 id,
-        String               statement,
+        UUID id,
+        String statement,
         List<QuestionOptionDto> options,
-        UUID                 correctOptionId,
-        UUID                 selectedOptionId,
-        boolean              isCorrect,
-        boolean              isSkipped,
-        String               explanationOriginal,
-        String               explanationEnriched,
-        String               officialDocUrl,
-        String               themeCode,
-        String               difficulty
-) {}
+        UUID correctOptionId,
+        UUID selectedOptionId,
+        boolean isCorrect,
+        boolean isSkipped,
+        String explanationOriginal,
+        String explanationEnriched,
+        String officialDocUrl,
+        String themeCode,
+        String difficulty
+) {
+}

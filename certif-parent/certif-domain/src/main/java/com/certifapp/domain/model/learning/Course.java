@@ -11,26 +11,26 @@ import java.util.UUID;
  * then reviewed by human admins before publication.
  * Maps to the {@code courses} table in PostgreSQL.</p>
  *
- * @param id               surrogate UUID
- * @param certificationId  parent certification slug
- * @param themeId          parent theme UUID
- * @param title            display title
- * @param contentMarkdown  editable Markdown source — authoritative content
- * @param contentHtml      pre-rendered HTML for performance
- * @param aiStatus         DRAFT | AI_GENERATED | HUMAN_REVIEWED | PUBLISHED
- * @param version          incremented on each significant revision
- * @param createdAt        creation timestamp
- * @param updatedAt        last modification timestamp
+ * @param id              surrogate UUID
+ * @param certificationId parent certification slug
+ * @param themeId         parent theme UUID
+ * @param title           display title
+ * @param contentMarkdown editable Markdown source — authoritative content
+ * @param contentHtml     pre-rendered HTML for performance
+ * @param aiStatus        DRAFT | AI_GENERATED | HUMAN_REVIEWED | PUBLISHED
+ * @param version         incremented on each significant revision
+ * @param createdAt       creation timestamp
+ * @param updatedAt       last modification timestamp
  */
 public record Course(
-        UUID           id,
-        String         certificationId,
-        UUID           themeId,
-        String         title,
-        String         contentMarkdown,
-        String         contentHtml,
-        String         aiStatus,
-        int            version,
+        UUID id,
+        String certificationId,
+        UUID themeId,
+        String title,
+        String contentMarkdown,
+        String contentHtml,
+        String aiStatus,
+        int version,
         OffsetDateTime createdAt,
         OffsetDateTime updatedAt
 ) {
@@ -44,7 +44,9 @@ public record Course(
         if (version < 1) version = 1;
     }
 
-    /** Returns {@code true} if this course is ready to be displayed to end-users. */
+    /**
+     * Returns {@code true} if this course is ready to be displayed to end-users.
+     */
     public boolean isPublished() {
         return "PUBLISHED".equals(aiStatus);
     }

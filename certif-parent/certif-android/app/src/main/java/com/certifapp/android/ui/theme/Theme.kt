@@ -14,25 +14,25 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val CertifLightColors = lightColorScheme(
-    primary        = Color(0xFF2C3E50),
-    onPrimary      = Color.White,
-    primaryContainer   = Color(0xFF3498DB),
-    secondary      = Color(0xFF3498DB),
-    onSecondary    = Color.White,
-    tertiary       = Color(0xFFE74C3C),
-    background     = Color(0xFFF8F9FA),
-    surface        = Color.White,
-    error          = Color(0xFFE74C3C)
+    primary = Color(0xFF2C3E50),
+    onPrimary = Color.White,
+    primaryContainer = Color(0xFF3498DB),
+    secondary = Color(0xFF3498DB),
+    onSecondary = Color.White,
+    tertiary = Color(0xFFE74C3C),
+    background = Color(0xFFF8F9FA),
+    surface = Color.White,
+    error = Color(0xFFE74C3C)
 )
 
 private val CertifDarkColors = darkColorScheme(
-    primary        = Color(0xFF3498DB),
-    onPrimary      = Color.White,
-    secondary      = Color(0xFF5DADE2),
-    onSecondary    = Color.White,
-    background     = Color(0xFF1A1A2E),
-    surface        = Color(0xFF16213E),
-    error          = Color(0xFFE74C3C)
+    primary = Color(0xFF3498DB),
+    onPrimary = Color.White,
+    secondary = Color(0xFF5DADE2),
+    onSecondary = Color.White,
+    background = Color(0xFF1A1A2E),
+    surface = Color(0xFF16213E),
+    error = Color(0xFFE74C3C)
 )
 
 /**
@@ -49,8 +49,9 @@ fun CertifAppTheme(
             val ctx = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(ctx) else dynamicLightColorScheme(ctx)
         }
+
         darkTheme -> CertifDarkColors
-        else      -> CertifLightColors
+        else -> CertifLightColors
     }
 
     val view = LocalView.current
@@ -65,7 +66,7 @@ fun CertifAppTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography  = Typography,
-        content     = content
+        typography = Typography,
+        content = content
     )
 }

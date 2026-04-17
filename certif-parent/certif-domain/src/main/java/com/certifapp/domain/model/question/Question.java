@@ -21,40 +21,40 @@ import java.util.UUID;
  *
  * <p>Maps to the {@code questions} table in PostgreSQL.</p>
  *
- * @param id                   surrogate UUID (PostgreSQL uuid_generate_v4)
- * @param legacyId             original JSON id — unique, used for seed idempotency
- * @param certificationId      parent certification slug (e.g. {@code "ocp21"})
- * @param themeId              parent theme UUID
- * @param statement            question text (may contain Markdown code blocks)
- * @param difficulty           {@link DifficultyLevel}
- * @param type                 {@link QuestionType}
- * @param options              ordered list of answer choices (2-5 options)
- * @param explanationOriginal  raw explanation from source JSON (never modified)
- * @param explanationEnriched  AI-enriched or human-edited explanation (may be null)
- * @param explanationStatus    current lifecycle status of the explanation
- * @param officialDocUrl       optional link to vendor documentation
- * @param codeExample          optional illustrative code snippet
- * @param aiConfidenceScore    AI certainty score 0.0-1.0 (null if not processed)
- * @param isActive             whether this question is served to users
- * @param lastReviewedAt       timestamp of last human review (null if never reviewed)
+ * @param id                  surrogate UUID (PostgreSQL uuid_generate_v4)
+ * @param legacyId            original JSON id — unique, used for seed idempotency
+ * @param certificationId     parent certification slug (e.g. {@code "ocp21"})
+ * @param themeId             parent theme UUID
+ * @param statement           question text (may contain Markdown code blocks)
+ * @param difficulty          {@link DifficultyLevel}
+ * @param type                {@link QuestionType}
+ * @param options             ordered list of answer choices (2-5 options)
+ * @param explanationOriginal raw explanation from source JSON (never modified)
+ * @param explanationEnriched AI-enriched or human-edited explanation (may be null)
+ * @param explanationStatus   current lifecycle status of the explanation
+ * @param officialDocUrl      optional link to vendor documentation
+ * @param codeExample         optional illustrative code snippet
+ * @param aiConfidenceScore   AI certainty score 0.0-1.0 (null if not processed)
+ * @param isActive            whether this question is served to users
+ * @param lastReviewedAt      timestamp of last human review (null if never reviewed)
  */
 public record Question(
-        UUID              id,
-        String            legacyId,
-        String            certificationId,
-        UUID              themeId,
-        String            statement,
-        DifficultyLevel   difficulty,
-        QuestionType      type,
+        UUID id,
+        String legacyId,
+        String certificationId,
+        UUID themeId,
+        String statement,
+        DifficultyLevel difficulty,
+        QuestionType type,
         List<QuestionOption> options,
-        String            explanationOriginal,
-        String            explanationEnriched,
+        String explanationOriginal,
+        String explanationEnriched,
         ExplanationStatus explanationStatus,
-        String            officialDocUrl,
-        String            codeExample,
-        Double            aiConfidenceScore,
-        boolean           isActive,
-        OffsetDateTime    lastReviewedAt
+        String officialDocUrl,
+        String codeExample,
+        Double aiConfidenceScore,
+        boolean isActive,
+        OffsetDateTime lastReviewedAt
 ) {
 
     /**
@@ -69,8 +69,8 @@ public record Question(
         }
         if (options == null || options.size() < 2) {
             throw new IllegalArgumentException(
-                "A question must have at least 2 options, got: "
-                + (options == null ? "null" : options.size()));
+                    "A question must have at least 2 options, got: "
+                            + (options == null ? "null" : options.size()));
         }
         if (difficulty == null) {
             throw new IllegalArgumentException("difficulty must not be null");
@@ -83,7 +83,7 @@ public record Question(
         }
         if (aiConfidenceScore != null && (aiConfidenceScore < 0.0 || aiConfidenceScore > 1.0)) {
             throw new IllegalArgumentException(
-                "aiConfidenceScore must be between 0.0 and 1.0, got: " + aiConfidenceScore);
+                    "aiConfidenceScore must be between 0.0 and 1.0, got: " + aiConfidenceScore);
         }
         options = List.copyOf(options);
     }
@@ -92,7 +92,7 @@ public record Question(
      * Returns the correct {@link QuestionOption} for a {@code SINGLE_CHOICE} question.
      *
      * @return an {@code Optional} containing the correct option,
-     *         or empty if none is marked correct
+     * or empty if none is marked correct
      */
     public Optional<QuestionOption> correctOption() {
         return options.stream().filter(QuestionOption::isCorrect).findFirst();

@@ -1,11 +1,11 @@
-```java
 package com.certifapp.domain.model.question;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static org.assertj.core.api.Assertions.assertThat;
+
 import static com.certifapp.domain.model.question.ExplanationStatus.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 public class ExplanationStatusTest {
@@ -41,4 +41,4 @@ public class ExplanationStatusTest {
         assertThat(HUMAN_VALIDATED.isAiGenerated()).isFalse();
     }
 }
-```
+

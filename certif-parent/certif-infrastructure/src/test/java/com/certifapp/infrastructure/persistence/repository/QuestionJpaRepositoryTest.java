@@ -1,4 +1,3 @@
-```java
 package com.certifapp.infrastructure.persistence.repository;
 
 import com.certifapp.infrastructure.persistence.entity.QuestionEntity;
@@ -12,11 +11,9 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class QuestionJpaRepositoryTest {
@@ -172,4 +169,4 @@ public class QuestionJpaRepositoryTest {
         assertThat(result).isEqualTo(0);
     }
 }
-```
+

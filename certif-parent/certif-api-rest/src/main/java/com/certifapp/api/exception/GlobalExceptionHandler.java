@@ -4,10 +4,11 @@ package com.certifapp.api.exception;
 import com.certifapp.api.dto.response.ErrorResponse;
 import com.certifapp.domain.exception.*;
 import io.jsonwebtoken.JwtException;
-import org.springframework.http.*;
-import org.springframework.validation.FieldError;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
 

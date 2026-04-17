@@ -1,7 +1,10 @@
 // certif-parent/certif-api-rest/src/main/java/com/certifapp/api/security/JwtTokenProvider.java
 package com.certifapp.api.security;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -22,16 +25,16 @@ import java.util.UUID;
 public class JwtTokenProvider {
 
     private final SecretKey secretKey;
-    private final long      accessExpiryMs;
-    private final long      refreshExpiryMs;
+    private final long accessExpiryMs;
+    private final long refreshExpiryMs;
 
     public JwtTokenProvider(
             @Value("${app.jwt.secret}") String secret,
             @Value("${app.jwt.access-expiry:900}") long accessExpirySec,
             @Value("${app.jwt.refresh-expiry:604800}") long refreshExpirySec) {
 
-        this.secretKey       = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-        this.accessExpiryMs  = accessExpirySec  * 1000L;
+        this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        this.accessExpiryMs = accessExpirySec * 1000L;
         this.refreshExpiryMs = refreshExpirySec * 1000L;
     }
 
@@ -99,7 +102,7 @@ public class JwtTokenProvider {
     // ── Private ──────────────────────────────────────────────────────────────
 
     private String buildToken(String subject, String role, long expiryMs, String type) {
-        Date now    = new Date();
+        Date now = new Date();
         Date expiry = new Date(now.getTime() + expiryMs);
 
         JwtBuilder builder = Jwts.builder()

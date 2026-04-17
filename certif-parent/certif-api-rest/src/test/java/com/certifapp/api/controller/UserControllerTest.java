@@ -1,33 +1,29 @@
-```java
 package com.certifapp.api.controller;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.springframework.http.HttpStatus.*;
-
-import java.util.Optional;
-import java.util.UUID;
 
 import com.certifapp.api.dto.request.UpdatePreferencesRequest;
 import com.certifapp.api.dto.response.ApiResponse;
-import com.certifapp.domain.exception.UserNotFoundException;
-import com.certifapp.domain.model.user.UiTheme;
 import com.certifapp.domain.model.session.ExamMode;
+import com.certifapp.domain.model.user.UiTheme;
 import com.certifapp.domain.model.user.User;
 import com.certifapp.domain.model.user.UserPreferences;
 import com.certifapp.domain.port.input.user.UpdateUserPreferencesUseCase;
 import com.certifapp.domain.port.output.UserPreferencesRepository;
 import com.certifapp.domain.port.output.UserRepository;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
+
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpStatus.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
@@ -155,4 +151,4 @@ public class UserControllerTest {
         assertThat(apiResponse.getMessage()).startsWith("Invalid mode");
     }
 }
-```
+

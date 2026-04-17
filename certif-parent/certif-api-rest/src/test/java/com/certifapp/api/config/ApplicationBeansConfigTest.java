@@ -1,11 +1,4 @@
-```java
 package com.certifapp.api.config;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
-import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,39 +9,41 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.mockito.Mockito.*;
+
 @ExtendWith(MockitoExtension.class)
 public class ApplicationBeansConfigTest {
 
     @Mock
     private CertificationRepository certificationRepository;
-    
+
     @Mock
     private QuestionRepository questionRepository;
-    
+
     @Mock
     private ExamSessionRepository sessionRepository;
-    
+
     @Mock
     private UserAnswerRepository answerRepository;
-    
+
     @Mock
     private FlashcardRepository flashcardRepository;
-    
+
     @Mock
     private UserRepository userRepository;
-    
+
     @Mock
     private UserPreferencesRepository preferencesRepository;
-    
+
     @Mock
     private PdfExportPort pdfExportPort;
-    
+
     @Mock
     private SM2ScheduleRepository sm2Repository;
-    
+
     @Mock
     private PasswordEncoder passwordEncoder;
-    
+
     @InjectMocks
     private ApplicationBeansConfig applicationBeansConfig;
 
@@ -94,7 +89,7 @@ public class ApplicationBeansConfigTest {
     @DisplayName("Should create a ListCertificationsUseCaseImpl bean with required dependencies")
     public void listCertificationsUseCase_creation() {
         when(applicationBeansConfig.certificationRepository()).thenReturn(certificationRepository);
-        
+
         ListCertificationsUseCaseImpl useCase = applicationBeansConfig.listCertificationsUseCase();
         assertThat(useCase).isNotNull();
         verify(applicationBeansConfig, times(1)).certificationRepository();
@@ -104,7 +99,7 @@ public class ApplicationBeansConfigTest {
     @DisplayName("Should create a GetCertificationDetailsUseCaseImpl bean with required dependencies")
     public void getCertificationDetailsUseCase_creation() {
         when(applicationBeansConfig.certificationRepository()).thenReturn(certificationRepository);
-        
+
         GetCertificationDetailsUseCaseImpl useCase = applicationBeansConfig.getCertificationDetailsUseCase();
         assertThat(useCase).isNotNull();
         verify(applicationBeansConfig, times(1)).certificationRepository();
@@ -119,7 +114,7 @@ public class ApplicationBeansConfigTest {
         when(applicationBeansConfig.userRepository()).thenReturn(userRepository);
         when(applicationBeansConfig.freemiumGuardService()).thenReturn(freemiumGuardService);
         when(applicationBeansConfig.questionSelectionService()).thenReturn(questionSelectionService);
-        
+
         StartExamSessionUseCaseImpl useCase = applicationBeansConfig.startExamSessionUseCase();
         assertThat(useCase).isNotNull();
         verify(applicationBeansConfig, times(1)).certificationRepository();
@@ -137,7 +132,7 @@ public class ApplicationBeansConfigTest {
         when(applicationBeansConfig.questionRepository()).thenReturn(questionRepository);
         when(applicationBeansConfig.answerRepository()).thenReturn(answerRepository);
         when(applicationBeansConfig.scoringService()).thenReturn(scoringService);
-        
+
         SubmitAnswerUseCaseImpl useCase = applicationBeansConfig.submitAnswerUseCase();
         assertThat(useCase).isNotNull();
         verify(applicationBeansConfig, times(1)).sessionRepository();
@@ -154,7 +149,7 @@ public class ApplicationBeansConfigTest {
         when(applicationBeansConfig.questionRepository()).thenReturn(questionRepository);
         when(applicationBeansConfig.certificationRepository()).thenReturn(certificationRepository);
         when(applicationBeansConfig.scoringService()).thenReturn(scoringService);
-        
+
         SubmitExamUseCaseImpl useCase = applicationBeansConfig.submitExamUseCase();
         assertThat(useCase).isNotNull();
         verify(applicationBeansConfig, times(1)).sessionRepository();
@@ -168,7 +163,7 @@ public class ApplicationBeansConfigTest {
     @DisplayName("Should create a GetExamResultsUseCaseImpl bean with required dependencies")
     public void getExamResultsUseCase_creation() {
         when(applicationBeansConfig.sessionRepository()).thenReturn(sessionRepository);
-        
+
         GetExamResultsUseCaseImpl useCase = applicationBeansConfig.getExamResultsUseCase();
         assertThat(useCase).isNotNull();
         verify(applicationBeansConfig, times(1)).sessionRepository();
@@ -178,7 +173,7 @@ public class ApplicationBeansConfigTest {
     @DisplayName("Should create a GetSessionHistoryUseCaseImpl bean with required dependencies")
     public void getSessionHistoryUseCase_creation() {
         when(applicationBeansConfig.sessionRepository()).thenReturn(sessionRepository);
-        
+
         GetSessionHistoryUseCaseImpl useCase = applicationBeansConfig.getSessionHistoryUseCase();
         assertThat(useCase).isNotNull();
         verify(applicationBeansConfig, times(1)).sessionRepository();
@@ -194,7 +189,7 @@ public class ApplicationBeansConfigTest {
         when(applicationBeansConfig.pdfExportPort()).thenReturn(pdfExportPort);
         when(applicationBeansConfig.freemiumGuardService()).thenReturn(freemiumGuardService);
         when(applicationBeansConfig.scoringService()).thenReturn(scoringService);
-        
+
         ExportSessionPdfUseCaseImpl useCase = applicationBeansConfig.exportSessionPdfUseCase();
         assertThat(useCase).isNotNull();
         verify(applicationBeansConfig, times(1)).sessionRepository();
@@ -212,7 +207,7 @@ public class ApplicationBeansConfigTest {
         when(applicationBeansConfig.flashcardRepository()).thenReturn(flashcardRepository);
         when(applicationBeansConfig.userRepository()).thenReturn(userRepository);
         when(applicationBeansConfig.freemiumGuardService()).thenReturn(freemiumGuardService);
-        
+
         GetFlashcardsUseCaseImpl useCase = applicationBeansConfig.getFlashcardsUseCase();
         assertThat(useCase).isNotNull();
         verify(applicationBeansConfig, times(1)).flashcardRepository();
@@ -225,7 +220,7 @@ public class ApplicationBeansConfigTest {
     public void reviewFlashcardUseCase_creation() {
         when(applicationBeansConfig.sm2Repository()).thenReturn(sm2Repository);
         when(applicationBeansConfig.sm2AlgorithmService()).thenReturn(sm2AlgorithmService);
-        
+
         ReviewFlashcardUseCaseImpl useCase = applicationBeansConfig.reviewFlashcardUseCase();
         assertThat(useCase).isNotNull();
         verify(applicationBeansConfig, times(1)).sm2Repository();
@@ -238,7 +233,7 @@ public class ApplicationBeansConfigTest {
         when(applicationBeansConfig.userRepository()).thenReturn(userRepository);
         when(applicationBeansConfig.preferencesRepository()).thenReturn(preferencesRepository);
         when(applicationBeansConfig.passwordEncoder()).thenReturn(passwordEncoder);
-        
+
         RegisterUserUseCaseImpl useCase = applicationBeansConfig.registerUserUseCase();
         assertThat(useCase).isNotNull();
         verify(applicationBeansConfig, times(1)).userRepository();
@@ -251,7 +246,7 @@ public class ApplicationBeansConfigTest {
     public void authenticateUserUseCase_creation() {
         when(applicationBeansConfig.userRepository()).thenReturn(userRepository);
         when(applicationBeansConfig.passwordEncoder()).thenReturn(passwordEncoder);
-        
+
         AuthenticateUserUseCaseImpl useCase = applicationBeansConfig.authenticateUserUseCase();
         assertThat(useCase).isNotNull();
         verify(applicationBeansConfig, times(1)).userRepository();
@@ -263,11 +258,11 @@ public class ApplicationBeansConfigTest {
     public void updateUserPreferencesUseCase_creation() {
         when(applicationBeansConfig.userRepository()).thenReturn(userRepository);
         when(applicationBeansConfig.preferencesRepository()).thenReturn(preferencesRepository);
-        
+
         UpdateUserPreferencesUseCaseImpl useCase = applicationBeansConfig.updateUserPreferencesUseCase();
         assertThat(useCase).isNotNull();
         verify(applicationBeansConfig, times(1)).userRepository();
         verify(applicationBeansConfig, times(1)).preferencesRepository();
     }
 }
-```
+

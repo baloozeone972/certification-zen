@@ -8,12 +8,18 @@ package com.certifapp.domain.model.user;
  */
 public enum UiTheme {
 
-    /** Light background — default for new users. */
+    /**
+     * Light background — default for new users.
+     */
     LIGHT,
 
-    /** Dark background — reduced eye strain for night study. */
+    /**
+     * Dark background — reduced eye strain for night study.
+     */
     DARK,
 
-    /** Follow the operating system / browser preference. */
+    /**
+     * Follow the operating system / browser preference.
+     */
     SYSTEM
 }

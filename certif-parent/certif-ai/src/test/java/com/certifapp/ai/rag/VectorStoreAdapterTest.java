@@ -1,7 +1,5 @@
-```java
 package com.certifapp.ai.rag;
 
-import dev.langchain4j.data.document.Metadata;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.embedding.EmbeddingModel;
@@ -13,8 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoExtension;
-import org.slf4j.Logger;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -133,4 +130,4 @@ public class VectorStoreAdapterTest {
         assertThat(storedId).isNotNull();
     }
 }
-```
+

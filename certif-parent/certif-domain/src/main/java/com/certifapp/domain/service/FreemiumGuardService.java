@@ -4,7 +4,6 @@ package com.certifapp.domain.service;
 import com.certifapp.domain.exception.FreemiumLimitExceededException;
 import com.certifapp.domain.exception.SubscriptionRequiredException;
 import com.certifapp.domain.model.certification.Certification;
-import com.certifapp.domain.model.session.ExamMode;
 import com.certifapp.domain.model.user.SubscriptionTier;
 
 /**
@@ -18,7 +17,7 @@ public class FreemiumGuardService {
     /**
      * Verifies that a FREE-tier user has not exceeded their daily exam limit.
      *
-     * @param tier          user subscription tier
+     * @param tier           user subscription tier
      * @param todayExamCount number of exams already started today for this certification
      * @throws FreemiumLimitExceededException if the daily limit is exceeded
      */

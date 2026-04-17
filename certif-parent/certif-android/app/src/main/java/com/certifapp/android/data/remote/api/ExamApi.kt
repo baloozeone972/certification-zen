@@ -10,8 +10,10 @@ interface ExamApi {
     suspend fun startSession(@Body request: StartExamRequest): ApiResponse<ExamSessionDto>
 
     @POST("exams/sessions/{id}/answers")
-    suspend fun submitAnswer(@Path("id") sessionId: String,
-                             @Body request: SubmitAnswerRequest): ApiResponse<Any>
+    suspend fun submitAnswer(
+        @Path("id") sessionId: String,
+        @Body request: SubmitAnswerRequest
+    ): ApiResponse<Any>
 
     @POST("exams/sessions/{id}/submit")
     suspend fun submitExam(@Path("id") sessionId: String): ApiResponse<ExamSessionDto>

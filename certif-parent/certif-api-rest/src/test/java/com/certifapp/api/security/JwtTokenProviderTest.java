@@ -2,10 +2,14 @@
 package com.certifapp.api.security;
 
 import io.jsonwebtoken.JwtException;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * Unit tests for {@link JwtTokenProvider}.
@@ -13,11 +17,11 @@ import static org.assertj.core.api.Assertions.*;
 @DisplayName("JwtTokenProvider")
 class JwtTokenProviderTest {
 
-    private JwtTokenProvider tokenProvider;
     private static final UUID USER_ID = UUID.randomUUID();
     // 64-char secret (512 bits) — safe for HS256
     private static final String SECRET =
             "test_jwt_secret_256_bits_minimum_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+    private JwtTokenProvider tokenProvider;
 
     @BeforeEach
     void setUp() {

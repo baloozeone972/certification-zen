@@ -12,22 +12,22 @@ import java.util.UUID;
  * project goals and diagnostic results.
  * Maps to the {@code user_certification_paths} table in PostgreSQL.</p>
  *
- * @param id            surrogate UUID
- * @param userId        owner user UUID
- * @param roleType      declared professional role (e.g. "Java Developer")
- * @param projectGoal   free-text goal description
- * @param steps         ordered list of certification steps
- * @param aiRationale   AI explanation of this path ordering
- * @param createdAt     generation timestamp
- * @param updatedAt     last update timestamp
+ * @param id          surrogate UUID
+ * @param userId      owner user UUID
+ * @param roleType    declared professional role (e.g. "Java Developer")
+ * @param projectGoal free-text goal description
+ * @param steps       ordered list of certification steps
+ * @param aiRationale AI explanation of this path ordering
+ * @param createdAt   generation timestamp
+ * @param updatedAt   last update timestamp
  */
 public record UserCertPath(
-        UUID           id,
-        UUID           userId,
-        String         roleType,
-        String         projectGoal,
+        UUID id,
+        UUID userId,
+        String roleType,
+        String projectGoal,
         List<PathStep> steps,
-        String         aiRationale,
+        String aiRationale,
         OffsetDateTime createdAt,
         OffsetDateTime updatedAt
 ) {
@@ -39,16 +39,16 @@ public record UserCertPath(
     /**
      * One ordered step in a certification learning path.
      *
-     * @param certificationId  certification to complete at this step
-     * @param order            1-based position
-     * @param rationale        AI justification for this position
-     * @param estimatedWeeks   estimated preparation duration in weeks
+     * @param certificationId certification to complete at this step
+     * @param order           1-based position
+     * @param rationale       AI justification for this position
+     * @param estimatedWeeks  estimated preparation duration in weeks
      */
     public record PathStep(
             String certificationId,
-            int    order,
+            int order,
             String rationale,
-            int    estimatedWeeks
+            int estimatedWeeks
     ) {
         public PathStep {
             if (certificationId == null || certificationId.isBlank())
