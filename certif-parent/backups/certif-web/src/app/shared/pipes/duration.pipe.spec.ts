@@ -1,4 +1,4 @@
-import { DurationPipe } from './duration.pipe';
+import {DurationPipe} from './duration.pipe';
 
 describe('DurationPipe', () => {
     let pipe: DurationPipe;
@@ -34,3 +34,4 @@ describe('DurationPipe', () => {
         expect(pipe.transform(3600)).toBe("1h00m00s");
     });
 });
+
