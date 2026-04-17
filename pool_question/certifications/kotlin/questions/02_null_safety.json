@@ -1,0 +1,1284 @@
+[
+  {
+    "id": "KOT-NS-001",
+    "theme": "Null Safety",
+    "theme_label": "Nullable types",
+    "difficulty": "easy",
+    "question": "Comment déclarer une variable nullable ?",
+    "options": [
+      "var name: String? = null",
+      "var name: String = null",
+      "var name: String? = \"\"",
+      "var name: String = \"\""
+    ],
+    "correct": 0,
+    "explanation": "Le ? après le type indique la nullabilité."
+  },
+  {
+    "id": "KOT-NS-002",
+    "theme": "Null Safety",
+    "theme_label": "Nullable types",
+    "difficulty": "easy",
+    "question": "Quelle est la superclasse de tous les types nullables ?",
+    "options": [
+      "Any?",
+      "Any",
+      "Nothing?",
+      "Unit?"
+    ],
+    "correct": 0,
+    "explanation": "Any? est le supertype de tous les types nullables."
+  },
+  {
+    "id": "KOT-NS-003",
+    "theme": "Null Safety",
+    "theme_label": "Nullable types",
+    "difficulty": "easy",
+    "question": "String? est un sous-type de String ?",
+    "options": [
+      "Non",
+      "Oui",
+      "Oui avec conversion",
+      "Dépend du contexte"
+    ],
+    "correct": 0,
+    "explanation": "Nullable n'est pas sous-type de non-nullable."
+  },
+  {
+    "id": "KOT-NS-004",
+    "theme": "Null Safety",
+    "theme_label": "Safe call",
+    "difficulty": "easy",
+    "question": "Que retourne str?.length si str est null ?",
+    "options": [
+      "null",
+      "0",
+      "Exception",
+      "Unit"
+    ],
+    "correct": 0,
+    "explanation": "L'appel sécurisé retourne null."
+  },
+  {
+    "id": "KOT-NS-005",
+    "theme": "Null Safety",
+    "theme_label": "Safe call",
+    "difficulty": "medium",
+    "question": "Que produit str?.length ?: 0 si str est null ?",
+    "options": [
+      "0",
+      "null",
+      "Exception",
+      "Unit"
+    ],
+    "correct": 0,
+    "explanation": "Elvis fournit une valeur par défaut."
+  },
+  {
+    "id": "KOT-NS-006",
+    "theme": "Null Safety",
+    "theme_label": "Safe call",
+    "difficulty": "medium",
+    "question": "Que fait person?.address?.city ?",
+    "options": [
+      "Accès sécurisé chaîné",
+      "Accès direct",
+      "Lance NPE",
+      "Retourne null si un maillon est null"
+    ],
+    "correct": 0,
+    "explanation": "Chaînage sécurisé : s'arrête au premier null."
+  },
+  {
+    "id": "KOT-NS-007",
+    "theme": "Null Safety",
+    "theme_label": "Elvis operator",
+    "difficulty": "easy",
+    "question": "L'opérateur Elvis peut-il lancer une exception ?",
+    "options": [
+      "Oui, throw Exception()",
+      "Non",
+      "Oui, mais seulement IllegalArgumentException",
+      "Oui, mais seulement NPE"
+    ],
+    "correct": 0,
+    "explanation": "Elvis peut lancer une exception : ?: throw Exception()"
+  },
+  {
+    "id": "KOT-NS-008",
+    "theme": "Null Safety",
+    "theme_label": "Elvis operator",
+    "difficulty": "hard",
+    "question": "Elvis est-il associatif à droite ?",
+    "options": [
+      "Oui",
+      "Non",
+      "Associatif à gauche",
+      "Ne s'applique pas"
+    ],
+    "correct": 0,
+    "explanation": "a ?: b ?: c est équivalent à a ?: (b ?: c)"
+  },
+  {
+    "id": "KOT-NS-009",
+    "theme": "Null Safety",
+    "theme_label": "Not-null assertion",
+    "difficulty": "easy",
+    "question": "Que se passe-t-il avec str!!.length si str est null ?",
+    "options": [
+      "NullPointerException",
+      "Retourne 0",
+      "Ignore",
+      "Erreur compilation"
+    ],
+    "correct": 0,
+    "explanation": "L'opérateur !! force la non-nullité et lance NPE."
+  },
+  {
+    "id": "KOT-NS-010",
+    "theme": "Null Safety",
+    "theme_label": "Not-null assertion",
+    "difficulty": "hard",
+    "question": "Peut-on enchaîner !! ?",
+    "options": [
+      "Oui, person!!.address!!.city",
+      "Non",
+      "Oui mais déconseillé",
+      "Uniquement avec ?"
+    ],
+    "correct": 0,
+    "explanation": "On peut chaîner !! mais dangereux."
+  },
+  {
+    "id": "KOT-NS-011",
+    "theme": "Null Safety",
+    "theme_label": "Smart cast",
+    "difficulty": "medium",
+    "question": "Dans if (str != null) { str.length } le smart cast fonctionne-t-il ?",
+    "options": [
+      "Oui",
+      "Non",
+      "Oui uniquement avec val",
+      "Oui uniquement avec var"
+    ],
+    "correct": 0,
+    "explanation": "Smart cast après vérification de null."
+  },
+  {
+    "id": "KOT-NS-012",
+    "theme": "Null Safety",
+    "theme_label": "Smart cast",
+    "difficulty": "hard",
+    "question": "Smart cast fonctionne-t-il avec var ?",
+    "options": [
+      "Oui, si non modifiée entre temps",
+      "Non",
+      "Oui toujours",
+      "Uniquement dans les conditions"
+    ],
+    "correct": 0,
+    "explanation": "Pour var, smart cast possible si pas de modification potentielle."
+  },
+  {
+    "id": "KOT-NS-013",
+    "theme": "Null Safety",
+    "theme_label": "lateinit",
+    "difficulty": "medium",
+    "question": "lateinit var peut-elle être nullable ?",
+    "options": [
+      "Non",
+      "Oui",
+      "Oui avec ?",
+      "Oui avec null"
+    ],
+    "correct": 0,
+    "explanation": "lateinit ne supporte pas les types nullables."
+  },
+  {
+    "id": "KOT-NS-014",
+    "theme": "Null Safety",
+    "theme_label": "lateinit",
+    "difficulty": "hard",
+    "question": "Comment vérifier si une propriété lateinit est initialisée ?",
+    "options": [
+      "::property.isInitialized",
+      "property == null",
+      "property != null",
+      "isInitialized(property)"
+    ],
+    "correct": 0,
+    "explanation": "::name.isInitialized (depuis Kotlin 1.2)."
+  },
+  {
+    "id": "KOT-NS-015",
+    "theme": "Null Safety",
+    "theme_label": "lateinit",
+    "difficulty": "hard",
+    "question": "Peut-on utiliser lateinit avec des types primitifs ?",
+    "options": [
+      "Non",
+      "Oui",
+      "Oui avec Int?",
+      "Oui avec Int"
+    ],
+    "correct": 0,
+    "explanation": "lateinit ne supporte pas les types primitifs."
+  },
+  {
+    "id": "KOT-NS-016",
+    "theme": "Null Safety",
+    "theme_label": "Platform types",
+    "difficulty": "hard",
+    "question": "Que sont les platform types ?",
+    "options": [
+      "Types venant de Java, nullabilité inconnue",
+      "Types Kotlin",
+      "Types primitifs",
+      "Types génériques"
+    ],
+    "correct": 0,
+    "explanation": "Les types Java sont des platform types (String!)."
+  },
+  {
+    "id": "KOT-NS-017",
+    "theme": "Null Safety",
+    "theme_label": "Platform types",
+    "difficulty": "hard",
+    "question": "Peut-on déclarer un platform type en Kotlin ?",
+    "options": [
+      "Non, seulement via Java",
+      "Oui, avec !",
+      "Oui, avec ?",
+      "Oui, avec nothing"
+    ],
+    "correct": 0,
+    "explanation": "Les platform types sont uniquement inférés depuis Java."
+  },
+  {
+    "id": "KOT-NS-018",
+    "theme": "Null Safety",
+    "theme_label": "Nullability annotations",
+    "difficulty": "hard",
+    "question": "Quelles annotations Java sont reconnues par Kotlin ?",
+    "options": [
+      "@Nullable, @NotNull, @NonNull",
+      "@Null, @NonNull",
+      "@Nullable seulement",
+      "Aucune"
+    ],
+    "correct": 0,
+    "explanation": "Kotlin comprend les annotations de nullabilité."
+  },
+  {
+    "id": "KOT-NS-019",
+    "theme": "Null Safety",
+    "theme_label": "Nullability annotations",
+    "difficulty": "hard",
+    "question": "Kotlin a-t-il ses propres annotations de nullabilité ?",
+    "options": [
+      "Oui, @Nullable et @NotNull",
+      "Non",
+      "Oui, @Null et @NonNull",
+      "Oui, @NullableString"
+    ],
+    "correct": 0,
+    "explanation": "kotlin.annotations.jvm"
+  },
+  {
+    "id": "KOT-NS-020",
+    "theme": "Null Safety",
+    "theme_label": "requireNotNull",
+    "difficulty": "hard",
+    "question": "Que fait requireNotNull ?",
+    "options": [
+      "Retourne la valeur non-null ou lève IllegalArgumentException",
+      "Retourne null",
+      "Lance NPE",
+      "Ignore null"
+    ],
+    "correct": 0,
+    "explanation": "requireNotNull(value) { message }"
+  },
+  {
+    "id": "KOT-NS-021",
+    "theme": "Null Safety",
+    "theme_label": "checkNotNull",
+    "difficulty": "hard",
+    "question": "Différence entre requireNotNull et checkNotNull ?",
+    "options": [
+      "checkNotNull lève IllegalStateException",
+      "checkNotNull lève IllegalArgumentException",
+      "Identiques",
+      "checkNotNull retourne null"
+    ],
+    "correct": 0,
+    "explanation": "require = IllegalArgumentException, check = IllegalStateException."
+  },
+  {
+    "id": "KOT-NS-022",
+    "theme": "Null Safety",
+    "theme_label": "Null-safe cast",
+    "difficulty": "hard",
+    "question": "Que fait l'opérateur as? ?",
+    "options": [
+      "Cast sécurisé, retourne null si échec",
+      "Cast forcé",
+      "Cast générique",
+      "Cast nullable"
+    ],
+    "correct": 0,
+    "explanation": "as? évite ClassCastException."
+  },
+  {
+    "id": "KOT-NS-023",
+    "theme": "Null Safety",
+    "theme_label": "Null-safe cast",
+    "difficulty": "hard",
+    "question": "Quel est le type de retour de as? ?",
+    "options": [
+      "Type cible?",
+      "Type cible",
+      "Any?",
+      "Unit?"
+    ],
+    "correct": 0,
+    "explanation": "as? retourne un nullable du type cible."
+  },
+  {
+    "id": "KOT-NS-024",
+    "theme": "Null Safety",
+    "theme_label": "FilterNotNull",
+    "difficulty": "hard",
+    "question": "Que fait .filterNotNull() sur une collection ?",
+    "options": [
+      "Supprime les éléments null",
+      "Garde les null",
+      "Convertit les null",
+      "Ignore"
+    ],
+    "correct": 0,
+    "explanation": "Retourne une liste sans éléments null."
+  },
+  {
+    "id": "KOT-NS-025",
+    "theme": "Null Safety",
+    "theme_label": "mapNotNull",
+    "difficulty": "hard",
+    "question": "Que fait mapNotNull ?",
+    "options": [
+      "Map puis filtre les null",
+      "Map seulement",
+      "Filter seulement",
+      "Map et flatMap"
+    ],
+    "correct": 0,
+    "explanation": "mapNotNull { transform } combine map et filterNotNull."
+  },
+  {
+    "id": "KOT-NS-026",
+    "theme": "Null Safety",
+    "theme_label": "Nullability in generics",
+    "difficulty": "hard",
+    "question": "List<String> peut-elle contenir null ?",
+    "options": [
+      "Non",
+      "Oui",
+      "Oui avec List<String?>",
+      "Dépend"
+    ],
+    "correct": 0,
+    "explanation": "List<String> ne peut pas contenir null."
+  },
+  {
+    "id": "KOT-NS-027",
+    "theme": "Null Safety",
+    "theme_label": "Nullability in generics",
+    "difficulty": "hard",
+    "question": "Comment autoriser null dans une collection ?",
+    "options": [
+      "List<String?>",
+      "List<String>",
+      "List<Any?>",
+      "A et C"
+    ],
+    "correct": 3,
+    "explanation": "Utiliser le type nullable du paramètre."
+  },
+  {
+    "id": "KOT-NS-028",
+    "theme": "Null Safety",
+    "theme_label": "Safe calls with let",
+    "difficulty": "hard",
+    "question": "Quel est l'équivalent de str?.let { it.length } ?",
+    "options": [
+      "if (str != null) str.length else null",
+      "str!!.length",
+      "str?.length",
+      "str?.length ?: 0"
+    ],
+    "correct": 0,
+    "explanation": "let s'exécute seulement si non null."
+  },
+  {
+    "id": "KOT-NS-029",
+    "theme": "Null Safety",
+    "theme_label": "run with null safety",
+    "difficulty": "hard",
+    "question": "Que fait str?.run { length } ?",
+    "options": [
+      "Exécute run si non null",
+      "Exécute toujours",
+      "Lance NPE",
+      "Retourne null"
+    ],
+    "correct": 0,
+    "explanation": "run n'est appelé que si str non null."
+  },
+  {
+    "id": "KOT-NS-030",
+    "theme": "Null Safety",
+    "theme_label": "apply with null safety",
+    "difficulty": "hard",
+    "question": "Que retourne str?.apply { } ?",
+    "options": [
+      "str si non null, sinon null",
+      "Résultat du lambda",
+      "Unit",
+      "Rien"
+    ],
+    "correct": 0,
+    "explanation": "apply retourne le récepteur, donc str ou null."
+  },
+  {
+    "id": "KOT-NS-031",
+    "theme": "Null Safety",
+    "theme_label": "Nullability and Java",
+    "difficulty": "hard",
+    "question": "Comment déclarer une API Java comme nullable ?",
+    "options": [
+      "@Nullable",
+      "@Null",
+      "@NullableApi",
+      "Aucune"
+    ],
+    "correct": 0,
+    "explanation": "L'annotation @Nullable indique la nullabilité."
+  },
+  {
+    "id": "KOT-NS-032",
+    "theme": "Null Safety",
+    "theme_label": "Nullability and Java",
+    "difficulty": "hard",
+    "question": "Sans annotation, un type Java devient ?",
+    "options": [
+      "Platform type",
+      "Nullable",
+      "Non-nullable",
+      "Any"
+    ],
+    "correct": 0,
+    "explanation": "Les types Java non annotés sont des platform types."
+  },
+  {
+    "id": "KOT-NS-033",
+    "theme": "Null Safety",
+    "theme_label": "Nullability and Java",
+    "difficulty": "hard",
+    "question": "Peut-on supprimer les platform types ?",
+    "options": [
+      "Oui avec -Xtype-enhancement-improvements",
+      "Non",
+      "Oui avec annotation",
+      "Uniquement en Java"
+    ],
+    "correct": 0,
+    "explanation": "Des flags du compilateur peuvent améliorer la nullabilité."
+  },
+  {
+    "id": "KOT-NS-034",
+    "theme": "Null Safety",
+    "theme_label": "Nothing?",
+    "difficulty": "hard",
+    "question": "Nothing? est un sous-type de ?",
+    "options": [
+      "Tous les types nullables",
+      "Tous les types",
+      "Nothing",
+      "Any"
+    ],
+    "correct": 0,
+    "explanation": "Nothing? est le sous-type des types nullables."
+  },
+  {
+    "id": "KOT-NS-035",
+    "theme": "Null Safety",
+    "theme_label": "Nothing?",
+    "difficulty": "hard",
+    "question": "Quelle est la valeur de Nothing? ?",
+    "options": [
+      "null",
+      "Nothing",
+      "Unit",
+      "Aucune"
+    ],
+    "correct": 0,
+    "explanation": "Nothing? a une seule valeur : null."
+  },
+  {
+    "id": "KOT-NS-036",
+    "theme": "Null Safety",
+    "theme_label": "Nullable receiver",
+    "difficulty": "hard",
+    "question": "Peut-on appeler une fonction d'extension sur un nullable ?",
+    "options": [
+      "Oui, définir sur T?",
+      "Non",
+      "Oui, avec @Nullable",
+      "Uniquement pour les primitifs"
+    ],
+    "correct": 0,
+    "explanation": "fun String?.isNullOrBlank(): Boolean"
+  },
+  {
+    "id": "KOT-NS-037",
+    "theme": "Null Safety",
+    "theme_label": "Nullable receiver",
+    "difficulty": "hard",
+    "question": "Que vaut null.isNullOrBlank() ?",
+    "options": [
+      "true",
+      "false",
+      "null",
+      "Exception"
+    ],
+    "correct": 0,
+    "explanation": "null.isNullOrBlank() retourne true."
+  },
+  {
+    "id": "KOT-NS-038",
+    "theme": "Null Safety",
+    "theme_label": "Contract",
+    "difficulty": "hard",
+    "question": "Que permet kotlin.contracts ?",
+    "options": [
+      "Informe le compilateur sur le comportement",
+      "Créer des contrats",
+      "Optimiser",
+      "Toutes ces réponses"
+    ],
+    "correct": 3,
+    "explanation": "Contracts améliore l'analyse de nullabilité."
+  },
+  {
+    "id": "KOT-NS-039",
+    "theme": "Null Safety",
+    "theme_label": "Contract example",
+    "difficulty": "hard",
+    "question": "Que déclare contract { returns() implies (value != null) } ?",
+    "options": [
+      "Si fonction retourne, valeur non nulle",
+      "Si valeur non nulle, fonction retourne",
+      "Toujours vrai",
+      "Toujours faux"
+    ],
+    "correct": 0,
+    "explanation": "Le contract informe que la fonction garantit la non-nullité."
+  },
+  {
+    "id": "KOT-NS-040",
+    "theme": "Null Safety",
+    "theme_label": "UnsafeVariance",
+    "difficulty": "hard",
+    "question": "Quand utiliser @UnsafeVariance ?",
+    "options": [
+      "Forcer la variance contraire à la déclaration",
+      "Rendre safe",
+      "Éviter les warnings",
+      "Optimiser"
+    ],
+    "correct": 0,
+    "explanation": "Utilisé pour les types invariants."
+  },
+  {
+    "id": "KOT-NS-041",
+    "theme": "Null Safety",
+    "theme_label": "Type parameter nullability",
+    "difficulty": "hard",
+    "question": "T dans une classe générique est-il nullable ?",
+    "options": [
+      "Oui, par défaut",
+      "Non",
+      "Oui, avec T?",
+      "Dépend"
+    ],
+    "correct": 0,
+    "explanation": "T est nullable par défaut (équivalent à T?)."
+  },
+  {
+    "id": "KOT-NS-042",
+    "theme": "Null Safety",
+    "theme_label": "Type parameter nullability",
+    "difficulty": "hard",
+    "question": "Comment rendre T non-nullable ?",
+    "options": [
+      "T & Any",
+      "T?",
+      "T!!",
+      "T: Any"
+    ],
+    "correct": 0,
+    "explanation": "T & Any ou <T : Any> pour borne supérieure non-nullable."
+  },
+  {
+    "id": "KOT-NS-043",
+    "theme": "Null Safety",
+    "theme_label": "NotNull inference",
+    "difficulty": "hard",
+    "question": "Le compilateur peut-il inférer non-null pour les paramètres ?",
+    "options": [
+      "Oui, depuis Kotlin 1.3",
+      "Non",
+      "Oui, avec annotation",
+      "Uniquement pour les retours"
+    ],
+    "correct": 0,
+    "explanation": "Inférence de non-null pour les paramètres dans certaines conditions."
+  },
+  {
+    "id": "KOT-NS-044",
+    "theme": "Null Safety",
+    "theme_label": "Data class nullability",
+    "difficulty": "hard",
+    "question": "Dans une data class, les composants peuvent-ils être nullables ?",
+    "options": [
+      "Oui",
+      "Non",
+      "Oui, avec ?",
+      "Oui, avec lateinit"
+    ],
+    "correct": 0,
+    "explanation": "Les data classes acceptent des propriétés nullables."
+  },
+  {
+    "id": "KOT-NS-045",
+    "theme": "Null Safety",
+    "theme_label": "Safe call with scope",
+    "difficulty": "hard",
+    "question": "Que fait obj?.let { } ?: run { } ?",
+    "options": [
+      "Exécute let si non null, sinon run",
+      "Exécute toujours let",
+      "Exécute toujours run",
+      "Erreur"
+    ],
+    "correct": 0,
+    "explanation": "Combinaison de safe call et Elvis."
+  },
+  {
+    "id": "KOT-NS-046",
+    "theme": "Null Safety",
+    "theme_label": "Multiple safe calls",
+    "difficulty": "hard",
+    "question": "Que retourne a?.b?.c?.d ?",
+    "options": [
+      "null si un maillon est null",
+      "d toujours",
+      "Exception",
+      "Unit"
+    ],
+    "correct": 0,
+    "explanation": "Chaînage sécurisé : s'arrête au premier null."
+  },
+  {
+    "id": "KOT-NS-047",
+    "theme": "Null Safety",
+    "theme_label": "Elvis with throw",
+    "difficulty": "hard",
+    "question": "Que fait str?.length ?: throw IllegalArgumentException() ?",
+    "options": [
+      "Lance exception si str est null",
+      "Retourne 0",
+      "Retourne null",
+      "Lance NPE"
+    ],
+    "correct": 0,
+    "explanation": "Elvis peut lancer une exception personnalisée."
+  },
+  {
+    "id": "KOT-NS-048",
+    "theme": "Null Safety",
+    "theme_label": "lateinit vs nullable",
+    "difficulty": "hard",
+    "question": "Quand préférer lateinit à nullable ?",
+    "options": [
+      "Quand la valeur sera définie avant usage",
+      "Toujours",
+      "Jamais",
+      "Pour les primitifs"
+    ],
+    "correct": 0,
+    "explanation": "lateinit évite les vérifications de null inutiles."
+  },
+  {
+    "id": "KOT-NS-049",
+    "theme": "Null Safety",
+    "theme_label": "Null safety in when",
+    "difficulty": "hard",
+    "question": "Peut-on utiliser when pour les nullables ?",
+    "options": [
+      "Oui, case null",
+      "Non",
+      "Oui, avec when (value == null)",
+      "Oui, avec when { null -> }"
+    ],
+    "correct": 0,
+    "explanation": "when (nullable) { null -> ... else -> ... }"
+  },
+  {
+    "id": "KOT-NS-050",
+    "theme": "Null Safety",
+    "theme_label": "Null safety in when",
+    "difficulty": "hard",
+    "question": "Que fait when (value) { is String -> ... else -> ... } si value est null ?",
+    "options": [
+      "Va dans else",
+      "Va dans is String",
+      "Lance NPE",
+      "Erreur compilation"
+    ],
+    "correct": 0,
+    "explanation": "null ne passe pas is String, va dans else."
+  },
+  {
+    "id": "KOT-NS-051",
+    "theme": "Null Safety",
+    "theme_label": "Null safety in loops",
+    "difficulty": "hard",
+    "question": "Que fait for (item in nullableList ?: emptyList()) ?",
+    "options": [
+      "Itère sur emptyList si null",
+      "Itère sur nullableList si non null",
+      "A et B",
+      "Erreur"
+    ],
+    "correct": 2,
+    "explanation": "Elvis fournit une liste vide si null."
+  },
+  {
+    "id": "KOT-NS-052",
+    "theme": "Null Safety",
+    "theme_label": "Nullable extension",
+    "difficulty": "hard",
+    "question": "Comment définir une extension pour nullable ?",
+    "options": [
+      "fun String?.myExtension() { }",
+      "fun String.myExtension() { }",
+      "fun myExtension(String?) { }",
+      "fun String? = ..."
+    ],
+    "correct": 0,
+    "explanation": "Le récepteur nullable permet l'extension."
+  },
+  {
+    "id": "KOT-NS-053",
+    "theme": "Null Safety",
+    "theme_label": "Null propagation",
+    "difficulty": "hard",
+    "question": "Que retourne nullableArray?.get(0) ?: -1 ?",
+    "options": [
+      "-1 si nullableArray null ou array vide",
+      "-1 seulement si null",
+      "null",
+      "Exception"
+    ],
+    "correct": 0,
+    "explanation": "Le safe call échoue si tableau null, l'index peut être invalide."
+  },
+  {
+    "id": "KOT-NS-054",
+    "theme": "Null Safety",
+    "theme_label": "Require with message",
+    "difficulty": "hard",
+    "question": "requireNotNull(value) { \"message\" } lance quelle exception ?",
+    "options": [
+      "IllegalArgumentException",
+      "IllegalStateException",
+      "NullPointerException",
+      "RuntimeException"
+    ],
+    "correct": 0,
+    "explanation": "requireNotNull lève IllegalArgumentException."
+  },
+  {
+    "id": "KOT-NS-055",
+    "theme": "Null Safety",
+    "theme_label": "Check with message",
+    "difficulty": "hard",
+    "question": "checkNotNull(value) { \"message\" } lance quelle exception ?",
+    "options": [
+      "IllegalStateException",
+      "IllegalArgumentException",
+      "NullPointerException",
+      "RuntimeException"
+    ],
+    "correct": 0,
+    "explanation": "checkNotNull lève IllegalStateException."
+  },
+  {
+    "id": "KOT-NS-056",
+    "theme": "Null Safety",
+    "theme_label": "NotNull assertion performance",
+    "difficulty": "hard",
+    "question": "!! est-il plus performant que ?. ?",
+    "options": [
+      "Oui, pas de vérification",
+      "Non, plus lent",
+      "Identique",
+      "Dépend"
+    ],
+    "correct": 0,
+    "explanation": "!! n'ajoute pas de vérification dans le bytecode."
+  },
+  {
+    "id": "KOT-NS-057",
+    "theme": "Null Safety",
+    "theme_label": "Smart cast limitation",
+    "difficulty": "hard",
+    "question": "Pourquoi le smart cast peut échouer sur var ?",
+    "options": [
+      "La variable peut être modifiée",
+      "Le type n'est pas connu",
+      "Le compilateur ne supporte pas",
+      "Uniquement pour les val"
+    ],
+    "correct": 0,
+    "explanation": "Entre la vérification et l'utilisation, la var peut changer."
+  },
+  {
+    "id": "KOT-NS-058",
+    "theme": "Null Safety",
+    "theme_label": "Smart cast workaround",
+    "difficulty": "hard",
+    "question": "Comment forcer le smart cast sur var ?",
+    "options": [
+      "val local = var",
+      "var as? Type",
+      "var!!",
+      "Impossible"
+    ],
+    "correct": 0,
+    "explanation": "Copier dans une val locale pour smart cast."
+  },
+  {
+    "id": "KOT-NS-059",
+    "theme": "Null Safety",
+    "theme_label": "Array of nullables",
+    "difficulty": "hard",
+    "question": "arrayOfNulls<String>(5) crée un tableau de ?",
+    "options": [
+      "String?",
+      "String",
+      "Any",
+      "Nothing"
+    ],
+    "correct": 0,
+    "explanation": "arrayOfNulls retourne un tableau d'éléments nullables."
+  },
+  {
+    "id": "KOT-NS-060",
+    "theme": "Null Safety",
+    "theme_label": "Map with null values",
+    "difficulty": "hard",
+    "question": "mapOf(\"a\" to null) est-il autorisé ?",
+    "options": [
+      "Oui, si le type de valeur est nullable",
+      "Non",
+      "Oui, toujours",
+      "Non, car null n'est pas autorisé"
+    ],
+    "correct": 0,
+    "explanation": "Le type de la map doit être V? pour accepter null."
+  },
+  {
+    "id": "KOT-NS-061",
+    "theme": "Null Safety",
+    "theme_label": "Safe call",
+    "difficulty": "medium",
+    "type": "MULTI_CHOICE",
+    "question": "Sélectionnez TOUTES les affirmations correctes concernant l'opérateur de safe call (?.) en Kotlin :",
+    "options": [
+      "Permet d'éviter les NullPointerException",
+      "Peut être utilisé avec des méthodes et des propriétés",
+      "Retourne null si l'objet est null, sinon appelle la méthode/propriété",
+      "Modifie le type de l'objet à non-nullable"
+    ],
+    "correct": 0,
+    "correct_multiple": [
+      0,
+      1,
+      2
+    ],
+    "explanation": "L'opérateur de safe call (?.) est utilisé pour éviter les NullPointerException en Kotlin. Il peut être appliqué à des méthodes et des propriétés, et retourne null si l'objet est null. Cependant, il ne modifie pas le type de l'objet à non-nullable."
+  },
+  {
+    "id": "KOT-NS-063",
+    "theme": "Null Safety",
+    "theme_label": "lateinit",
+    "difficulty": "medium",
+    "type": "MULTI_CHOICE",
+    "question": "Quelles sont les deux affirmations vraies concernant l'utilisation de lateinit en Kotlin ?",
+    "options": [
+      "Peut être utilisé avec des types primitifs",
+      "Doit être initialisé avant d'être utilisé",
+      "Peut être utilisé avec des propriétés val",
+      "Permet de déclarer une propriété non-nullable sans initialisation immédiate"
+    ],
+    "correct": 1,
+    "correct_multiple": [
+      1,
+      3
+    ],
+    "explanation": "lateinit ne peut pas être utilisé avec des types primitifs et doit être initialisé avant d'être utilisé. Il ne peut pas être utilisé avec des propriétés val, mais permet de déclarer une propriété non-nullable sans initialisation immédiate."
+  },
+  {
+    "id": "KOT-NS-064",
+    "theme": "Null Safety",
+    "theme_label": "Smart cast",
+    "difficulty": "hard",
+    "type": "SINGLE_CHOICE",
+    "question": "Quelle est la condition requise pour que Kotlin effectue un smart cast sur une variable nullable ?",
+    "options": [
+      "La variable doit être déclarée comme non-nullable",
+      "La variable doit être initialisée avec une valeur non-null",
+      "Le compilateur doit déterminer que la variable ne peut pas être null dans un bloc de code",
+      "La variable doit être mutable"
+    ],
+    "correct": 2,
+    "correct_multiple": null,
+    "explanation": "Pour que Kotlin effectue un smart cast sur une variable nullable, le compilateur doit déterminer que la variable ne peut pas être null dans un bloc de code spécifique. Cela se produit généralement après une vérification non-null."
+  },
+  {
+    "id": "KOT-NS-065",
+    "theme": "Null Safety",
+    "theme_label": "Platform types",
+    "difficulty": "easy",
+    "type": "MULTI_CHOICE",
+    "question": "Quelles sont les deux affirmations vraies concernant les types plateformes en Kotlin ?",
+    "options": [
+      "Sont utilisés pour interagir avec des bibliothèques Java",
+      "Peuvent être nulls même si non-nullable dans Kotlin",
+      "Sont déclarés avec le suffixe '?'",
+      "Permettent l'utilisation de méthodes spécifiques à la plateforme"
+    ],
+    "correct": 0,
+    "correct_multiple": [
+      0,
+      1
+    ],
+    "explanation": "Les types plateformes en Kotlin sont utilisés pour interagir avec des bibliothèques Java. Ils peuvent être nulls même si non-nullable dans Kotlin, ce qui permet une meilleure intégration avec le code Java existant. Ils ne sont pas déclarés avec un suffixe '?' et n'ont pas de méthodes spécifiques à la plateforme."
+  },
+  {
+    "id": "KOT-NS-065",
+    "theme": "Null Safety",
+    "theme_label": "Safe call",
+    "difficulty": "medium",
+    "type": "MULTI_CHOICE",
+    "question": "Sélectionnez TOUTES les affirmations correctes concernant l'opérateur de safe call (?.) :",
+    "options": [
+      "Permet d'éviter les exceptions NullPointerException",
+      "Peut être utilisé avec des méthodes et des propriétés",
+      "N'est pas utilisable avec les fonctions",
+      "Retourne null si l'objet est null"
+    ],
+    "correct": 0,
+    "correct_multiple": [
+      0,
+      1,
+      3
+    ],
+    "explanation": "L'opérateur de safe call permet d'éviter les exceptions NullPointerException en retournant null si l'objet est null (Option A et D sont correctes). Il peut être utilisé avec des méthodes et des propriétés (Option B est correcte). Cependant, il peut être utilisé avec les fonctions (Option C est incorrecte)."
+  },
+  {
+    "id": "KOT-NS-066",
+    "theme": "Null Safety",
+    "theme_label": "Elvis operator",
+    "difficulty": "easy",
+    "type": "SINGLE_CHOICE",
+    "question": "Quelle est l'utilité principale de l'opérateur Elvis (?:) ?",
+    "options": [
+      "Permet de définir une valeur par défaut si la variable est null",
+      "Effectue un cast sécurisé entre types",
+      "Permet de faire des appels sûrs à des méthodes",
+      "Affiche un message d'erreur si la variable est null"
+    ],
+    "correct": 0,
+    "correct_multiple": null,
+    "explanation": "L'opérateur Elvis permet de définir une valeur par défaut si la variable est null (Option A est correcte). Les autres options ne sont pas correctes."
+  },
+  {
+    "id": "KOT-NS-067",
+    "theme": "Null Safety",
+    "theme_label": "lateinit",
+    "difficulty": "hard",
+    "type": "MULTI_CHOICE",
+    "question": "Quelles sont les DEUX affirmations vraies concernant le mot-clé lateinit ?",
+    "options": [
+      "Peut être utilisé avec des types primitifs",
+      "Nécessite l'initialisation avant utilisation",
+      "Permet de déclarer des propriétés non-nullables sans initialisation immédiate",
+      "Peut être utilisé avec des propriétés val"
+    ],
+    "correct": 2,
+    "correct_multiple": [
+      2,
+      3
+    ],
+    "explanation": "Le mot-clé lateinit permet de déclarer des propriétés non-nullables sans initialisation immédiate (Option C est correcte). Il peut être utilisé avec des propriétés val (Option D est correcte). Les autres options ne sont pas correctes."
+  },
+  {
+    "id": "KOT-NS-068",
+    "theme": "Null Safety",
+    "theme_label": "Smart cast",
+    "difficulty": "medium",
+    "type": "SINGLE_CHOICE",
+    "question": "Quelle est la condition pour que Kotlin effectue un smart cast ?",
+    "options": [
+      "Lorsqu'une variable est vérifiée avec is et utilisée dans un bloc if",
+      "Lorsqu'une variable est assignée à une autre variable non-null",
+      "Lorsqu'une variable est déclarée comme lateinit",
+      "Lorsqu'une variable est utilisée dans une boucle"
+    ],
+    "correct": 0,
+    "correct_multiple": null,
+    "explanation": "Kotlin effectue un smart cast lorsqu'une variable est vérifiée avec is et utilisée dans un bloc if (Option A est correcte). Les autres options ne sont pas correctes."
+  },
+  {
+    "id": "KOT-NS-069",
+    "theme": "Null Safety",
+    "theme_label": "Platform types",
+    "difficulty": "hard",
+    "type": "MULTI_CHOICE",
+    "question": "Quelles sont les DEUX affirmations vraies concernant les types de plateforme (platform types) ?",
+    "options": [
+      "Sont utilisés pour interagir avec du code Java non-nullable",
+      "Peuvent être convertis en types nullable Kotlin sans problème",
+      "Sont représentés avec un suffixe '?' dans la signature de méthode Java",
+      "Permettent d'éviter les vérifications de nullité"
+    ],
+    "correct": 0,
+    "correct_multiple": [
+      0,
+      3
+    ],
+    "explanation": "Les types de plateforme sont utilisés pour interagir avec du code Java non-nullable (Option A est correcte). Ils permettent d'éviter les vérifications de nullité (Option D est correcte). Les autres options ne sont pas correctes."
+  },
+  {
+    "id": "KOT-NS-070",
+    "theme": "Null Safety",
+    "theme_label": "Nullable types",
+    "difficulty": "medium",
+    "type": "MULTI_CHOICE",
+    "question": "Sélectionnez TOUTES les affirmations correctes concernant le type nullable :",
+    "options": [
+      "Un type nullable peut être déclaré avec un signe de point d'interrogation après le type",
+      "Un type nullable peut être affecté à null",
+      "Tous les types en Kotlin sont non-nullables par défaut",
+      "Un type nullable peut être utilisé dans des opérations arithmétiques sans conversion"
+    ],
+    "correct": 0,
+    "correct_multiple": [
+      0,
+      1
+    ],
+    "explanation": "Option A est correcte car un type nullable en Kotlin est déclaré avec un signe de point d'interrogation après le type. Option B est correcte car une variable nullable peut être affectée à null. Option C est incorrecte car tous les types en Kotlin ne sont pas non-nullables par défaut, ils peuvent être déclarés comme nullable. Option D est incorrecte car une variable nullable nécessite une conversion explicite pour être utilisée dans des opérations arithmétiques."
+  },
+  {
+    "id": "KOT-NS-071",
+    "theme": "Null Safety",
+    "theme_label": "Safe call",
+    "difficulty": "easy",
+    "type": "SINGLE_CHOICE",
+    "question": "Quelle est la syntaxe correcte pour une safe call en Kotlin ?",
+    "options": [
+      "variable?.property",
+      "variable.property?",
+      "variable?::property",
+      "variable?.property?"
+    ],
+    "correct": 0,
+    "correct_multiple": null,
+    "explanation": "Option A est correcte car la syntaxe pour une safe call en Kotlin utilise le point d'interrogation après la variable. Option B est incorrecte car le point d'interrogation ne peut pas être placé après la propriété. Option C est incorrecte car le double point d'exclamation n'est pas utilisé pour les safe calls. Option D est incorrecte car le double point d'interrogation n'est pas utilisé pour les safe calls."
+  },
+  {
+    "id": "KOT-NS-072",
+    "theme": "Null Safety",
+    "theme_label": "lateinit",
+    "difficulty": "hard",
+    "type": "MULTI_CHOICE",
+    "question": "Quelles sont les deux propositions vraies concernant le mot-clé lateinit en Kotlin ?",
+    "options": [
+      "lateinit peut être utilisé pour des propriétés var et val",
+      "Une propriété lateinit doit être initialisée avant son utilisation",
+      "lateinit peut être utilisé avec des types primitifs",
+      "Une propriété lateinit ne peut pas être nulle après son initialisation"
+    ],
+    "correct": 1,
+    "correct_multiple": [
+      1,
+      3
+    ],
+    "explanation": "Option A est incorrecte car lateinit ne peut être utilisé que pour des propriétés var. Option B est correcte car une propriété lateinit doit effectivement être initialisée avant son utilisation. Option C est incorrecte car lateinit ne peut pas être utilisé avec des types primitifs, qui sont non-nullables par défaut. Option D est correcte car une fois initialisée, une propriété lateinit ne peut plus être nulle."
+  },
+  {
+    "id": "KOT-NS-073",
+    "theme": "Null Safety",
+    "theme_label": "Elvis operator",
+    "difficulty": "medium",
+    "type": "SINGLE_CHOICE",
+    "question": "Quelle est la valeur retournée par l'expression `a ?: b` si a est non-null ?",
+    "options": [
+      "a",
+      "b",
+      "null",
+      "erreur de compilation"
+    ],
+    "correct": 0,
+    "correct_multiple": null,
+    "explanation": "Option A est correcte car l'opérateur Elvis retourne la valeur de a si elle n'est pas null. Option B est incorrecte car b est retourné uniquement si a est null. Option C est incorrecte car l'expression ne retournera jamais null si a n'est pas null. Option D est incorrecte car l'expression ne provoque aucune erreur de compilation si a n'est pas null."
+  },
+  {
+    "id": "KOT-NS-074",
+    "theme": "Null Safety",
+    "theme_label": "Smart cast",
+    "difficulty": "easy",
+    "type": "MULTI_CHOICE",
+    "question": "Quelles sont les deux affirmations correctes concernant le smart cast en Kotlin ?",
+    "options": [
+      "Le smart cast est automatique et ne nécessite aucune action du programmeur",
+      "Le smart cast peut être utilisé avec des types nullable sans vérification supplémentaire",
+      "Le smart cast est effectué lorsqu'une variable est utilisée dans une condition if avec un type spécifique",
+      "Le smart cast peut être utilisé pour convertir n'importe quel type en un autre"
+    ],
+    "correct": 2,
+    "correct_multiple": [
+      2,
+      3
+    ],
+    "explanation": "Option A est incorrecte car le smart cast nécessite parfois une vérification supplémentaire, comme un if. Option B est incorrecte car le smart cast avec des types nullable nécessite une vérification explicite. Option C est correcte car le smart cast est effectué lorsque Kotlin peut déduire le type d'une variable dans une condition if. Option D est incorrecte car le smart cast ne convertit pas n'importe quel type en un autre, il vérifie et utilise le type déduit."
+  },
+  {
+    "id": "KOT-NS-075",
+    "theme": "Null Safety",
+    "theme_label": "Safe call",
+    "difficulty": "medium",
+    "type": "MULTI_CHOICE",
+    "question": "Sélectionnez TOUTES les affirmations correctes concernant l'opérateur de safe call (?.) :",
+    "options": [
+      "Permet d'éviter les NullPointerException",
+      "Peut être utilisé avec des méthodes et des propriétés",
+      "N'est pas utilisable avec les fonctions lambda",
+      "Retourne null si l'objet est null"
+    ],
+    "correct": 0,
+    "correct_multiple": [
+      0,
+      1,
+      3
+    ],
+    "explanation": "L'opérateur de safe call (?.) est utilisé pour éviter les NullPointerException en vérifiant si l'objet est null avant d'accéder à ses membres. Il peut être utilisé avec des méthodes, des propriétés et même les fonctions lambda. Si l'objet est null, l'expression entière retourne null."
+  },
+  {
+    "id": "KOT-NS-076",
+    "theme": "Null Safety",
+    "theme_label": "Elvis operator",
+    "difficulty": "easy",
+    "type": "SINGLE_CHOICE",
+    "question": "Quelle est la fonction principale de l'opérateur Elvis (?:) ?",
+    "options": [
+      "Permet de retourner une valeur par défaut si la première expression est null",
+      "Effectue une vérification de nullité avant d'exécuter une action",
+      "Remplace la valeur d'une variable par null",
+      "Force l'exécution d'un bloc de code"
+    ],
+    "correct": 0,
+    "correct_multiple": null,
+    "explanation": "L'opérateur Elvis (?:) permet de retourner une valeur par défaut si la première expression est null. C'est utile pour éviter les NullPointerException et fournir une valeur alternative."
+  },
+  {
+    "id": "KOT-NS-077",
+    "theme": "Null Safety",
+    "theme_label": "lateinit",
+    "difficulty": "hard",
+    "type": "MULTI_CHOICE",
+    "question": "Quelles sont les deux principales restrictions liées à l'utilisation de lateinit ?",
+    "options": [
+      "Ne peut pas être utilisé avec des types primitifs",
+      "Doit être initialisé avant d'être utilisé",
+      "Ne peut pas être utilisé dans des classes data",
+      "Doit être marqué comme final"
+    ],
+    "correct": 1,
+    "correct_multiple": [
+      1,
+      2
+    ],
+    "explanation": "lateinit ne peut pas être utilisé avec des types primitifs, mais doit être initialisé avant d'être utilisé. Il ne peut pas être utilisé dans des classes data, car ces classes nécessitent une initialisation immédiate de toutes les propriétés. Il ne doit pas être marqué comme final."
+  },
+  {
+    "id": "KOT-NS-078",
+    "theme": "Null Safety",
+    "theme_label": "Smart cast",
+    "difficulty": "medium",
+    "type": "SINGLE_CHOICE",
+    "question": "Quelle est la condition pour que Kotlin effectue un smart cast ?",
+    "options": [
+      "Lorsqu'une variable est vérifiée avec une expression if",
+      "Toujours, après chaque assignation de valeur",
+      "Lorsque la variable est déclarée comme nullable",
+      "Après une fonction qui retourne un type non null"
+    ],
+    "correct": 0,
+    "correct_multiple": null,
+    "explanation": "Kotlin effectue un smart cast lorsqu'une variable est vérifiée avec une expression if, permettant de lever la nullabilité temporairement dans le bloc if."
+  },
+  {
+    "id": "KOT-NS-079",
+    "theme": "Null Safety",
+    "theme_label": "Platform types",
+    "difficulty": "hard",
+    "type": "MULTI_CHOICE",
+    "question": "Quelles sont les deux caractéristiques des platform types dans Kotlin ?",
+    "options": [
+      "Peuvent être nullables ou non-nullables selon le contexte",
+      "Sont utilisés uniquement dans les interactions avec Java",
+      "Permettent d'éviter les NullPointerException",
+      "Ne peuvent pas être utilisés dans des expressions lambda"
+    ],
+    "correct": 1,
+    "correct_multiple": [
+      1,
+      2
+    ],
+    "explanation": "Les platform types peuvent être nullables ou non-nullables selon le contexte et sont principalement utilisés dans les interactions avec Java. Ils permettent d'éviter les NullPointerException en fournissant des informations sur la nullabilité dans le code Kotlin."
+  },
+  {
+    "id": "KOT-NS-080",
+    "theme": "Null Safety",
+    "theme_label": "Safe call",
+    "difficulty": "medium",
+    "type": "MULTI_CHOICE",
+    "question": "Sélectionnez TOUTES les affirmations correctes concernant l'opérateur de safe call (?.) en Kotlin :",
+    "options": [
+      "L'opérateur de safe call permet d'éviter les exceptions NullPointerException.",
+      "Il peut être utilisé avec des méthodes et des propriétés.",
+      "L'opérateur de safe call retourne null si l'objet est non nul.",
+      "Il ne peut être utilisé qu'avec des variables de type nullable."
+    ],
+    "correct": 0,
+    "correct_multiple": [
+      0,
+      1
+    ],
+    "explanation": "L'opérateur de safe call (?.) est utilisé pour éviter les exceptions NullPointerException en Kotlin, ce qui le rend correct. Il peut être utilisé avec des méthodes et des propriétés, donc cette option est également correcte. Cependant, l'opérateur de safe call retourne la valeur de la méthode ou de la propriété si l'objet est non nul, pas null. Donc, cette option est incorrecte. Enfin, l'opérateur de safe call peut être utilisé avec des variables non nulles pour accéder aux propriétés ou méthodes, donc cette option est incorrecte."
+  }
+]
