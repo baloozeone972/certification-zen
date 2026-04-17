@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- certif-ios/CertifApp/Info.plist -->
+<!-- App configuration: permissions, background tasks, URL schemes -->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+
+    <!-- ═══════════════════════════════════════════════════
+         App Identity
+    ═══════════════════════════════════════════════════ -->
+    <key>CFBundleName</key>
+    <string>CertifApp</string>
+
+    <key>CFBundleDisplayName</key>
+    <string>CertifApp</string>
+
+    <key>CFBundleIdentifier</key>
+    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+
+    <key>CFBundleVersion</key>
+    <string>$(CURRENT_PROJECT_VERSION)</string>
+
+    <key>CFBundleShortVersionString</key>
+    <string>$(MARKETING_VERSION)</string>
+
+    <key>CFBundleExecutable</key>
+    <string>$(EXECUTABLE_NAME)</string>
+
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+
+    <key>LSRequiresIPhoneOS</key>
+    <true/>
+
+    <!-- ═══════════════════════════════════════════════════
+         Minimum iOS version
+    ═══════════════════════════════════════════════════ -->
+    <key>MinimumOSVersion</key>
+    <string>17.0</string>
+
+    <!-- ═══════════════════════════════════════════════════
+         Background Tasks (equivalent: AndroidManifest BIND_JOB_SERVICE)
+         Must match BackgroundTaskIdentifier constants in SyncBackgroundTask.swift
+    ═══════════════════════════════════════════════════ -->
+    <key>BGTaskSchedulerPermittedIdentifiers</key>
+    <array>
+        <string>com.certifapp.sync</string>
+        <string>com.certifapp.coachreport</string>
+    </array>
+
+    <!-- ═══════════════════════════════════════════════════
+         Background modes
+    ═══════════════════════════════════════════════════ -->
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>fetch</string>
+        <string>processing</string>
+        <string>remote-notification</string>
+    </array>
+
+    <!-- ═══════════════════════════════════════════════════
+         Privacy usage descriptions (App Store required)
+    ═══════════════════════════════════════════════════ -->
+    <key>NSUserNotificationsUsageDescription</key>
+    <string>CertifApp vous envoie des rappels pour vos révisions et votre rapport coach hebdomadaire.</string>
+
+    <key>NSCameraUsageDescription</key>
+    <string>CertifApp utilise la caméra pour scanner vos documents de certification.</string>
+
+    <!-- ═══════════════════════════════════════════════════
+         URL Schemes (deep linking)
+    ═══════════════════════════════════════════════════ -->
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLName</key>
+            <string>com.certifapp.deeplink</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>certifapp</string>
+            </array>
+        </dict>
+    </array>
+
+    <!-- ═══════════════════════════════════════════════════
+         App Transport Security
+    ═══════════════════════════════════════════════════ -->
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <!-- Allow localhost for development only -->
+        <key>NSExceptionDomains</key>
+        <dict>
+            <key>localhost</key>
+            <dict>
+                <key>NSExceptionAllowsInsecureHTTPLoads</key>
+                <true/>
+            </dict>
+        </dict>
+    </dict>
+
+    <!-- ═══════════════════════════════════════════════════
+         API Base URL (overridden by Config.xcconfig)
+    ═══════════════════════════════════════════════════ -->
+    <key>API_BASE_URL</key>
+    <string>$(API_BASE_URL)</string>
+
+    <!-- ═══════════════════════════════════════════════════
+         Orientation support
+    ═══════════════════════════════════════════════════ -->
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+
+    <key>UISupportedInterfaceOrientations~ipad</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationPortraitUpsideDown</string>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+
+    <!-- ═══════════════════════════════════════════════════
+         Launch screen
+    ═══════════════════════════════════════════════════ -->
+    <key>UILaunchScreen</key>
+    <dict/>
+
+</dict>
+</plist>
