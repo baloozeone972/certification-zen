@@ -38,10 +38,13 @@ public class GetExamResultsUseCaseImplTest {
     @Test
     @DisplayName("execute_nominal_case")
     public void execute_nominal_case() {
+        // Arrange
         when(sessionRepository.findById(eq(sessionId))).thenReturn(Optional.of(examSession));
 
+        // Act
         ExamSession result = getExamResultsUseCase.execute(sessionId, userId);
 
+        // Assert
         assertThat(result).isEqualTo(examSession);
         verify(sessionRepository, times(1)).findById(eq(sessionId));
     }
@@ -49,8 +52,10 @@ public class GetExamResultsUseCaseImplTest {
     @Test
     @DisplayName("execute_edge_case_no_session")
     public void execute_edge_case_no_session() {
+        // Arrange
         when(sessionRepository.findById(eq(sessionId))).thenReturn(Optional.empty());
 
+        // Act & Assert
         ExamSessionNotFoundException exception = assertThrows(ExamSessionNotFoundException.class,
                 () -> getExamResultsUseCase.execute(sessionId, userId));
 
@@ -61,8 +66,10 @@ public class GetExamResultsUseCaseImplTest {
     @Test
     @DisplayName("execute_error_case_user_id_mismatch")
     public void execute_error_case_user_id_mismatch() {
+        // Arrange
         when(sessionRepository.findById(eq(sessionId))).thenReturn(Optional.of(examSession));
 
+        // Act & Assert
         ExamSessionNotFoundException exception = assertThrows(ExamSessionNotFoundException.class,
                 () -> getExamResultsUseCase.execute(sessionId, UUID.randomUUID()));
 
@@ -70,4 +77,3 @@ public class GetExamResultsUseCaseImplTest {
         verify(sessionRepository, times(1)).findById(eq(sessionId));
     }
 }
-

@@ -3,16 +3,25 @@ package com.certifapp.application.dto.user;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verifyNoInteractions;
 
-@ExtendWith(MockitoExtension.class)
 public class TokenPairDtoTest {
+
+    @Mock
+    private TokenService mockTokenService;
+
+    @InjectMocks
+    private TokenPairDto tokenPairDto;
 
     @BeforeEach
     public void setUp() {
-        // No setup required for this test case as no mocks or dependencies are used
+        MockitoAnnotations.openMocks(this);
     }
 
     @DisplayName("Test nominal case of TokenPairDto creation")
@@ -72,4 +81,3 @@ public class TokenPairDtoTest {
         verifyNoInteractions(mockTokenService);
     }
 }
-

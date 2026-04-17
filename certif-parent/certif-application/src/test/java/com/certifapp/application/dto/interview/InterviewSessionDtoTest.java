@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class InterviewSessionDtoTest {
@@ -22,11 +23,6 @@ public class InterviewSessionDtoTest {
     @BeforeEach
     public void setUp() {
         // Setup any necessary mocks or initializations here
-    }
-
-    @AfterEach
-    public void tearDown() {
-        // Cleanup any resources if needed
     }
 
     @Test
@@ -109,4 +105,3 @@ public class InterviewSessionDtoTest {
         assertThat(sessionDto.toString()).isNotNull();
     }
 }
-

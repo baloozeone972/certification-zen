@@ -31,7 +31,16 @@ public class CourseSummaryDtoTest {
     @Test
     @DisplayName("Should create a valid CourseSummaryDto with all parameters")
     public void shouldCreateValidCourseSummaryDto() {
+        // Arrange
+        UUID id = UUID.randomUUID();
+        String themeCode = "THEME123";
+        String title = "Course Title";
+        String aiStatus = "ACTIVE";
+
+        // Act
         CourseSummaryDto dto = new CourseSummaryDto(id, themeCode, title, aiStatus);
+
+        // Assert
         assertThat(dto.id()).isEqualTo(id);
         assertThat(dto.themeCode()).isEqualTo(themeCode);
         assertThat(dto.title()).isEqualTo(title);
@@ -41,29 +50,64 @@ public class CourseSummaryDtoTest {
     @Test
     @DisplayName("Should handle null id")
     public void shouldHandleNullId() {
-        CourseSummaryDto dto = new CourseSummaryDto(null, themeCode, title, aiStatus);
+        // Arrange
+        UUID id = null;
+        String themeCode = "THEME123";
+        String title = "Course Title";
+        String aiStatus = "ACTIVE";
+
+        // Act
+        CourseSummaryDto dto = new CourseSummaryDto(id, themeCode, title, aiStatus);
+
+        // Assert
         assertThat(dto.id()).isNull();
     }
 
     @Test
     @DisplayName("Should handle empty themeCode")
     public void shouldHandleEmptyThemeCode() {
-        CourseSummaryDto dto = new CourseSummaryDto(id, "", title, aiStatus);
+        // Arrange
+        UUID id = UUID.randomUUID();
+        String themeCode = "";
+        String title = "Course Title";
+        String aiStatus = "ACTIVE";
+
+        // Act
+        CourseSummaryDto dto = new CourseSummaryDto(id, themeCode, title, aiStatus);
+
+        // Assert
         assertThat(dto.themeCode()).isEmpty();
     }
 
     @Test
     @DisplayName("Should handle null title")
     public void shouldHandleNullTitle() {
-        CourseSummaryDto dto = new CourseSummaryDto(id, themeCode, null, aiStatus);
+        // Arrange
+        UUID id = UUID.randomUUID();
+        String themeCode = "THEME123";
+        String title = null;
+        String aiStatus = "ACTIVE";
+
+        // Act
+        CourseSummaryDto dto = new CourseSummaryDto(id, themeCode, title, aiStatus);
+
+        // Assert
         assertThat(dto.title()).isNull();
     }
 
     @Test
     @DisplayName("Should handle empty aiStatus")
     public void shouldHandleEmptyAiStatus() {
-        CourseSummaryDto dto = new CourseSummaryDto(id, themeCode, title, "");
+        // Arrange
+        UUID id = UUID.randomUUID();
+        String themeCode = "THEME123";
+        String title = "Course Title";
+        String aiStatus = "";
+
+        // Act
+        CourseSummaryDto dto = new CourseSummaryDto(id, themeCode, title, aiStatus);
+
+        // Assert
         assertThat(dto.aiStatus()).isEmpty();
     }
 }
-

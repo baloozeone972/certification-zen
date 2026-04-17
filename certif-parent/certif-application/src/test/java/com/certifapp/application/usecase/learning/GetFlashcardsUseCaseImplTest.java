@@ -52,12 +52,15 @@ public class GetFlashcardsUseCaseImplTest {
     @Test
     @DisplayName("should return flashcards when user has PRO tier")
     public void execute_PRO_user_success() {
+        // Arrange
         when(userRepository.findById(userId)).thenReturn(Optional.of(mockUser(SubscriptionTier.PRO)));
         List<Flashcard> expectedFlashcards = Arrays.asList(new Flashcard());
         when(flashcardRepository.findDueByUserAndCertification(any(), any(), anyInt())).thenReturn(expectedFlashcards);
 
+        // Act
         List<Flashcard> result = getFlashcardsUseCase.execute(userId, certificationId, limit);
 
+        // Assert
         assertThat(result).isEqualTo(expectedFlashcards);
         verify(userRepository).findById(userId);
         verify(freemiumGuardService).requireUnlimited(SubscriptionTier.PRO, "Flashcards & Spaced Repetition");
@@ -67,8 +70,10 @@ public class GetFlashcardsUseCaseImplTest {
     @Test
     @DisplayName("should throw SubscriptionRequiredException when user has FREE tier")
     public void execute_FREE_user_failure() {
+        // Arrange
         when(userRepository.findById(userId)).thenReturn(Optional.of(mockUser(SubscriptionTier.FREE)));
 
+        // Act & Assert
         assertThatThrownBy(() -> getFlashcardsUseCase.execute(userId, certificationId, limit))
                 .isInstanceOf(SubscriptionRequiredException.class)
                 .withFailMessage("Subscription is required for this feature");
@@ -80,12 +85,15 @@ public class GetFlashcardsUseCaseImplTest {
     @Test
     @DisplayName("should use default limit when provided limit is less than or equal to 0")
     public void execute_limit_0_success() {
+        // Arrange
         int defaultLimit = 20;
         List<Flashcard> expectedFlashcards = Arrays.asList(new Flashcard());
         when(flashcardRepository.findDueByUserAndCertification(any(), any(), eq(defaultLimit))).thenReturn(expectedFlashcards);
 
+        // Act
         List<Flashcard> result = getFlashcardsUseCase.execute(userId, certificationId, 0);
 
+        // Assert
         assertThat(result).isEqualTo(expectedFlashcards);
         verify(userRepository).findById(userId);
         verify(freemiumGuardService).requireUnlimited(SubscriptionTier.FREE, "Flashcards & Spaced Repetition");
@@ -95,12 +103,15 @@ public class GetFlashcardsUseCaseImplTest {
     @Test
     @DisplayName("should use maximum limit when provided limit exceeds maximum allowed")
     public void execute_limit_greater_than_max_success() {
+        // Arrange
         int maxLimit = 50;
         List<Flashcard> expectedFlashcards = Arrays.asList(new Flashcard());
         when(flashcardRepository.findDueByUserAndCertification(any(), any(), eq(maxLimit))).thenReturn(expectedFlashcards);
 
+        // Act
         List<Flashcard> result = getFlashcardsUseCase.execute(userId, certificationId, 100);
 
+        // Assert
         assertThat(result).isEqualTo(expectedFlashcards);
         verify(userRepository).findById(userId);
         verify(freemiumGuardService).requireUnlimited(SubscriptionTier.FREE, "Flashcards & Spaced Repetition");
@@ -113,4 +124,3 @@ public class GetFlashcardsUseCaseImplTest {
         return user;
     }
 }
-

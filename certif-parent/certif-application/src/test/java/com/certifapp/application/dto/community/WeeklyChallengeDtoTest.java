@@ -35,49 +35,48 @@ public class WeeklyChallengeDtoTest {
     @Test
     @DisplayName("Should return the correct challenge ID")
     public void getId_challengeExists_expectedId() {
-        assertThat(weeklyChallengeDto.id()).isEqualTo(weeklyChallengeDto.getId());
+        assertThat(weeklyChallengeDto.getId()).isEqualTo(weeklyChallengeDto.id());
     }
 
     @Test
     @DisplayName("Should return the correct challenge title")
     public void getTitle_challengeExists_expectedTitle() {
-        assertThat(weeklyChallengeDto.title()).isEqualTo(weeklyChallengeDto.getTitle());
+        assertThat(weeklyChallengeDto.getTitle()).isEqualTo(weeklyChallengeDto.title());
     }
 
     @Test
     @DisplayName("Should return the correct certification ID")
     public void getCertificationId_challengeExists_expectedCertificationId() {
-        assertThat(weeklyChallengeDto.certificationId()).isEqualTo(weeklyChallengeDto.getCertificationId());
+        assertThat(weeklyChallengeDto.getCertificationId()).isEqualTo(weeklyChallengeDto.certificationId());
     }
 
     @Test
     @DisplayName("Should return the correct theme code")
     public void getThemeCode_challengeExists_expectedThemeCode() {
-        assertThat(weeklyChallengeDto.themeCode()).isEqualTo(weeklyChallengeDto.getThemeCode());
+        assertThat(weeklyChallengeDto.getThemeCode()).isEqualTo(weeklyChallengeDto.themeCode());
     }
 
     @Test
     @DisplayName("Should return the correct start time")
     public void getStartsAt_challengeExists_expectedStartTime() {
-        assertThat(weeklyChallengeDto.startsAt()).isEqualTo(weeklyChallengeDto.getStartsAt());
+        assertThat(weeklyChallengeDto.getStartsAt()).isEqualTo(weeklyChallengeDto.startsAt());
     }
 
     @Test
     @DisplayName("Should return the correct end time")
     public void getEndsAt_challengeExists_expectedEndTime() {
-        assertThat(weeklyChallengeDto.endsAt()).isEqualTo(weeklyChallengeDto.getEndsAt());
+        assertThat(weeklyChallengeDto.getEndsAt()).isEqualTo(weeklyChallengeDto.endsAt());
     }
 
     @Test
     @DisplayName("Should return the correct total participants")
     public void getTotalParticipants_challengeExists_expectedTotalParticipants() {
-        assertThat(weeklyChallengeDto.totalParticipants()).isEqualTo(weeklyChallengeDto.getTotalParticipants());
+        assertThat(weeklyChallengeDto.getTotalParticipants()).isEqualTo(weeklyChallengeDto.totalParticipants());
     }
 
     @Test
     @DisplayName("Should return the correct question count")
     public void getQuestionCount_challengeExists_expectedQuestionCount() {
-        assertThat(weeklyChallengeDto.questionCount()).isEqualTo(weeklyChallengeDto.getQuestionCount());
+        assertThat(weeklyChallengeDto.getQuestionCount()).isEqualTo(weeklyChallengeDto.questionCount());
     }
 }
-

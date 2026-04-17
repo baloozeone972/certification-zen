@@ -31,9 +31,18 @@ public class UserAnswerDtoTest {
     @Test
     @DisplayName("Should create UserAnswerDto with selected option")
     public void testCreateUserAnswerDtoWithSelectedOption() {
-        userAnswerDto = new UserAnswerDto(mockQuestionId, mockSelectedOptionId, true, false);
-        assertThat(userAnswerDto.questionId()).isEqualTo(mockQuestionId);
-        assertThat(userAnswerDto.selectedOptionId()).isEqualTo(mockSelectedOptionId);
+        // Arrange
+        UUID questionId = mockQuestionId;
+        UUID selectedOptionId = mockSelectedOptionId;
+        boolean isCorrect = true;
+        boolean isSkipped = false;
+
+        // Act
+        userAnswerDto = new UserAnswerDto(questionId, selectedOptionId, isCorrect, isSkipped);
+
+        // Assert
+        assertThat(userAnswerDto.questionId()).isEqualTo(questionId);
+        assertThat(userAnswerDto.selectedOptionId()).isEqualTo(selectedOptionId);
         assertThat(userAnswerDto.isCorrect()).isTrue();
         assertThat(userAnswerDto.isSkipped()).isFalse();
     }
@@ -41,8 +50,17 @@ public class UserAnswerDtoTest {
     @Test
     @DisplayName("Should create UserAnswerDto with no selected option")
     public void testCreateUserAnswerDtoWithNoSelectedOption() {
-        userAnswerDto = new UserAnswerDto(mockQuestionId, null, false, true);
-        assertThat(userAnswerDto.questionId()).isEqualTo(mockQuestionId);
+        // Arrange
+        UUID questionId = mockQuestionId;
+        UUID selectedOptionId = null;
+        boolean isCorrect = false;
+        boolean isSkipped = true;
+
+        // Act
+        userAnswerDto = new UserAnswerDto(questionId, selectedOptionId, isCorrect, isSkipped);
+
+        // Assert
+        assertThat(userAnswerDto.questionId()).isEqualTo(questionId);
         assertThat(userAnswerDto.selectedOptionId()).isNull();
         assertThat(userAnswerDto.isCorrect()).isFalse();
         assertThat(userAnswerDto.isSkipped()).isTrue();
@@ -51,7 +69,13 @@ public class UserAnswerDtoTest {
     @Test
     @DisplayName("Should throw NullPointerException if questionId is null")
     public void testCreateUserAnswerDtoWithNullQuestionId() {
-        assertThatThrownBy(() -> new UserAnswerDto(null, mockSelectedOptionId, true, false))
+        // Arrange
+        UUID selectedOptionId = mockSelectedOptionId;
+        boolean isCorrect = true;
+        boolean isSkipped = false;
+
+        // Act & Assert
+        assertThatThrownBy(() -> new UserAnswerDto(null, selectedOptionId, isCorrect, isSkipped))
                 .isInstanceOf(NullPointerException.class)
                 .hasMessageContaining("questionId must not be null");
     }
@@ -59,7 +83,14 @@ public class UserAnswerDtoTest {
     @Test
     @DisplayName("Should throw IllegalArgumentException if isCorrect and isSkipped are both true")
     public void testCreateUserAnswerDtoWithIncorrectAndSkipped() {
-        assertThatThrownBy(() -> new UserAnswerDto(mockQuestionId, mockSelectedOptionId, true, true))
+        // Arrange
+        UUID questionId = mockQuestionId;
+        UUID selectedOptionId = mockSelectedOptionId;
+        boolean isCorrect = true;
+        boolean isSkipped = true;
+
+        // Act & Assert
+        assertThatThrownBy(() -> new UserAnswerDto(questionId, selectedOptionId, isCorrect, isSkipped))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("either isCorrect or isSkipped must be true");
     }

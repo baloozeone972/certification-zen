@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(MockitoExtension.class)
 public class ExamResultDtoTest {
@@ -208,4 +209,3 @@ public class ExamResultDtoTest {
         assertThatThrownBy(() -> invalidExamResultDto.endedAt()).isInstanceOf(NullPointerException.class);
     }
 }
-

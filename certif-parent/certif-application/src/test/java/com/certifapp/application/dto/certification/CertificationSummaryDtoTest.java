@@ -3,16 +3,24 @@ package com.certifapp.application.dto.certification;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(MockitoExtension.class)
+@DisplayName("CertificationSummaryDto Tests")
 public class CertificationSummaryDtoTest {
+
+    @Mock
+    private CertificationService certificationService;
+
+    @InjectMocks
+    private CertificationSummaryDto certificationSummaryDto;
 
     @BeforeEach
     public void setUp() {
-        // Setup code if needed
+        MockitoAnnotations.openMocks(this);
     }
 
     @DisplayName("Create a valid CertificationSummaryDto with nominal case")
@@ -26,15 +34,15 @@ public class CertificationSummaryDtoTest {
         int examDurationMin = 90;
         String examType = "MCQ";
 
-        CertificationSummaryDto certificationSummaryDto = new CertificationSummaryDto(id, code, name, totalQuestions, passingScore, examDurationMin, examType);
+        CertificationSummaryDto dto = new CertificationSummaryDto(id, code, name, totalQuestions, passingScore, examDurationMin, examType);
 
-        assertThat(certificationSummaryDto.id()).isEqualTo(id);
-        assertThat(certificationSummaryDto.code()).isEqualTo(code);
-        assertThat(certificationSummaryDto.name()).isEqualTo(name);
-        assertThat(certificationSummaryDto.totalQuestions()).isEqualTo(totalQuestions);
-        assertThat(certificationSummaryDto.passingScore()).isEqualTo(passingScore);
-        assertThat(certificationSummaryDto.examDurationMin()).isEqualTo(examDurationMin);
-        assertThat(certificationSummaryDto.examType()).isEqualTo(examType);
+        assertThat(dto.id()).isEqualTo(id);
+        assertThat(dto.code()).isEqualTo(code);
+        assertThat(dto.name()).isEqualTo(name);
+        assertThat(dto.totalQuestions()).isEqualTo(totalQuestions);
+        assertThat(dto.passingScore()).isEqualTo(passingScore);
+        assertThat(dto.examDurationMin()).isEqualTo(examDurationMin);
+        assertThat(dto.examType()).isEqualTo(examType);
     }
 
     @DisplayName("Create a valid CertificationSummaryDto with edge cases")
@@ -48,15 +56,15 @@ public class CertificationSummaryDtoTest {
         int examDurationMin = 60;
         String examType = "";
 
-        CertificationSummaryDto certificationSummaryDto = new CertificationSummaryDto(id, code, name, totalQuestions, passingScore, examDurationMin, examType);
+        CertificationSummaryDto dto = new CertificationSummaryDto(id, code, name, totalQuestions, passingScore, examDurationMin, examType);
 
-        assertThat(certificationSummaryDto.id()).isEqualTo(id);
-        assertThat(certificationSummaryDto.code()).isEqualTo(code);
-        assertThat(certificationSummaryDto.name()).isEqualTo(name);
-        assertThat(certificationSummaryDto.totalQuestions()).isEqualTo(totalQuestions);
-        assertThat(certificationSummaryDto.passingScore()).isEqualTo(passingScore);
-        assertThat(certificationSummaryDto.examDurationMin()).isEqualTo(examDurationMin);
-        assertThat(certificationSummaryDto.examType()).isEqualTo(examType);
+        assertThat(dto.id()).isEqualTo(id);
+        assertThat(dto.code()).isEqualTo(code);
+        assertThat(dto.name()).isEqualTo(name);
+        assertThat(dto.totalQuestions()).isEqualTo(totalQuestions);
+        assertThat(dto.passingScore()).isEqualTo(passingScore);
+        assertThat(dto.examDurationMin()).isEqualTo(examDurationMin);
+        assertThat(dto.examType()).isEqualTo(examType);
     }
 
     @DisplayName("Create a valid CertificationSummaryDto with error cases")
@@ -70,15 +78,14 @@ public class CertificationSummaryDtoTest {
         int examDurationMin = -10;
         String examType = "INVALID";
 
-        CertificationSummaryDto certificationSummaryDto = new CertificationSummaryDto(id, code, name, totalQuestions, passingScore, examDurationMin, examType);
+        CertificationSummaryDto dto = new CertificationSummaryDto(id, code, name, totalQuestions, passingScore, examDurationMin, examType);
 
-        assertThat(certificationSummaryDto.id()).isEqualTo(id);
-        assertThat(certificationSummaryDto.code()).isEqualTo(code);
-        assertThat(certificationSummaryDto.name()).isEqualTo(name);
-        assertThat(certificationSummaryDto.totalQuestions()).isEqualTo(totalQuestions);
-        assertThat(certificationSummaryDto.passingScore()).isEqualTo(passingScore);
-        assertThat(certificationSummaryDto.examDurationMin()).isEqualTo(examDurationMin);
-        assertThat(certificationSummaryDto.examType()).isEqualTo(examType);
+        assertThat(dto.id()).isEqualTo(id);
+        assertThat(dto.code()).isEqualTo(code);
+        assertThat(dto.name()).isEqualTo(name);
+        assertThat(dto.totalQuestions()).isEqualTo(totalQuestions);
+        assertThat(dto.passingScore()).isEqualTo(passingScore);
+        assertThat(dto.examDurationMin()).isEqualTo(examDurationMin);
+        assertThat(dto.examType()).isEqualTo(examType);
     }
 }
-

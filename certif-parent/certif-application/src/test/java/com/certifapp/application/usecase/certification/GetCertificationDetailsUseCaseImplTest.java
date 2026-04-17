@@ -34,10 +34,13 @@ public class GetCertificationDetailsUseCaseImplTest {
     @Test
     @DisplayName("execute_nominal_case_should_return_certification")
     public void execute_nominal_case_should_return_certification() {
+        // Arrange
         when(certificationRepository.findById(anyString())).thenReturn(java.util.Optional.of(certification));
 
+        // Act
         Certification result = getCertificationDetailsUseCase.execute("ocp21");
 
+        // Assert
         assertThat(result).isEqualTo(certification);
         verify(certificationRepository, times(1)).findById("ocp21");
     }
@@ -45,8 +48,10 @@ public class GetCertificationDetailsUseCaseImplTest {
     @Test
     @DisplayName("execute_edge_case_empty_certificationId_should_throw_exception")
     public void execute_edge_case_empty_certificationId_should_throw_exception() {
+        // Arrange
         when(certificationRepository.findById(anyString())).thenReturn(java.util.Optional.empty());
 
+        // Act & Assert
         assertThatThrownBy(() -> getCertificationDetailsUseCase.execute(""))
                 .isInstanceOf(CertificationNotFoundException.class)
                 .hasMessage("ocp21");
@@ -55,11 +60,12 @@ public class GetCertificationDetailsUseCaseImplTest {
     @Test
     @DisplayName("execute_error_case_null_certificationId_should_throw_exception")
     public void execute_error_case_null_certificationId_should_throw_exception() {
+        // Arrange
         when(certificationRepository.findById(anyString())).thenReturn(java.util.Optional.empty());
 
+        // Act & Assert
         assertThatThrownBy(() -> getCertificationDetailsUseCase.execute(null))
                 .isInstanceOf(CertificationNotFoundException.class)
                 .hasMessage("null");
     }
 }
-

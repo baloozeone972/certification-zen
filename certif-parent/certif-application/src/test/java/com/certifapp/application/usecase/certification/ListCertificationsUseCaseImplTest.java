@@ -28,11 +28,6 @@ public class ListCertificationsUseCaseImplTest {
         // Additional setup if needed
     }
 
-    @AfterEach
-    public void tearDown() {
-        // Additional teardown if needed
-    }
-
     @Test
     @DisplayName("should return all active certifications when activeOnly is true")
     public void execute_activeOnly_true_expectedActiveCertifications() {
@@ -95,4 +90,3 @@ public class ListCertificationsUseCaseImplTest {
         verify(certificationRepository, times(1)).findAll(activeOnly);
     }
 }
-

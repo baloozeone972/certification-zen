@@ -1,4 +1,3 @@
-// certif-parent/certif-application/src/test/java/com/certifapp/application/usecase/user/RegisterUserUseCaseImplTest.java
 package com.certifapp.application.usecase.user;
 
 import com.certifapp.domain.exception.DuplicateEmailException;
@@ -25,9 +24,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * Unit tests for {@link RegisterUserUseCaseImpl}.
- */
 @ExtendWith(MockitoExtension.class)
 @DisplayName("RegisterUserUseCaseImpl")
 class RegisterUserUseCaseImplTest {

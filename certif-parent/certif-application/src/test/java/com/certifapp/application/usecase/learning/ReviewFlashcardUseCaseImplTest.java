@@ -1,4 +1,3 @@
-// certif-parent/certif-application/src/test/java/com/certifapp/application/usecase/learning/ReviewFlashcardUseCaseImplTest.java
 package com.certifapp.application.usecase.learning;
 
 import com.certifapp.domain.model.learning.SM2Schedule;
@@ -22,9 +21,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * Unit tests for {@link ReviewFlashcardUseCaseImpl}.
- */
 @ExtendWith(MockitoExtension.class)
 @DisplayName("ReviewFlashcardUseCaseImpl")
 class ReviewFlashcardUseCaseImplTest {
@@ -34,6 +30,8 @@ class ReviewFlashcardUseCaseImplTest {
     @Mock
     private SM2ScheduleRepository sm2Repository;
     private SM2AlgorithmService sm2Service;
+    @Mock
+    private ReviewFlashcardUseCase.OutputPort outputPort;
     private ReviewFlashcardUseCaseImpl useCase;
 
     @BeforeEach

@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class QuestionDtoTest {
@@ -126,4 +127,3 @@ public class QuestionDtoTest {
                 .isInstanceOf(NullPointerException.class);
     }
 }
-

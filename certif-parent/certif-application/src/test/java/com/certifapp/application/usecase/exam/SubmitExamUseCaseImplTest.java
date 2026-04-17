@@ -25,6 +25,7 @@ import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -82,8 +83,9 @@ public class SubmitExamUseCaseImplTest {
     }
 
     @Test
-    @DisplayName("nominal case: exam session completed successfully")
+    @DisplayName("submitExam_success")
     public void submitExam_success() {
+        // Arrange
         when(sessionRepository.findById(sessionId))
                 .thenReturn(Optional.of(session));
         when(answerRepository.findBySessionId(sessionId))
@@ -95,8 +97,10 @@ public class SubmitExamUseCaseImplTest {
         when(scoringService.score(any(), any(), anyDouble(), anyInt()))
                 .thenReturn(new ScoringService.ScoringResult(2, 85.0, true));
 
+        // Act
         ExamSession completed = submitExamUseCase.execute(sessionId, userId);
 
+        // Assert
         assertThat(completed.status()).isEqualTo(SessionStatus.COMPLETED);
         assertThat(completed.percentage()).isEqualTo(85.0);
         assertThat(completed.passed()).isTrue();
@@ -104,18 +108,21 @@ public class SubmitExamUseCaseImplTest {
     }
 
     @Test
-    @DisplayName("edge case: exam session not found")
+    @DisplayName("submitExam_examSessionNotFound")
     public void submitExam_examSessionNotFound() {
+        // Arrange
         when(sessionRepository.findById(sessionId))
                 .thenReturn(Optional.empty());
 
+        // Act & Assert
         assertThrows(ExamSessionNotFoundException.class, () ->
                 submitExamUseCase.execute(sessionId, userId));
     }
 
     @Test
-    @DisplayName("edge case: exam session belongs to another user")
+    @DisplayName("submitExam_examSessionBelongsToAnotherUser")
     public void submitExam_examSessionBelongsToAnotherUser() {
+        // Arrange
         when(sessionRepository.findById(sessionId))
                 .thenReturn(Optional.of(new ExamSession(
                         sessionId, UUID.randomUUID(), UUID.randomUUID(),
@@ -123,13 +130,15 @@ public class SubmitExamUseCaseImplTest {
                         OffsetDateTime.now(), null, 0, 10, 5, 85.0, true,
                         Collections.emptyList())));
 
+        // Act & Assert
         assertThrows(ExamSessionNotFoundException.class, () ->
                 submitExamUseCase.execute(sessionId, userId));
     }
 
     @Test
-    @DisplayName("edge case: exam session already completed")
+    @DisplayName("submitExam_examSessionAlreadyCompleted")
     public void submitExam_examSessionAlreadyCompleted() {
+        // Arrange
         when(sessionRepository.findById(sessionId))
                 .thenReturn(Optional.of(new ExamSession(
                         sessionId, userId, UUID.randomUUID(),
@@ -137,25 +146,29 @@ public class SubmitExamUseCaseImplTest {
                         OffsetDateTime.now(), null, 0, 10, 5, 85.0, true,
                         Collections.emptyList())));
 
+        // Act & Assert
         assertThrows(ExamAlreadyCompletedException.class, () ->
                 submitExamUseCase.execute(sessionId, userId));
     }
 
     @Test
-    @DisplayName("edge case: certification not found")
+    @DisplayName("submitExam_certificationNotFound")
     public void submitExam_certificationNotFound() {
+        // Arrange
         when(sessionRepository.findById(sessionId))
                 .thenReturn(Optional.of(session));
         when(certificationRepository.findById(session.certificationId()))
                 .thenReturn(Optional.empty());
 
+        // Act & Assert
         assertThrows(CertificationNotFoundException.class, () ->
                 submitExamUseCase.execute(sessionId, userId));
     }
 
     @Test
-    @DisplayName("edge case: question not found")
+    @DisplayName("submitExam_questionNotFound")
     public void submitExam_questionNotFound() {
+        // Arrange
         when(sessionRepository.findById(sessionId))
                 .thenReturn(Optional.of(session));
         when(answerRepository.findBySessionId(sessionId))
@@ -163,8 +176,8 @@ public class SubmitExamUseCaseImplTest {
         when(questionRepository.findById(any(UUID.class)))
                 .thenReturn(Optional.empty());
 
+        // Act & Assert
         assertThrows(ExamSessionNotFoundException.class, () ->
                 submitExamUseCase.execute(sessionId, userId));
     }
 }
-

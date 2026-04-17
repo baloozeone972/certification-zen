@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -69,4 +68,3 @@ public class UserPreferencesDtoTest {
         assertThat(userPreferencesDto.freeModeDurationMin()).isEqualTo(60);
     }
 }
-

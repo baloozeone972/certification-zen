@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 public class LeaderboardEntryDtoTest {
@@ -119,4 +120,3 @@ public class LeaderboardEntryDtoTest {
         assertThat(exception.getMessage()).isEqualTo("userId must not be null");
     }
 }
-

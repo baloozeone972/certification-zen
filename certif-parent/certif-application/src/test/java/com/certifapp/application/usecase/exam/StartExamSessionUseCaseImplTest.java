@@ -1,4 +1,3 @@
-// certif-parent/certif-application/src/test/java/com/certifapp/application/usecase/exam/StartExamSessionUseCaseImplTest.java
 package com.certifapp.application.usecase.exam;
 
 import com.certifapp.domain.exception.CertificationNotFoundException;
