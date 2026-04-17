@@ -55,8 +55,8 @@ public enum ExamMode {
      */
     public boolean supportsTimer() {
         return switch (this) {
-            case EXAM, FREE -> true;
-            default -> false;
+            case COMPLETED, EXPIRED -> true;
+            case IN_PROGRESS, ABANDONED -> false;
         };
     }
 

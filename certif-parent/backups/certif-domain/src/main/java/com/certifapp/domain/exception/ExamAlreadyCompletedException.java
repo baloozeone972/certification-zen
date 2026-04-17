@@ -4,9 +4,16 @@ package com.certifapp.domain.exception;
 /**
  * Thrown when trying to submit or answer a session that is already completed.
  */
-public record ExamAlreadyCompletedException(java.util.UUID sessionId) extends CertifAppException {
+public class ExamAlreadyCompletedException extends CertifAppException {
 
-    public ExamAlreadyCompletedException {
+    private final java.util.UUID sessionId;
+
+    public ExamAlreadyCompletedException(java.util.UUID sessionId) {
         super("Exam session already completed: " + sessionId);
+        this.sessionId = sessionId;
+    }
+
+    public java.util.UUID getSessionId() {
+        return sessionId;
     }
 }

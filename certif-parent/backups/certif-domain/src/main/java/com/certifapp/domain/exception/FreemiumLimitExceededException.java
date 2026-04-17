@@ -4,7 +4,11 @@ package com.certifapp.domain.exception;
 /**
  * Thrown when a FREE-tier user exceeds their daily exam or question limit.
  */
-public record FreemiumLimitExceededException(String message) extends CertifAppException {
+public class FreemiumLimitExceededException extends CertifAppException {
+
+    public FreemiumLimitExceededException(String message) {
+        super(message);
+    }
 
     public static FreemiumLimitExceededException dailyExams() {
         return new FreemiumLimitExceededException(

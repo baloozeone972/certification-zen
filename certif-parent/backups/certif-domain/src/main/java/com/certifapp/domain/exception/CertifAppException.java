@@ -6,7 +6,7 @@ package com.certifapp.domain.exception;
  * All domain exceptions must extend this class to allow unified handling
  * in the API layer via {@code GlobalExceptionHandler}.
  */
-public record CertifAppException(String message, Throwable cause) {
+public class CertifAppException extends RuntimeException {
 
     /** Error code for structured API error responses. */
     private final String errorCode;
@@ -17,7 +17,10 @@ public record CertifAppException(String message, Throwable cause) {
      * @param message error description (exposed in API error response)
      */
     public CertifAppException(String message) {
-        this(message, null);
+        super(message);
+        this.errorCode = this.getClass().getSimpleName()
+                .replace("Exception", "")
+                .toUpperCase();
     }
 
     /**

@@ -4,8 +4,9 @@ package com.certifapp.domain.exception;
 /**
  * Thrown when email/password authentication fails.
  */
-public record InvalidCredentialsException(String message) extends CertifAppException {
+public class InvalidCredentialsException extends CertifAppException {
+
     public InvalidCredentialsException() {
-        this("Invalid email or password");
+        super("Invalid email or password");
     }
 }

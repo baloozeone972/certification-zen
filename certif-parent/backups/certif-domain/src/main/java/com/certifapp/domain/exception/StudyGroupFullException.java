@@ -4,9 +4,16 @@ package com.certifapp.domain.exception;
 /**
  * Thrown when a user tries to join a study group that has reached its member limit.
  */
-public record StudyGroupFullException(java.util.UUID groupId, int maxMembers) extends CertifAppException {
+public class StudyGroupFullException extends CertifAppException {
 
-    public StudyGroupFullException {
+    private final java.util.UUID groupId;
+
+    public StudyGroupFullException(java.util.UUID groupId, int maxMembers) {
         super("Study group " + groupId + " is full (max: " + maxMembers + ")");
+        this.groupId = groupId;
+    }
+
+    public java.util.UUID getGroupId() {
+        return groupId;
     }
 }

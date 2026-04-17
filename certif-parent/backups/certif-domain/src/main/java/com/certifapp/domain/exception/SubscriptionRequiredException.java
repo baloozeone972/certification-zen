@@ -4,9 +4,16 @@ package com.certifapp.domain.exception;
 /**
  * Thrown when a PRO-only feature is accessed by a FREE-tier user.
  */
-public record SubscriptionRequiredException(String featureName) extends CertifAppException {
+public class SubscriptionRequiredException extends CertifAppException {
 
-    public SubscriptionRequiredException {
+    private final String featureName;
+
+    public SubscriptionRequiredException(String featureName) {
         super("Feature \"" + featureName + "\" requires a PRO subscription");
+        this.featureName = featureName;
+    }
+
+    public String getFeatureName() {
+        return featureName;
     }
 }

@@ -4,16 +4,9 @@ package com.certifapp.domain.exception;
 /**
  * Thrown when a question with the given UUID does not exist.
  */
-public class QuestionNotFoundException extends CertifAppException {
+public record QuestionNotFoundException(java.util.UUID questionId) extends CertifAppException {
 
-    private final java.util.UUID questionId;
-
-    public QuestionNotFoundException(java.util.UUID questionId) {
+    public QuestionNotFoundException {
         super("Question not found: " + questionId);
-        this.questionId = questionId;
-    }
-
-    public java.util.UUID getQuestionId() {
-        return questionId;
     }
 }
