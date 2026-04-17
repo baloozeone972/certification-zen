@@ -3,17 +3,21 @@ package com.certifapp.infrastructure.persistence.entity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.testcontainers.context.SpringBootTestContextInitializer;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+
+import java.time.OffsetDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(MockitoExtension.class)
+@DataJpaTest
+@ContextConfiguration(initializers = SpringJUnitConfig.Initializer.class)
+@SpringBootTestContextInitializer
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class FlashcardEntityTest {
-
-    @InjectMocks
-    private FlashcardEntity flashcardEntity;
 
     @BeforeEach
     public void setUp() {

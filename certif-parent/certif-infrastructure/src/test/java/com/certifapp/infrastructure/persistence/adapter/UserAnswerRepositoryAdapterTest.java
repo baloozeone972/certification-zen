@@ -12,6 +12,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.testcontainers.context.SpringBootTestContextInitializer;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,20 +30,26 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
+@DataJpaTest
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(initializers = SpringBootTestContextInitializer.class)
+@Transactional
 public class UserAnswerRepositoryAdapterTest {
+
+    @Autowired
+    private UserAnswerJpaRepository jpaRepository;
+
+    @Mock
+    private ExamSessionMapper mapper;
+
+    @InjectMocks
+    private UserAnswerRepositoryAdapter userAnswerRepositoryAdapter;
 
     private final UUID sessionId = UUID.randomUUID();
     private final UserAnswer userAnswer1 = new UserAnswer(sessionId, 1, "optionA");
     private final UserAnswer userAnswer2 = new UserAnswer(sessionId, 2, "optionB");
     private final ExamSessionEntity examSessionEntity1 = new ExamSessionEntity(sessionId, null);
     private final ExamSessionEntity examSessionEntity2 = new ExamSessionEntity(sessionId, null);
-    @Mock
-    private UserAnswerJpaRepository jpaRepository;
-    @Mock
-    private ExamSessionMapper mapper;
-    @InjectMocks
-    private UserAnswerRepositoryAdapter userAnswerRepositoryAdapter;
 
     @BeforeEach
     public void setUp() {
@@ -99,4 +112,3 @@ public class UserAnswerRepositoryAdapterTest {
         verify(jpaRepository, never()).findBySessionIdOrderByAnsweredAt(any(UUID.class));
     }
 }
-

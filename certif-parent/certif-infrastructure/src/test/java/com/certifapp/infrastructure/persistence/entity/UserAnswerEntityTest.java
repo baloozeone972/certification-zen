@@ -4,114 +4,131 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.testcontainers.context.SpringBootTestContextInitializer;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@DataJpaTest
+@ContextConfiguration(initializers = SpringBootTestContextInitializer.class)
+@SpringJUnitConfig(classes = {UserAnswerEntityTest.Config.class})
+@Testcontainers
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class UserAnswerEntityTest {
 
-    @Mock
-    private UUID mockId;
+    @Container
+    public static PostgreSQLContainer<?> postgresql = new PostgreSQLContainer<>("postgres:latest")
+            .withDatabaseName("testdb")
+            .withUsername("testuser")
+            .withPassword("testpass");
 
-    @Mock
-    private UUID mockSessionId;
-
-    @Mock
-    private UUID mockQuestionId;
-
-    @Mock
-    private UUID mockSelectedOption;
-
-    @InjectMocks
-    private UserAnswerEntity userAnswerEntity;
+    @Autowired
+    private UserAnswerRepository userAnswerRepository;
 
     @BeforeEach
     public void setUp() {
-        when(mockId).thenReturn(UUID.randomUUID());
-        when(mockSessionId).thenReturn(UUID.randomUUID());
-        when(mockQuestionId).thenReturn(UUID.randomUUID());
-        when(mockSelectedOption).thenReturn(UUID.randomUUID());
-
-        userAnswerEntity.setId(mockId);
-        userAnswerEntity.setSessionId(mockSessionId);
-        userAnswerEntity.setQuestionId(mockQuestionId);
-        userAnswerEntity.setSelectedOption(mockSelectedOption);
+        // No setup needed for this test
     }
 
     @AfterEach
     public void tearDown() {
-        verifyNoMoreInteractions(mockId, mockSessionId, mockQuestionId, mockSelectedOption);
+        verifyNoMoreInteractions(userAnswerRepository);
     }
 
     @Test
     @DisplayName("Test UserAnswerEntity creation with correct values")
     public void testUserAnswerEntityCreationCorrectValues() {
-        assertThat(userAnswerEntity.getId()).isNotNull();
-        assertThat(userAnswerEntity.getSessionId()).isEqualTo(mockSessionId);
-        assertThat(userAnswerEntity.getQuestionId()).isEqualTo(mockQuestionId);
-        assertThat(userAnswerEntity.getSelectedOption()).isEqualTo(mockSelectedOption);
-        assertThat(userAnswerEntity.isCorrect()).isFalse();
-        assertThat(userAnswerEntity.isSkipped()).isFalse();
-        assertThat(userAnswerEntity.getResponseTimeMs()).isNull();
-        assertThat(userAnswerEntity.getAnsweredAt()).isNotNull();
+        UserAnswerEntity userAnswerEntity = new UserAnswerEntity();
+        userAnswerEntity.setId(UUID.randomUUID());
+        userAnswerEntity.setSessionId(UUID.randomUUID());
+        userAnswerEntity.setQuestionId(UUID.randomUUID());
+        userAnswerEntity.setSelectedOption(UUID.randomUUID());
+
+        UserAnswerEntity savedUserAnswer = userAnswerRepository.save(userAnswerEntity);
+
+        assertThat(savedUserAnswer.getId()).isNotNull();
+        assertThat(savedUserAnswer.getSessionId()).isEqualTo(userAnswerEntity.getSessionId());
+        assertThat(savedUserAnswer.getQuestionId()).isEqualTo(userAnswerEntity.getQuestionId());
+        assertThat(savedUserAnswer.getSelectedOption()).isEqualTo(userAnswerEntity.getSelectedOption());
+        assertThat(savedUserAnswer.isCorrect()).isFalse();
+        assertThat(savedUserAnswer.isSkipped()).isFalse();
+        assertThat(savedUserAnswer.getResponseTimeMs()).isNull();
+        assertThat(savedUserAnswer.getAnsweredAt()).isNotNull();
     }
 
     @Test
     @DisplayName("Test UserAnswerEntity creation with null values")
     public void testUserAnswerEntityCreationNullValues() {
-        when(mockId).thenReturn(null);
-        when(mockSessionId).thenReturn(null);
-        when(mockQuestionId).thenReturn(null);
-        when(mockSelectedOption).thenReturn(null);
+        UserAnswerEntity userAnswerEntity = new UserAnswerEntity();
+        userAnswerEntity.setId(null);
+        userAnswerEntity.setSessionId(null);
+        userAnswerEntity.setQuestionId(null);
+        userAnswerEntity.setSelectedOption(null);
 
-        userAnswerEntity.setId(mockId);
-        userAnswerEntity.setSessionId(mockSessionId);
-        userAnswerEntity.setQuestionId(mockQuestionId);
-        userAnswerEntity.setSelectedOption(mockSelectedOption);
+        UserAnswerEntity savedUserAnswer = userAnswerRepository.save(userAnswerEntity);
 
-        assertThat(userAnswerEntity.getId()).isNull();
-        assertThat(userAnswerEntity.getSessionId()).isNull();
-        assertThat(userAnswerEntity.getQuestionId()).isNull();
-        assertThat(userAnswerEntity.getSelectedOption()).isNull();
+        assertThat(savedUserAnswer.getId()).isNull();
+        assertThat(savedUserAnswer.getSessionId()).isNull();
+        assertThat(savedUserAnswer.getQuestionId()).isNull();
+        assertThat(savedUserAnswer.getSelectedOption()).isNull();
     }
 
     @Test
     @DisplayName("Test UserAnswerEntity creation with isCorrect set to true")
     public void testUserAnswerEntityCreationIsCorrectTrue() {
+        UserAnswerEntity userAnswerEntity = new UserAnswerEntity();
+        userAnswerEntity.setId(UUID.randomUUID());
+        userAnswerEntity.setSessionId(UUID.randomUUID());
+        userAnswerEntity.setQuestionId(UUID.randomUUID());
+        userAnswerEntity.setSelectedOption(UUID.randomUUID());
         userAnswerEntity.setCorrect(true);
-        assertThat(userAnswerEntity.isCorrect()).isTrue();
+
+        UserAnswerEntity savedUserAnswer = userAnswerRepository.save(userAnswerEntity);
+
+        assertThat(savedUserAnswer.isCorrect()).isTrue();
     }
 
     @Test
     @DisplayName("Test UserAnswerEntity creation with isSkipped set to true")
     public void testUserAnswerEntityCreationIsSkippedTrue() {
+        UserAnswerEntity userAnswerEntity = new UserAnswerEntity();
+        userAnswerEntity.setId(UUID.randomUUID());
+        userAnswerEntity.setSessionId(UUID.randomUUID());
+        userAnswerEntity.setQuestionId(UUID.randomUUID());
+        userAnswerEntity.setSelectedOption(UUID.randomUUID());
         userAnswerEntity.setSkipped(true);
-        assertThat(userAnswerEntity.isSkipped()).isTrue();
+
+        UserAnswerEntity savedUserAnswer = userAnswerRepository.save(userAnswerEntity);
+
+        assertThat(savedUserAnswer.isSkipped()).isTrue();
     }
 
     @Test
     @DisplayName("Test UserAnswerEntity creation with responseTimeMs set to a value")
     public void testUserAnswerEntityCreationResponseTimeMsValue() {
-        when(mockId).thenReturn(UUID.randomUUID());
-        when(mockSessionId).thenReturn(UUID.randomUUID());
-        when(mockQuestionId).thenReturn(UUID.randomUUID());
-        when(mockSelectedOption).thenReturn(UUID.randomUUID());
-
-        userAnswerEntity.setId(mockId);
-        userAnswerEntity.setSessionId(mockSessionId);
-        userAnswerEntity.setQuestionId(mockQuestionId);
-        userAnswerEntity.setSelectedOption(mockSelectedOption);
+        UserAnswerEntity userAnswerEntity = new UserAnswerEntity();
+        userAnswerEntity.setId(UUID.randomUUID());
+        userAnswerEntity.setSessionId(UUID.randomUUID());
+        userAnswerEntity.setQuestionId(UUID.randomUUID());
+        userAnswerEntity.setSelectedOption(UUID.randomUUID());
         userAnswerEntity.setResponseTimeMs(100L);
 
-        assertThat(userAnswerEntity.getResponseTimeMs()).isEqualTo(100L);
+        UserAnswerEntity savedUserAnswer = userAnswerRepository.save(userAnswerEntity);
+
+        assertThat(savedUserAnswer.getResponseTimeMs()).isEqualTo(100L);
     }
 
+    static class Config {
+        // Configuration for the test
+    }
 }

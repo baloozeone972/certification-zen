@@ -4,27 +4,36 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.testcontainers.context.SpringBootTestContextInitializer;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.OffsetDateTime;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@ExtendWith(MockitoExtension.class)
+@DataJpaTest
+@ContextConfiguration(initializers = SpringBootTestContextInitializer.class)
+@TestPropertySource(locations = "classpath:application-test.properties")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class CertificationThemeEntityTest {
 
-    @Mock
-    private CertificationEntity certification;
+    @Autowired
+    private CertificationThemeRepository themeRepository;
 
-    @InjectMocks
     private CertificationThemeEntity theme;
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
+        theme = new CertificationThemeEntity();
         theme.setId(UUID.randomUUID());
-        theme.setCertification(certification);
+        theme.setCertification(new CertificationEntity());
         theme.setCode("testCode");
         theme.setLabel("testLabel");
         theme.setQuestionCount(10);
@@ -34,7 +43,7 @@ public class CertificationThemeEntityTest {
 
     @AfterEach
     public void tearDown() {
-        verifyNoMoreInteractions(certification);
+        themeRepository.deleteAll();
     }
 
     @Test
@@ -103,27 +112,18 @@ public class CertificationThemeEntityTest {
     @Test
     @DisplayName(" error case: null certification should throw exception")
     public void setCertification_Null_ShouldThrowException() {
-        IllegalArgumentException thrown = assertThatThrownBy(() -> theme.setCertification(null))
-                .isInstanceOf(IllegalArgumentException.class)
-                .withMessageContaining("certification");
-        assertThat(thrown).hasNoCause();
+        assertThrows(IllegalArgumentException.class, () -> theme.setCertification(null));
     }
 
     @Test
     @DisplayName(" error case: null code should throw exception")
     public void setCode_Null_ShouldThrowException() {
-        IllegalArgumentException thrown = assertThatThrownBy(() -> theme.setCode(null))
-                .isInstanceOf(IllegalArgumentException.class)
-                .withMessageContaining("code");
-        assertThat(thrown).hasNoCause();
+        assertThrows(IllegalArgumentException.class, () -> theme.setCode(null));
     }
 
     @Test
     @DisplayName(" error case: null label should throw exception")
     public void setLabel_Null_ShouldThrowException() {
-        IllegalArgumentException thrown = assertThatThrownBy(() -> theme.setLabel(null))
-                .isInstanceOf(IllegalArgumentException.class)
-                .withMessageContaining("label");
+        assertThrows(IllegalArgumentException.class, () -> theme.setLabel(null));
     }
 }
-

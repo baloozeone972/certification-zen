@@ -25,7 +25,7 @@ import static org.mockito.Mockito.*;
 public class ExamSessionJpaRepositoryTest {
 
     @Mock
-    private ExamSessionEntity examSessionEntity;
+    private ExamSessionEntityRepository examSessionEntityRepository;
 
     @InjectMocks
     private ExamSessionJpaRepositoryImpl examSessionJpaRepository;

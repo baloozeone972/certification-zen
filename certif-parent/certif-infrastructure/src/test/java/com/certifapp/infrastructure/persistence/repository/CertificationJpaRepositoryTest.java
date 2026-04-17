@@ -3,68 +3,71 @@ package com.certifapp.infrastructure.persistence.repository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.testcontainers.context.SpringBootTestContextInitializer;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@DataJpaTest
+@ContextConfiguration(initializers = SpringBootTestContextInitializer.class)
+@SpringJUnitConfig(classes = {CertificationJpaRepositoryTest.Config.class})
+@Testcontainers
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class CertificationJpaRepositoryTest {
 
-    @Mock
-    private CertificationEntity mockCertificationEntity1;
+    @Container
+    public static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest")
+            .withDatabaseName("testdb")
+            .withUsername("testuser")
+            .withPassword("testpass");
 
-    @Mock
-    private CertificationEntity mockCertificationEntity2;
-
-    @InjectMocks
+    @Autowired
     private CertificationJpaRepository underTest;
 
     @BeforeEach
     public void setUp() {
-        when(mockCertificationEntity1.getName()).thenReturn("Cert1");
-        when(mockCertificationEntity1.isActive()).thenReturn(true);
+        // Arrange
+        CertificationEntity cert1 = new CertificationEntity("Cert1", true);
+        CertificationEntity cert2 = new CertificationEntity("Cert2", false);
 
-        when(mockCertificationEntity2.getName()).thenReturn("Cert2");
-        when(mockCertificationEntity2.isActive()).thenReturn(false);
+        underTest.save(cert1);
+        underTest.save(cert2);
     }
 
     @Test
     @DisplayName("findAllWithThemes_nominalCase_expectedAllCertifications")
     public void findAllWithThemes_nominalCase_expectedAllCertifications() {
-        // Arrange
-        when(underTest.findAll()).thenReturn(List.of(mockCertificationEntity1, mockCertificationEntity2));
-
         // Act
         List<CertificationEntity> result = underTest.findAllWithThemes();
 
         // Assert
-        assertThat(result).containsExactlyInAnyOrder(mockCertificationEntity1, mockCertificationEntity2);
+        assertThat(result).hasSize(2);
     }
 
     @Test
     @DisplayName("findAllActiveWithThemes_nominalCase_expectedOnlyActiveCertifications")
     public void findAllActiveWithThemes_nominalCase_expectedOnlyActiveCertifications() {
-        // Arrange
-        when(underTest.findAll()).thenReturn(List.of(mockCertificationEntity1, mockCertificationEntity2));
-
         // Act
         List<CertificationEntity> result = underTest.findAllActiveWithThemes();
 
         // Assert
-        assertThat(result).containsExactlyInAnyOrder(mockCertificationEntity1);
+        assertThat(result).hasSize(1);
     }
 
     @Test
     @DisplayName("findAllActiveWithThemes_noActiveCertifications_expectedEmptyList")
     public void findAllActiveWithThemes_noActiveCertifications_expectedEmptyList() {
         // Arrange
-        when(underTest.findAll()).thenReturn(List.of(mockCertificationEntity2));
+        underTest.deleteAll();
 
         // Act
         List<CertificationEntity> result = underTest.findAllActiveWithThemes();
@@ -76,21 +79,18 @@ public class CertificationJpaRepositoryTest {
     @Test
     @DisplayName("findAll_nominalCase_expectedAllEntities")
     public void findAll_nominalCase_expectedAllEntities() {
-        // Arrange
-        when(underTest.findAll()).thenReturn(List.of(mockCertificationEntity1, mockCertificationEntity2));
-
         // Act
         List<CertificationEntity> result = underTest.findAll();
 
         // Assert
-        assertThat(result).containsExactlyInAnyOrder(mockCertificationEntity1, mockCertificationEntity2);
+        assertThat(result).hasSize(2);
     }
 
     @Test
     @DisplayName("findAll_emptyRepository_expectedEmptyList")
     public void findAll_emptyRepository_expectedEmptyList() {
         // Arrange
-        when(underTest.findAll()).thenReturn(List.of());
+        underTest.deleteAll();
 
         // Act
         List<CertificationEntity> result = underTest.findAll();
@@ -99,5 +99,13 @@ public class CertificationJpaRepositoryTest {
         assertThat(result).isEmpty();
     }
 
+    static class Config {
+        @Bean
+        public PostgreSQLContainer<?> postgres() {
+            return new PostgreSQLContainer<>("postgres:latest")
+                    .withDatabaseName("testdb")
+                    .withUsername("testuser")
+                    .withPassword("testpass");
+        }
+    }
 }
-

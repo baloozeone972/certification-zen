@@ -3,36 +3,34 @@ package com.certifapp.infrastructure.persistence.entity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.testcontainers.context.SpringBootTestContextInitializer;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@DataJpaTest
+@ContextConfiguration(initializers = SpringBootTestContextInitializer.class)
+@TestPropertySource(properties = "spring.flyway.enabled=true")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class QuestionEntityTest {
-
-    @Mock
-    private QuestionOptionEntity option1;
-
-    @InjectMocks
-    private QuestionEntity questionEntity;
 
     @BeforeEach
     public void setUp() {
-        questionEntity.setOptions(List.of(option1));
+        // No need for setup as we are using DataJpaTest
     }
 
     @DisplayName("should set id successfully")
     @Test
     public void setId_successfully() {
         UUID testId = UUID.randomUUID();
+        QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setId(testId);
         assertThat(questionEntity.getId()).isEqualTo(testId);
     }
@@ -41,6 +39,7 @@ public class QuestionEntityTest {
     @Test
     public void setLegacyId_successfully() {
         String testLegacyId = "legacy123";
+        QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setLegacyId(testLegacyId);
         assertThat(questionEntity.getLegacyId()).isEqualTo(testLegacyId);
     }
@@ -49,6 +48,7 @@ public class QuestionEntityTest {
     @Test
     public void setCertificationId_successfully() {
         String testCertificationId = "certif456";
+        QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setCertificationId(testCertificationId);
         assertThat(questionEntity.getCertificationId()).isEqualTo(testCertificationId);
     }
@@ -57,6 +57,7 @@ public class QuestionEntityTest {
     @Test
     public void setThemeId_successfully() {
         UUID testThemeId = UUID.randomUUID();
+        QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setThemeId(testThemeId);
         assertThat(questionEntity.getThemeId()).isEqualTo(testThemeId);
     }
@@ -65,6 +66,7 @@ public class QuestionEntityTest {
     @Test
     public void setStatement_successfully() {
         String testStatement = "What is Java?";
+        QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setStatement(testStatement);
         assertThat(questionEntity.getStatement()).isEqualTo(testStatement);
     }
@@ -73,6 +75,7 @@ public class QuestionEntityTest {
     @Test
     public void setDifficulty_successfully() {
         String testDifficulty = "Easy";
+        QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setDifficulty(testDifficulty);
         assertThat(questionEntity.getDifficulty()).isEqualTo(testDifficulty);
     }
@@ -81,6 +84,7 @@ public class QuestionEntityTest {
     @Test
     public void setQuestionType_successfully() {
         String testQuestionType = "Multiple Choice";
+        QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setQuestionType(testQuestionType);
         assertThat(questionEntity.getQuestionType()).isEqualTo(testQuestionType);
     }
@@ -89,6 +93,7 @@ public class QuestionEntityTest {
     @Test
     public void setExplanationOriginal_successfully() {
         String testExplanationOriginal = "Java is a programming language.";
+        QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setExplanationOriginal(testExplanationOriginal);
         assertThat(questionEntity.getExplanationOriginal()).isEqualTo(testExplanationOriginal);
     }
@@ -97,6 +102,7 @@ public class QuestionEntityTest {
     @Test
     public void setExplanationEnriched_successfully() {
         String testExplanationEnriched = "Java is a high-level, class-based, object-oriented programming language.";
+        QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setExplanationEnriched(testExplanationEnriched);
         assertThat(questionEntity.getExplanationEnriched()).isEqualTo(testExplanationEnriched);
     }
@@ -105,6 +111,7 @@ public class QuestionEntityTest {
     @Test
     public void setExplanationStatus_successfully() {
         String testExplanationStatus = "ENRICHED";
+        QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setExplanationStatus(testExplanationStatus);
         assertThat(questionEntity.getExplanationStatus()).isEqualTo(testExplanationStatus);
     }
@@ -113,6 +120,7 @@ public class QuestionEntityTest {
     @Test
     public void setExplanationVersion_successfully() {
         int testExplanationVersion = 2;
+        QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setExplanationVersion(testExplanationVersion);
         assertThat(questionEntity.getExplanationVersion()).isEqualTo(testExplanationVersion);
     }
@@ -121,6 +129,7 @@ public class QuestionEntityTest {
     @Test
     public void setOfficialDocUrl_successfully() {
         String testOfficialDocUrl = "https://docs.oracle.com/javase/tutorial/";
+        QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setOfficialDocUrl(testOfficialDocUrl);
         assertThat(questionEntity.getOfficialDocUrl()).isEqualTo(testOfficialDocUrl);
     }
@@ -129,6 +138,7 @@ public class QuestionEntityTest {
     @Test
     public void setCodeExample_successfully() {
         String testCodeExample = "public class HelloWorld { public static void main(String[] args) { System.out.println(\"Hello, World!\"); } }";
+        QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setCodeExample(testCodeExample);
         assertThat(questionEntity.getCodeExample()).isEqualTo(testCodeExample);
     }
@@ -137,6 +147,7 @@ public class QuestionEntityTest {
     @Test
     public void setAiConfidenceScore_successfully() {
         Double testAiConfidenceScore = 0.95;
+        QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setAiConfidenceScore(testAiConfidenceScore);
         assertThat(questionEntity.getAiConfidenceScore()).isEqualTo(testAiConfidenceScore);
     }
@@ -145,6 +156,7 @@ public class QuestionEntityTest {
     @Test
     public void setLastReviewedBy_successfully() {
         UUID testLastReviewedBy = UUID.randomUUID();
+        QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setLastReviewedBy(testLastReviewedBy);
         assertThat(questionEntity.getLastReviewedBy()).isEqualTo(testLastReviewedBy);
     }
@@ -153,6 +165,7 @@ public class QuestionEntityTest {
     @Test
     public void setLastReviewedAt_successfully() {
         OffsetDateTime testLastReviewedAt = OffsetDateTime.now();
+        QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setLastReviewedAt(testLastReviewedAt);
         assertThat(questionEntity.getLastReviewedAt()).isEqualTo(testLastReviewedAt);
     }
@@ -161,6 +174,7 @@ public class QuestionEntityTest {
     @Test
     public void setActive_successfully() {
         boolean testIsActive = false;
+        QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setActive(testIsActive);
         assertThat(questionEntity.isActive()).isEqualTo(testIsActive);
     }
@@ -169,8 +183,7 @@ public class QuestionEntityTest {
     @Test
     public void onCreate_setCreatedAt_successfully() {
         OffsetDateTime now = OffsetDateTime.now();
-        when(OffsetDateTime.now()).thenReturn(now);
-
+        QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.onCreate();
 
         assertThat(questionEntity.getCreatedAt()).isEqualTo(now);
@@ -180,9 +193,8 @@ public class QuestionEntityTest {
     @Test
     public void onUpdate_noChangeInCreatedAt() {
         OffsetDateTime createdNow = OffsetDateTime.now();
+        QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setCreatedAt(createdNow);
-
-        when(OffsetDateTime.now()).thenReturn(createdNow.plusSeconds(1));
 
         questionEntity.onUpdate();
 
@@ -193,11 +205,9 @@ public class QuestionEntityTest {
     @Test
     public void onUpdate_updateUpdatedAt() {
         OffsetDateTime now = OffsetDateTime.now();
-        when(OffsetDateTime.now()).thenReturn(now);
-
+        QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.onUpdate();
 
         assertThat(questionEntity.getUpdatedAt()).isEqualTo(now);
     }
 }
-

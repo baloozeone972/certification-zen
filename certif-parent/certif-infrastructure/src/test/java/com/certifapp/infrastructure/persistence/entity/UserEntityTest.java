@@ -4,69 +4,98 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.testcontainers.context.SpringBootTestContextInitializer;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
+@DataJpaTest
+@ContextConfiguration(initializers = SpringExtension.class)
+@Testcontainers
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class UserEntityTest {
 
-    @Mock
-    private OffsetDateTime now;
+    @Container
+    public static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest")
+            .withDatabaseName("testdb")
+            .withUsername("testuser")
+            .withPassword("testpass");
 
-    @InjectMocks
-    private UserEntity userEntity;
+    @Autowired
+    private UserRepository userRepository;
 
     @BeforeEach
     public void setUp() {
-        when(now.now()).thenReturn(OffsetDateTime.of(2023, 10, 1, 12, 0, 0, 0));
-        userEntity = new UserEntity();
+        OffsetDateTime now = OffsetDateTime.of(2023, 10, 1, 12, 0, 0, 0);
+        UserEntity userEntity = new UserEntity();
+        userEntity.onCreate();
+
+        userRepository.save(userEntity);
     }
 
     @AfterEach
     public void tearDown() {
-        reset(userEntity);
+        userRepository.deleteAll();
     }
 
     @Test
     @DisplayName("UserEntity creation sets createdAt and updatedAt to current time")
     public void create_userEntity_setsCreatedAtAndUpdatedAtToCurrentTime() {
+        // Arrange
+        OffsetDateTime now = OffsetDateTime.of(2023, 10, 1, 12, 0, 0, 0);
+        UserEntity userEntity = new UserEntity();
+        userEntity.onCreate();
+
         // Act
         userEntity.onCreate();
 
         // Assert
-        assertThat(userEntity.getCreatedAt()).isEqualTo(now.now());
-        assertThat(userEntity.getUpdatedAt()).isEqualTo(now.now());
+        assertThat(userEntity.getCreatedAt()).isEqualTo(now);
+        assertThat(userEntity.getUpdatedAt()).isEqualTo(now);
 
-        verify(now, times(2)).now();
+        // Verify
+        var savedUser = userRepository.findById(userEntity.getId()).orElse(null);
+        assertThat(savedUser).isNotNull();
+        assertThat(savedUser.getCreatedAt()).isEqualTo(now);
+        assertThat(savedUser.getUpdatedAt()).isEqualTo(now);
     }
 
     @Test
     @DisplayName("UserEntity update sets updatedAt to current time")
     public void update_userEntity_setsUpdatedAtToCurrentTime() {
         // Arrange
-        userEntity.setCreatedAt(OffsetDateTime.of(2023, 9, 1, 12, 0, 0, 0));
+        OffsetDateTime now = OffsetDateTime.of(2023, 10, 1, 12, 0, 0, 0);
+        UserEntity userEntity = new UserEntity();
+        userEntity.onCreate();
 
         // Act
         userEntity.onUpdate();
 
         // Assert
-        assertThat(userEntity.getUpdatedAt()).isEqualTo(now.now());
+        assertThat(userEntity.getUpdatedAt()).isEqualTo(now);
 
-        verify(now, times(1)).now();
+        // Verify
+        var savedUser = userRepository.findById(userEntity.getId()).orElse(null);
+        assertThat(savedUser).isNotNull();
+        assertThat(savedUser.getUpdatedAt()).isEqualTo(now);
     }
 
     @Test
     @DisplayName("UserEntity creation with no createdAt sets it to current time")
     public void create_userEntity_noCreatedAt_setsCreatedAtToCurrentTime() {
         // Arrange
+        OffsetDateTime now = OffsetDateTime.of(2023, 10, 1, 12, 0, 0, 0);
+        UserEntity userEntity = new UserEntity();
         userEntity.setId(UUID.randomUUID());
         userEntity.setEmail("test@example.com");
         userEntity.setPasswordHash("hashedPassword");
@@ -79,16 +108,22 @@ public class UserEntityTest {
         userEntity.onCreate();
 
         // Assert
-        assertThat(userEntity.getCreatedAt()).isEqualTo(now.now());
-        assertThat(userEntity.getUpdatedAt()).isEqualTo(now.now());
+        assertThat(userEntity.getCreatedAt()).isEqualTo(now);
+        assertThat(userEntity.getUpdatedAt()).isEqualTo(now);
 
-        verify(now, times(2)).now();
+        // Verify
+        var savedUser = userRepository.findById(userEntity.getId()).orElse(null);
+        assertThat(savedUser).isNotNull();
+        assertThat(savedUser.getCreatedAt()).isEqualTo(now);
+        assertThat(savedUser.getUpdatedAt()).isEqualTo(now);
     }
 
     @Test
     @DisplayName("UserEntity update with existing createdAt sets only updatedAt")
     public void update_userEntity_existingCreatedAt_setsOnlyUpdatedAt() {
         // Arrange
+        OffsetDateTime now = OffsetDateTime.of(2023, 10, 1, 12, 0, 0, 0);
+        UserEntity userEntity = new UserEntity();
         userEntity.setId(UUID.randomUUID());
         userEntity.setEmail("test@example.com");
         userEntity.setPasswordHash("hashedPassword");
@@ -102,10 +137,13 @@ public class UserEntityTest {
         userEntity.onUpdate();
 
         // Assert
-        assertThat(userEntity.getUpdatedAt()).isEqualTo(now.now());
-        assertThat(userEntity.getCreatedAt()).isNotEqualTo(now.now());
+        assertThat(userEntity.getUpdatedAt()).isEqualTo(now);
+        assertThat(userEntity.getCreatedAt()).isNotEqualTo(now);
 
-        verify(now, times(1)).now();
+        // Verify
+        var savedUser = userRepository.findById(userEntity.getId()).orElse(null);
+        assertThat(savedUser).isNotNull();
+        assertThat(savedUser.getUpdatedAt()).isEqualTo(now);
+        assertThat(savedUser.getCreatedAt()).isNotEqualTo(now);
     }
 }
-
