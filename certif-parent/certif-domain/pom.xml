@@ -1,71 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- certif-domain/pom.xml -->
+<!-- certif-parent/certif-domain/pom.xml -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
          https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.certifapp</groupId>
-        <artifactId>certif-parent</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
-    </parent>
+  <parent>
+    <groupId>com.certifapp</groupId>
+    <artifactId>certif-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
 
-    <artifactId>certif-domain</artifactId>
-    <packaging>jar</packaging>
-    <name>CertifApp — Domain</name>
-    <description>
-        Couche domaine pure : entités métier, règles de gestion, ports hexagonaux.
-        AUCUNE dépendance Spring, JPA ou framework externe.
-        Contient uniquement Java 21 pur + annotations Jackson pour la sérialisation
-        des Records (utilisées uniquement dans les DTOs de sortie, jamais dans les entités domain).
-    </description>
+  <artifactId>certif-domain</artifactId>
+  <name>certif-domain</name>
+  <description>
+    Domain module — pure Java 21, no framework dependency.
+    Contains entities (Records), domain services, port interfaces and exceptions.
+  </description>
 
-    <dependencies>
-        <!--
-            Jackson annotations UNIQUEMENT (pas de databind).
-            Justification : les Records domain peuvent être sérialisés par l'infrastructure
-            sans polluer le domain avec Spring ou JPA.
-            @JsonProperty sur les Records pour contrôler les noms de champs JSON.
-        -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-            <!-- Version gérée par Spring Boot BOM via parent -->
-        </dependency>
-
-        <!-- Jakarta Validation Annotations UNIQUEMENT (API, pas l'implémentation) -->
-        <dependency>
-            <groupId>jakarta.validation</groupId>
-            <artifactId>jakarta.validation-api</artifactId>
-            <!-- Version gérée par Spring Boot BOM -->
-        </dependency>
-
-        <!-- Tests -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>21</source>
-                    <target>21</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+  <dependencies>
+    <!-- Zero runtime dependencies — only test tooling -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 </project>

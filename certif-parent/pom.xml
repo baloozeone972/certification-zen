@@ -1,370 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- certif-parent/pom.xml -->
+<!-- certif-parent/pom.xml — POM parent multi-module CertifApp -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
          https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.certifapp</groupId>
-    <artifactId>certif-parent</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
+  <groupId>com.certifapp</groupId>
+  <artifactId>certif-parent</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>certif-parent</name>
+  <description>CertifApp — Multi-module Maven parent POM</description>
 
-    <name>CertifApp — Parent</name>
-    <description>
-        CertifApp — Plateforme SaaS de préparation aux certifications professionnelles.
-        Migration commerciale de CertiPrep Engine (JavaFX) vers Spring Boot 3 + Angular 18 + Android.
-    </description>
-    <url>https://github.com/certification-zen/certification-zen</url>
+  <modules>
+    <module>certif-domain</module>
+    <module>certif-application</module>
+    <module>certif-infrastructure</module>
+    <module>certif-api-rest</module>
+    <module>certif-ai</module>
+  </modules>
 
-    <modules>
-        <module>certif-domain</module>
-        <module>certif-application</module>
-        <module>certif-infrastructure</module>
-        <module>certif-api-rest</module>
-        <module>certif-ai</module>
-    </modules>
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.3.4</version>
+    <relativePath/>
+  </parent>
 
-    <properties>
-        <!-- Java -->
-        <java.version>21</java.version>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  <properties>
+    <!-- Java -->
+    <java.version>21</java.version>
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <!-- Spring Boot -->
-        <spring-boot.version>3.3.4</spring-boot.version>
+    <!-- Dependency versions -->
+    <mapstruct.version>1.5.5.Final</mapstruct.version>
+    <jjwt.version>0.12.6</jjwt.version>
+    <springdoc.version>2.6.0</springdoc.version>
+    <itext.version>8.0.4</itext.version>
+    <langchain4j.version>0.35.0</langchain4j.version>
+    <testcontainers.version>1.20.1</testcontainers.version>
+  </properties>
 
-        <!-- LangChain4j — toutes les versions alignées -->
-        <langchain4j.version>0.35.0</langchain4j.version>
-
-        <!-- Mapping -->
-        <mapstruct.version>1.5.5.Final</mapstruct.version>
-
-        <!-- PDF -->
-        <itext7.version>7.2.5</itext7.version>
-
-        <!-- Tests -->
-        <testcontainers.version>1.19.8</testcontainers.version>
-
-        <!-- BDD -->
-        <flyway.version>10.15.0</flyway.version>
-
-        <!-- Sérialisation -->
-        <jackson.version>2.17.2</jackson.version>
-
-        <!-- Sécurité JWT -->
-        <jjwt.version>0.12.6</jjwt.version>
-
-        <!-- API Documentation -->
-        <springdoc.version>2.6.0</springdoc.version>
-
-        <!-- Stripe -->
-        <stripe.version>26.1.0</stripe.version>
-
-        <!-- Cache -->
-        <caffeine.version>3.1.8</caffeine.version>
-
-        <!-- Plugins -->
-        <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
-        <maven-surefire-plugin.version>3.3.1</maven-surefire-plugin.version>
-        <maven-failsafe-plugin.version>3.3.1</maven-failsafe-plugin.version>
-        <jacoco.version>0.8.12</jacoco.version>
-    </properties>
-
-    <!-- Lombok : NON utilisé — justification :
-         Les Records Java 21 remplacent 100% des cas d'usage Lombok (data classes, builders).
-         Lombok ajoute une dépendance au compilateur et complexifie le debugging.
-         Pattern : record + static factory method quand un builder est nécessaire. -->
-
-    <dependencyManagement>
-        <dependencies>
-            <!-- ===== Spring Boot BOM ===== -->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-            <!-- ===== Modules internes ===== -->
-            <dependency>
-                <groupId>com.certifapp</groupId>
-                <artifactId>certif-domain</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.certifapp</groupId>
-                <artifactId>certif-application</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.certifapp</groupId>
-                <artifactId>certif-infrastructure</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.certifapp</groupId>
-                <artifactId>certif-ai</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <!-- ===== LangChain4j ===== -->
-            <dependency>
-                <groupId>dev.langchain4j</groupId>
-                <artifactId>langchain4j</artifactId>
-                <version>${langchain4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>dev.langchain4j</groupId>
-                <artifactId>langchain4j-core</artifactId>
-                <version>${langchain4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>dev.langchain4j</groupId>
-                <artifactId>langchain4j-anthropic</artifactId>
-                <version>${langchain4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>dev.langchain4j</groupId>
-                <artifactId>langchain4j-ollama</artifactId>
-                <version>${langchain4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>dev.langchain4j</groupId>
-                <artifactId>langchain4j-embeddings</artifactId>
-                <version>${langchain4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>dev.langchain4j</groupId>
-                <artifactId>langchain4j-document-loader-filesystem</artifactId>
-                <version>${langchain4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>dev.langchain4j</groupId>
-                <artifactId>langchain4j-pgvector</artifactId>
-                <version>${langchain4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>dev.langchain4j</groupId>
-                <artifactId>langchain4j-spring-boot-starter</artifactId>
-                <version>${langchain4j.version}</version>
-            </dependency>
-
-            <!-- ===== MapStruct ===== -->
-            <dependency>
-                <groupId>org.mapstruct</groupId>
-                <artifactId>mapstruct</artifactId>
-                <version>${mapstruct.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mapstruct</groupId>
-                <artifactId>mapstruct-processor</artifactId>
-                <version>${mapstruct.version}</version>
-                <scope>provided</scope>
-            </dependency>
-
-            <!-- ===== iText7 PDF ===== -->
-            <dependency>
-                <groupId>com.itextpdf</groupId>
-                <artifactId>itext7-core</artifactId>
-                <version>${itext7.version}</version>
-                <type>pom</type>
-            </dependency>
-            <dependency>
-                <groupId>com.itextpdf</groupId>
-                <artifactId>kernel</artifactId>
-                <version>${itext7.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.itextpdf</groupId>
-                <artifactId>layout</artifactId>
-                <version>${itext7.version}</version>
-            </dependency>
-
-            <!-- ===== Testcontainers ===== -->
-            <dependency>
-                <groupId>org.testcontainers</groupId>
-                <artifactId>testcontainers-bom</artifactId>
-                <version>${testcontainers.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-            <!-- ===== JWT ===== -->
-            <dependency>
-                <groupId>io.jsonwebtoken</groupId>
-                <artifactId>jjwt-api</artifactId>
-                <version>${jjwt.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.jsonwebtoken</groupId>
-                <artifactId>jjwt-impl</artifactId>
-                <version>${jjwt.version}</version>
-                <scope>runtime</scope>
-            </dependency>
-            <dependency>
-                <groupId>io.jsonwebtoken</groupId>
-                <artifactId>jjwt-jackson</artifactId>
-                <version>${jjwt.version}</version>
-                <scope>runtime</scope>
-            </dependency>
-
-            <!-- ===== SpringDoc OpenAPI ===== -->
-            <dependency>
-                <groupId>org.springdoc</groupId>
-                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-                <version>${springdoc.version}</version>
-            </dependency>
-
-            <!-- ===== Stripe ===== -->
-            <dependency>
-                <groupId>com.stripe</groupId>
-                <artifactId>stripe-java</artifactId>
-                <version>${stripe.version}</version>
-            </dependency>
-
-            <!-- ===== Caffeine Cache ===== -->
-            <dependency>
-                <groupId>com.github.ben-manes.caffeine</groupId>
-                <artifactId>caffeine</artifactId>
-                <version>${caffeine.version}</version>
-            </dependency>
-
-            <!-- ===== Jackson (versions explicites) ===== -->
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.datatype</groupId>
-                <artifactId>jackson-datatype-jsr310</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
-    <!-- Dépendances communes à TOUS les modules -->
+  <dependencyManagement>
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <scope>test</scope>
-        </dependency>
+      <!-- Testcontainers BOM -->
+      <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>testcontainers-bom</artifactId>
+        <version>${testcontainers.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
     </dependencies>
+  </dependencyManagement>
 
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${maven-compiler-plugin.version}</version>
-                    <configuration>
-                        <source>21</source>
-                        <target>21</target>
-                        <encoding>UTF-8</encoding>
-                        <compilerArgs>
-                            <!-- Activer le preview Java 21 si nécessaire -->
-                           <!-- <arg>&#45;&#45;enable-preview</arg> -->
-                        </compilerArgs>
-                        <annotationProcessorPaths>
-                            <path>
-                                <groupId>org.mapstruct</groupId>
-                                <artifactId>mapstruct-processor</artifactId>
-                                <version>${mapstruct.version}</version>
-                            </path>
-                        </annotationProcessorPaths>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${maven-surefire-plugin.version}</version>
-                    <configuration>
-                        <argLine>@{argLine} -XX:+EnableDynamicAgentLoading</argLine>
-                        <includes>
-                            <include>**/*Test.java</include>
-                            <include>**/*Tests.java</include>
-                        </includes>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>${maven-failsafe-plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>integration-test</goal>
-                                <goal>verify</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.jacoco</groupId>
-                    <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>${jacoco.version}</version>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>prepare-agent</goal>
-                            </goals>
-                        </execution>
-                        <execution>
-                            <id>report</id>
-                            <phase>test</phase>
-                            <goals>
-                                <goal>report</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-maven-plugin</artifactId>
-                    <version>${spring-boot.version}</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
+  <build>
+    <plugins>
+      <!-- Compiler avec Virtual Threads + annotation processors -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>21</source>
+          <target>21</target>
+          <compilerArgs>
+            <arg>--enable-preview</arg>
+          </compilerArgs>
+          <parameters>true</parameters>
+        </configuration>
+      </plugin>
 
-    <profiles>
-        <!-- Profil local : Ollama, PostgreSQL locale -->
-        <profile>
-            <id>local</id>
-            <properties>
-                <spring.profiles.active>local</spring.profiles.active>
-            </properties>
-        </profile>
-        <!-- Profil test : Testcontainers, H2 pour certains tests unitaires -->
-        <profile>
-            <id>test</id>
-            <properties>
-                <spring.profiles.active>test</spring.profiles.active>
-            </properties>
-        </profile>
-        <!-- Profil prod : Claude API, Supabase PostgreSQL -->
-        <profile>
-            <id>prod</id>
-            <properties>
-                <spring.profiles.active>prod</spring.profiles.active>
-            </properties>
-        </profile>
-    </profiles>
+      <!-- Surefire — JUnit 5 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <argLine>--enable-preview</argLine>
+        </configuration>
+      </plugin>
+
+      <!-- Failsafe — tests d'intégration Testcontainers -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <argLine>--enable-preview</argLine>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>
