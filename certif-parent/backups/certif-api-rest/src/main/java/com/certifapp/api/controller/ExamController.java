@@ -144,7 +144,7 @@ public class ExamController {
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_PDF)
                 .header(HttpHeaders.CONTENT_DISPOSITION,
-                        "attachment; filename=certifapp_results_" + id + ".pdf")
+                        "attachment; filename=" certifapp_results_" + id + ".pdf"")
                 .body(pdf);
     }
 
