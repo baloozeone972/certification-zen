@@ -1,75 +1,76 @@
+// certif-parent/certif-domain/src/test/java/com/certifapp/domain/exception/CertifAppExceptionTest.java
 package com.certifapp.domain.exception;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class CertifAppExceptionTest {
+/**
+ * Unit tests for {@link CertifAppException}.
+ * Verifies constructors, message propagation and null validation.
+ */
+@DisplayName("CertifAppException")
+class CertifAppExceptionTest {
 
     @Test
-    @DisplayName("should throw exception with default message when no arguments provided")
-    public void shouldThrowExceptionWithDefaultMessageWhenNoArgumentsProvided() {
-        // Arrange
-        CertifAppException exception = new CertifAppException();
-
-        // Act & Assert
-        assertThat(exception.getMessage()).isNotEmpty();
+    @DisplayName("no-arg constructor → non-empty message")
+    void noArg_shouldHaveNonEmptyMessage() {
+        CertifAppException ex = new CertifAppException();
+        assertThat(ex.getMessage()).isNotBlank();
     }
 
     @Test
-    @DisplayName("should throw exception with custom message when provided")
-    public void shouldThrowExceptionWithCustomMessageWhenProvided() {
-        // Arrange
-        String customMessage = "Custom error message";
-        CertifAppException exception = new CertifAppException(customMessage);
-
-        // Act & Assert
-        assertThat(exception.getMessage()).isEqualTo(customMessage);
+    @DisplayName("String constructor → message stored correctly")
+    void stringConstructor_shouldStoreMessage() {
+        CertifAppException ex = new CertifAppException("Custom error");
+        assertThat(ex.getMessage()).isEqualTo("Custom error");
     }
 
     @Test
-    @DisplayName("should throw exception with custom cause when provided")
-    public void shouldThrowExceptionWithCustomCauseWhenProvided() {
-        // Arrange
-        Throwable cause = new RuntimeException("Caused by this");
-        CertifAppException exception = new CertifAppException(cause);
-
-        // Act & Assert
-        assertThat(exception.getCause()).isEqualTo(cause);
+    @DisplayName("Throwable constructor → cause stored correctly")
+    void throwableConstructor_shouldStoreCause() {
+        Throwable cause = new RuntimeException("root");
+        CertifAppException ex = new CertifAppException(cause);
+        assertThat(ex.getCause()).isEqualTo(cause);
     }
 
     @Test
-    @DisplayName("should throw exception with custom message and cause when provided")
-    public void shouldThrowExceptionWithCustomMessageAndCauseWhenProvided() {
-        // Arrange
-        String customMessage = "Custom error message";
-        Throwable cause = new RuntimeException("Caused by this");
-        CertifAppException exception = new CertifAppException(customMessage, cause);
-
-        // Act & Assert
-        assertThat(exception.getMessage()).isEqualTo(customMessage);
-        assertThat(exception.getCause()).isEqualTo(cause);
+    @DisplayName("String+Throwable constructor → both stored")
+    void fullConstructor_shouldStoreBoth() {
+        Throwable cause = new RuntimeException("root");
+        CertifAppException ex = new CertifAppException("msg", cause);
+        assertThat(ex.getMessage()).isEqualTo("msg");
+        assertThat(ex.getCause()).isEqualTo(cause);
     }
 
     @Test
-    @DisplayName("should throw IllegalArgumentException when null message provided")
-    public void shouldThrowIllegalArgumentExceptionWhenNullMessageProvided() {
-        // Arrange & Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            new CertifAppException((String) null);
-        });
-        assertThat(exception.getMessage()).isEqualTo("message cannot be null");
+    @DisplayName("null message → IllegalArgumentException")
+    void nullMessage_shouldThrowIllegalArgument() {
+        assertThatThrownBy(() -> new CertifAppException((String) null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("message cannot be null");
     }
 
     @Test
-    @DisplayName("should throw IllegalArgumentException when null cause provided")
-    public void shouldThrowIllegalArgumentExceptionWhenNullCauseProvided() {
-        // Arrange & Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            new CertifAppException((Throwable) null);
-        });
-        assertThat(exception.getMessage()).isEqualTo("cause cannot be null");
+    @DisplayName("null cause → IllegalArgumentException")
+    void nullCause_shouldThrowIllegalArgument() {
+        assertThatThrownBy(() -> new CertifAppException((Throwable) null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("cause cannot be null");
+    }
+
+    @Test
+    @DisplayName("getErrorCode() → non-null derived code")
+    void getErrorCode_shouldReturnNonNull() {
+        CertifAppException ex = new CertifAppException("test");
+        assertThat(ex.getErrorCode()).isNotNull().isNotBlank();
+    }
+
+    @Test
+    @DisplayName("is instance of RuntimeException")
+    void shouldBeRuntimeException() {
+        assertThat(new CertifAppException("test")).isInstanceOf(RuntimeException.class);
     }
 }
