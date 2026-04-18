@@ -14,18 +14,25 @@
   </parent>
 
   <artifactId>certif-application</artifactId>
-  <name>certif-application</name>
+  <n>certif-application</n>
   <description>
     Application module — use case implementations and DTOs.
     No Spring annotations allowed here; BCrypt injected via Function interfaces.
   </description>
 
   <dependencies>
+
     <!-- Domain module -->
     <dependency>
       <groupId>com.certifapp</groupId>
       <artifactId>certif-domain</artifactId>
       <version>${project.version}</version>
+    </dependency>
+
+    <!-- SLF4J — logging interface (implémentation fournie par Spring Boot au runtime) -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
     </dependency>
 
     <!-- Jackson for DTO serialization helpers (no Spring context) -->
@@ -34,7 +41,7 @@
       <artifactId>jackson-databind</artifactId>
     </dependency>
 
-    <!-- Test -->
+    <!-- ── Tests ───────────────────────────────────────────────────────────── -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
@@ -47,8 +54,19 @@
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
       <artifactId>mockito-junit-jupiter</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 </project>
