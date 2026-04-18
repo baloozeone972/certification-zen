@@ -1,0 +1,31 @@
+# certif-parent/certif-api-rest/src/main/resources/application-local.yml
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/certifapp}
+    username: ${SPRING_DATASOURCE_USERNAME:certifapp}
+    password: ${SPRING_DATASOURCE_PASSWORD:certifapp_dev_password}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+  jpa:
+    show-sql: true
+
+  mail:
+    host: ${SPRING_MAIL_HOST:localhost}
+    port: ${SPRING_MAIL_PORT:1025}
+    properties:
+      mail.smtp.auth: false
+      mail.smtp.starttls.enable: false
+
+app:
+  jwt:
+    secret: ${APP_JWT_SECRET:local_dev_jwt_secret_must_be_256_bits_xxxxxxxxxxxxxxxxxxxxxxxxxx}
+
+logging:
+  level:
+    com.certifapp: DEBUG
+    org.springframework.security: DEBUG
+
+server:
+  port: 8080

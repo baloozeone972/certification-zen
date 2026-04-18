@@ -1,0 +1,642 @@
+[
+  {
+    "id": "J21-09-001",
+    "theme": "Modules JPMS",
+    "theme_label": "Modules - module-info.java, exports, requires, opens",
+    "difficulty": "medium",
+    "question": "Quel est le nom du fichier qui déclare un module en Java ?",
+    "options": [
+      "module.java",
+      "module-info.java",
+      "module.config",
+      "info.module"
+    ],
+    "correct": 1,
+    "explanation": "module-info.java est le fichier de déclaration du module. Il doit être à la racine du module."
+  },
+  {
+    "id": "J21-09-002",
+    "theme": "Modules JPMS",
+    "theme_label": "Modules - module-info.java, exports, requires, opens",
+    "difficulty": "medium",
+    "question": "Que signifie 'exports' dans module-info.java ?",
+    "options": [
+      "Rend un package accessible aux autres modules",
+      "Exporte une classe spécifique",
+      "Déclare une dépendance",
+      "Ouvre le module à la réflexion"
+    ],
+    "correct": 0,
+    "explanation": "exports déclare quels packages sont accessibles aux autres modules. Sans exports, un package est privé au module."
+  },
+  {
+    "id": "J21-09-003",
+    "theme": "Modules JPMS",
+    "theme_label": "Modules - module-info.java, exports, requires, opens",
+    "difficulty": "medium",
+    "question": "Que signifie 'requires' dans module-info.java ?",
+    "options": [
+      "Déclare une dépendance vers un autre module",
+      "Requiert une classe spécifique",
+      "Exporte un package",
+      "Ouvre un package à la réflexion"
+    ],
+    "correct": 0,
+    "explanation": "requires déclare qu'un module a besoin d'un autre module pour fonctionner. requires transitive propage la dépendance."
+  },
+  {
+    "id": "J21-09-004",
+    "theme": "Modules JPMS",
+    "theme_label": "Modules - module-info.java, exports, requires, opens",
+    "difficulty": "medium",
+    "question": "Que signifie 'requires transitive' ?",
+    "options": [
+      "Les modules qui requièrent ce module héritent aussi de cette dépendance",
+      "La dépendance est optionnelle",
+      "La dépendance est transitive automatiquement",
+      "La dépendance est au runtime seulement"
+    ],
+    "correct": 0,
+    "explanation": "requires transitive fait que tout module qui dépend du module courant hérite aussi de cette dépendance (ex: module A requires transitive B, module C requires A → C a accès à B)."
+  },
+  {
+    "id": "J21-09-005",
+    "theme": "Modules JPMS",
+    "theme_label": "Modules - module-info.java, exports, requires, opens",
+    "difficulty": "medium",
+    "question": "Que signifie 'opens' dans module-info.java ?",
+    "options": [
+      "Permet l'accès par réflexion depuis d'autres modules",
+      "Ouvre un package pour la sérialisation",
+      "Remplace exports pour la réflexion",
+      "A et C sont correctes"
+    ],
+    "correct": 3,
+    "explanation": "opens permet la réflexion profonde (accès aux champs privés). exports permet l'accès à la compilation et à la réflexion normale."
+  },
+  {
+    "id": "J21-09-006",
+    "theme": "Modules JPMS",
+    "theme_label": "Modules - module-info.java, exports, requires, opens",
+    "difficulty": "medium",
+    "question": "Quelle est la différence entre 'exports' et 'opens' ?",
+    "options": [
+      "exports permet accès à la compilation, opens permet réflexion profonde",
+      "opens permet d'accéder aux champs privés via reflection",
+      "opens est plus permissif que exports",
+      "Toutes ces réponses"
+    ],
+    "correct": 3,
+    "explanation": "exports : accès normal (compilation + réflexion non-privée). opens : accès réflexion totale (y compris private)."
+  },
+  {
+    "id": "J21-09-007",
+    "theme": "Modules JPMS",
+    "theme_label": "Modules - module-info.java, exports, requires, opens",
+    "difficulty": "medium",
+    "question": "Que signifie 'provides ... with ...' dans module-info ?",
+    "options": [
+      "Déclare un service fourni par le module",
+      "Implantation de ServiceLoader",
+      "Permet la découverte de services",
+      "Toutes ces réponses"
+    ],
+    "correct": 3,
+    "explanation": "provides ServiceInterface with ImplementationClass déclare une implémentation de service pour ServiceLoader."
+  },
+  {
+    "id": "J21-09-008",
+    "theme": "Modules JPMS",
+    "theme_label": "Modules - module-info.java, exports, requires, opens",
+    "difficulty": "medium",
+    "question": "Que signifie 'uses' dans module-info.java ?",
+    "options": [
+      "Déclare qu'un module consomme un service",
+      "Utilise ServiceLoader pour charger des implémentations",
+      "Requiert une interface de service",
+      "Toutes ces réponses"
+    ],
+    "correct": 3,
+    "explanation": "uses ServiceInterface indique que le module utilise ServiceLoader pour trouver des implémentations de ce service."
+  },
+  {
+    "id": "J21-09-009",
+    "theme": "Modules JPMS",
+    "theme_label": "Modules - module-info.java, exports, requires, opens",
+    "difficulty": "easy",
+    "question": "Quel module est requis par défaut par tous les modules ?",
+    "options": [
+      "java.base",
+      "java.lang",
+      "java.util",
+      "java.core"
+    ],
+    "correct": 0,
+    "explanation": "java.base est le module fondamental. Il est implicitement requis par tous les modules (automatic requires)."
+  },
+  {
+    "id": "J21-09-010",
+    "theme": "Modules JPMS",
+    "theme_label": "Modules - module-info.java, exports, requires, opens",
+    "difficulty": "medium",
+    "question": "Quel est l'effet de 'exports ... to' ?",
+    "options": [
+      "Exporte un package uniquement à des modules spécifiques",
+      "Export qualifié (qualified export)",
+      "Limite l'accès à certains modules",
+      "Toutes ces réponses"
+    ],
+    "correct": 3,
+    "explanation": "exports package.to module1, module2 restreint l'export à une liste de modules spécifiques."
+  },
+  {
+    "id": "J21-09-011",
+    "theme": "Modules JPMS",
+    "theme_label": "Modules - module-info.java, exports, requires, opens",
+    "difficulty": "hard",
+    "question": "Que sont les 'automatic modules' ?",
+    "options": [
+      "JARs sur le classpath devenant des modules automatiques",
+      "Nom dérivé du nom du JAR",
+      "Exportent tous leurs packages",
+      "Toutes ces réponses"
+    ],
+    "correct": 3,
+    "explanation": "Un JAR placé sur le modulepath sans module-info devient un automatic module. Il exporte tous ses packages."
+  },
+  {
+    "id": "J21-09-012",
+    "theme": "Modules JPMS",
+    "theme_label": "Modules - module-info.java, exports, requires, opens",
+    "difficulty": "hard",
+    "question": "Qu'est-ce qu'un 'unnamed module' ?",
+    "options": [
+      "Code sur le classpath (non modulepath)",
+      "Pas de module-info",
+      "Accès à tous les modules exportés",
+      "Toutes ces réponses"
+    ],
+    "correct": 3,
+    "explanation": "Le code sur le classpath classique forme le unnamed module, qui peut lire tous les modules exportés."
+  },
+  {
+    "id": "J21-09-013",
+    "theme": "Modules JPMS",
+    "theme_label": "Modules - module-info.java, exports, requires, opens",
+    "difficulty": "medium",
+    "question": "Comment compiler un module avec javac ?",
+    "options": [
+      "javac --module-path mods -d out src/module-info.java src/com/example/...",
+      "javac -mp mods -d out src/module-info.java",
+      "javac --module-source-path src -d out --module monmodule",
+      "Toutes ces réponses"
+    ],
+    "correct": 3,
+    "explanation": "javac --module-path pour les dépendances, --module-source-path pour la structure multi-module."
+  },
+  {
+    "id": "J21-09-014",
+    "theme": "Modules JPMS",
+    "theme_label": "Modules - module-info.java, exports, requires, opens",
+    "difficulty": "medium",
+    "question": "Comment exécuter un module avec java ?",
+    "options": [
+      "java --module-path mods --module monmodule/com.example.Main",
+      "java -mp mods -m monmodule/com.example.Main",
+      "java --module mods/monmodule/com.example.Main",
+      "A et B sont correctes"
+    ],
+    "correct": 3,
+    "explanation": "--module-path (ou -p) et --module (ou -m) avec nom_module/nom_classe_principale."
+  },
+  {
+    "id": "J21-09-015",
+    "theme": "Modules JPMS",
+    "theme_label": "Modules - module-info.java, exports, requires, opens",
+    "difficulty": "hard",
+    "question": "Que sont les 'services' dans JPMS ?",
+    "options": [
+      "Pattern de découverte d'implémentations via ServiceLoader",
+      "Couplage faible entre modules",
+      "provides/uses dans module-info",
+      "Toutes ces réponses"
+    ],
+    "correct": 3,
+    "explanation": "Les services permettent un découplage : un module définit une interface (service), d'autres fournissent des implémentations."
+  },
+  {
+    "id": "J21-09-016",
+    "theme": "Modules JPMS",
+    "theme_label": "Modules - module-info.java, exports, requires, opens",
+    "difficulty": "hard",
+    "question": "Quelle est la différence entre 'open' et 'opens' ?",
+    "options": [
+      "open module { ... } rend tout le module accessible par réflexion",
+      "opens package.to... ouvre un package spécifique",
+      "open module est plus permissif",
+      "Toutes ces réponses"
+    ],
+    "correct": 3,
+    "explanation": "open module (au niveau du module) rend tous les packages ouverts à la réflexion. opens est pour un package spécifique."
+  },
+  {
+    "id": "J21-09-017",
+    "theme": "Modules JPMS",
+    "theme_label": "Modules - module-info.java, exports, requires, opens",
+    "difficulty": "hard",
+    "question": "Quelle commande liste les modules disponibles ?",
+    "options": [
+      "java --list-modules",
+      "java -l",
+      "java --show-modules",
+      "java -list-modules"
+    ],
+    "correct": 0,
+    "explanation": "java --list-modules affiche tous les modules visibles sur le modulepath et modules système."
+  },
+  {
+    "id": "J21-09-018",
+    "theme": "Modules JPMS",
+    "theme_label": "Modules - module-info.java, exports, requires, opens",
+    "difficulty": "hard",
+    "question": "Que fait 'jlink' ?",
+    "options": [
+      "Crée une image runtime personnalisée",
+      "Inclut seulement les modules nécessaires",
+      "Réduit la taille de la JVM",
+      "Toutes ces réponses"
+    ],
+    "correct": 3,
+    "explanation": "jlink assemble un ensemble de modules dans une image runtime optimisée (taille réduite)."
+  },
+  {
+    "id": "J21-09-019",
+    "theme": "Modules JPMS",
+    "theme_label": "Modules - module-info.java, exports, requires, opens",
+    "difficulty": "hard",
+    "question": "Que fait 'jdeps' ?",
+    "options": [
+      "Analyse les dépendances des classes",
+      "Détecte les dépendances cycliques",
+      "Aide à la migration vers les modules",
+      "Toutes ces réponses"
+    ],
+    "correct": 3,
+    "explanation": "jdeps analyse les dépendances de classes et aide à créer module-info.java pour la migration."
+  },
+  {
+    "id": "J21-09-020",
+    "theme": "Modules JPMS",
+    "theme_label": "Modules - module-info.java, exports, requires, opens",
+    "difficulty": "medium",
+    "question": "Que signifie 'requires static' ?",
+    "options": [
+      "Dépendance optionnelle à la compilation",
+      "Non nécessaire à l'exécution",
+      "Pour les annotations ou APIs facultatives",
+      "Toutes ces réponses"
+    ],
+    "correct": 3,
+    "explanation": "requires static indique une dépendance optionnelle. Le module peut fonctionner sans elle à l'exécution."
+  },
+  {
+    "id": "J21-09-021",
+    "theme": "Modules JPMS",
+    "theme_label": "Modules - module-info.java, exports, requires, opens",
+    "difficulty": "hard",
+    "question": "Que sont les 'qualified exports' ?",
+    "options": [
+      "exports mon.package to moduleA, moduleB",
+      "Restreint l'accès à certains modules",
+      "Utilisé pour des APIs internes partagées",
+      "Toutes ces réponses"
+    ],
+    "correct": 3,
+    "explanation": "Les qualified exports permettent un partage contrôlé, typiquement pour des tests ou des modules amis."
+  },
+  {
+    "id": "J21-09-022",
+    "theme": "Modules JPMS",
+    "theme_label": "Modules - module-info.java, exports, requires, opens",
+    "difficulty": "hard",
+    "question": "Quelle est la structure d'un module multi-release JAR ?",
+    "options": [
+      "META-INF/versions/9/, META-INF/versions/11/",
+      "Code spécifique par version Java",
+      "Permet rétrocompatibilité",
+      "Toutes ces réponses"
+    ],
+    "correct": 3,
+    "explanation": "Multi-release JAR permet d'avoir différentes versions de classes pour différentes versions Java."
+  },
+  {
+    "id": "J21-09-023",
+    "theme": "Modules JPMS",
+    "theme_label": "Modules - module-info.java, exports, requires, opens",
+    "difficulty": "medium",
+    "question": "Que signifie 'jar --describe-module' ?",
+    "options": [
+      "Affiche les infos du module d'un JAR",
+      "Nécessite un JAR avec module-info",
+      "Affiche exports, requires, etc.",
+      "Toutes ces réponses"
+    ],
+    "correct": 3,
+    "explanation": "jar --describe-module --file mon.jar affiche le descripteur du module contenu dans le JAR."
+  },
+  {
+    "id": "J21-09-024",
+    "theme": "Modules JPMS",
+    "theme_label": "Modules - module-info.java, exports, requires, opens",
+    "difficulty": "medium",
+    "question": "Quel est l'avantage principal de JPMS ?",
+    "options": [
+      "Encapsulation forte (strong encapsulation)",
+      "Configuration explicite des dépendances",
+      "Réduction de la surface d'attaque",
+      "Toutes ces réponses"
+    ],
+    "correct": 3,
+    "explanation": "JPMS apporte encapsulation, fiabilité des dépendances, meilleure sécurité et optimisation (jlink)."
+  },
+  {
+    "id": "J21-09-025",
+    "theme": "Modules JPMS",
+    "theme_label": "Modules - module-info.java, exports, requires, opens",
+    "difficulty": "medium",
+    "question": "Quel est le comportement par défaut d'un package non exporté ?",
+    "options": [
+      "Accessible uniquement à l'intérieur du module",
+      "Inaccessible aux autres modules (même réflexion)",
+      "Reflection interdit l'accès aux membres privés",
+      "Toutes ces réponses"
+    ],
+    "correct": 3,
+    "explanation": "Un package non exporté est privé au module. La réflexion ne peut pas accéder aux membres (sauf --add-opens)."
+  },
+  {
+    "id": "J21-09-026",
+    "theme": "Modules JPMS",
+    "theme_label": "Modules - module-info.java, exports, requires, opens",
+    "difficulty": "hard",
+    "question": "Comment permettre la réflexion vers un package non exporté ?",
+    "options": [
+      "--add-opens module/package=targetmodule",
+      "opens package dans module-info",
+      "--add-exports pour compilation, --add-opens pour réflexion",
+      "Toutes ces réponses"
+    ],
+    "correct": 3,
+    "explanation": "--add-opens est l'option de ligne de commande pour autoriser la réflexion profonde vers un package."
+  },
+  {
+    "id": "J21-09-027",
+    "theme": "Modules JPMS",
+    "theme_label": "Modules - module-info.java, exports, requires, opens",
+    "difficulty": "hard",
+    "question": "Que sont les 'patch modules' ?",
+    "options": [
+      "--patch-module module=chemin",
+      "Remplacer des classes dans un module existant",
+      "Utilisé pour les tests ou hotfix",
+      "Toutes ces réponses"
+    ],
+    "correct": 3,
+    "explanation": "--patch-module permet de substituer ou ajouter des classes dans un module (comme le classpath override)."
+  },
+  {
+    "id": "J21-09-028",
+    "theme": "Modules JPMS",
+    "theme_label": "Modules - module-info.java, exports, requires, opens",
+    "difficulty": "medium",
+    "question": "Quelle est la différence entre 'java.base' et 'java.se' ?",
+    "options": [
+      "java.base est le module minimal, java.se regroupe les modules SE",
+      "java.se inclut java.base + java.sql, java.xml, etc.",
+      "java.se est plus gros que java.base",
+      "Toutes ces réponses"
+    ],
+    "correct": 3,
+    "explanation": "java.base est indispensable. java.se est un module aggregateur pour l'ensemble de Java SE (sauf JavaFX)."
+  },
+  {
+    "id": "J21-09-029",
+    "theme": "Modules JPMS",
+    "theme_label": "Modules - module-info.java, exports, requires, opens",
+    "difficulty": "hard",
+    "question": "Comment migrer une application legacy vers les modules ?",
+    "options": [
+      "Commencer par utiliser --classpath (unnamed module)",
+      "Ajouter module-info progressivement",
+      "Utiliser jdeps pour analyser",
+      "Toutes ces réponses"
+    ],
+    "correct": 3,
+    "explanation": "Migration progressive : d'abord classpath, puis modulepath avec automatic modules, enfin module-info explicites."
+  },
+  {
+    "id": "J21-09-030",
+    "theme": "Modules JPMS",
+    "theme_label": "Modules - module-info.java, exports, requires, opens",
+    "difficulty": "hard",
+    "question": "Que sont les 'layers' dans JPMS ?",
+    "options": [
+      "Couches de modules pour conteneurs",
+      "Permettent plusieurs versions d'un module",
+      "Utilisées par les application servers",
+      "Toutes ces réponses"
+    ],
+    "correct": 3,
+    "explanation": "ModuleLayer permet de créer des configurations de modules isolées (ex: plusieurs versions, conteneurs)."
+  },
+  {
+    "id": "JAVA21-MJ-001",
+    "theme": "Modules JPMS",
+    "theme_label": "module-info.java, exports, requires, opens",
+    "difficulty": "medium",
+    "type": "MULTI_CHOICE",
+    "question": "Sélectionnez TOUTES les affirmations correctes concernant l'instruction 'exports' dans module-info.java :",
+    "options": [
+      "Exporte un package à d'autres modules",
+      "Ouvre le module à la réflexion",
+      "Déclare une dépendance avec un autre module",
+      "Permet d'accéder à des classes non publiques"
+    ],
+    "correct": 0,
+    "correct_multiple": [
+      0,
+      1
+    ],
+    "explanation": "L'instruction 'exports' est utilisée pour exporter un package à d'autres modules, ce qui signifie qu'il peut être accédé par ces modules. Elle ne déclare pas de dépendance (ce qui est fait avec 'requires') et elle n'ouvre pas le module à la réflexion (ce qui est fait avec 'opens'). De plus, elle ne permet pas d'accéder à des classes non publiques."
+  },
+  {
+    "id": "JAVA21-MJ-002",
+    "theme": "Modules JPMS",
+    "theme_label": "module-info.java, exports, requires, opens",
+    "difficulty": "easy",
+    "type": "SINGLE_CHOICE",
+    "question": "Quelle directive dans module-info.java permet de déclarer une dépendance avec un autre module ?",
+    "options": [
+      "exports",
+      "requires",
+      "opens",
+      "uses"
+    ],
+    "correct": 1,
+    "correct_multiple": null,
+    "explanation": "La directive 'requires' est utilisée pour déclarer une dépendance avec un autre module. Les autres directives ont des fonctions différentes : 'exports' pour exporter un package, 'opens' pour ouvrir un package à la réflexion, et 'uses' pour déclarer des services utilisés par le module."
+  },
+  {
+    "id": "JAVA21-MJ-003",
+    "theme": "Modules JPMS",
+    "theme_label": "module-info.java, exports, requires, opens",
+    "difficulty": "hard",
+    "type": "MULTI_CHOICE",
+    "question": "Quelles sont les DEUX propositions vraies concernant l'instruction 'opens' dans module-info.java ?",
+    "options": [
+      "Permet l'accès réflexif à des classes non publiques",
+      "Exporte un package à d'autres modules",
+      "Déclare une dépendance avec un autre module",
+      "Ouvre le module à la réflexion pour tous les packages"
+    ],
+    "correct": 0,
+    "correct_multiple": [
+      0,
+      3
+    ],
+    "explanation": "L'instruction 'opens' permet l'accès réflexif à des classes non publiques, ce qui est nécessaire pour certaines fonctionnalités de réflexion. Elle ne déclare pas de dépendance (ce qui est fait avec 'requires') et elle n'exporte pas un package à d'autres modules (ce qui est fait avec 'exports'). De plus, elle ouvre le module à la réflexion pour tous les packages spécifiés."
+  },
+  {
+    "id": "JAVA21-MJ-004",
+    "theme": "Modules JPMS",
+    "theme_label": "module-info.java, exports, requires, opens",
+    "difficulty": "medium",
+    "type": "SINGLE_CHOICE",
+    "question": "Quelle directive dans module-info.java permet d'ouvrir un package à la réflexion pour tous les modules ?",
+    "options": [
+      "exports",
+      "requires transitive",
+      "opens",
+      "uses"
+    ],
+    "correct": 2,
+    "correct_multiple": null,
+    "explanation": "La directive 'opens' est utilisée pour ouvrir un package à la réflexion, ce qui permet aux modules de lire les classes non publiques. Les autres directives ont des fonctions différentes : 'exports' pour exporter un package, 'requires transitive' pour déclarer une dépendance transitive, et 'uses' pour déclarer des services utilisés par le module."
+  },
+  {
+    "id": "JAVA21-MJ-005",
+    "theme": "Modules JPMS",
+    "theme_label": "module-info.java, exports, requires, opens",
+    "difficulty": "medium",
+    "type": "MULTI_CHOICE",
+    "question": "Sélectionnez TOUTES les affirmations correctes concernant la directive 'requires' dans module-info.java :",
+    "options": [
+      "Déclare une dépendance vers un autre module",
+      "Exporte des packages du module courant",
+      "Permet l'accès à la réflexion dans le module déclaré",
+      "Ouvre un package au module courant"
+    ],
+    "correct": 0,
+    "correct_multiple": [
+      0,
+      3
+    ],
+    "explanation": "La directive 'requires' est utilisée pour déclarer une dépendance vers un autre module, ce qui signifie que le module courant nécessite les services fournis par ce module. L'option B est incorrecte car 'exports' est utilisée pour exporter des packages, pas 'requires'. L'option C est incorrecte car la directive 'opens' est utilisée pour permettre l'accès à la réflexion, pas 'requires'. L'option D est correcte car 'opens' permet d'accéder à la réflexion dans un package, mais elle est distincte de 'requires'."
+  },
+  {
+    "id": "JAVA21-MJ-006",
+    "theme": "Modules JPMS",
+    "theme_label": "module-info.java, exports, requires, opens",
+    "difficulty": "easy",
+    "type": "SINGLE_CHOICE",
+    "question": "Quelle directive dans module-info.java est utilisée pour déclarer que le module courant peut être utilisé par d'autres modules ?",
+    "options": [
+      "exports",
+      "requires",
+      "opens",
+      "provides"
+    ],
+    "correct": 0,
+    "correct_multiple": null,
+    "explanation": "La directive 'exports' est utilisée pour déclarer que le module courant peut être utilisé par d'autres modules. Elle rend un package accessible aux autres modules."
+  },
+  {
+    "id": "JAVA21-MJ-007",
+    "theme": "Modules JPMS",
+    "theme_label": "module-info.java, exports, requires, opens",
+    "difficulty": "hard",
+    "type": "MULTI_CHOICE",
+    "question": "Quelles sont les DEUX propositions vraies concernant la directive 'opens' dans module-info.java :",
+    "options": [
+      "Permet l'accès à la réflexion dans un package",
+      "Exporte des packages du module courant",
+      "Déclare une dépendance vers un autre module",
+      "Ouvre un package au module courant"
+    ],
+    "correct": 0,
+    "correct_multiple": [
+      0,
+      3
+    ],
+    "explanation": "La directive 'opens' permet l'accès à la réflexion dans un package, ce qui signifie que le module courant peut être inspecté et modifié dynamiquement par d'autres modules. L'option B est incorrecte car 'exports' est utilisée pour exporter des packages, pas 'opens'. L'option C est incorrecte car la directive 'requires' est utilisée pour déclarer une dépendance, pas 'opens'. L'option D est correcte car 'opens' permet d'accéder à la réflexion dans un package, mais elle est distincte de 'requires'."
+  },
+  {
+    "id": "JAVA21-MJ-008",
+    "theme": "Modules JPMS",
+    "theme_label": "module-info.java, exports, requires, opens",
+    "difficulty": "medium",
+    "type": "SINGLE_CHOICE",
+    "question": "Quelle directive dans module-info.java est utilisée pour déclarer que le module courant fournit une implémentation d'une interface ou d'une classe ?",
+    "options": [
+      "exports",
+      "requires",
+      "opens",
+      "provides"
+    ],
+    "correct": 3,
+    "correct_multiple": null,
+    "explanation": "La directive 'provides' est utilisée pour déclarer que le module courant fournit une implémentation d'une interface ou d'une classe. Elle est généralement utilisée en conjonction avec 'uses' dans un autre module pour indiquer une dépendance."
+  },
+  {
+    "id": "JAVA21-MJ-009",
+    "theme": "Modules JPMS",
+    "theme_label": "module-info.java, exports, requires, opens",
+    "difficulty": "hard",
+    "type": "MULTI_CHOICE",
+    "question": "Sélectionnez TOUTES les affirmations correctes concernant la directive 'uses' dans module-info.java :",
+    "options": [
+      "Déclare une dépendance vers un service spécifique",
+      "Exporte des packages du module courant",
+      "Permet l'accès à la réflexion dans un package",
+      "Indique que le module courant utilise des services fournis par d'autres modules"
+    ],
+    "correct": 0,
+    "correct_multiple": [
+      0,
+      3
+    ],
+    "explanation": "La directive 'uses' est utilisée pour déclarer une dépendance vers un service spécifique, ce qui signifie que le module courant utilise des services fournis par d'autres modules. L'option B est incorrecte car 'exports' est utilisée pour exporter des packages, pas 'uses'. L'option C est incorrecte car la directive 'opens' est utilisée pour permettre l'accès à la réflexion, pas 'uses'. L'option D est correcte car 'uses' indique que le module courant utilise des services fournis par d'autres modules."
+  },
+  {
+    "id": "JAVA21-MJ-010",
+    "theme": "Modules JPMS",
+    "theme_label": "module-info.java, exports, requires, opens",
+    "difficulty": "medium",
+    "type": "MULTI_CHOICE",
+    "question": "Sélectionnez TOUTES les affirmations correctes concernant le fichier module-info.java :",
+    "options": [
+      "Il doit être placé à la racine du module.",
+      "Il définit les dépendances avec d'autres modules via 'requires'.",
+      "Il peut exporter des packages avec 'exports'.",
+      "Il permet d'ouvrir des packages à la réflexion avec 'opens'."
+    ],
+    "correct": 0,
+    "correct_multiple": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "explanation": "Toutes les affirmations sont correctes. module-info.java doit être à la racine du module, il définit les dépendances avec 'requires', il peut exporter des packages avec 'exports' et il permet d'ouvrir des packages à la réflexion avec 'opens'."
+  }
+]

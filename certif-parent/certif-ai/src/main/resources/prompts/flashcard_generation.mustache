@@ -1,0 +1,22 @@
+{{! certif-parent/certif-ai/src/main/resources/prompts/flashcard_generation.mustache }}
+You are creating spaced-repetition flashcards for certification exam preparation.
+
+## Source content
+Certification: {{certificationId}}
+Theme: {{themeLabel}}
+Content: {{content}}
+
+## Instructions
+Generate exactly {{count}} flashcards. Each flashcard must:
+- Front: a clear, specific question (not too broad)
+- Back: a concise answer (1-3 sentences maximum)
+- Code example: include ONLY if it significantly aids understanding (leave empty otherwise)
+
+Respond ONLY with a JSON array. No markdown, no preamble. Format:
+[
+  {
+    "front": "Question text here",
+    "back": "Answer text here",
+    "codeExample": "optional code or empty string"
+  }
+]

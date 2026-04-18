@@ -1,0 +1,1068 @@
+[
+  {
+    "id": "KOT-FUN-001",
+    "theme": "Functional Programming",
+    "theme_label": "Lambda expressions",
+    "difficulty": "easy",
+    "question": "Quelle est la syntaxe d'une lambda ?",
+    "options": [
+      "{ param -> expression }",
+      "(param) -> expression",
+      "lambda param = expression",
+      "function(param) { expression }"
+    ],
+    "correct": 0,
+    "explanation": "{ x -> x + 1 } est une lambda."
+  },
+  {
+    "id": "KOT-FUN-002",
+    "theme": "Functional Programming",
+    "theme_label": "Lambda expressions",
+    "difficulty": "easy",
+    "question": "Comment référencer un paramètre unique dans une lambda ?",
+    "options": [
+      "it",
+      "this",
+      "value",
+      "param"
+    ],
+    "correct": 0,
+    "explanation": "it est le nom implicite du paramètre unique."
+  },
+  {
+    "id": "KOT-FUN-003",
+    "theme": "Functional Programming",
+    "theme_label": "Higher-order functions",
+    "difficulty": "easy",
+    "question": "Qu'est-ce qu'une fonction d'ordre supérieur ?",
+    "options": [
+      "Fonction qui prend une fonction en paramètre",
+      "Fonction qui retourne une fonction",
+      "Fonction générique",
+      "A et B"
+    ],
+    "correct": 3,
+    "explanation": "Higher-order function manipule des fonctions."
+  },
+  {
+    "id": "KOT-FUN-004",
+    "theme": "Functional Programming",
+    "theme_label": "Higher-order functions",
+    "difficulty": "medium",
+    "question": "Comment déclarer un paramètre fonction ?",
+    "options": [
+      "fun operate(a: Int, b: Int, op: (Int, Int) -> Int)",
+      "fun operate(a: Int, b: Int, op: Function<Int, Int, Int>)",
+      "fun operate(a: Int, b: Int, op: Int -> Int -> Int)",
+      "fun operate(a: Int, b: Int, op: (Int, Int): Int)"
+    ],
+    "correct": 0,
+    "explanation": "(Int, Int) -> Int est le type de la fonction."
+  },
+  {
+    "id": "KOT-FUN-005",
+    "theme": "Functional Programming",
+    "theme_label": "map",
+    "difficulty": "easy",
+    "question": "Que fait map sur une collection ?",
+    "options": [
+      "Transforme chaque élément",
+      "Filtre les éléments",
+      "Réduit la collection",
+      "Trie la collection"
+    ],
+    "correct": 0,
+    "explanation": "map applique une transformation à chaque élément."
+  },
+  {
+    "id": "KOT-FUN-006",
+    "theme": "Functional Programming",
+    "theme_label": "filter",
+    "difficulty": "easy",
+    "question": "Que fait filter sur une collection ?",
+    "options": [
+      "Garde les éléments satisfaisant une condition",
+      "Supprime les éléments",
+      "Transforme les éléments",
+      "Ordonne les éléments"
+    ],
+    "correct": 0,
+    "explanation": "filter conserve les éléments vérifiant le prédicat."
+  },
+  {
+    "id": "KOT-FUN-007",
+    "theme": "Functional Programming",
+    "theme_label": "reduce",
+    "difficulty": "medium",
+    "question": "Que fait reduce ?",
+    "options": [
+      "Accumule les éléments en un résultat",
+      "Réduit la taille",
+      "Supprime des éléments",
+      "Transforme"
+    ],
+    "correct": 0,
+    "explanation": "reduce combine les éléments avec une opération associative."
+  },
+  {
+    "id": "KOT-FUN-008",
+    "theme": "Functional Programming",
+    "theme_label": "reduce vs fold",
+    "difficulty": "hard",
+    "question": "Différence entre reduce et fold ?",
+    "options": [
+      "fold a une valeur initiale, reduce non",
+      "reduce a une valeur initiale, fold non",
+      "Identiques",
+      "fold pour les listes vides"
+    ],
+    "correct": 0,
+    "explanation": "fold accepte une valeur initiale, reduce utilise le premier élément."
+  },
+  {
+    "id": "KOT-FUN-009",
+    "theme": "Functional Programming",
+    "theme_label": "flatMap",
+    "difficulty": "hard",
+    "question": "Que fait flatMap ?",
+    "options": [
+      "Map puis aplatit",
+      "Filtre puis aplatit",
+      "Reduce puis aplatit",
+      "Transforme seulement"
+    ],
+    "correct": 0,
+    "explanation": "flatMap transforme chaque élément en collection puis aplatit."
+  },
+  {
+    "id": "KOT-FUN-010",
+    "theme": "Functional Programming",
+    "theme_label": "flatMap example",
+    "difficulty": "hard",
+    "question": "Que produit listOf(1,2).flatMap { listOf(it, it*2) } ?",
+    "options": [
+      "[1,2,2,4]",
+      "[1,2]",
+      "[2,4]",
+      "[1,2,4]"
+    ],
+    "correct": 0,
+    "explanation": "1 → [1,2], 2 → [2,4] → [1,2,2,4]."
+  },
+  {
+    "id": "KOT-FUN-011",
+    "theme": "Functional Programming",
+    "theme_label": "groupBy",
+    "difficulty": "hard",
+    "question": "Que fait groupBy ?",
+    "options": [
+      "Groupe les éléments par clé",
+      "Ordonne les éléments",
+      "Supprime les doublons",
+      "Filtre"
+    ],
+    "correct": 0,
+    "explanation": "groupBy retourne une Map<Key, List<Element>>."
+  },
+  {
+    "id": "KOT-FUN-012",
+    "theme": "Functional Programming",
+    "theme_label": "associate",
+    "difficulty": "hard",
+    "question": "Que fait associate ?",
+    "options": [
+      "Crée une Map à partir d'une collection",
+      "Associe des valeurs",
+      "Joint des collections",
+      "Fusionne"
+    ],
+    "correct": 0,
+    "explanation": "associate { it to it*2 } crée une Map."
+  },
+  {
+    "id": "KOT-FUN-013",
+    "theme": "Functional Programming",
+    "theme_label": "zip",
+    "difficulty": "hard",
+    "question": "Que fait zip ?",
+    "options": [
+      "Combine deux collections en paires",
+      "Compresse",
+      "Zippe",
+      "A et C"
+    ],
+    "correct": 3,
+    "explanation": "list1.zip(list2) retourne des paires (a,b)."
+  },
+  {
+    "id": "KOT-FUN-014",
+    "theme": "Functional Programming",
+    "theme_label": "partition",
+    "difficulty": "hard",
+    "question": "Que retourne partition ?",
+    "options": [
+      "Pair de collections (vrais, faux)",
+      "Liste de booléens",
+      "Map",
+      "Set"
+    ],
+    "correct": 0,
+    "explanation": "partition sépare les éléments selon un prédicat."
+  },
+  {
+    "id": "KOT-FUN-015",
+    "theme": "Functional Programming",
+    "theme_label": "Sequence",
+    "difficulty": "hard",
+    "question": "Qu'est-ce qu'une Sequence ?",
+    "options": [
+      "Collection paresseuse",
+      "Collection eager",
+      "Liste",
+      "Set"
+    ],
+    "correct": 0,
+    "explanation": "Sequence évalue les opérations paresseusement."
+  },
+  {
+    "id": "KOT-FUN-016",
+    "theme": "Functional Programming",
+    "theme_label": "Sequence vs List",
+    "difficulty": "hard",
+    "question": "Avantage de Sequence sur List ?",
+    "options": [
+      "Moins de mémoire pour grands volumes",
+      "Plus rapide",
+      "Plus simple",
+      "A et B"
+    ],
+    "correct": 0,
+    "explanation": "Sequence permet le traitement paresseux, idéal pour grandes collections."
+  },
+  {
+    "id": "KOT-FUN-017",
+    "theme": "Functional Programming",
+    "theme_label": "asSequence",
+    "difficulty": "hard",
+    "question": "Comment créer une Sequence ?",
+    "options": [
+      "list.asSequence()",
+      "sequence { }",
+      "generateSequence",
+      "Toutes ces réponses"
+    ],
+    "correct": 3,
+    "explanation": "Plusieurs façons de créer des sequences."
+  },
+  {
+    "id": "KOT-FUN-018",
+    "theme": "Functional Programming",
+    "theme_label": "takeWhile",
+    "difficulty": "hard",
+    "question": "Que fait takeWhile ?",
+    "options": [
+      "Prend les éléments tant que condition vraie",
+      "Prend tous les éléments",
+      "Ignore les premiers",
+      "Filtre"
+    ],
+    "correct": 0,
+    "explanation": "takeWhile s'arrête à la première condition fausse."
+  },
+  {
+    "id": "KOT-FUN-019",
+    "theme": "Functional Programming",
+    "theme_label": "dropWhile",
+    "difficulty": "hard",
+    "question": "Que fait dropWhile ?",
+    "options": [
+      "Ignore les éléments tant que condition vraie",
+      "Prend les éléments",
+      "Supprime tout",
+      "Garde les premiers"
+    ],
+    "correct": 0,
+    "explanation": "dropWhile ignore jusqu'à la première condition fausse."
+  },
+  {
+    "id": "KOT-FUN-020",
+    "theme": "Functional Programming",
+    "theme_label": "chunked",
+    "difficulty": "hard",
+    "question": "Que fait chunked ?",
+    "options": [
+      "Découpe en sous-listes de taille donnée",
+      "Regroupe par taille",
+      "Transforme",
+      "Filtre"
+    ],
+    "correct": 0,
+    "explanation": "list.chunked(3) crée des sous-listes de 3 éléments."
+  },
+  {
+    "id": "KOT-FUN-021",
+    "theme": "Functional Programming",
+    "theme_label": "windowed",
+    "difficulty": "hard",
+    "question": "Différence entre chunked et windowed ?",
+    "options": [
+      "windowed a un chevauchement possible",
+      "chunked sans chevauchement",
+      "Identiques",
+      "A et B"
+    ],
+    "correct": 3,
+    "explanation": "windowed permet le chevauchement (step)."
+  },
+  {
+    "id": "KOT-FUN-022",
+    "theme": "Functional Programming",
+    "theme_label": "fold vs reduce",
+    "difficulty": "hard",
+    "question": "fold peut-il s'appliquer sur une liste vide ?",
+    "options": [
+      "Oui, retourne la valeur initiale",
+      "Non, exception",
+      "Oui, null",
+      "Dépend"
+    ],
+    "correct": 0,
+    "explanation": "fold fonctionne sur liste vide grâce à la valeur initiale."
+  },
+  {
+    "id": "KOT-FUN-023",
+    "theme": "Functional Programming",
+    "theme_label": "runningFold",
+    "difficulty": "hard",
+    "question": "Que retourne runningFold ?",
+    "options": [
+      "Liste des valeurs intermédiaires",
+      "Valeur finale",
+      "Map",
+      "Set"
+    ],
+    "correct": 0,
+    "explanation": "runningFold retourne toutes les valeurs d'accumulation."
+  },
+  {
+    "id": "KOT-FUN-024",
+    "theme": "Functional Programming",
+    "theme_label": "sortedBy",
+    "difficulty": "easy",
+    "question": "Comment trier par une propriété ?",
+    "options": [
+      "sortedBy { it.property }",
+      "sortBy { it.property }",
+      "orderBy { it.property }",
+      "A et B"
+    ],
+    "correct": 3,
+    "explanation": "sortedBy retourne une nouvelle liste triée."
+  },
+  {
+    "id": "KOT-FUN-025",
+    "theme": "Functional Programming",
+    "theme_label": "distinct",
+    "difficulty": "easy",
+    "question": "Que fait distinct ?",
+    "options": [
+      "Supprime les doublons",
+      "Garde les doublons",
+      "Transforme",
+      "Compte"
+    ],
+    "correct": 0,
+    "explanation": "distinct retourne une liste sans doublons."
+  },
+  {
+    "id": "KOT-FUN-026",
+    "theme": "Functional Programming",
+    "theme_label": "distinctBy",
+    "difficulty": "hard",
+    "question": "Que fait distinctBy ?",
+    "options": [
+      "Supprime les doublons selon une clé",
+      "Supprime tous les doublons",
+      "Garde un élément par clé",
+      "A et C"
+    ],
+    "correct": 3,
+    "explanation": "distinctBy { it.property } garde le premier pour chaque clé."
+  },
+  {
+    "id": "KOT-FUN-027",
+    "theme": "Functional Programming",
+    "theme_label": "maxByOrNull",
+    "difficulty": "hard",
+    "question": "Que retourne maxByOrNull ?",
+    "options": [
+      "Élément max selon sélecteur, ou null",
+      "Élément max",
+      "Valeur max",
+      "Index max"
+    ],
+    "correct": 0,
+    "explanation": "maxByOrNull évite les exceptions sur liste vide."
+  },
+  {
+    "id": "KOT-FUN-028",
+    "theme": "Functional Programming",
+    "theme_label": "minByOrNull",
+    "difficulty": "hard",
+    "question": "minByOrNull fait quoi ?",
+    "options": [
+      "Élément min selon sélecteur, ou null",
+      "Élément min",
+      "Valeur min",
+      "Index min"
+    ],
+    "correct": 0,
+    "explanation": "minByOrNull est la version sûre."
+  },
+  {
+    "id": "KOT-FUN-029",
+    "theme": "Functional Programming",
+    "theme_label": "firstOrNull",
+    "difficulty": "hard",
+    "question": "firstOrNull diffère de first par ?",
+    "options": [
+      "Retourne null au lieu de NoSuchElementException",
+      "Retourne le dernier",
+      "Retourne une liste",
+      "Identique"
+    ],
+    "correct": 0,
+    "explanation": "firstOrNull évite l'exception."
+  },
+  {
+    "id": "KOT-FUN-030",
+    "theme": "Functional Programming",
+    "theme_label": "singleOrNull",
+    "difficulty": "hard",
+    "question": "Que fait singleOrNull ?",
+    "options": [
+      "Retourne l'unique élément ou null",
+      "Retourne le premier",
+      "Retourne le dernier",
+      "Retourne tous"
+    ],
+    "correct": 0,
+    "explanation": "singleOrNull attend exactement 0 ou 1 élément."
+  },
+  {
+    "id": "KOT-FUN-031",
+    "theme": "Functional Programming",
+    "theme_label": "any",
+    "difficulty": "easy",
+    "question": "Que fait any ?",
+    "options": [
+      "Vérifie si un élément satisfait la condition",
+      "Vérifie si tous les éléments satisfont",
+      "Compte les éléments",
+      "Prend le premier"
+    ],
+    "correct": 0,
+    "explanation": "any retourne true si au moins un élément satisfait."
+  },
+  {
+    "id": "KOT-FUN-032",
+    "theme": "Functional Programming",
+    "theme_label": "all",
+    "difficulty": "easy",
+    "question": "Que fait all ?",
+    "options": [
+      "Vérifie si tous les éléments satisfont",
+      "Vérifie si un élément satisfait",
+      "Compte les éléments",
+      "Filtre"
+    ],
+    "correct": 0,
+    "explanation": "all retourne true si tous les éléments satisfont."
+  },
+  {
+    "id": "KOT-FUN-033",
+    "theme": "Functional Programming",
+    "theme_label": "none",
+    "difficulty": "hard",
+    "question": "Que fait none ?",
+    "options": [
+      "Vérifie si aucun élément ne satisfait",
+      "Vérifie si tous satisfont",
+      "Vérifie si un satisfait",
+      "Retourne le contraire de any"
+    ],
+    "correct": 0,
+    "explanation": "none est l'inverse de any."
+  },
+  {
+    "id": "KOT-FUN-034",
+    "theme": "Functional Programming",
+    "theme_label": "count",
+    "difficulty": "easy",
+    "question": "Que fait count ?",
+    "options": [
+      "Compte les éléments satisfaisant une condition",
+      "Compte tous les éléments",
+      "Retourne le nombre",
+      "Toutes ces réponses"
+    ],
+    "correct": 3,
+    "explanation": "count peut être sans paramètre ou avec prédicat."
+  },
+  {
+    "id": "KOT-FUN-035",
+    "theme": "Functional Programming",
+    "theme_label": "forEach",
+    "difficulty": "easy",
+    "question": "Que fait forEach ?",
+    "options": [
+      "Applique une action à chaque élément",
+      "Transforme les éléments",
+      "Filtre les éléments",
+      "Réduit"
+    ],
+    "correct": 0,
+    "explanation": "forEach exécute une action pour chaque élément."
+  },
+  {
+    "id": "KOT-FUN-036",
+    "theme": "Functional Programming",
+    "theme_label": "onEach",
+    "difficulty": "hard",
+    "question": "Différence entre onEach et forEach ?",
+    "options": [
+      "onEach retourne la collection",
+      "forEach retourne Unit",
+      "Identiques",
+      "A et B"
+    ],
+    "correct": 3,
+    "explanation": "onEach permet le chaînage."
+  },
+  {
+    "id": "KOT-FUN-037",
+    "theme": "Functional Programming",
+    "theme_label": "withIndex",
+    "difficulty": "hard",
+    "question": "Que retourne withIndex ?",
+    "options": [
+      "Collection d'IndexedValue",
+      "Liste d'indices",
+      "Map",
+      "Set"
+    ],
+    "correct": 0,
+    "explanation": "withIndex donne accès à l'index et la valeur."
+  },
+  {
+    "id": "KOT-FUN-038",
+    "theme": "Functional Programming",
+    "theme_label": "associateBy",
+    "difficulty": "hard",
+    "question": "Que fait associateBy ?",
+    "options": [
+      "Crée une Map avec la clé fournie",
+      "Associe par valeur",
+      "Joint",
+      "Groupe"
+    ],
+    "correct": 0,
+    "explanation": "associateBy { it.id } crée une Map id → objet."
+  },
+  {
+    "id": "KOT-FUN-039",
+    "theme": "Functional Programming",
+    "theme_label": "associateWith",
+    "difficulty": "hard",
+    "question": "Que fait associateWith ?",
+    "options": [
+      "Crée une Map avec la valeur dérivée",
+      "Associe par clé",
+      "Joint",
+      "Groupe"
+    ],
+    "correct": 0,
+    "explanation": "associateWith { it.length } crée Map élément → longueur."
+  },
+  {
+    "id": "KOT-FUN-040",
+    "theme": "Functional Programming",
+    "theme_label": "unzip",
+    "difficulty": "hard",
+    "question": "Que fait unzip ?",
+    "options": [
+      "Sépare une liste de paires en deux listes",
+      "Combine deux listes",
+      "Zip inverse",
+      "A et C"
+    ],
+    "correct": 3,
+    "explanation": "unzip transforme List<Pair<A,B>> en Pair<List<A>,List<B>>."
+  },
+  {
+    "id": "KOT-FUN-041",
+    "theme": "Functional Programming",
+    "theme_label": "slice",
+    "difficulty": "hard",
+    "question": "Que fait slice ?",
+    "options": [
+      "Extrait une plage d'indices",
+      "Coupe la liste",
+      "Sépare",
+      "Filtre"
+    ],
+    "correct": 0,
+    "explanation": "slice(1..3) retourne les éléments aux indices donnés."
+  },
+  {
+    "id": "KOT-FUN-042",
+    "theme": "Functional Programming",
+    "theme_label": "drop",
+    "difficulty": "hard",
+    "question": "Que fait drop ?",
+    "options": [
+      "Ignore les n premiers éléments",
+      "Prend les n premiers",
+      "Supprime les n derniers",
+      "Garde les n premiers"
+    ],
+    "correct": 0,
+    "explanation": "drop(2) ignore les 2 premiers éléments."
+  },
+  {
+    "id": "KOT-FUN-043",
+    "theme": "Functional Programming",
+    "theme_label": "take",
+    "difficulty": "hard",
+    "question": "Que fait take ?",
+    "options": [
+      "Prend les n premiers éléments",
+      "Ignore les n premiers",
+      "Prend les n derniers",
+      "Prend tous"
+    ],
+    "correct": 0,
+    "explanation": "take(2) prend les 2 premiers éléments."
+  },
+  {
+    "id": "KOT-FUN-044",
+    "theme": "Functional Programming",
+    "theme_label": "takeLast",
+    "difficulty": "hard",
+    "question": "Que fait takeLast ?",
+    "options": [
+      "Prend les n derniers éléments",
+      "Prend les n premiers",
+      "Ignore les n derniers",
+      "Prend tous"
+    ],
+    "correct": 0,
+    "explanation": "takeLast(2) prend les 2 derniers éléments."
+  },
+  {
+    "id": "KOT-FUN-045",
+    "theme": "Functional Programming",
+    "theme_label": "dropLast",
+    "difficulty": "hard",
+    "question": "Que fait dropLast ?",
+    "options": [
+      "Ignore les n derniers éléments",
+      "Ignore les n premiers",
+      "Prend les n derniers",
+      "Prend tous"
+    ],
+    "correct": 0,
+    "explanation": "dropLast(2) ignore les 2 derniers éléments."
+  },
+  {
+    "id": "KOT-FUN-046",
+    "theme": "Functional Programming",
+    "theme_label": "filterIsInstance",
+    "difficulty": "hard",
+    "question": "Que fait filterIsInstance<T>() ?",
+    "options": [
+      "Filtre les éléments d'un type donné",
+      "Filtre par instance",
+      "Cast",
+      "A et B"
+    ],
+    "correct": 3,
+    "explanation": "filterIsInstance<String>() garde les String."
+  },
+  {
+    "id": "KOT-FUN-047",
+    "theme": "Functional Programming",
+    "theme_label": "filterNotNull",
+    "difficulty": "hard",
+    "question": "Que fait filterNotNull ?",
+    "options": [
+      "Supprime les éléments null",
+      "Garde les null",
+      "Transforme null",
+      "Ignore"
+    ],
+    "correct": 0,
+    "explanation": "filterNotNull retourne une liste non-nullable."
+  },
+  {
+    "id": "KOT-FUN-048",
+    "theme": "Functional Programming",
+    "theme_label": "mapIndexed",
+    "difficulty": "hard",
+    "question": "Que fait mapIndexed ?",
+    "options": [
+      "Map avec accès à l'index",
+      "Map sans index",
+      "Filtre",
+      "Reduce"
+    ],
+    "correct": 0,
+    "explanation": "mapIndexed { index, value -> ... }"
+  },
+  {
+    "id": "KOT-FUN-049",
+    "theme": "Functional Programming",
+    "theme_label": "forEachIndexed",
+    "difficulty": "hard",
+    "question": "Que fait forEachIndexed ?",
+    "options": [
+      "forEach avec index",
+      "map avec index",
+      "filter avec index",
+      "reduce avec index"
+    ],
+    "correct": 0,
+    "explanation": "forEachIndexed { index, value -> }"
+  },
+  {
+    "id": "KOT-FUN-050",
+    "theme": "Functional Programming",
+    "theme_label": "sumOf",
+    "difficulty": "hard",
+    "question": "Que fait sumOf ?",
+    "options": [
+      "Somme des valeurs transformées",
+      "Somme simple",
+      "Moyenne",
+      "Compte"
+    ],
+    "correct": 0,
+    "explanation": "sumOf { it.length } somme les longueurs."
+  },
+  {
+    "id": "KOT-FP-001",
+    "theme": "Functional Programming",
+    "theme_label": "Higher-order functions",
+    "difficulty": "medium",
+    "type": "MULTI_CHOICE",
+    "question": "Sélectionnez TOUTES les affirmations correctes concernant les fonctions d'ordre supérieur en Kotlin :",
+    "options": [
+      "Une fonction d'ordre supérieur peut prendre une autre fonction en paramètre.",
+      "Une fonction d'ordre supérieur ne peut pas retourner une autre fonction.",
+      "Les fonctions lambda sont des exemples de fonctions d'ordre supérieur.",
+      "Une fonction d'ordre supérieur peut être stockée dans une variable."
+    ],
+    "correct": 0,
+    "correct_multiple": [
+      0,
+      2,
+      3
+    ],
+    "explanation": "A est correct car une fonction d'ordre supérieur peut prendre une autre fonction en paramètre. B est incorrect car les fonctions d'ordre supérieur peuvent retourner une autre fonction. C est correct car les fonctions lambda sont des exemples de fonctions d'ordre supérieur. D est correct car une fonction d'ordre supérieur peut être stockée dans une variable."
+  },
+  {
+    "id": "KOT-FP-002",
+    "theme": "Functional Programming",
+    "theme_label": "map",
+    "difficulty": "easy",
+    "type": "SINGLE_CHOICE",
+    "question": "Quelle méthode est utilisée pour transformer chaque élément d'une collection en Kotlin ?",
+    "options": [
+      "map",
+      "filter",
+      "reduce",
+      "flatMap"
+    ],
+    "correct": 0,
+    "correct_multiple": null,
+    "explanation": "A est correct car la méthode map est utilisée pour transformer chaque élément d'une collection en Kotlin. Les autres options sont incorrectes car elles servent à des opérations différentes : filter pour filtrer les éléments, reduce pour réduire la collection à une seule valeur, et flatMap pour transformer et aplatir les éléments."
+  },
+  {
+    "id": "KOT-FP-004",
+    "theme": "Functional Programming",
+    "theme_label": "Sequence",
+    "difficulty": "medium",
+    "type": "SINGLE_CHOICE",
+    "question": "Quelle est la principale différence entre une List et une Sequence en Kotlin ?",
+    "options": [
+      "Une List est évaluée immédiatement, tandis qu'une Sequence est évaluée de manière paresseuse.",
+      "Une List peut contenir des éléments null, tandis qu'une Sequence non.",
+      "Une List est mutable, tandis qu'une Sequence est immutable.",
+      "Une List utilise moins de mémoire que une Sequence."
+    ],
+    "correct": 0,
+    "correct_multiple": null,
+    "explanation": "A est correct car une List est évaluée immédiatement, tandis qu'une Sequence est évaluée de manière paresseuse. Les autres options sont incorrectes car elles ne reflètent pas les principales différences entre une List et une Sequence."
+  },
+  {
+    "id": "KOT-FP-005",
+    "theme": "Functional Programming",
+    "theme_label": "filterIsInstance",
+    "difficulty": "easy",
+    "type": "MULTI_CHOICE",
+    "question": "Quelles sont les deux affirmations correctes concernant filterIsInstance en Kotlin :",
+    "options": [
+      "filterIsInstance retourne une List de type nullable.",
+      "filterIsInstance filtre les éléments d'une collection en fonction du type spécifié.",
+      "filterIsInstance peut être utilisé avec n'importe quel type de collection.",
+      "filterIsInstance retourne une Sequence."
+    ],
+    "correct": 1,
+    "correct_multiple": [
+      1,
+      3
+    ],
+    "explanation": "A est incorrect car filterIsInstance retourne une List non nullable. B est correct car filterIsInstance filtre les éléments d'une collection en fonction du type spécifié. C est incorrect car filterIsInstance ne peut être utilisé qu'avec des collections de type Any. D est correct car filterIsInstance retourne une Sequence."
+  },
+  {
+    "id": "KOT-FP-005",
+    "theme": "Functional Programming",
+    "theme_label": "Higher-order functions",
+    "difficulty": "medium",
+    "type": "MULTI_CHOICE",
+    "question": "Sélectionnez TOUTES les affirmations correctes concernant les fonctions d'ordre supérieur en Kotlin :",
+    "options": [
+      "Les fonctions d'ordre supérieur peuvent prendre une autre fonction en paramètre.",
+      "Les fonctions d'ordre supérieur ne peuvent pas retourner une fonction.",
+      "Les lambdas en Kotlin sont des fonctions d'ordre supérieur.",
+      "Les fonctions d'ordre supérieur peuvent être stockées dans des variables."
+    ],
+    "correct": 0,
+    "correct_multiple": [
+      0,
+      2,
+      3
+    ],
+    "explanation": "Les fonctions d'ordre supérieur peuvent prendre une autre fonction en paramètre (A est correct). Elles ne sont pas limitées à retourner une fonction, donc B est incorrect. Les lambdas en Kotlin sont des fonctions d'ordre supérieur (C est correct). Elles peuvent également être stockées dans des variables (D est correct)."
+  },
+  {
+    "id": "KOT-FP-006",
+    "theme": "Functional Programming",
+    "theme_label": "map",
+    "difficulty": "easy",
+    "type": "SINGLE_CHOICE",
+    "question": "Quelle est la fonction Kotlin utilisée pour transformer chaque élément d'une collection en une autre forme ?",
+    "options": [
+      "map",
+      "filter",
+      "reduce",
+      "flatMap"
+    ],
+    "correct": 0,
+    "correct_multiple": null,
+    "explanation": "La fonction map est utilisée pour transformer chaque élément d'une collection en une autre forme (A est correct)."
+  },
+  {
+    "id": "KOT-FP-007",
+    "theme": "Functional Programming",
+    "theme_label": "reduce vs fold",
+    "difficulty": "hard",
+    "type": "MULTI_CHOICE",
+    "question": "Quelles sont les DEUX affirmations vraies concernant la différence entre reduce et fold en Kotlin ?",
+    "options": [
+      "reduce nécessite un élément neutre.",
+      "fold nécessite un élément neutre.",
+      "reduce peut être utilisé sur des collections vides.",
+      "fold peut être utilisé sur des collections vides."
+    ],
+    "correct": 1,
+    "correct_multiple": [
+      1,
+      3
+    ],
+    "explanation": "reduce nécessite un élément neutre (A est incorrect). fold nécessite un élément neutre (B est correct). reduce ne peut pas être utilisé sur des collections vides sans élément neutre (C est incorrect). fold peut être utilisé sur des collections vides avec un élément neutre (D est correct)."
+  },
+  {
+    "id": "KOT-FP-008",
+    "theme": "Functional Programming",
+    "theme_label": "Sequence vs List",
+    "difficulty": "medium",
+    "type": "SINGLE_CHOICE",
+    "question": "Quelle est la principale différence entre une Sequence et une List en Kotlin ?",
+    "options": [
+      "Une Sequence est évaluée immédiatement, une List est évaluée de manière différée.",
+      "Une Sequence est évaluée de manière différée, une List est évaluée immédiatement.",
+      "Une Sequence est mutable, une List est immutable.",
+      "Une Sequence peut contenir des éléments nulls, une List ne le peut pas."
+    ],
+    "correct": 1,
+    "correct_multiple": null,
+    "explanation": "Une Sequence est évaluée de manière différée, une List est évaluée immédiatement (B est correct)."
+  },
+  {
+    "id": "KOT-FP-009",
+    "theme": "Functional Programming",
+    "theme_label": "distinctBy",
+    "difficulty": "easy",
+    "type": "SINGLE_CHOICE",
+    "question": "Quelle fonction Kotlin est utilisée pour retourner une collection contenant des éléments distincts basés sur un critère spécifique ?",
+    "options": [
+      "distinct",
+      "distinctBy",
+      "unique",
+      "filterUnique"
+    ],
+    "correct": 1,
+    "correct_multiple": null,
+    "explanation": "distinctBy est utilisée pour retourner une collection contenant des éléments distincts basés sur un critère spécifique (B est correct)."
+  },
+  {
+    "id": "KOT-FP-010",
+    "theme": "Functional Programming",
+    "theme_label": "Higher-order functions",
+    "difficulty": "medium",
+    "type": "MULTI_CHOICE",
+    "question": "Sélectionnez TOUTES les affirmations correctes concernant les fonctions d'ordre supérieur en Kotlin :",
+    "options": [
+      "Les fonctions d'ordre supérieur peuvent accepter des fonctions en tant que paramètres.",
+      "Les fonctions d'ordre supérieur peuvent retourner des fonctions.",
+      "Les fonctions d'ordre supérieur ne peuvent pas être utilisées avec des lambdas.",
+      "Les fonctions d'ordre supérieur permettent une programmation déclarative."
+    ],
+    "correct": 0,
+    "correct_multiple": [
+      0,
+      1,
+      3
+    ],
+    "explanation": "Les options A, B et D sont correctes. Les fonctions d'ordre supérieur en Kotlin peuvent effectivement accepter des fonctions en tant que paramètres, retourner des fonctions et favoriser une programmation déclarative. L'option C est incorrecte car les fonctions d'ordre supérieur peuvent être utilisées avec des lambdas."
+  },
+  {
+    "id": "KOT-FP-011",
+    "theme": "Functional Programming",
+    "theme_label": "map",
+    "difficulty": "easy",
+    "type": "SINGLE_CHOICE",
+    "question": "Quelle est la différence entre map et flatMap en Kotlin ?",
+    "options": [
+      "map transforme chaque élément de la collection en un autre élément, tandis que flatMap peut transformer et aplatir les éléments.",
+      "map retourne une collection de listes, tandis que flatMap retourne une seule liste.",
+      "map et flatMap sont interchangeables dans la plupart des cas.",
+      "flatMap transforme chaque élément en une liste, puis aplatit ces listes en une seule collection."
+    ],
+    "correct": 3,
+    "correct_multiple": null,
+    "explanation": "L'option D est correcte. flatMap transforme chaque élément en une liste, puis aplatit ces listes en une seule collection. Les options A et E sont incorrectes car map ne transforme pas les éléments en listes, et B est incorrect car map retourne une collection d'éléments transformés, pas de listes."
+  },
+  {
+    "id": "KOT-FP-012",
+    "theme": "Functional Programming",
+    "theme_label": "reduce vs fold",
+    "difficulty": "hard",
+    "type": "MULTI_CHOICE",
+    "question": "Quelles sont les DEUX propositions vraies concernant reduce et fold en Kotlin ?",
+    "options": [
+      "reduce lance une exception si la collection est vide.",
+      "fold nécessite un paramètre initial.",
+      "reduce et fold sont interchangeables dans tous les cas.",
+      "fold peut retourner un type différent du type des éléments de la collection."
+    ],
+    "correct": 1,
+    "correct_multiple": [
+      1,
+      3
+    ],
+    "explanation": "Les options B et D sont correctes. fold nécessite un paramètre initial, ce qui lui permet de fonctionner même sur des collections vides. De plus, fold peut retourner un type différent du type des éléments de la collection, ce qui est utile pour accumuler des résultats dans un autre type. Les options A et C sont incorrectes car reduce lance une exception sur des collections vides, et les deux fonctions ne sont pas interchangeables dans tous les cas."
+  },
+  {
+    "id": "KOT-FP-013",
+    "theme": "Functional Programming",
+    "theme_label": "Sequence",
+    "difficulty": "medium",
+    "type": "SINGLE_CHOICE",
+    "question": "Quelle est la principale différence entre une List et une Sequence en Kotlin ?",
+    "options": [
+      "Une List est évaluée immédiatement, tandis qu'une Sequence est évaluée de manière différée.",
+      "Une List peut contenir des éléments null, tandis qu'une Sequence ne le peut pas.",
+      "Une List est toujours plus rapide que une Sequence.",
+      "Une Sequence ne peut pas être convertie en List."
+    ],
+    "correct": 0,
+    "correct_multiple": null,
+    "explanation": "L'option A est correcte. Une List est évaluée immédiatement, tandis qu'une Sequence est évaluée de manière différée, ce qui permet des opérations plus efficaces sur de grandes collections. Les options B et C sont incorrectes car une List peut contenir des éléments null, et il n'y a pas de garantie que l'une soit toujours plus rapide que l'autre. L'option D est incorrecte car une Sequence peut être convertie en List à l'aide de la méthode asList()."
+  },
+  {
+    "id": "KOT-FP-014",
+    "theme": "Functional Programming",
+    "theme_label": "distinctBy",
+    "difficulty": "easy",
+    "type": "SINGLE_CHOICE",
+    "question": "Quelle méthode est utilisée pour supprimer les éléments en double d'une collection en Kotlin, en se basant sur une clé spécifique ?",
+    "options": [
+      "distinctBy",
+      "unique",
+      "removeDuplicates",
+      "filterUnique"
+    ],
+    "correct": 0,
+    "correct_multiple": null,
+    "explanation": "L'option A est correcte. distinctBy est la méthode utilisée pour supprimer les éléments en double d'une collection en Kotlin, en se basant sur une clé spécifique. Les options B et C sont incorrectes car elles ne font pas partie de l'API Kotlin standard. L'option D est également incorrecte car filterUnique n'existe pas dans l'API Kotlin."
+  },
+  {
+    "id": "KOT-FP-015",
+    "theme": "Functional Programming",
+    "theme_label": "Higher-order functions",
+    "difficulty": "medium",
+    "type": "MULTI_CHOICE",
+    "question": "Sélectionnez TOUTES les affirmations correctes concernant les fonctions d'ordre supérieur dans Kotlin :",
+    "options": [
+      "Une fonction d'ordre supérieur peut prendre une autre fonction en paramètre.",
+      "Une fonction d'ordre supérieur ne peut pas retourner une autre fonction.",
+      "Les fonctions anonymes peuvent être utilisées comme arguments pour les fonctions d'ordre supérieur.",
+      "Les fonctions d'ordre supérieur ne peuvent être utilisées que dans les bibliothèques standard."
+    ],
+    "correct": 0,
+    "correct_multiple": [
+      0,
+      2
+    ],
+    "explanation": "A est correct car une fonction d'ordre supérieur peut effectivement prendre une autre fonction en paramètre. B est incorrect car les fonctions d'ordre supérieur peuvent retourner une autre fonction. C est correct car les fonctions anonymes, également appelées lambdas, peuvent être utilisées comme arguments pour les fonctions d'ordre supérieur. D est incorrect car les fonctions d'ordre supérieur sont largement utilisées dans divers contextes, pas seulement dans les bibliothèques standard."
+  },
+  {
+    "id": "KOT-FP-016",
+    "theme": "Functional Programming",
+    "theme_label": "Sequence",
+    "difficulty": "easy",
+    "type": "SINGLE_CHOICE",
+    "question": "Quelle est la principale différence entre une List et une Sequence en Kotlin ?",
+    "options": [
+      "Une Sequence est évaluée de manière lazy, tandis qu'une List est évaluée immédiatement.",
+      "Une Sequence utilise moins de mémoire qu'une List.",
+      "Une Sequence est toujours plus rapide qu'une List.",
+      "Une Sequence ne peut pas être convertie en List."
+    ],
+    "correct": 0,
+    "correct_multiple": null,
+    "explanation": "A est correct car une Sequence en Kotlin est évaluée de manière lazy, ce qui signifie qu'elle n'est pas évaluée jusqu'à ce que ses éléments soient réellement nécessaires. B est incorrect car la différence principale n'est pas liée à l'utilisation de la mémoire. C est incorrect car la vitesse dépend du contexte et des opérations effectuées. D est incorrect car une Sequence peut être convertie en List à l'aide de la méthode asList()."
+  },
+  {
+    "id": "KOT-FP-017",
+    "theme": "Functional Programming",
+    "theme_label": "reduce vs fold",
+    "difficulty": "hard",
+    "type": "MULTI_CHOICE",
+    "question": "Quelles sont les deux principales différences entre la méthode reduce et la méthode fold dans Kotlin ?",
+    "options": [
+      "reduce a besoin d'un élément neutre initial, tandis que fold non.",
+      "fold peut être utilisé avec des types de retour différents, contrairement à reduce.",
+      "reduce fonctionne sur une collection vide sans lever d'exception, tandis que fold lève une exception.",
+      "fold est plus performante que reduce dans tous les cas."
+    ],
+    "correct": 1,
+    "correct_multiple": [
+      1,
+      3
+    ],
+    "explanation": "A est incorrect car reduce nécessite effectivement un élément neutre initial. B est correct car fold peut spécifier un type de retour différent grâce à son paramètre initial, ce qui n'est pas le cas avec reduce. C est incorrect car reduce lève une exception sur une collection vide, contrairement à fold qui peut gérer ce cas avec un élément neutre initial. D est incorrect car la performance dépend du contexte et des opérations effectuées."
+  }
+]
