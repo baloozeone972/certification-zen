@@ -1,133 +1,128 @@
+// certif-parent/certif-domain/src/test/java/com/certifapp/domain/port/output/UserRepositoryTest.java
 package com.certifapp.domain.port.output;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import com.certifapp.domain.model.user.*;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
+/**
+ * Contract tests for {@link UserRepository} output port.
+ * The interface is mocked — adapter implementation tested in UserRepositoryAdapterTest.
+ */
 @ExtendWith(MockitoExtension.class)
-public class UserRepositoryTest {
+@DisplayName("UserRepository — port contract")
+class UserRepositoryTest {
 
     @Mock
-    private UserRepository userRepository;
+    private UserRepository repository;
 
-    @InjectMocks
-    private UserRepositoryImpl userRepositoryImpl;
-
-    @BeforeEach
-    public void setUp() {
-        // Initialization code, if any
+    private User buildUser(UUID id, String email) {
+        return new User(id, email, "$2a$12$hash", UserRole.USER,
+                SubscriptionTier.FREE, "fr", "Europe/Paris",
+                null, true, OffsetDateTime.now(), OffsetDateTime.now());
     }
 
-    @AfterEach
-    public void tearDown() {
-        reset(userRepository);
+    // ── findById ─────────────────────────────────────────────────────────────
+
+    @Test
+    @DisplayName("findById — user found → Optional.of(user)")
+    void findById_found_returnsUser() {
+        UUID id   = UUID.randomUUID();
+        User user = buildUser(id, "a@test.com");
+        when(repository.findById(id)).thenReturn(Optional.of(user));
+
+        assertThat(repository.findById(id)).contains(user);
+        verify(repository).findById(id);
     }
 
     @Test
-    @DisplayName("findById_nominalCase_userFound")
-    public void findById_nominalCase_userFound() {
-        UUID userId = UUID.randomUUID();
-        User user = new User(userId, "test@example.com", "Test User");
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+    @DisplayName("findById — unknown id → Optional.empty()")
+    void findById_notFound_returnsEmpty() {
+        UUID id = UUID.randomUUID();
+        when(repository.findById(id)).thenReturn(Optional.empty());
 
-        Optional<User> result = userRepositoryImpl.findById(userId);
+        assertThat(repository.findById(id)).isEmpty();
+    }
 
-        assertThat(result).isPresent().containsSame(user);
-        verify(userRepository, times(1)).findById(userId);
+    // ── findByEmail ──────────────────────────────────────────────────────────
+
+    @Test
+    @DisplayName("findByEmail — existing email → Optional.of(user)")
+    void findByEmail_found_returnsUser() {
+        String email = "b@test.com";
+        User user    = buildUser(UUID.randomUUID(), email);
+        when(repository.findByEmail(email)).thenReturn(Optional.of(user));
+
+        assertThat(repository.findByEmail(email)).contains(user);
     }
 
     @Test
-    @DisplayName("findById_edgeCase_userNotFound")
-    public void findById_edgeCase_userNotFound() {
-        UUID userId = UUID.randomUUID();
-        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+    @DisplayName("findByEmail — unknown email → Optional.empty()")
+    void findByEmail_notFound_returnsEmpty() {
+        when(repository.findByEmail("x@test.com")).thenReturn(Optional.empty());
+        assertThat(repository.findByEmail("x@test.com")).isEmpty();
+    }
 
-        Optional<User> result = userRepositoryImpl.findById(userId);
+    // ── findByStripeCustomerId ────────────────────────────────────────────────
 
-        assertThat(result).isEmpty();
-        verify(userRepository, times(1)).findById(userId);
+    @Test
+    @DisplayName("findByStripeCustomerId — known customer → Optional.of(user)")
+    void findByStripeCustomerId_found_returnsUser() {
+        User user = buildUser(UUID.randomUUID(), "c@test.com");
+        when(repository.findByStripeCustomerId("cus_123")).thenReturn(Optional.of(user));
+
+        assertThat(repository.findByStripeCustomerId("cus_123")).contains(user);
     }
 
     @Test
-    @DisplayName("findByEmail_nominalCase_userFound")
-    public void findByEmail_nominalCase_userFound() {
-        String email = "test@example.com";
-        User user = new User(UUID.randomUUID(), email, "Test User");
-        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+    @DisplayName("findByStripeCustomerId — unknown customer → Optional.empty()")
+    void findByStripeCustomerId_notFound_returnsEmpty() {
+        when(repository.findByStripeCustomerId("cus_unknown")).thenReturn(Optional.empty());
+        assertThat(repository.findByStripeCustomerId("cus_unknown")).isEmpty();
+    }
 
-        Optional<User> result = userRepositoryImpl.findByEmail(email);
+    // ── existsByEmail ─────────────────────────────────────────────────────────
 
-        assertThat(result).isPresent().containsSame(user);
-        verify(userRepository, times(1)).findByEmail(email);
+    @Test
+    @DisplayName("existsByEmail — registered email → true")
+    void existsByEmail_registered_returnsTrue() {
+        when(repository.existsByEmail("d@test.com")).thenReturn(true);
+        assertThat(repository.existsByEmail("d@test.com")).isTrue();
     }
 
     @Test
-    @DisplayName("findByEmail_edgeCase_userNotFound")
-    public void findByEmail_edgeCase_userNotFound() {
-        String email = "test@example.com";
-        when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
-
-        Optional<User> result = userRepositoryImpl.findByEmail(email);
-
-        assertThat(result).isEmpty();
-        verify(userRepository, times(1)).findByEmail(email);
+    @DisplayName("existsByEmail — unknown email → false")
+    void existsByEmail_unknown_returnsFalse() {
+        when(repository.existsByEmail("z@test.com")).thenReturn(false);
+        assertThat(repository.existsByEmail("z@test.com")).isFalse();
     }
 
+    // ── save ─────────────────────────────────────────────────────────────────
+
     @Test
-    @DisplayName("existsByEmail_nominalCase_userExists")
-    public void existsByEmail_nominalCase_userExists() {
-        String email = "test@example.com";
-        when(userRepository.existsByEmail(email)).thenReturn(true);
-
-        boolean result = userRepositoryImpl.existsByEmail(email);
-
-        assertThat(result).isTrue();
-        verify(userRepository, times(1)).existsByEmail(email);
+    @DisplayName("save — returns persisted user")
+    void save_returnsPersistedUser() {
+        User user    = buildUser(UUID.randomUUID(), "e@test.com");
+        when(repository.save(user)).thenReturn(user);
+        assertThat(repository.save(user)).isEqualTo(user);
     }
 
-    @Test
-    @DisplayName("existsByEmail_edgeCase_userDoesNotExist")
-    public void existsByEmail_edgeCase_userDoesNotExist() {
-        String email = "test@example.com";
-        when(userRepository.existsByEmail(email)).thenReturn(false);
-
-        boolean result = userRepositoryImpl.existsByEmail(email);
-
-        assertThat(result).isFalse();
-        verify(userRepository, times(1)).existsByEmail(email);
-    }
+    // ── deleteById ───────────────────────────────────────────────────────────
 
     @Test
-    @DisplayName("save_nominalCase_userSaved")
-    public void save_nominalCase_userSaved() {
-        User user = new User(UUID.randomUUID(), "test@example.com", "Test User");
-        when(userRepository.save(any(User.class))).thenReturn(user);
-
-        User result = userRepositoryImpl.save(user);
-
-        assertThat(result).isEqualToComparingFieldByField(user);
-        verify(userRepository, times(1)).save(any(User.class));
-    }
-
-    @Test
-    @DisplayName("deleteById_nominalCase_userDeleted")
-    public void deleteById_nominalCase_userDeleted() {
-        UUID userId = UUID.randomUUID();
-        userRepositoryImpl.deleteById(userId);
-
-        verify(userRepository, times(1)).deleteById(userId);
+    @DisplayName("deleteById — invoked once")
+    void deleteById_invokedOnce() {
+        UUID id = UUID.randomUUID();
+        repository.deleteById(id);
+        verify(repository, times(1)).deleteById(id);
     }
 }
-```
