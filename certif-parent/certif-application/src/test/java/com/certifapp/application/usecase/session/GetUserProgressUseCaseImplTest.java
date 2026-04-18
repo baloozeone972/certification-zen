@@ -1,5 +1,7 @@
 package com.certifapp.application.usecase.session;
 
+import java.util.UUID;
+
 import com.certifapp.domain.model.session.ExamSession;
 import com.certifapp.domain.port.input.session.GetSessionHistoryUseCase;
 import com.certifapp.domain.port.output.ExamSessionRepository;

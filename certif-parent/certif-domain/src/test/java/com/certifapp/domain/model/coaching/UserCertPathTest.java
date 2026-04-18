@@ -1,5 +1,7 @@
 package com.certifapp.domain.model.coaching;
 
+import java.util.UUID;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -19,7 +19,7 @@ public class AuthenticateUserUseCaseTest {
     @Mock
     private UserRepository userRepository;
 
-    @InjectMocks
+    @Mock
     private AuthenticateUserUseCase authenticateUserUseCase;
 
     @BeforeEach

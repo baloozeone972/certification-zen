@@ -21,7 +21,7 @@ public class GetCertificationDetailsUseCaseTest {
     @Mock
     private CertificationRepository certificationRepository;
 
-    @InjectMocks
+    @Mock
     private GetCertificationDetailsUseCase getCertificationDetailsUseCase;
 
     @BeforeEach

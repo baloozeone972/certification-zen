@@ -1,6 +1,8 @@
 // certif-parent/certif-domain/src/test/java/com/certifapp/domain/service/ScoringServiceTest.java
 package com.certifapp.domain.service;
 
+import java.util.UUID;
+
 import com.certifapp.domain.model.question.*;
 import com.certifapp.domain.model.session.*;
 import org.junit.jupiter.api.BeforeEach;

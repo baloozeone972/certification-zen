@@ -23,7 +23,7 @@ public class GetExamResultsUseCaseTest {
     @Mock
     private ExamSessionRepository examSessionRepository;
 
-    @InjectMocks
+    @Mock
     private GetExamResultsUseCase getExamResultsUseCase;
 
     @BeforeEach

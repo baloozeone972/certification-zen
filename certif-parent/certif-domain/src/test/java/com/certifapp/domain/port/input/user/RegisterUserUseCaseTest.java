@@ -20,7 +20,7 @@ public class RegisterUserUseCaseTest {
     @Mock
     private UserRepository userRepository;
 
-    @InjectMocks
+    @Mock
     private RegisterUserUseCase registerUserUseCase;
 
     @BeforeEach

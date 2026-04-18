@@ -24,7 +24,7 @@ public class GetFlashcardsUseCaseTest {
     @Mock
     private FlashcardService flashcardService;
 
-    @InjectMocks
+    @Mock
     private GetFlashcardsUseCase getFlashcardsUseCase;
 
     @BeforeEach

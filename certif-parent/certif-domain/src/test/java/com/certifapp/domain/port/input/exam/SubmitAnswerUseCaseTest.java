@@ -22,7 +22,7 @@ public class SubmitAnswerUseCaseTest {
     @Mock
     private ExamSessionRepository examSessionRepository;
 
-    @InjectMocks
+    @Mock
     private SubmitAnswerUseCase submitAnswerUseCase;
 
     private UUID sessionId = UUID.randomUUID();

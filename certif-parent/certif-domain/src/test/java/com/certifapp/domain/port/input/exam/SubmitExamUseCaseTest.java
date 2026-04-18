@@ -20,7 +20,7 @@ public class SubmitExamUseCaseTest {
     @Mock
     private ExamSessionRepository examSessionRepository;
 
-    @InjectMocks
+    @Mock
     private SubmitExamUseCase submitExamUseCase;
 
     @BeforeEach

@@ -1,5 +1,7 @@
 package com.certifapp.api.controller;
 
+import java.util.UUID;
+
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.assertThat;

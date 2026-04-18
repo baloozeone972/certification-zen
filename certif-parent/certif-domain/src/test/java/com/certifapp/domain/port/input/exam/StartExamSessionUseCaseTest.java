@@ -22,7 +22,7 @@ public class StartExamSessionUseCaseTest {
     @Mock
     private ExamSessionRepository examSessionRepository;
 
-    @InjectMocks
+    @Mock
     private StartExamSessionUseCase startExamSessionUseCase;
 
     @BeforeEach

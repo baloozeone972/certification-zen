@@ -1,5 +1,7 @@
 package com.certifapp.infrastructure.persistence.repository;
 
+import java.util.UUID;
+
 import com.certifapp.infrastructure.persistence.entity.QuestionEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

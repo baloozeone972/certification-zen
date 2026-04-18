@@ -22,7 +22,7 @@ public class GetSessionHistoryUseCaseTest {
     @Mock
     private ExamSessionRepository examSessionRepository;
 
-    @InjectMocks
+    @Mock
     private GetSessionHistoryUseCase getSessionHistoryUseCase;
 
     private UUID userId = UUID.randomUUID();

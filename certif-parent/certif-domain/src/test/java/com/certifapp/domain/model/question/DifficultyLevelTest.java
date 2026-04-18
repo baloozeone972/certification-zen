@@ -1,5 +1,7 @@
 package com.certifapp.domain.model.question;
 
+import org.junit.jupiter.api.extension.ExtendWith;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

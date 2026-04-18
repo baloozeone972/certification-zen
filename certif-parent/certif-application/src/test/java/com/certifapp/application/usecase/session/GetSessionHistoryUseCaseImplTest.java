@@ -28,7 +28,7 @@ public class GetSessionHistoryUseCaseImplTest {
     @Mock
     private ExamSessionRepository sessionRepository;
 
-    @InjectMocks
+    @Mock
     private GetSessionHistoryUseCase useCase;
 
     private UUID userId;

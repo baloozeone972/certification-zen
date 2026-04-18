@@ -20,7 +20,7 @@ public class ExportSessionPdfUseCaseTest {
     @Mock
     private SessionRepository sessionRepository;
 
-    @InjectMocks
+    @Mock
     private ExportSessionPdfUseCase exportSessionPdfUseCase;
 
     private UUID sessionId;

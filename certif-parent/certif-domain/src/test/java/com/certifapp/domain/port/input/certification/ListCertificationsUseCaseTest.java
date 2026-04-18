@@ -22,7 +22,7 @@ public class ListCertificationsUseCaseTest {
     @Mock
     private CertificationRepository certificationRepository;
 
-    @InjectMocks
+    @Mock
     private ListCertificationsUseCase listCertificationsUseCase;
 
     @BeforeEach

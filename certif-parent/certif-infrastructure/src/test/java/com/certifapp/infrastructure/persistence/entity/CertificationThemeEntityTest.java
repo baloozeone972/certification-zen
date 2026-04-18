@@ -1,5 +1,8 @@
 package com.certifapp.infrastructure.persistence.entity;
 
+import java.util.UUID;
+import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

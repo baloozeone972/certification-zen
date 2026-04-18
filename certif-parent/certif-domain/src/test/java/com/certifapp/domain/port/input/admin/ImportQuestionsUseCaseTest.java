@@ -1,5 +1,7 @@
 package com.certifapp.domain.port.input.admin;
 
+import java.util.UUID;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +19,7 @@ public class ImportQuestionsUseCaseTest {
     @Mock
     private QuestionRepository questionRepository;
 
-    @InjectMocks
+    @Mock
     private ImportQuestionsUseCase importQuestionsUseCase;
 
     @BeforeEach
