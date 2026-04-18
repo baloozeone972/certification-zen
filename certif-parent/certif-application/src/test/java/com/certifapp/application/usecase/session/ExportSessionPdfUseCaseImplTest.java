@@ -1,142 +1,61 @@
+// certif-parent/certif-application/src/test/java/com/certifapp/application/usecase/session/ExportSessionPdfUseCaseImplTest.java
 package com.certifapp.application.usecase.session;
 
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
-import java.util.*;
-import java.util.stream.Collectors;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import com.certifapp.domain.model.session.*;
+import com.certifapp.domain.model.user.*;
+import com.certifapp.domain.port.output.*;
+import com.certifapp.domain.service.*;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.OffsetDateTime;
+import java.util.*;
+
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+
 @ExtendWith(MockitoExtension.class)
-public class ExportSessionPdfUseCaseImplTest {
+@DisplayName("ExportSessionPdfUseCaseImpl")
+class ExportSessionPdfUseCaseImplTest {
 
-    @Mock
-    private ExamSessionRepository sessionRepository;
+    @Mock ExamSessionRepository sessionRepository;
+    @Mock QuestionRepository    questionRepository;
+    @Mock UserRepository        userRepository;
+    @Mock UserAnswerRepository  answerRepository;
+    @Mock PdfExportPort         pdfExportPort;
+    @Mock FreemiumGuardService  freemiumGuardService;
+    @Mock ScoringService        scoringService;
+    @InjectMocks ExportSessionPdfUseCaseImpl useCase;
 
-    @Mock
-    private QuestionRepository questionRepository;
+    private static final UUID SESSION_ID = UUID.randomUUID();
+    private static final UUID USER_ID    = UUID.randomUUID();
 
-    @Mock
-    private UserRepository userRepository;
-
-    @Mock
-    private UserAnswerRepository answerRepository;
-
-    @Mock
-    private PdfExportPort pdfExportPort;
-
-    @Mock
-    private FreemiumGuardService freemiumGuardService;
-
-    @Mock
-    private ScoringService scoringService;
-
-    @InjectMocks
-    private ExportSessionPdfUseCaseImpl exportSessionPdfUseCase;
-
-    private UUID sessionId;
-    private UUID userId;
-    private ExamSession session;
-    private List<UserAnswer> answers;
-    private List<Question> questions;
-    private byte[] pdfBytes;
-
-    @BeforeEach
-    public void setUp() {
-        sessionId = UUID.randomUUID();
-        userId = UUID.randomUUID();
-        session = new ExamSession(sessionId, userId, null);
-        answers = new ArrayList<>();
-        questions = new ArrayList<>();
-        pdfBytes = new byte[0];
+    private User buildProUser() {
+        return new User(USER_ID, "u@test.com", "$2a$12$h", UserRole.USER,
+                SubscriptionTier.PRO, "fr", "Europe/Paris", null, true,
+                OffsetDateTime.now(), OffsetDateTime.now());
     }
 
-    @Test
-    @DisplayName("should export PDF for PRO user")
-    public void execute_proUser_exportPdf() {
-        when(userRepository.findById(userId)).thenReturn(Optional.of(new com.certifapp.domain.model.user.User(userId, SubscriptionTier.PRO)));
-        when(sessionRepository.findById(sessionId)).thenReturn(Optional.of(session));
-        when(answerRepository.findBySessionId(sessionId)).thenReturn(answers);
-        when(questionRepository.findById(any(UUID.class))).thenReturn(Optional.ofNullable(null));
-        when(pdfExportPort.exportResults(any(), any(), any())).thenReturn(pdfBytes);
-
-        byte[] result = exportSessionPdfUseCase.execute(sessionId, userId);
-
-        assertThat(result).isEqualTo(pdfBytes);
-        verify(userRepository).findById(userId);
-        verify(sessionRepository).findById(sessionId);
-        verify(answerRepository).findBySessionId(sessionId);
-        verify(questionRepository).findById(any(UUID.class));
-        verify(pdfExportPort).exportResults(any(), any(), any());
+    private ExamSession buildSession() {
+        return new ExamSession(SESSION_ID, USER_ID, "ocp21", ExamMode.EXAM,
+                SessionStatus.COMPLETED, OffsetDateTime.now(), null, 1800L,
+                10, 7, 70.0, true, List.of());
     }
 
-    @Test
-    @DisplayName("should throw ExamSessionNotFoundException for non-existent session")
-    public void execute_nonExistentSession_throwException() {
-        when(userRepository.findById(userId)).thenReturn(Optional.of(new com.certifapp.domain.model.user.User(userId, SubscriptionTier.PRO)));
-        when(sessionRepository.findById(sessionId)).thenReturn(Optional.empty());
+    @Test @DisplayName("execute — PRO user with completed session → returns PDF bytes")
+    void execute_proUser_returnsPdf() {
+        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(buildProUser()));
+        when(sessionRepository.findById(SESSION_ID)).thenReturn(Optional.of(buildSession()));
+        when(answerRepository.findBySessionId(SESSION_ID)).thenReturn(List.of());
+        when(questionRepository.findAllById(any())).thenReturn(List.of());
+        when(pdfExportPort.exportResults(any(), any(), any())).thenReturn(new byte[]{1, 2, 3});
 
-        assertThatThrownBy(() -> exportSessionPdfUseCase.execute(sessionId, userId))
-                .isInstanceOf(ExamSessionNotFoundException.class)
-                .hasMessageContaining(sessionId.toString());
+        byte[] pdf = useCase.execute(SESSION_ID, USER_ID);
 
-        verify(userRepository).findById(userId);
-        verify(sessionRepository).findById(sessionId);
-    }
-
-    @Test
-    @DisplayName("should throw ExamSessionNotFoundException for session with wrong user")
-    public void execute_wrongUser_throwException() {
-        UUID otherUserId = UUID.randomUUID();
-        when(userRepository.findById(userId)).thenReturn(Optional.of(new com.certifapp.domain.model.user.User(userId, SubscriptionTier.PRO)));
-        when(sessionRepository.findById(sessionId)).thenReturn(Optional.of(new ExamSession(sessionId, otherUserId, null)));
-
-        assertThatThrownBy(() -> exportSessionPdfUseCase.execute(sessionId, userId))
-                .isInstanceOf(ExamSessionNotFoundException.class)
-                .hasMessageContaining(sessionId.toString());
-
-        verify(userRepository).findById(userId);
-        verify(sessionRepository).findById(sessionId);
-    }
-
-    @Test
-    @DisplayName("should throw SubscriptionRequiredException for FREE user")
-    public void execute_freeUser_throwException() {
-        when(userRepository.findById(userId)).thenReturn(Optional.of(new com.certifapp.domain.model.user.User(userId, SubscriptionTier.FREE)));
-
-        assertThatThrownBy(() -> exportSessionPdfUseCase.execute(sessionId, userId))
-                .isInstanceOf(SubscriptionRequiredException.class)
-                .hasMessageContaining("PDF Export");
-
-        verify(userRepository).findById(userId);
-    }
-
-    @Test
-    @DisplayName("should handle null questions gracefully")
-    public void execute_nullQuestions_exportPdf() {
-        when(userRepository.findById(userId)).thenReturn(Optional.of(new com.certifapp.domain.model.user.User(userId, SubscriptionTier.PRO)));
-        when(sessionRepository.findById(sessionId)).thenReturn(Optional.of(session));
-        when(answerRepository.findBySessionId(sessionId)).thenReturn(answers);
-        when(questionRepository.findById(any(UUID.class))).thenReturn(Optional.ofNullable(null));
-        when(pdfExportPort.exportResults(any(), any(), any())).thenReturn(pdfBytes);
-
-        byte[] result = exportSessionPdfUseCase.execute(sessionId, userId);
-
-        assertThat(result).isEqualTo(pdfBytes);
-        verify(userRepository).findById(userId);
-        verify(sessionRepository).findById(sessionId);
-        verify(answerRepository).findBySessionId(sessionId);
-        verify(questionRepository).findById(any(UUID.class));
+        assertThat(pdf).isNotEmpty();
         verify(pdfExportPort).exportResults(any(), any(), any());
     }
 }

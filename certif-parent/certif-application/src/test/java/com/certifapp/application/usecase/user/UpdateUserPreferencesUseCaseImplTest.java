@@ -1,89 +1,74 @@
+// certif-parent/certif-application/src/test/java/com/certifapp/application/usecase/user/UpdateUserPreferencesUseCaseImplTest.java
 package com.certifapp.application.usecase.user;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.certifapp.domain.exception.UserNotFoundException;
+import com.certifapp.domain.model.user.*;
+import com.certifapp.domain.port.input.user.UpdateUserPreferencesUseCase.UpdatePreferencesCommand;
+import com.certifapp.domain.port.output.*;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.time.OffsetDateTime;
+import java.util.*;
+
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-import com.certifapp.domain.exception.UserNotFoundException;
-import com.certifapp.domain.model.user.UserId;
-import com.certifapp.domain.model.user.UserPreferences;
-import com.certifapp.domain.port.input.user.UpdateUserPreferencesUseCase.UpdatePreferencesCommand;
-import com.certifapp.domain.port.output.UserPreferencesRepository;
-import com.certifapp.domain.port.output.UserRepository;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoExtension;
-
 @ExtendWith(MockitoExtension.class)
-public class UpdateUserPreferencesUseCaseImplTest {
+@DisplayName("UpdateUserPreferencesUseCaseImpl")
+class UpdateUserPreferencesUseCaseImplTest {
 
-    @Mock
-    private UserRepository userRepository;
+    @Mock UserRepository            userRepository;
+    @Mock UserPreferencesRepository preferencesRepository;
+    @InjectMocks UpdateUserPreferencesUseCaseImpl useCase;
 
-    @Mock
-    private UserPreferencesRepository preferencesRepository;
+    private static final UUID USER_ID = UUID.randomUUID();
 
-    @InjectMocks
-    private UpdateUserPreferencesUseCaseImpl useCase;
-
-    @BeforeEach
-    public void setUp() {
-        when(userRepository.findById(any(UserId.class))).thenReturn(Optional.empty());
+    private User buildUser() {
+        return new User(USER_ID, "u@test.com", "$2a$12$h", UserRole.USER,
+                SubscriptionTier.FREE, "fr", "Europe/Paris", null, true,
+                OffsetDateTime.now(), OffsetDateTime.now());
     }
 
-    @Test
-    @DisplayName("Should update user preferences with partial values")
-    public void updateUserPreferences_partiallyUpdated() throws UserNotFoundException {
-        // Arrange
-        UserId userId = new UserId(1L);
-        UpdatePreferencesCommand command = new UpdatePreferencesCommand(userId, "dark", null, "en", true);
-
-        UserPreferences existingPrefs = UserPreferences.defaultsFor(userId);
-        when(preferencesRepository.findByUserId(userId)).thenReturn(Optional.of(existingPrefs));
-
-        // Act
-        UserPreferences updatedPrefs = useCase.execute(command);
-
-        // Assert
-        assertThat(updatedPrefs.getTheme()).isEqualTo("dark");
-        assertThat(updatedPrefs.getLanguage()).isEqualTo(existingPrefs.getLanguage());
-        assertThat(updatedPrefs.getDefaultMode()).isEqualTo(existingPrefs.getDefaultMode());
-        assertThat(updatedPrefs.isNotificationsEnabled()).isEqualTo(true);
+    private UserPreferences buildPrefs() {
+        return UserPreferences.defaultsFor(USER_ID);
     }
 
-    @Test
-    @DisplayName("Should return default preferences if none exist")
-    public void updateUserPreferences_defaultPreferences() throws UserNotFoundException {
-        // Arrange
-        UserId userId = new UserId(1L);
-        UpdatePreferencesCommand command = new UpdatePreferencesCommand(userId, "dark", null, "en", true);
-
-        when(preferencesRepository.findByUserId(userId)).thenReturn(Optional.empty());
-
-        // Act
-        UserPreferences updatedPrefs = useCase.execute(command);
-
-        // Assert
-        assertThat(updatedPrefs.getTheme()).isEqualTo("dark");
-        assertThat(updatedPrefs.getLanguage()).isEqualTo("en");
-        assertThat(updatedPrefs.getDefaultMode()).isNull();
-        assertThat(updatedPrefs.isNotificationsEnabled()).isEqualTo(true);
+    @Test @DisplayName("user not found → UserNotFoundException")
+    void userNotFound_throws() {
+        when(userRepository.findById(USER_ID)).thenReturn(Optional.empty());
+        var cmd = new UpdatePreferencesCommand(USER_ID, "dark", "fr", "EXAM", true, null);
+        assertThatThrownBy(() -> useCase.execute(cmd))
+            .isInstanceOf(UserNotFoundException.class);
     }
 
-    @Test
-    @DisplayName("Should throw UserNotFoundException if user does not exist")
-    public void updateUserPreferences_userNotFound() {
-        // Arrange
-        UserId userId = new UserId(1L);
-        UpdatePreferencesCommand command = new UpdatePreferencesCommand(userId, "dark", null, "en", true);
+    @Test @DisplayName("valid command — preferences saved and returned")
+    void validCommand_preferencesUpdated() {
+        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(buildUser()));
+        when(preferencesRepository.findByUserId(USER_ID)).thenReturn(Optional.of(buildPrefs()));
+        when(preferencesRepository.save(any())).thenAnswer(i -> i.getArgument(0));
 
-        // Act & Assert
-        assertThatThrownBy(() -> useCase.execute(command))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessage(userId.toString());
+        var cmd = new UpdatePreferencesCommand(USER_ID, "dark", null, null, null, null);
+        UserPreferences result = useCase.execute(cmd);
+
+        assertThat(result.theme()).isEqualTo("dark");
+        verify(preferencesRepository).save(any());
+    }
+
+    @Test @DisplayName("null fields in command keep existing values")
+    void nullFields_keepExistingValues() {
+        UserPreferences existing = buildPrefs();
+        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(buildUser()));
+        when(preferencesRepository.findByUserId(USER_ID)).thenReturn(Optional.of(existing));
+        when(preferencesRepository.save(any())).thenAnswer(i -> i.getArgument(0));
+
+        var cmd = new UpdatePreferencesCommand(USER_ID, null, null, null, null, null);
+        UserPreferences result = useCase.execute(cmd);
+
+        assertThat(result.theme()).isEqualTo(existing.theme());
+        assertThat(result.language()).isEqualTo(existing.language());
     }
 }

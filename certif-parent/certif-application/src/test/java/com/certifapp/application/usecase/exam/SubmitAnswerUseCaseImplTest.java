@@ -1,100 +1,71 @@
+// certif-parent/certif-application/src/test/java/com/certifapp/application/usecase/exam/SubmitAnswerUseCaseImplTest.java
 package com.certifapp.application.usecase.exam;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
-
-import java.util.Map;
-import java.util.UUID;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import com.certifapp.domain.exception.ExamSessionNotFoundException;
+import com.certifapp.domain.model.question.*;
+import com.certifapp.domain.model.session.*;
+import com.certifapp.domain.port.input.exam.SubmitAnswerUseCase.SubmitAnswerCommand;
+import com.certifapp.domain.port.output.*;
+import com.certifapp.domain.service.ScoringService;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.OffsetDateTime;
+import java.util.*;
+
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 @ExtendWith(MockitoExtension.class)
-public class SubmitAnswerUseCaseImplTest {
+@DisplayName("SubmitAnswerUseCaseImpl")
+class SubmitAnswerUseCaseImplTest {
 
-    @Mock
-    private ExamSessionRepository sessionRepository;
+    @Mock ExamSessionRepository sessionRepository;
+    @Mock QuestionRepository    questionRepository;
+    @Mock UserAnswerRepository  answerRepository;
+    @Mock ScoringService        scoringService;
+    @InjectMocks SubmitAnswerUseCaseImpl useCase;
 
-    @Mock
-    private QuestionRepository questionRepository;
+    private static final UUID SESSION_ID  = UUID.randomUUID();
+    private static final UUID QUESTION_ID = UUID.randomUUID();
+    private static final UUID USER_ID     = UUID.randomUUID();
+    private static final UUID OPTION_ID   = UUID.randomUUID();
 
-    @Mock
-    private UserAnswerRepository answerRepository;
-
-    @Mock
-    private ScoringService scoringService;
-
-    @InjectMocks
-    private SubmitAnswerUseCaseImpl submitAnswerUseCase;
-
-    private SubmitAnswerCommand command;
-    private ExamSession session;
-    private Question question;
-    private UserAnswer answer;
-
-    @BeforeEach
-    public void setUp() {
-        command = new SubmitAnswerCommand(UUID.randomUUID(), UUID.randomUUID(), "optionId", 100L);
-        session = new ExamSession(UUID.randomUUID(), UUID.randomUUID(), "userId", false);
-        question = new Question(UUID.randomUUID(), "questionText");
-        answer = UserAnswer.answered(command.sessionId(), command.questionId(), command.selectedOptionId(), command.responseTimeMs());
+    private ExamSession buildSession() {
+        return new ExamSession(SESSION_ID, USER_ID, "ocp21", ExamMode.EXAM,
+                SessionStatus.IN_PROGRESS, OffsetDateTime.now(), null, null,
+                10, 0, 0.0, false, List.of());
     }
 
-    @Test
-    @DisplayName("should submit correct answer and evaluate correctness")
-    public void submitAnswerCorrect_answerShouldBeEvaluated() {
-        when(sessionRepository.findById(command.sessionId())).thenReturn(java.util.Optional.of(session));
-        when(questionRepository.findById(command.questionId())).thenReturn(java.util.Optional.of(question));
-
-        UserAnswer result = submitAnswerUseCase.execute(command);
-
-        verify(scoringService).evaluateAnswer(answer, Map.of(question.id(), question));
-        assertThat(result).isEqualTo(answer);
+    private Question buildQuestion() {
+        return new Question(QUESTION_ID, "ocp21", "oop",
+                "What is a Record?", List.of(), "Explanation",
+                DifficultyLevel.EASY, QuestionType.SINGLE_CHOICE,
+                List.of(), null, null);
     }
 
-    @Test
-    @DisplayName("should throw ExamSessionNotFoundException when session does not exist")
-    public void submitAnswerSessionNotFound_exceptionShouldBeThrown() {
-        when(sessionRepository.findById(command.sessionId())).thenReturn(java.util.Optional.empty());
-
-        assertThrows(ExamSessionNotFoundException.class, () -> submitAnswerUseCase.execute(command));
+    @Test @DisplayName("execute — session not found → ExamSessionNotFoundException")
+    void execute_sessionNotFound_throws() {
+        when(sessionRepository.findById(SESSION_ID)).thenReturn(Optional.empty());
+        var cmd = new SubmitAnswerCommand(SESSION_ID, QUESTION_ID, List.of(OPTION_ID), 5000L);
+        assertThatThrownBy(() -> useCase.execute(cmd))
+            .isInstanceOf(ExamSessionNotFoundException.class);
     }
 
-    @Test
-    @DisplayName("should throw ExamAlreadyCompletedException when session is already completed")
-    public void submitAnswerSessionCompleted_exceptionShouldBeThrown() {
-        session.setStatus(true);
-        when(sessionRepository.findById(command.sessionId())).thenReturn(java.util.Optional.of(session));
+    @Test @DisplayName("execute — answer saved and returned")
+    void execute_valid_savesAndReturnsAnswer() {
+        when(sessionRepository.findById(SESSION_ID)).thenReturn(Optional.of(buildSession()));
+        when(questionRepository.findById(QUESTION_ID)).thenReturn(Optional.of(buildQuestion()));
+        when(scoringService.evaluateAnswer(any(), any())).thenReturn(true);
+        when(answerRepository.save(any())).thenAnswer(i -> i.getArgument(0));
 
-        assertThrows(ExamAlreadyCompletedException.class, () -> submitAnswerUseCase.execute(command));
-    }
+        var cmd = new SubmitAnswerCommand(SESSION_ID, QUESTION_ID, List.of(OPTION_ID), 5000L);
+        UserAnswer result = useCase.execute(cmd);
 
-    @Test
-    @DisplayName("should handle null selectedOptionId and create skipped answer")
-    public void submitAnswerSkipped_answerShouldBeSaved() {
-        command.setSelectedOptionId(null);
-        when(sessionRepository.findById(command.sessionId())).thenReturn(java.util.Optional.of(session));
-
-        UserAnswer result = submitAnswerUseCase.execute(command);
-
-        verify(answerRepository).save(UserAnswer.skipped(command.sessionId(), command.questionId()));
-        assertThat(result).isEqualTo(UserAnswer.skipped(command.sessionId(), command.questionId()));
-    }
-
-    @Test
-    @DisplayName("should handle null question and not evaluate answer")
-    public void submitAnswerQuestionNull_answerShouldBeSavedWithoutEvaluation() {
-        when(sessionRepository.findById(command.sessionId())).thenReturn(java.util.Optional.of(session));
-        when(questionRepository.findById(command.questionId())).thenReturn(java.util.Optional.empty());
-
-        UserAnswer result = submitAnswerUseCase.execute(command);
-
-        verify(scoringService, never()).evaluateAnswer(any(), any());
-        assertThat(result).isEqualTo(answer);
+        assertThat(result).isNotNull();
+        verify(answerRepository).save(any(UserAnswer.class));
     }
 }

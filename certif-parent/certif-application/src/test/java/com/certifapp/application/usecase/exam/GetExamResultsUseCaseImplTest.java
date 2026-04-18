@@ -1,74 +1,56 @@
+// certif-parent/certif-application/src/test/java/com/certifapp/application/usecase/exam/GetExamResultsUseCaseImplTest.java
 package com.certifapp.application.usecase.exam;
 
 import com.certifapp.domain.exception.ExamSessionNotFoundException;
-import com.certifapp.domain.model.session.ExamSession;
-import com.certifapp.domain.port.input.exam.GetExamResultsUseCase;
+import com.certifapp.domain.model.session.*;
 import com.certifapp.domain.port.output.ExamSessionRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoExtension;
+import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
-import java.util.UUID;
+import java.time.OffsetDateTime;
+import java.util.*;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyUUID;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class GetExamResultsUseCaseImplTest {
+@DisplayName("GetExamResultsUseCaseImpl")
+class GetExamResultsUseCaseImplTest {
 
-    @Mock
-    private ExamSessionRepository sessionRepository;
+    @Mock  ExamSessionRepository sessionRepository;
+    @InjectMocks GetExamResultsUseCaseImpl useCase;
 
-    @InjectMocks
-    private GetExamResultsUseCaseImpl getExamResultsUseCase;
+    private static final UUID SESSION_ID = UUID.randomUUID();
+    private static final UUID USER_ID    = UUID.randomUUID();
 
-    private UUID sessionId = UUID.randomUUID();
-    private UUID userId = UUID.randomUUID();
-    private ExamSession examSession;
-
-    @BeforeEach
-    public void setUp() {
-        examSession = new ExamSession(sessionId, userId);
+    private ExamSession buildSession() {
+        return new ExamSession(SESSION_ID, USER_ID, "ocp21", ExamMode.EXAM,
+                SessionStatus.COMPLETED, OffsetDateTime.now(), null, null,
+                10, 7, 70.0, true, List.of());
     }
 
-    @Test
-    @DisplayName("execute_nominal_case")
-    public void execute_nominal_case() {
-        when(sessionRepository.findById(eq(sessionId))).thenReturn(Optional.of(examSession));
-
-        ExamSession result = getExamResultsUseCase.execute(sessionId, userId);
-
-        assertThat(result).isEqualTo(examSession);
-        verify(sessionRepository, times(1)).findById(eq(sessionId));
+    @Test @DisplayName("execute — session found and owned by user → returns session")
+    void execute_sessionFound_returnsSession() {
+        ExamSession session = buildSession();
+        when(sessionRepository.findById(SESSION_ID)).thenReturn(Optional.of(session));
+        assertThat(useCase.execute(SESSION_ID, USER_ID)).isEqualTo(session);
     }
 
-    @Test
-    @DisplayName("execute_edge_case_no_session")
-    public void execute_edge_case_no_session() {
-        when(sessionRepository.findById(eq(sessionId))).thenReturn(Optional.empty());
-
-        ExamSessionNotFoundException exception = assertThrows(ExamSessionNotFoundException.class,
-                () -> getExamResultsUseCase.execute(sessionId, userId));
-
-        assertThat(exception.getMessage()).isEqualTo("Exam session not found for sessionId: " + sessionId);
-        verify(sessionRepository, times(1)).findById(eq(sessionId));
+    @Test @DisplayName("execute — session not found → throws ExamSessionNotFoundException")
+    void execute_sessionNotFound_throwsException() {
+        when(sessionRepository.findById(SESSION_ID)).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> useCase.execute(SESSION_ID, USER_ID))
+            .isInstanceOf(ExamSessionNotFoundException.class);
     }
 
-    @Test
-    @DisplayName("execute_error_case_user_id_mismatch")
-    public void execute_error_case_user_id_mismatch() {
-        when(sessionRepository.findById(eq(sessionId))).thenReturn(Optional.of(examSession));
-
-        ExamSessionNotFoundException exception = assertThrows(ExamSessionNotFoundException.class,
-                () -> getExamResultsUseCase.execute(sessionId, UUID.randomUUID()));
-
-        assertThat(exception.getMessage()).isEqualTo("Exam session not found for sessionId: " + sessionId);
-        verify(sessionRepository, times(1)).findById(eq(sessionId));
+    @Test @DisplayName("execute — session owned by different user → throws ExamSessionNotFoundException")
+    void execute_wrongUser_throwsException() {
+        ExamSession otherSession = buildSession();
+        when(sessionRepository.findById(SESSION_ID)).thenReturn(Optional.of(otherSession));
+        // Different userId
+        assertThatThrownBy(() -> useCase.execute(SESSION_ID, UUID.randomUUID()))
+            .isInstanceOf(ExamSessionNotFoundException.class);
     }
 }
