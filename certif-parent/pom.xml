@@ -29,19 +29,18 @@
   </parent>
 
   <properties>
-    <!-- Java -->
     <java.version>21</java.version>
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-    <!-- Dependency versions -->
     <mapstruct.version>1.5.5.Final</mapstruct.version>
     <jjwt.version>0.12.6</jjwt.version>
     <springdoc.version>2.6.0</springdoc.version>
     <itext.version>8.0.4</itext.version>
     <langchain4j.version>0.35.0</langchain4j.version>
     <testcontainers.version>1.20.1</testcontainers.version>
+    <!-- Version Mockito alignée avec Spring Boot 3.3.4 -->
+    <mockito.version>5.12.0</mockito.version>
   </properties>
 
   <dependencyManagement>
@@ -55,30 +54,33 @@
         <scope>import</scope>
       </dependency>
 
-      <!-- SLF4J API — gestion explicite pour les modules sans Spring Boot -->
+      <!-- SLF4J — version gérée pour les modules sans Spring Boot -->
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
         <version>2.0.13</version>
       </dependency>
-
-      <!-- Mockito — version alignée avec Spring Boot 3.3.x -->
       <dependency>
-        <groupId>org.mockito</groupId>
-        <artifactId>mockito-core</artifactId>
-        <version>5.12.0</version>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-simple</artifactId>
+        <version>2.0.13</version>
       </dependency>
+
+      <!--
+        mockito-junit-jupiter N'est PAS géré par spring-boot-starter-parent.
+        On doit déclarer la version explicitement ici.
+        mockito-core est géré par Spring Boot BOM → pas besoin de version.
+      -->
       <dependency>
         <groupId>org.mockito</groupId>
         <artifactId>mockito-junit-jupiter</artifactId>
-        <version>5.12.0</version>
+        <version>${mockito.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
 
   <build>
     <plugins>
-      <!-- Compiler avec Virtual Threads + annotation processors -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -96,7 +98,6 @@
         </configuration>
       </plugin>
 
-      <!-- Surefire — JUnit 5 -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -108,7 +109,6 @@
         </configuration>
       </plugin>
 
-      <!-- Failsafe — tests d'intégration Testcontainers -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
@@ -122,7 +122,6 @@
         </executions>
       </plugin>
 
-      <!-- JaCoCo — couverture de code -->
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
