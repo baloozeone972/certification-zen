@@ -12,8 +12,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Adapter implementing {@link UserRepository} using Spring Data JPA.
- * Converts between domain Records and JPA entities via MapStruct.
+ * JPA adapter for the {@link UserRepository} domain port.
  */
 @Component
 public class UserRepositoryAdapter implements UserRepository {
@@ -33,12 +32,17 @@ public class UserRepositoryAdapter implements UserRepository {
 
     @Override
     public Optional<User> findByEmail(String email) {
-        return jpaRepository.findByEmail(email).map(mapper::toDomain);
+        return jpaRepository.findByEmail(email.toLowerCase().trim()).map(mapper::toDomain);
+    }
+
+    @Override
+    public Optional<User> findByStripeCustomerId(String stripeCustomerId) {
+        return jpaRepository.findByStripeCustomerId(stripeCustomerId).map(mapper::toDomain);
     }
 
     @Override
     public boolean existsByEmail(String email) {
-        return jpaRepository.existsByEmail(email);
+        return jpaRepository.existsByEmail(email.toLowerCase().trim());
     }
 
     @Override
