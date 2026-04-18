@@ -748,7 +748,8 @@
     ],
     "correct": 0,
     "explanation": "Un record peut avoir des enum comme composants ou champs statiques."
-  }.,  {
+  },
+  {
   "id": "OCP17-REC-051",
   "theme": "Records Suite",
   "theme_label": "Records avancés",
