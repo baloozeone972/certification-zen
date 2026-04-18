@@ -9,6 +9,8 @@ import java.util.UUID;
 public interface UserRepository {
     Optional<User> findById(UUID id);
     Optional<User> findByEmail(String email);
+    /** Finds a user by their Stripe customer ID — used by the webhook processor. */
+    Optional<User> findByStripeCustomerId(String stripeCustomerId);
     boolean        existsByEmail(String email);
     User           save(User user);
     void           deleteById(UUID id);
