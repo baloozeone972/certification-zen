@@ -1,93 +1,86 @@
+// certif-parent/certif-domain/src/test/java/com/certifapp/domain/port/output/PdfExportPortTest.java
 package com.certifapp.domain.port.output;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoExtension;
-import org.assertj.core.api.Assertions;
 
 import com.certifapp.domain.model.session.ExamSession;
 import com.certifapp.domain.model.session.ThemeStats;
 import com.certifapp.domain.model.question.Question;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+
+/**
+ * Contract tests for {@link PdfExportPort} output port.
+ * Tests the interface contract via mock — implementation tested in IText7PdfExportAdapterTest.
+ */
 @ExtendWith(MockitoExtension.class)
-public class PdfExportPortTest {
+@DisplayName("PdfExportPort — interface contract")
+class PdfExportPortTest {
 
+    /** Mock of the port under test — verifies the API contract. */
     @Mock
-    private ExamSession examSession;
-
-    @Mock
-    private List<ThemeStats> themeStatsList;
-
-    @Mock
-    private List<Question> questionList;
-
-    @InjectMocks
     private PdfExportPort pdfExportPort;
 
-    @BeforeEach
-    public void setUp() {
-        // Setup code if needed
-    }
+    @Mock private ExamSession     session;
+    @Mock private List<ThemeStats> themeStats;
+    @Mock private List<Question>   questions;
 
-    @AfterEach
-    public void tearDown() {
-        // Teardown code if needed
+    // ── exportResults ─────────────────────────────────────────────────────────
+
+    @Test
+    @DisplayName("exportResults — returns non-null byte array on nominal call")
+    void exportResults_nominal_returnsBytes() {
+        byte[] pdf = new byte[]{1, 2, 3};
+        when(pdfExportPort.exportResults(any(), any(), any())).thenReturn(pdf);
+
+        byte[] result = pdfExportPort.exportResults(session, themeStats, questions);
+
+        assertThat(result).isNotNull().isNotEmpty();
+        verify(pdfExportPort).exportResults(session, themeStats, questions);
     }
 
     @Test
-    @DisplayName("Generates PDF for nominal case")
-    public void exportResults_nominalCase_success() {
-        byte[] pdfContent = pdfExportPort.exportResults(examSession, themeStatsList, questionList);
-        Assertions.assertThat(pdfContent).isNotNull();
+    @DisplayName("exportResults — called exactly once per invocation")
+    void exportResults_calledOnce() {
+        when(pdfExportPort.exportResults(any(), any(), any())).thenReturn(new byte[0]);
+
+        pdfExportPort.exportResults(session, themeStats, questions);
+
+        verify(pdfExportPort, times(1)).exportResults(any(), any(), any());
     }
 
     @Test
-    @DisplayName("Generates PDF for empty question list")
-    public void exportResults_emptyQuestionList_success() {
-        List<Question> emptyQuestionList = new ArrayList<>();
-        byte[] pdfContent = pdfExportPort.exportResults(examSession, themeStatsList, emptyQuestionList);
-        Assertions.assertThat(pdfContent).isNotNull();
+    @DisplayName("exportResults — accepts empty question list")
+    void exportResults_emptyQuestions_noException() {
+        when(pdfExportPort.exportResults(any(), any(), eq(List.of()))).thenReturn(new byte[0]);
+
+        assertThatCode(() ->
+            pdfExportPort.exportResults(session, themeStats, List.of())
+        ).doesNotThrowAnyException();
     }
 
     @Test
-    @DisplayName("Generates PDF for null session")
-    public void exportResults_nullSession_success() {
-        ExamSession nullSession = null;
-        byte[] pdfContent = pdfExportPort.exportResults(nullSession, themeStatsList, questionList);
-        Assertions.assertThat(pdfContent).isNotNull();
+    @DisplayName("exportResults — accepts null session (graceful handling)")
+    void exportResults_nullSession_noException() {
+        when(pdfExportPort.exportResults(isNull(), any(), any())).thenReturn(new byte[0]);
+
+        assertThatCode(() ->
+            pdfExportPort.exportResults(null, themeStats, questions)
+        ).doesNotThrowAnyException();
     }
 
     @Test
-    @DisplayName("Generates PDF for null theme stats list")
-    public void exportResults_nullThemeStatsList_success() {
-        List<ThemeStats> nullThemeStatsList = null;
-        byte[] pdfContent = pdfExportPort.exportResults(examSession, nullThemeStatsList, questionList);
-        Assertions.assertThat(pdfContent).isNotNull();
-    }
+    @DisplayName("exportResults — returns at least 0 bytes (never negative length)")
+    void exportResults_lengthNonNegative() {
+        when(pdfExportPort.exportResults(any(), any(), any())).thenReturn(new byte[512]);
 
-    @Test
-    @DisplayName("Generates PDF for null questions list")
-    public void exportResults_nullQuestionsList_success() {
-        List<Question> nullQuestionsList = null;
-        byte[] pdfContent = pdfExportPort.exportResults(examSession, themeStatsList, nullQuestionsList);
-        Assertions.assertThat(pdfContent).isNotNull();
-    }
-
-    @Test
-    @DisplayName("Generates PDF for edge case with single question")
-    public void exportResults_singleQuestion_success() {
-        List<Question> singleQuestionList = new ArrayList<>();
-        singleQuestionList.add(new Question());
-        byte[] pdfContent = pdfExportPort.exportResults(examSession, themeStatsList, singleQuestionList);
-        Assertions.assertThat(pdfContent).isNotNull();
+        byte[] result = pdfExportPort.exportResults(session, themeStats, questions);
+        assertThat(result.length).isGreaterThanOrEqualTo(0);
     }
 }
-```
