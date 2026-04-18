@@ -14,14 +14,21 @@
   </parent>
 
   <artifactId>certif-domain</artifactId>
-  <name>certif-domain</name>
+  <n>certif-domain</n>
   <description>
     Domain module — pure Java 21, no framework dependency.
     Contains entities (Records), domain services, port interfaces and exceptions.
   </description>
 
   <dependencies>
-    <!-- Zero runtime dependencies — only test tooling -->
+
+    <!-- SLF4J — logging interface uniquement, pas d'implémentation -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+
+    <!-- ── Tests ───────────────────────────────────────────────────────────── -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
@@ -34,8 +41,20 @@
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
       <artifactId>mockito-junit-jupiter</artifactId>
       <scope>test</scope>
     </dependency>
+    <!-- SLF4J simple pour les tests (évite ClassNotFoundException) -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 </project>
