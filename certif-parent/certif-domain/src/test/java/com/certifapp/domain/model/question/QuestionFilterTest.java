@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.model.question;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -116,4 +115,3 @@ public class QuestionFilterTest {
         Assertions.assertThat(filter.excludeIds()).isEmpty();
     }
 }
-```

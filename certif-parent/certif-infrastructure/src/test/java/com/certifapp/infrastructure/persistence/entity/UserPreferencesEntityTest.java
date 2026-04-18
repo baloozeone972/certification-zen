@@ -1,4 +1,3 @@
-```java
 package com.certifapp.infrastructure.persistence.entity;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -151,4 +150,3 @@ public class UserPreferencesEntityTest {
         assertThat(userPreferencesEntity.getUpdatedAt()).isEqualTo(updatedAt);
     }
 }
-```

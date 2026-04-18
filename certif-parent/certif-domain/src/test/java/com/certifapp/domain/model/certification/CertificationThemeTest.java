@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.model.certification;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -139,4 +138,3 @@ public class CertificationThemeTest {
                 .hasMessage("weightPercent must be between 0 and 100, got: 101.0");
     }
 }
-```

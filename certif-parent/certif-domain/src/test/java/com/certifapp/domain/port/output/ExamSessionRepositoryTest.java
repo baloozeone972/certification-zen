@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.port.output;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -157,4 +156,3 @@ public class ExamSessionRepositoryTest {
         assertThrows(NullPointerException.class, () -> examSessionRepository.save(session));
     }
 }
-```

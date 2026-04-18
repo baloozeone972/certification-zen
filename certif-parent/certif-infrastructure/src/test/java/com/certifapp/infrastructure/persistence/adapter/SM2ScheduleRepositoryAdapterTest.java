@@ -1,4 +1,3 @@
-```java
 package com.certifapp.infrastructure.persistence.adapter;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -83,4 +82,3 @@ public class SM2ScheduleRepositoryAdapterTest {
         verify(jpaRepository).save(entity);
     }
 }
-```

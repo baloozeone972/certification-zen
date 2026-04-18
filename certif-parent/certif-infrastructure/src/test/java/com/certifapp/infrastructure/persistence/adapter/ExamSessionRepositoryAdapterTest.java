@@ -1,4 +1,3 @@
-```java
 package com.certifapp.infrastructure.persistence.adapter;
 
 import com.certifapp.domain.model.session.ExamMode;
@@ -127,4 +126,3 @@ public class ExamSessionRepositoryAdapterTest {
         assertThatThrownBy(() -> repositoryAdapter.save(examSession)).isInstanceOf(RuntimeException.class);
     }
 }
-```

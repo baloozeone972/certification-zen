@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.exception;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -56,4 +55,3 @@ public class CertificationNotFoundExceptionTest {
             .hasMessage("Certification ID cannot be null");
     }
 }
-```

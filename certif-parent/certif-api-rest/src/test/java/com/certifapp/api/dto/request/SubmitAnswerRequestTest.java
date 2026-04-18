@@ -1,4 +1,3 @@
-```java
 package com.certifapp.api.dto.request;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -70,4 +69,3 @@ public class SubmitAnswerRequestTest {
                 .hasMessage("responseTimeMs must be non-negative");
     }
 }
-```

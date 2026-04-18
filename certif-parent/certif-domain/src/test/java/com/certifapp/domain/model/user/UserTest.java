@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.model.user;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -85,4 +84,3 @@ public class UserTest {
         verify(subscriptionTier, times(1)).isUnlimited();
     }
 }
-```

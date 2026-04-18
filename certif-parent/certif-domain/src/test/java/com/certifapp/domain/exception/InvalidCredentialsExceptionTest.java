@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.exception;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -26,4 +25,3 @@ public class InvalidCredentialsExceptionTest {
         assertThat(exception.getMessage()).isEqualTo("Invalid email or password");
     }
 }
-```

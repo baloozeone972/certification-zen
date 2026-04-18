@@ -1,4 +1,3 @@
-```java
 package com.certifapp.api.dto.response;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -77,4 +76,3 @@ public class ErrorResponseTest {
         Assertions.assertThat(response.timestamp()).isNotNull();
     }
 }
-```

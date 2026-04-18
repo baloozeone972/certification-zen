@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.port.input.payment;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -112,4 +111,3 @@ public class ProcessStripeWebhookUseCaseTest {
                 .hasMessage("Invalid Stripe-Signature");
     }
 }
-```

@@ -1,4 +1,3 @@
-```java
 package com.certifapp.api.controller;
 
 import com.certifapp.api.dto.request.StartExamRequest;
@@ -152,4 +151,3 @@ public class ExamControllerTest {
         verify(historyUseCase).execute(eq(userId), any(GetSessionHistoryUseCase.HistoryFilter.class), eq(page), eq(size));
     }
 }
-```

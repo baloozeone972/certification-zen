@@ -1,4 +1,3 @@
-```java
 package com.certifapp.ai.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -96,4 +95,3 @@ public class DiagnosticAnalyzerTest {
         assertThat((List<Map<String, String>>) result.get("recommendations")).isEmpty();
     }
 }
-```

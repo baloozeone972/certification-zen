@@ -1,4 +1,3 @@
-```java
 package com.certifapp.api.dto.request;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -124,4 +123,3 @@ public class RegisterRequestTest {
         Assertions.assertThat(registerRequest.timezone()).isEqualTo("UTC+02:00 Eastern European Time");
     }
 }
-```

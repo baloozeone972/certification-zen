@@ -1,4 +1,3 @@
-```java
 package com.certifapp.application.usecase.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -88,4 +87,3 @@ public class UpdateUserPreferencesUseCaseImplTest {
                 .hasMessage(userId.toString());
     }
 }
-```

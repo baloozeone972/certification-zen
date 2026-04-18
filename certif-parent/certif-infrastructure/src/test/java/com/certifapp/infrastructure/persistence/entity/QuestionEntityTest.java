@@ -1,4 +1,3 @@
-```java
 package com.certifapp.infrastructure.persistence.entity;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -203,4 +202,3 @@ public class QuestionEntityTest {
         assertThat(questionEntity.getUpdatedAt()).isEqualTo(now);
     }
 }
-```

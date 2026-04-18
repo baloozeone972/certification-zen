@@ -1,4 +1,3 @@
-```java
 package com.certifapp.api.controller;
 
 import static org.mockito.ArgumentMatchers.*;
@@ -136,4 +135,3 @@ public class LearningControllerTest {
         verify(reviewUseCase).execute(command);
     }
 }
-```

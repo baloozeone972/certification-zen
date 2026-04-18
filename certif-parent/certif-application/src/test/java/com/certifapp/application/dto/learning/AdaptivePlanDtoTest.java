@@ -1,4 +1,3 @@
-```java
 package com.certifapp.application.dto.learning;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -144,4 +143,3 @@ public class AdaptivePlanDtoTest {
                 .withMessage("predictedScore must be between 0 and 100");
     }
 }
-```

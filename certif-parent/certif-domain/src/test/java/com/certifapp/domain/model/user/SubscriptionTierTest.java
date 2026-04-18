@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.model.user;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -49,4 +48,3 @@ public class SubscriptionTierTest {
         assertThat(SubscriptionTier.PACK.hasAiFeatures()).isFalse();
     }
 }
-```

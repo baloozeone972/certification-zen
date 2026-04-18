@@ -1,4 +1,3 @@
-```java
 package com.certifapp.api.dto.response;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -57,4 +56,3 @@ public class ApiResponseTest {
                 .isInstanceOf(NullPointerException.class);
     }
 }
-```

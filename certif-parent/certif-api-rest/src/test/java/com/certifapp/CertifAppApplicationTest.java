@@ -1,4 +1,3 @@
-```java
 package com.certifapp;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -47,4 +46,3 @@ public class CertifAppApplicationTest {
         verify(mockSpringApplication, times(1)).run(anyString());
     }
 }
-```

@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.port.input.learning;
 
 import com.certifapp.domain.model.learning.SM2Schedule;

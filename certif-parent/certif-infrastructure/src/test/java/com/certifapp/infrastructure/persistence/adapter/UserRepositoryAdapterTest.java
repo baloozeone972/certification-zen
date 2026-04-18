@@ -1,4 +1,3 @@
-```java
 package com.certifapp.infrastructure.persistence.adapter;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -148,4 +147,3 @@ public class UserRepositoryAdapterTest {
         verify(jpaRepository, times(1)).deleteById(id);
     }
 }
-```

@@ -1,4 +1,3 @@
-```java
 package com.certifapp.application.dto.user;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -76,4 +75,3 @@ public class TokenPairDtoTest {
         verifyNoInteractions(mockTokenService);
     }
 }
-```

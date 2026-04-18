@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.port.input.exam;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -84,4 +83,3 @@ public class SubmitAnswerUseCaseTest {
         verify(examSessionRepository).save(any(UserAnswer.class));
     }
 }
-```

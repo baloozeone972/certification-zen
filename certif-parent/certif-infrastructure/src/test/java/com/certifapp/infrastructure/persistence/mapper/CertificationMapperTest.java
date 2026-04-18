@@ -1,4 +1,3 @@
-```java
 package com.certifapp.infrastructure.persistence.mapper;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -86,4 +85,3 @@ public class CertificationMapperTest {
         assertThat(result.getTitle()).isEqualTo(domain.getTitle());
     }
 }
-```

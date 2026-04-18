@@ -1,4 +1,3 @@
-```java
 package com.certifapp.application.usecase.exam;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -166,4 +165,3 @@ public class SubmitExamUseCaseImplTest {
             submitExamUseCase.execute(sessionId, userId));
     }
 }
-```

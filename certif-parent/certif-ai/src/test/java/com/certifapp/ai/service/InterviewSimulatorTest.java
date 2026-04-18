@@ -1,4 +1,3 @@
-```java
 package com.certifapp.ai.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -86,4 +85,3 @@ public class InterviewSimulatorTest {
         assertThat(result).isEqualTo("Generated question");
     }
 }
-```

@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.port.output;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -161,4 +160,3 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
         return null;
     }
 }
-```

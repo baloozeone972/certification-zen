@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.model.question;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -41,4 +40,3 @@ public class ExplanationStatusTest {
         assertThat(HUMAN_VALIDATED.isAiGenerated()).isFalse();
     }
 }
-```

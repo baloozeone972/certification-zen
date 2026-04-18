@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.service;
 
 import com.certifapp.domain.model.question.Question;
@@ -95,4 +94,3 @@ public class QuestionSelectionServiceTest {
         assertThat(result).isEqualTo(allQuestions);
     }
 }
-```

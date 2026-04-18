@@ -1,4 +1,3 @@
-```java
 package com.certifapp.application.usecase.session;
 
 import com.certifapp.domain.model.session.ExamSession;
@@ -183,4 +182,3 @@ public class GetSessionHistoryUseCaseImplTest {
                 eq(20));
     }
 }
-```

@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.port.input.certification;
 
 import com.certifapp.domain.exception.CertificationNotFoundException;
@@ -73,4 +72,3 @@ public class GetCertificationDetailsUseCaseTest {
         verify(certificationRepository, times(1)).findById(certificationId);
     }
 }
-```

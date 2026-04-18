@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.port.output;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -80,4 +79,3 @@ public class UserPreferencesRepositoryTest {
         verify(userPreferencesRepository, times(1)).save(any(UserPreferences.class));
     }
 }
-```

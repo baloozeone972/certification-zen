@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.model.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -65,4 +64,3 @@ public class UserRoleTest {
         assertThat(exception.getMessage()).isEqualTo("Invalid role: INVALID_ROLE");
     }
 }
-```

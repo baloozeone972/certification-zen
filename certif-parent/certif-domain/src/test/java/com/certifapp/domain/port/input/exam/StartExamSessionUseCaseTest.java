@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.port.input.exam;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -156,4 +155,3 @@ public class StartExamSessionUseCaseTest {
         assertThat(exception.getMessage()).isEqualTo("Freemium limit exceeded");
     }
 }
-```

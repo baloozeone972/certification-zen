@@ -1,4 +1,3 @@
-```java
 package com.certifapp.application.usecase.certification;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -65,4 +64,3 @@ public class GetCertificationDetailsUseCaseImplTest {
                 .hasMessage("null");
     }
 }
-```

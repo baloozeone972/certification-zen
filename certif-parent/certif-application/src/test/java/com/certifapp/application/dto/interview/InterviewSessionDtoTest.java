@@ -1,4 +1,3 @@
-```java
 package com.certifapp.application.dto.interview;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -110,4 +109,3 @@ public class InterviewSessionDtoTest {
         assertThat(sessionDto.toString()).isNotNull();
     }
 }
-```

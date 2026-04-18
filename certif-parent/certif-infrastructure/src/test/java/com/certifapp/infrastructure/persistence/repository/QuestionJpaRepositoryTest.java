@@ -1,4 +1,3 @@
-```java
 package com.certifapp.infrastructure.persistence.repository;
 
 import com.certifapp.infrastructure.persistence.entity.QuestionEntity;
@@ -172,4 +171,3 @@ public class QuestionJpaRepositoryTest {
         assertThat(result).isEqualTo(0);
     }
 }
-```

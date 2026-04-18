@@ -1,4 +1,3 @@
-```java
 package com.certifapp.ai.service;
 
 import dev.langchain4j.model.chat.ChatLanguageModel;
@@ -204,4 +203,3 @@ Erreur lors de la génération du rapport. "
         verify(heavyModel, times(1)).generate(anyString());
     }
 }
-```

@@ -1,4 +1,3 @@
-```java
 package com.certifapp.ai.rag;
 
 import com.certifapp.domain.model.learning.Course;
@@ -111,4 +110,3 @@ public class DocumentIngesterTest {
         // Assuming a mock for Logger to check logs
     }
 }
-```

@@ -1,4 +1,3 @@
-```java
 package com.certifapp.ai.rag;
 
 import dev.langchain4j.data.segment.TextSegment;
@@ -124,4 +123,3 @@ public class RetrievalServiceTest {
         verify(vectorStore).search("Java programming", 3, 0.65);
     }
 }
-```

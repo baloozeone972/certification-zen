@@ -1,4 +1,3 @@
-```java
 package com.certifapp.infrastructure.config;
 
 import org.flywaydb.core.Flyway;
@@ -55,4 +54,3 @@ public class FlywayConfigTest {
         verify(flyway.getConfiguration(), times(1)).getProfile();
     }
 }
-```

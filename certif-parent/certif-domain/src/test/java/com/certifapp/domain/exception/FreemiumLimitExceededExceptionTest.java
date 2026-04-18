@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.exception;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -37,4 +36,3 @@ public class FreemiumLimitExceededExceptionTest {
         assertThat(exception.getMessage()).isEqualTo("FREE tier: maximum 20 questions per session");
     }
 }
-```

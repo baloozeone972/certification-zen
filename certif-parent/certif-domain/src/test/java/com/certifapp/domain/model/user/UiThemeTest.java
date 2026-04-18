@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.model.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,4 +40,3 @@ public class UiThemeTest {
         assertThat(uiTheme.SYSTEM.getName()).isEqualTo("SYSTEM");
     }
 }
-```

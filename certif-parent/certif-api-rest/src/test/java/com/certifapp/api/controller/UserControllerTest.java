@@ -1,4 +1,3 @@
-```java
 package com.certifapp.api.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -155,4 +154,3 @@ public class UserControllerTest {
         assertThat(apiResponse.getMessage()).startsWith("Invalid mode");
     }
 }
-```

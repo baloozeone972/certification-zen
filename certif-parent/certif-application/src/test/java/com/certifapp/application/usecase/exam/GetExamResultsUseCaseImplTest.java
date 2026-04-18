@@ -1,4 +1,3 @@
-```java
 package com.certifapp.application.usecase.exam;
 
 import com.certifapp.domain.exception.ExamSessionNotFoundException;
@@ -73,4 +72,3 @@ public class GetExamResultsUseCaseImplTest {
         verify(sessionRepository, times(1)).findById(eq(sessionId));
     }
 }
-```

@@ -1,4 +1,3 @@
-```java
 package com.certifapp.api.dto.response;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -109,4 +108,3 @@ public class TokenResponseTest {
         assertThat(result.tokenType()).isEqualTo("Bearer");
     }
 }
-```

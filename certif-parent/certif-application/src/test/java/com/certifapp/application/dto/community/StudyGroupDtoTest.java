@@ -1,4 +1,3 @@
-```java
 package com.certifapp.application.dto.community;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -72,4 +71,3 @@ public class StudyGroupDtoTest {
         assertThat(studyGroupDto.inviteCode()).isNull();
     }
 }
-```

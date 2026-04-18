@@ -1,4 +1,3 @@
-```java
 package com.certifapp.ai.config;
 
 import dev.langchain4j.model.anthropic.AnthropicChatModel;
@@ -141,4 +140,3 @@ public class ModelRouterConfigTest {
         verify(modelRouterConfig, times(1)).ollamaLightModel(anyString(), anyString());
     }
 }
-```

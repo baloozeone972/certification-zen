@@ -1,4 +1,3 @@
-```java
 package com.certifapp.infrastructure.persistence.repository;
 
 import static org.mockito.Mockito.*;
@@ -85,4 +84,3 @@ public class UserJpaRepositoryTest {
         verify(jpaRepository, times(1)).existsByEmail(anyString());
     }
 }
-```

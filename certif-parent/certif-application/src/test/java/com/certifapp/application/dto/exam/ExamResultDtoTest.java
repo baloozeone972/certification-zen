@@ -1,4 +1,3 @@
-```java
 package com.certifapp.application.dto.exam;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -211,4 +210,3 @@ public class ExamResultDtoTest {
         assertThatThrownBy(() -> invalidExamResultDto.endedAt()).isInstanceOf(NullPointerException.class);
     }
 }
-```

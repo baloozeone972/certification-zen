@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.model.community;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,4 +34,3 @@ public class StudyGroupRoleTest {
         assertThat(StudyGroupRole.MEMBER.canModerate()).isFalse();
     }
 }
-```

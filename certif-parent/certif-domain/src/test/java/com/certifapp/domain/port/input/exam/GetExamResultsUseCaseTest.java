@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.port.input.exam;
 
 import com.certifapp.domain.exception.ExamSessionNotFoundException;
@@ -84,4 +83,3 @@ public class GetExamResultsUseCaseTest {
                 .withNoCause();
     }
 }
-```

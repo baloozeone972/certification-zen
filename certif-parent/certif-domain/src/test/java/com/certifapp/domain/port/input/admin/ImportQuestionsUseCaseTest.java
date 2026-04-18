@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.port.input.admin;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -73,4 +72,3 @@ public class ImportQuestionsUseCaseTest {
         verify(questionRepository, times(questions.size())).save(any(Question.class));
     }
 }
-```

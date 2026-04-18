@@ -1,4 +1,3 @@
-```java
 package com.certifapp.application.dto.exam;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -124,4 +123,3 @@ public class QuestionResultDtoTest {
         }).isInstanceOf(IllegalArgumentException.class).hasMessage("Invalid option ID: " + correctOptionId);
     }
 }
-```

@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.exception;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -40,4 +39,3 @@ public class QuestionNotFoundExceptionTest {
                 .hasMessage("Question not found: " + validUuid.toString());
     }
 }
-```

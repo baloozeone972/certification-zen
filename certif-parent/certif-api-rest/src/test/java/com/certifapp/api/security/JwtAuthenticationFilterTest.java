@@ -1,4 +1,3 @@
-```java
 package com.certifapp.api.security;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -110,4 +109,3 @@ public class JwtAuthenticationFilterTest {
         verify(chain, times(1)).doFilter(request, response);
     }
 }
-```

@@ -1,4 +1,3 @@
-```java
 package com.certifapp.application.dto.interview;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -88,4 +87,3 @@ public class InterviewFeedbackDtoTest {
         verify(someDependency, times(1)).log("Creating InterviewFeedbackDto");
     }
 }
-```

@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.exception;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -47,4 +46,3 @@ public class SubscriptionRequiredExceptionTest {
         verify(mockCertifAppException, never()).anyMethod();
     }
 }
-```

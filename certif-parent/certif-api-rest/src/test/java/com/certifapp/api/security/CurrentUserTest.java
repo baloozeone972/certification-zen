@@ -1,4 +1,3 @@
-```java
 package com.certifapp.api.security;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -78,4 +77,3 @@ public class CurrentUserTest {
         assertThrows(IllegalStateException.class, () -> currentUser.id());
     }
 }
-```

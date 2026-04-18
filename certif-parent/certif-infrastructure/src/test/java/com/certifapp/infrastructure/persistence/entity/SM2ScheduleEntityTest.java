@@ -1,4 +1,3 @@
-```java
 package com.certifapp.infrastructure.persistence.entity;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -91,4 +90,3 @@ public class SM2ScheduleEntityTest {
         assertThat(sm2ScheduleEntity.getLastReviewedAt()).isEqualTo(expectedLastReviewedAt);
     }
 }
-```

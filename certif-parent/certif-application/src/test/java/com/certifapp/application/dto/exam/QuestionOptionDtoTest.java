@@ -1,4 +1,3 @@
-```java
 package com.certifapp.application.dto.exam;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -79,4 +78,3 @@ public class QuestionOptionDtoTest {
             .isThrownBy(() -> new QuestionOptionDto(id, label.charAt(0), text));
     }
 }
-```

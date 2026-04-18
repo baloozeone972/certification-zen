@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.model.learning;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -162,4 +161,3 @@ public class CourseTest {
         assertThat(course.version()).isEqualTo(1);
     }
 }
-```

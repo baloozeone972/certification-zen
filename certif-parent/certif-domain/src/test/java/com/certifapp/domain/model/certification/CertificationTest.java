@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.model.certification;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -217,4 +216,3 @@ public class CertificationTest {
         assertThat(exception.getMessage()).isEqualTo("passingScore must be between 1 and 100, got: 150");
     }
 }
-```

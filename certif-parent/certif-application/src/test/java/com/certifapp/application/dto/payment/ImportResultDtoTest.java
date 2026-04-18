@@ -1,4 +1,3 @@
-```java
 package com.certifapp.application.dto.payment;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -68,4 +67,3 @@ public class ImportResultDtoTest {
         assertThat(importResultDto.errors().get(1)).isEqualTo("Error2");
     }
 }
-```

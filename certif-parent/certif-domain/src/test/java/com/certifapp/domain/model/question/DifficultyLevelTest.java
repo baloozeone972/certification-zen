@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.model.question;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -70,4 +69,3 @@ public class DifficultyLevelTest {
         assertThat(DifficultyLevel.HARD.toJson()).isEqualTo("hard");
     }
 }
-```

@@ -1,4 +1,3 @@
-```java
 package com.certifapp.api.websocket;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -95,4 +94,3 @@ public class ChallengeWebSocketControllerTest {
                 .hasMessage("Challenge ID must not be null");
     }
 }
-```

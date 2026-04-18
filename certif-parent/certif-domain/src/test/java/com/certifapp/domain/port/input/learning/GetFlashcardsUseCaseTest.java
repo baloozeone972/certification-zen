@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.port.input.learning;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -81,4 +80,3 @@ public class GetFlashcardsUseCaseTest {
         verify(flashcardService, times(1)).getFlashcardsDueForReview(userId, certificationId, limit);
     }
 }
-```

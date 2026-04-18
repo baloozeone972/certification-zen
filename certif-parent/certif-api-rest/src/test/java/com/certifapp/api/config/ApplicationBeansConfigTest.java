@@ -1,4 +1,3 @@
-```java
 package com.certifapp.api.config;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -270,4 +269,3 @@ public class ApplicationBeansConfigTest {
         verify(applicationBeansConfig, times(1)).preferencesRepository();
     }
 }
-```

@@ -1,4 +1,3 @@
-```java
 package com.certifapp.ai.service;
 
 import dev.langchain4j.model.chat.ChatLanguageModel;
@@ -96,4 +95,3 @@ Contenu en cours de génération...");
         verify(lightModel, times(1)).generate("Prompt Rendered");
     }
 }
-```

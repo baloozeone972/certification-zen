@@ -1,4 +1,3 @@
-```java
 package com.certifapp.infrastructure.persistence.entity;
 
 import org.junit.jupiter.api.*;
@@ -124,4 +123,3 @@ public class CertificationThemeEntityTest {
                 .withMessageContaining("label");
     }
 }
-```

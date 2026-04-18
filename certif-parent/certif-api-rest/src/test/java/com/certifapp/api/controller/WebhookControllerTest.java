@@ -1,4 +1,3 @@
-```java
 package com.certifapp.api.controller;
 
 import com.certifapp.domain.port.input.payment.ProcessStripeWebhookUseCase;
@@ -82,4 +81,3 @@ public class WebhookControllerTest {
         assertThatNullPointerException().isThrownBy(() -> controller.stripeWebhook(payload, signature));
     }
 }
-```

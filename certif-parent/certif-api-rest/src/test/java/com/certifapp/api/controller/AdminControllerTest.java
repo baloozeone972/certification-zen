@@ -1,4 +1,3 @@
-```java
 package com.certifapp.api.controller;
 
 import static org.mockito.ArgumentMatchers.*;
@@ -108,4 +107,3 @@ public class AdminControllerTest {
         assertThrows(NullPointerException.class, () -> adminController.importQuestions(null));
     }
 }
-```

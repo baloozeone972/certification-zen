@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.model.coaching;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -141,4 +140,3 @@ public class UserCertPathTest {
         ));
     }
 }
-```

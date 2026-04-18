@@ -1,4 +1,3 @@
-```java
 package com.certifapp.infrastructure.persistence.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -72,4 +71,3 @@ public class SM2ScheduleJpaRepositoryTest {
         verify(jpaRepository, never()).findByUserIdAndQuestionId(any(UUID.class), any(UUID.class));
     }
 }
-```

@@ -1,4 +1,3 @@
-```java
 package com.certifapp.ai.service;
 
 import com.certifapp.domain.model.learning.Flashcard;
@@ -124,4 +123,3 @@ public class FlashcardGeneratorTest {
         assertThat(actualFlashcards).isEqualTo(expectedFlashcards);
     }
 }
-```

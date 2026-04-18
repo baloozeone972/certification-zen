@@ -1,4 +1,3 @@
-```java
 package com.certifapp.infrastructure.persistence.mapper;
 
 import static org.mockito.Mockito.*;
@@ -233,4 +232,3 @@ public class UserMapperTest {
         assertThat(domains).isEmpty();
     }
 }
-```

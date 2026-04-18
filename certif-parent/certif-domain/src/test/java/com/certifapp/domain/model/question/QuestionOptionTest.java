@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.model.question;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -91,4 +90,3 @@ public class QuestionOptionTest {
         assertThat(questionOption.label()).isEqualTo('A');
     }
 }
-```

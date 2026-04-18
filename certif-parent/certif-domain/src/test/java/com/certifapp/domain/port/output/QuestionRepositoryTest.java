@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.port.output;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -133,4 +132,3 @@ public class QuestionRepositoryTest {
         verify(questionRepository, times(1)).saveAll(any(List.class));
     }
 }
-```

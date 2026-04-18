@@ -1,4 +1,3 @@
-```java
 package com.certifapp.application.dto.learning;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -72,4 +71,3 @@ public class CourseSummaryDtoTest {
         assertThat(dto.aiStatus()).isEmpty();
     }
 }
-```

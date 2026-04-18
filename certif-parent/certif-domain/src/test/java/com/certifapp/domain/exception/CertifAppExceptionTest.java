@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.exception;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -100,4 +99,3 @@ public class CertifAppExceptionTest {
         assertThat(exception.getMessage()).isEqualTo("cause cannot be null");
     }
 }
-```

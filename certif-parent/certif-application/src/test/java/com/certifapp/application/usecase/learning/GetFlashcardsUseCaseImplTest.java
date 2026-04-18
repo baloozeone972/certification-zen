@@ -1,4 +1,3 @@
-```java
 package com.certifapp.application.usecase.learning;
 
 import com.certifapp.domain.exception.SubscriptionRequiredException;
@@ -115,4 +114,3 @@ public class GetFlashcardsUseCaseImplTest {
         return user;
     }
 }
-```

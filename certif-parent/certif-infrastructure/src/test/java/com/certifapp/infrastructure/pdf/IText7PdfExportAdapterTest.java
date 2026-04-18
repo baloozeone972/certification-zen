@@ -1,4 +1,3 @@
-```java
 package com.certifapp.infrastructure.pdf;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -94,4 +93,3 @@ public class IText7PdfExportAdapterTest {
         assertThat(pdfBytes).isNotEmpty();
     }
 }
-```

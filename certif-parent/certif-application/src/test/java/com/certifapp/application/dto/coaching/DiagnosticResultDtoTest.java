@@ -1,4 +1,3 @@
-```java
 package com.certifapp.application.dto.coaching;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -73,4 +72,3 @@ public class DiagnosticResultDtoTest {
         assertThat(diagnosticResultDto.recommendedCertifications()).isEqualTo(List.of(new RecommendedCertificationDto("cert1", "Rationale1", 1)));
     }
 }
-```

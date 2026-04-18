@@ -1,4 +1,3 @@
-```java
 package com.certifapp.infrastructure.persistence.adapter;
 
 import com.certifapp.domain.model.session.UserAnswer;
@@ -104,4 +103,3 @@ public class UserAnswerRepositoryAdapterTest {
         verify(jpaRepository, never()).findBySessionIdOrderByAnsweredAt(any(UUID.class));
     }
 }
-```

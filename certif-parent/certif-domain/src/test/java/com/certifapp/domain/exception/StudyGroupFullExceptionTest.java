@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.exception;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -63,4 +62,3 @@ public class StudyGroupFullExceptionTest {
         assertThat(exception.getGroupId()).isEqualTo(groupId);
     }
 }
-```

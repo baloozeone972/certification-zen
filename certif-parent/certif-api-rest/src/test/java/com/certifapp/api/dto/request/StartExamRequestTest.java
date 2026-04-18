@@ -1,4 +1,3 @@
-```java
 package com.certifapp.api.dto.request;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -97,4 +96,3 @@ public class StartExamRequestTest {
     }
 
 }
-```

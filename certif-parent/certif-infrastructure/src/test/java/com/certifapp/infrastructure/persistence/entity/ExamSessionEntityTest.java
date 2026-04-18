@@ -1,4 +1,3 @@
-```java
 package com.certifapp.infrastructure.persistence.entity;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -134,4 +133,3 @@ public class ExamSessionEntityTest {
         assertThat(examSessionEntity.isPassed()).isEqualTo(testPassed);
     }
 }
-```

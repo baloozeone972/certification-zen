@@ -1,4 +1,3 @@
-```java
 package com.certifapp.ai.service;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -81,4 +80,3 @@ public class PromptRendererTest {
         assertThat(exception.getMessage()).isEqualTo("Failed to load prompt template: /prompts/testTemplate.mustache");
     }
 }
-```

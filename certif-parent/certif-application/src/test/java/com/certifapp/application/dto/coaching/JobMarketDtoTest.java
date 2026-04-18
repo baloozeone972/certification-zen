@@ -1,4 +1,3 @@
-```java
 package com.certifapp.application.dto.coaching;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -84,4 +83,3 @@ public class JobMarketDtoTest {
         verifyNoInteractions(jobMarketDto);
     }
 }
-```

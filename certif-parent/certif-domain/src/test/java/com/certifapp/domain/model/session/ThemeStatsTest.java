@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.model.session;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -76,4 +75,3 @@ public class ThemeStatsTest {
         assertThat(exception.getMessage()).isEqualTo("skipped must be >= 0");
     }
 }
-```

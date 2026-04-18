@@ -1,4 +1,3 @@
-```java
 package com.certifapp.ai.config;
 
 import dev.langchain4j.model.embedding.EmbeddingModel;
@@ -90,4 +89,3 @@ public class EmbeddingConfigTest {
                 .hasMessage("modelName must not be null");
     }
 }
-```

@@ -1,4 +1,3 @@
-```java
 package com.certifapp.api.exception;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -216,4 +215,3 @@ public class GlobalExceptionHandlerTest {
         assertThat(response.getBody().getMessage()).isEqualTo("An unexpected error occurred");
     }
 }
-```

@@ -1,4 +1,3 @@
-```java
 package com.certifapp.application.dto.community;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -122,4 +121,3 @@ public class LeaderboardEntryDtoTest {
         assertThat(exception.getMessage()).isEqualTo("userId must not be null");
     }
 }
-```

@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.model.session;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -126,4 +125,3 @@ public class UserAnswerTest {
         );
     }
 }
-```

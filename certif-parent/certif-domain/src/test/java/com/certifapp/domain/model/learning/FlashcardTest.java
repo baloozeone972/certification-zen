@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.model.learning;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -150,4 +149,3 @@ public class FlashcardTest {
         assertThat(result.createdAt()).isNotNull();
     }
 }
-```

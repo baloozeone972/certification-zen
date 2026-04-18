@@ -1,4 +1,3 @@
-```java
 package com.certifapp.api.websocket;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -63,4 +62,3 @@ public class WebSocketConfigTest {
         verify(messageBrokerRegistry).setUserDestinationPrefix("/user");
     }
 }
-```

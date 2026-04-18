@@ -1,4 +1,3 @@
-```java
 package com.certifapp.infrastructure.persistence.repository;
 
 import com.certifapp.infrastructure.persistence.entity.FlashcardEntity;
@@ -109,4 +108,3 @@ public class FlashcardJpaRepositoryTest {
         verify(jpaRepository, times(1)).findAll(any());
     }
 }
-```

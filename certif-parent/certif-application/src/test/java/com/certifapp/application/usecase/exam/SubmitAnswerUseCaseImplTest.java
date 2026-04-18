@@ -1,4 +1,3 @@
-```java
 package com.certifapp.application.usecase.exam;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -99,4 +98,3 @@ public class SubmitAnswerUseCaseImplTest {
         assertThat(result).isEqualTo(answer);
     }
 }
-```

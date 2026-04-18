@@ -1,4 +1,3 @@
-```java
 package com.certifapp.application.dto.certification;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -58,4 +57,3 @@ public class CertificationThemeDtoTest {
         assertThat(certificationThemeDto.weightPercent()).isEqualTo(25.0);
     }
 }
-```

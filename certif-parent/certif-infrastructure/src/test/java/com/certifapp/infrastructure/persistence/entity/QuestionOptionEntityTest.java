@@ -1,4 +1,3 @@
-```java
 package com.certifapp.infrastructure.persistence.entity;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -73,4 +72,3 @@ public class QuestionOptionEntityTest {
         assertThat(questionOption.getDisplayOrder()).isEqualTo(order);
     }
 }
-```

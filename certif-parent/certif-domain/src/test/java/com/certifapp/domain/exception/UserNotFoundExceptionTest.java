@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.exception;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,4 +27,3 @@ public class UserNotFoundExceptionTest {
             .hasMessage("User not found: " + identifier);
     }
 }
-```

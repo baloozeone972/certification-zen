@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.port.output;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -81,4 +80,3 @@ public class SM2ScheduleRepositoryTest {
         verify(repository, never()).save(any(SM2Schedule.class));
     }
 }
-```

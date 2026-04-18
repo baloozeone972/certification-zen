@@ -1,4 +1,3 @@
-```java
 package com.certifapp.application.dto.certification;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -93,4 +92,3 @@ public class CertificationDetailDtoTest {
         assertThat(certificationDetailDto.themes()).isEmpty();
     }
 }
-```

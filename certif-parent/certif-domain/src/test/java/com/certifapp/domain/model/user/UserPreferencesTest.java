@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.model.user;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -103,4 +102,3 @@ public class UserPreferencesTest {
         assertThat(preferences.freeModeDurationMin()).isEqualTo(60);
     }
 }
-```

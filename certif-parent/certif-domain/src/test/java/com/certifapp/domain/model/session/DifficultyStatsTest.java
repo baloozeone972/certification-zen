@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.model.session;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -71,4 +70,3 @@ public class DifficultyStatsTest {
         assertThat(stats.percentage()).isEqualTo(0.0);
     }
 }
-```

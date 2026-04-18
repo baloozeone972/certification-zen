@@ -1,4 +1,3 @@
-```java
 package com.certifapp.infrastructure.cache;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -53,4 +52,3 @@ public class CaffeineCacheConfigTest {
         assertThrows(NullPointerException.class, () -> caffeineCacheConfig.cacheManager());
     }
 }
-```

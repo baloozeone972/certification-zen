@@ -1,4 +1,3 @@
-```java
 package com.certifapp.application.dto.exam;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -131,4 +130,3 @@ public class ExamSessionSummaryDtoTest {
         assertThat(dto.passed()).isTrue();
     }
 }
-```

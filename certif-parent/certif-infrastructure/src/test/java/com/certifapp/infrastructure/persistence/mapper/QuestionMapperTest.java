@@ -1,4 +1,3 @@
-```java
 package com.certifapp.infrastructure.persistence.mapper;
 
 import static org.mockito.ArgumentMatchers.*;
@@ -186,4 +185,3 @@ public class QuestionMapperTest {
         assertThat(result.getQuestion()).isNull();
     }
 }
-```

@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.exception;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -44,4 +43,3 @@ public class ExamAlreadyCompletedExceptionTest {
         assertThat(message).isNotNull().contains("Exam session already completed");
     }
 }
-```

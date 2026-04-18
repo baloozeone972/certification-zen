@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.port.input.session;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -73,4 +72,3 @@ public class ExportSessionPdfUseCaseTest {
         verify(sessionRepository, times(1)).findById(sessionId);
     }
 }
-```

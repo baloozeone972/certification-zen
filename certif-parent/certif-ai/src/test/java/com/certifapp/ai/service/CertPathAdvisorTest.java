@@ -1,4 +1,3 @@
-```java
 package com.certifapp.ai.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -146,4 +145,3 @@ public class CertPathAdvisorTest {
         verify(lightModel).generate(anyString());
     }
 }
-```

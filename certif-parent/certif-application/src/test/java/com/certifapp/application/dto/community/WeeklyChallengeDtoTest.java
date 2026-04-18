@@ -1,4 +1,3 @@
-```java
 package com.certifapp.application.dto.community;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -83,4 +82,3 @@ public class WeeklyChallengeDtoTest {
         assertThat(weeklyChallengeDto.questionCount()).isEqualTo(weeklyChallengeDto.getQuestionCount());
     }
 }
-```

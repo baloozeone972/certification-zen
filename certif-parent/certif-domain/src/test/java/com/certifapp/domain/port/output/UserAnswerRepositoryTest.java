@@ -1,4 +1,3 @@
-```java
 package com.certifapp.domain.port.output;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -89,4 +88,3 @@ public class UserAnswerRepositoryTest {
         assertThat(result).isEmpty();
     }
 }
-```

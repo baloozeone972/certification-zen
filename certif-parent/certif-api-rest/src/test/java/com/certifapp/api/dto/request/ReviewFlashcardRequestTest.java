@@ -1,4 +1,3 @@
-```java
 package com.certifapp.api.dto.request;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -55,4 +54,3 @@ public class ReviewFlashcardRequestTest {
                 .hasMessage("rating must be between 0 and 5");
     }
 }
-```

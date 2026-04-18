@@ -1,4 +1,3 @@
-```java
 package com.certifapp.api.security;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -79,4 +78,3 @@ public class SecurityConfigTest {
         assertThat(((BCryptPasswordEncoder) passwordEncoder).getStrength()).isEqualTo(12);
     }
 }
-```

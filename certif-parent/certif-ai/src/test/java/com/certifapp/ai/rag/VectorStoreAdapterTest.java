@@ -1,4 +1,3 @@
-```java
 package com.certifapp.ai.rag;
 
 import dev.langchain4j.data.document.Metadata;
@@ -133,4 +132,3 @@ public class VectorStoreAdapterTest {
         assertThat(storedId).isNotNull();
     }
 }
-```
