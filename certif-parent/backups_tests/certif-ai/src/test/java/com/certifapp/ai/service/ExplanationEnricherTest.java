@@ -1,3 +1,4 @@
+// certif-parent/certif-ai/src/test/java/com/certifapp/ai/service/ExplanationEnricherTest.java
 package com.certifapp.ai.service;
 
 import com.certifapp.domain.model.question.*;
@@ -14,10 +15,14 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+/**
+ * Unit tests for {@link ExplanationEnricher}.
+ */
 @ExtendWith(MockitoExtension.class)
 @DisplayName("ExplanationEnricher")
 class ExplanationEnricherTest {
@@ -67,6 +72,8 @@ class ExplanationEnricherTest {
         assertThat(result).contains("Thread.ofVirtual()");
         verify(lightModel).generate(anyString());
     }
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
 
     @Test
     @DisplayName("Falls back to original explanation on AI error")

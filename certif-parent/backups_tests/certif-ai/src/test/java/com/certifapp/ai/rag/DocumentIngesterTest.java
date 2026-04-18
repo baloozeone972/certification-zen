@@ -54,6 +54,7 @@ public class DocumentIngesterTest {
         documentIngester.ingestQuestions(questions, certificationId);
 
         verify(vectorStore, never()).store(any(), any());
+        // Assuming a mock for Logger to check logs
     }
 
     @Test
@@ -67,6 +68,7 @@ public class DocumentIngesterTest {
         documentIngester.ingestQuestions(questions, certificationId);
 
         verify(vectorStore).store(any(), any());
+        // Assuming a mock for Logger to check logs
     }
 
     @Test
@@ -89,6 +91,7 @@ public class DocumentIngesterTest {
         documentIngester.ingestCourse(course);
 
         verify(vectorStore, never()).store(any(), any());
+        // Assuming a mock for Logger to check logs
     }
 
     @Test
@@ -102,5 +105,7 @@ public class DocumentIngesterTest {
         documentIngester.ingestCourse(course);
 
         verify(vectorStore, atLeastOnce()).store(any(), any());
+        // Assuming a mock for Logger to check logs
     }
 }
+

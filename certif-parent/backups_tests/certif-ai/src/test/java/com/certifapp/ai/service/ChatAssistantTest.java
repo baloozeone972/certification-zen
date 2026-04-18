@@ -1,3 +1,4 @@
+// certif-parent/certif-ai/src/test/java/com/certifapp/ai/service/ChatAssistantTest.java
 package com.certifapp.ai.service;
 
 import com.certifapp.ai.rag.RetrievalService;
