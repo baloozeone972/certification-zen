@@ -1,119 +1,165 @@
+// certif-parent/certif-domain/src/test/java/com/certifapp/domain/service/FreemiumGuardServiceTest.java
 package com.certifapp.domain.service;
 
+import com.certifapp.domain.exception.FreemiumLimitExceededException;
+import com.certifapp.domain.exception.SubscriptionRequiredException;
 import com.certifapp.domain.model.certification.Certification;
 import com.certifapp.domain.model.user.SubscriptionTier;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 
-public class FreemiumGuardServiceTest {
+/**
+ * Unit tests for {@link FreemiumGuardService}.
+ */
+@DisplayName("FreemiumGuardService")
+class FreemiumGuardServiceTest {
 
-    @Test
-    @DisplayName("checkDailyExamLimit_freeTierDailyLimitNotExceeded")
-    public void checkDailyExamLimit_freeTierDailyLimitNotExceeded() throws FreemiumLimitExceededException {
-        // Arrange
-        var freemiumGuardService = new FreemiumGuardService();
+    private FreemiumGuardService service;
 
-        // Act
-        freemiumGuardService.checkDailyExamLimit(SubscriptionTier.FREE, Certification.FREE_DAILY_EXAM_LIMIT - 1);
-
-        // Assert
+    @BeforeEach
+    void setUp() {
+        service = new FreemiumGuardService();
     }
 
-    @Test
-    @DisplayName("checkDailyExamLimit_proTierNoException")
-    public void checkDailyExamLimit_proTierNoException() throws FreemiumLimitExceededException {
-        // Arrange
-        var freemiumGuardService = new FreemiumGuardService();
+    // ── checkDailyExamLimit ───────────────────────────────────────────────────
 
-        // Act
-        freemiumGuardService.checkDailyExamLimit(SubscriptionTier.PRO, Certification.FREE_DAILY_EXAM_LIMIT - 1);
+    @Nested
+    @DisplayName("checkDailyExamLimit()")
+    class CheckDailyExamLimit {
 
-        // Assert
+        @Test
+        @DisplayName("FREE under limit → no exception")
+        void freeBelowLimit_shouldNotThrow() {
+            assertThatCode(() ->
+                service.checkDailyExamLimit(SubscriptionTier.FREE, Certification.FREE_DAILY_EXAM_LIMIT - 1)
+            ).doesNotThrowAnyException();
+        }
+
+        @Test
+        @DisplayName("FREE at limit → FreemiumLimitExceededException")
+        void freeAtLimit_shouldThrow() {
+            assertThatThrownBy(() ->
+                service.checkDailyExamLimit(SubscriptionTier.FREE, Certification.FREE_DAILY_EXAM_LIMIT)
+            ).isInstanceOf(FreemiumLimitExceededException.class);
+        }
+
+        @Test
+        @DisplayName("FREE over limit → FreemiumLimitExceededException")
+        void freeOverLimit_shouldThrow() {
+            assertThatThrownBy(() ->
+                service.checkDailyExamLimit(SubscriptionTier.FREE, Certification.FREE_DAILY_EXAM_LIMIT + 5)
+            ).isInstanceOf(FreemiumLimitExceededException.class);
+        }
+
+        @Test
+        @DisplayName("PRO at limit → no exception")
+        void proAtLimit_shouldNotThrow() {
+            assertThatCode(() ->
+                service.checkDailyExamLimit(SubscriptionTier.PRO, Certification.FREE_DAILY_EXAM_LIMIT)
+            ).doesNotThrowAnyException();
+        }
+
+        @Test
+        @DisplayName("PACK at limit → no exception")
+        void packAtLimit_shouldNotThrow() {
+            assertThatCode(() ->
+                service.checkDailyExamLimit(SubscriptionTier.PACK, Certification.FREE_DAILY_EXAM_LIMIT)
+            ).doesNotThrowAnyException();
+        }
     }
 
-    @Test
-    @DisplayName("checkDailyExamLimit_freeTierDailyLimitExceeded")
-    public void checkDailyExamLimit_freeTierDailyLimitExceeded() {
-        // Arrange
-        var freemiumGuardService = new FreemiumGuardService();
+    // ── effectiveQuestionCount ────────────────────────────────────────────────
 
-        // Act & Assert
-        assertThatThrownBy(() -> freemiumGuardService.checkDailyExamLimit(SubscriptionTier.FREE, Certification.FREE_DAILY_EXAM_LIMIT))
-                .isInstanceOf(FreemiumLimitExceededException.class)
-                .hasMessage("daily exams");
+    @Nested
+    @DisplayName("effectiveQuestionCount()")
+    class EffectiveQuestionCount {
+
+        @Test
+        @DisplayName("FREE requests more than limit → capped at limit")
+        void freeTierOverLimit_shouldCap() {
+            int result = service.effectiveQuestionCount(SubscriptionTier.FREE, Certification.FREE_QUESTION_LIMIT + 10);
+            assertThat(result).isEqualTo(Certification.FREE_QUESTION_LIMIT);
+        }
+
+        @Test
+        @DisplayName("FREE requests less than limit → not capped")
+        void freeTierUnderLimit_shouldNotCap() {
+            int result = service.effectiveQuestionCount(SubscriptionTier.FREE, 5);
+            assertThat(result).isEqualTo(5);
+        }
+
+        @Test
+        @DisplayName("PRO no capping")
+        void proTier_shouldNotCap() {
+            int requested = Certification.FREE_QUESTION_LIMIT + 10;
+            assertThat(service.effectiveQuestionCount(SubscriptionTier.PRO, requested)).isEqualTo(requested);
+        }
+
+        @Test
+        @DisplayName("PACK no capping")
+        void packTier_shouldNotCap() {
+            int requested = Certification.FREE_QUESTION_LIMIT + 10;
+            assertThat(service.effectiveQuestionCount(SubscriptionTier.PACK, requested)).isEqualTo(requested);
+        }
     }
 
-    @Test
-    @DisplayName("effectiveQuestionCount_freeTierRequestWithinLimit")
-    public void effectiveQuestionCount_freeTierRequestWithinLimit() {
-        // Arrange
-        var freemiumGuardService = new FreemiumGuardService();
+    // ── requirePro ───────────────────────────────────────────────────────────
 
-        // Act & Assert
-        assertThat(freemiumGuardService.effectiveQuestionCount(SubscriptionTier.FREE, Certification.FREE_QUESTION_LIMIT + 1))
-                .isEqualTo(Certification.FREE_QUESTION_LIMIT);
+    @Nested
+    @DisplayName("requirePro()")
+    class RequirePro {
+
+        @Test
+        @DisplayName("PRO → no exception")
+        void pro_shouldNotThrow() {
+            assertThatCode(() -> service.requirePro(SubscriptionTier.PRO, "AI feature"))
+                .doesNotThrowAnyException();
+        }
+
+        @Test
+        @DisplayName("FREE → SubscriptionRequiredException")
+        void free_shouldThrow() {
+            assertThatThrownBy(() -> service.requirePro(SubscriptionTier.FREE, "AI feature"))
+                .isInstanceOf(SubscriptionRequiredException.class);
+        }
+
+        @Test
+        @DisplayName("PACK → SubscriptionRequiredException (AI is PRO-only)")
+        void pack_shouldThrow() {
+            assertThatThrownBy(() -> service.requirePro(SubscriptionTier.PACK, "AI feature"))
+                .isInstanceOf(SubscriptionRequiredException.class);
+        }
     }
 
-    @Test
-    @DisplayName("effectiveQuestionCount_proTierNoCapping")
-    public void effectiveQuestionCount_proTierNoCapping() {
-        // Arrange
-        var freemiumGuardService = new FreemiumGuardService();
+    // ── requireUnlimited ─────────────────────────────────────────────────────
 
-        // Act & Assert
-        assertThat(freemiumGuardService.effectiveQuestionCount(SubscriptionTier.PRO, Certification.FREE_QUESTION_LIMIT + 1))
-                .isEqualTo(Certification.FREE_QUESTION_LIMIT + 1);
-    }
+    @Nested
+    @DisplayName("requireUnlimited()")
+    class RequireUnlimited {
 
-    @Test
-    @DisplayName("requirePro_freeTierException")
-    public void requirePro_freeTierException() {
-        // Arrange
-        var freemiumGuardService = new FreemiumGuardService();
+        @Test
+        @DisplayName("FREE → SubscriptionRequiredException")
+        void free_shouldThrow() {
+            assertThatThrownBy(() -> service.requireUnlimited(SubscriptionTier.FREE, "Unlimited"))
+                .isInstanceOf(SubscriptionRequiredException.class);
+        }
 
-        // Act & Assert
-        assertThatThrownBy(() -> freemiumGuardService.requirePro(SubscriptionTier.FREE, "AI feature"))
-                .isInstanceOf(SubscriptionRequiredException.class)
-                .hasMessage("AI feature");
-    }
+        @Test
+        @DisplayName("PRO → no exception")
+        void pro_shouldNotThrow() {
+            assertThatCode(() -> service.requireUnlimited(SubscriptionTier.PRO, "Unlimited"))
+                .doesNotThrowAnyException();
+        }
 
-    @Test
-    @DisplayName("requirePro_proTierNoException")
-    public void requirePro_proTierNoException() {
-        // Arrange
-        var freemiumGuardService = new FreemiumGuardService();
-
-        // Act
-        freemiumGuardService.requirePro(SubscriptionTier.PRO, "AI feature");
-
-        // Assert
-    }
-
-    @Test
-    @DisplayName("requireUnlimited_freeTierException")
-    public void requireUnlimited_freeTierException() {
-        // Arrange
-        var freemiumGuardService = new FreemiumGuardService();
-
-        // Act & Assert
-        assertThatThrownBy(() -> freemiumGuardService.requireUnlimited(SubscriptionTier.FREE, "Unlimited access"))
-                .isInstanceOf(SubscriptionRequiredException.class)
-                .hasMessage("Unlimited access");
-    }
-
-    @Test
-    @DisplayName("requireUnlimited_proOrPackTierNoException")
-    public void requireUnlimited_proOrPackTierNoException() {
-        // Arrange
-        var freemiumGuardService = new FreemiumGuardService();
-
-        // Act
-        freemiumGuardService.requireUnlimited(SubscriptionTier.PRO, "Unlimited access");
-        freemiumGuardService.requireUnlimited(SubscriptionTier.PACK, "Unlimited access");
-
-        // Assert
+        @Test
+        @DisplayName("PACK → no exception")
+        void pack_shouldNotThrow() {
+            assertThatCode(() -> service.requireUnlimited(SubscriptionTier.PACK, "Unlimited"))
+                .doesNotThrowAnyException();
+        }
     }
 }

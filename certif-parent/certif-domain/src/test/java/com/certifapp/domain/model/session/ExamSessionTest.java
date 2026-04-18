@@ -1,104 +1,200 @@
+// certif-parent/certif-domain/src/test/java/com/certifapp/domain/model/session/ExamSessionTest.java
 package com.certifapp.domain.model.session;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
-public class ExamSessionTest {
+/**
+ * Unit tests for {@link ExamSession} record.
+ * Covers: factory method, compact constructor invariants, utility methods.
+ */
+@DisplayName("ExamSession")
+class ExamSessionTest {
 
-    private UUID userId = UUID.randomUUID();
-    private String certificationId = "test-certification";
-    private ExamMode mode = ExamMode.NORMAL;
-    private OffsetDateTime startedAt = OffsetDateTime.now();
+    private static final UUID      USER_ID         = UUID.randomUUID();
+    private static final String    CERT_ID         = "ocp21";
+    private static final ExamMode  MODE            = ExamMode.EXAM;
+    private static final OffsetDateTime STARTED_AT = OffsetDateTime.now();
 
-    @BeforeEach
-    public void setUp() {
-        // Arrange
-        examSession = new ExamSession(
-                UUID.randomUUID(), userId, certificationId, mode,
-                SessionStatus.IN_PROGRESS,
-                startedAt, null, null,
-                10, 5, 50.0, false, List.of());
+    // ── Helpers ──────────────────────────────────────────────────────────────
+
+    private ExamSession buildSession(SessionStatus status, int total, int correct, double pct) {
+        return new ExamSession(
+                UUID.randomUUID(), USER_ID, CERT_ID, MODE, status,
+                STARTED_AT, null, null,
+                total, correct, pct, pct >= 68, List.of()
+        );
     }
 
-    @Test
-    @DisplayName("should create a new in-progress session")
-    public void start_examSession_creation() {
-        // Arrange
-        ExamSession session = ExamSession.start(userId, certificationId, mode, 10);
+    // ── Factory: start() ─────────────────────────────────────────────────────
 
-        // Act & Assert
-        assertThat(session.status()).isEqualTo(SessionStatus.IN_PROGRESS);
-        assertThat(session.userId()).isEqualTo(userId);
-        assertThat(session.certificationId()).isEqualTo(certificationId);
-        assertThat(session.mode()).isEqualTo(mode);
-        assertThat(session.startedAt()).isNotNull();
-        assertThat(session.durationSeconds()).isNull();
-        assertThat(session.totalQuestions()).isEqualTo(10);
-        assertThat(session.correctCount()).isEqualTo(0);
-        assertThat(session.percentage()).isEqualTo(0.0);
-        assertThat(session.passed()).isEqualTo(false);
-        assertThat(session.answers()).isEmpty();
+    @Nested
+    @DisplayName("start() factory")
+    class StartFactory {
+
+        @Test
+        @DisplayName("creates IN_PROGRESS session with zero scores")
+        void start_shouldCreateInProgressWithZeroScores() {
+            ExamSession session = ExamSession.start(USER_ID, CERT_ID, MODE, 80);
+
+            assertThat(session.status()).isEqualTo(SessionStatus.IN_PROGRESS);
+            assertThat(session.userId()).isEqualTo(USER_ID);
+            assertThat(session.certificationId()).isEqualTo(CERT_ID);
+            assertThat(session.mode()).isEqualTo(MODE);
+            assertThat(session.totalQuestions()).isEqualTo(80);
+            assertThat(session.correctCount()).isZero();
+            assertThat(session.percentage()).isZero();
+            assertThat(session.passed()).isFalse();
+            assertThat(session.durationSeconds()).isNull();
+            assertThat(session.endedAt()).isNull();
+            assertThat(session.answers()).isEmpty();
+        }
+
+        @Test
+        @DisplayName("generates unique IDs on each call")
+        void start_shouldGenerateUniqueIds() {
+            ExamSession s1 = ExamSession.start(USER_ID, CERT_ID, MODE, 10);
+            ExamSession s2 = ExamSession.start(USER_ID, CERT_ID, MODE, 10);
+            assertThat(s1.id()).isNotEqualTo(s2.id());
+        }
     }
 
-    @Test
-    @DisplayName("should be in progress")
-    public void isInProgress_statusInProgress() {
-        // Arrange
-        examSession = new ExamSession(
-                UUID.randomUUID(), userId, certificationId, mode,
-                SessionStatus.IN_PROGRESS,
-                startedAt, null, null,
-                10, 5, 50.0, false, List.of());
+    // ── Compact constructor invariants ────────────────────────────────────────
 
-        // Act & Assert
-        assertThat(examSession.isInProgress()).isTrue();
+    @Nested
+    @DisplayName("compact constructor validations")
+    class ConstructorValidations {
+
+        @Test
+        @DisplayName("null userId → IllegalArgumentException")
+        void nullUserId_shouldThrow() {
+            assertThatThrownBy(() ->
+                new ExamSession(UUID.randomUUID(), null, CERT_ID, MODE,
+                        SessionStatus.IN_PROGRESS, STARTED_AT, null, null,
+                        10, 0, 0.0, false, List.of())
+            ).isInstanceOf(IllegalArgumentException.class)
+             .hasMessageContaining("userId");
+        }
+
+        @Test
+        @DisplayName("blank certificationId → IllegalArgumentException")
+        void blankCertId_shouldThrow() {
+            assertThatThrownBy(() ->
+                new ExamSession(UUID.randomUUID(), USER_ID, "  ", MODE,
+                        SessionStatus.IN_PROGRESS, STARTED_AT, null, null,
+                        10, 0, 0.0, false, List.of())
+            ).isInstanceOf(IllegalArgumentException.class)
+             .hasMessageContaining("certificationId");
+        }
+
+        @Test
+        @DisplayName("totalQuestions = 0 → IllegalArgumentException")
+        void zeroTotalQuestions_shouldThrow() {
+            assertThatThrownBy(() ->
+                new ExamSession(UUID.randomUUID(), USER_ID, CERT_ID, MODE,
+                        SessionStatus.IN_PROGRESS, STARTED_AT, null, null,
+                        0, 0, 0.0, false, List.of())
+            ).isInstanceOf(IllegalArgumentException.class)
+             .hasMessageContaining("totalQuestions");
+        }
+
+        @Test
+        @DisplayName("correctCount > totalQuestions → IllegalArgumentException")
+        void correctCountExceedsTotal_shouldThrow() {
+            assertThatThrownBy(() ->
+                new ExamSession(UUID.randomUUID(), USER_ID, CERT_ID, MODE,
+                        SessionStatus.IN_PROGRESS, STARTED_AT, null, null,
+                        10, 11, 0.0, false, List.of())
+            ).isInstanceOf(IllegalArgumentException.class)
+             .hasMessageContaining("correctCount");
+        }
+
+        @Test
+        @DisplayName("percentage = 101.0 → IllegalArgumentException")
+        void percentageOver100_shouldThrow() {
+            assertThatThrownBy(() ->
+                new ExamSession(UUID.randomUUID(), USER_ID, CERT_ID, MODE,
+                        SessionStatus.IN_PROGRESS, STARTED_AT, null, null,
+                        10, 5, 101.0, false, List.of())
+            ).isInstanceOf(IllegalArgumentException.class)
+             .hasMessageContaining("percentage");
+        }
+
+        @Test
+        @DisplayName("null answers → defaults to empty list")
+        void nullAnswers_shouldDefaultToEmpty() {
+            ExamSession s = new ExamSession(UUID.randomUUID(), USER_ID, CERT_ID, MODE,
+                    SessionStatus.IN_PROGRESS, STARTED_AT, null, null,
+                    10, 0, 0.0, false, null);
+            assertThat(s.answers()).isEmpty();
+        }
     }
 
-    @Test
-    @DisplayName("should not be in progress")
-    public void isInProgress_statusNotInProgress() {
-        // Arrange
-        examSession = new ExamSession(
-                UUID.randomUUID(), userId, certificationId, mode,
-                SessionStatus.SUBMITTED,
-                startedAt, null, null,
-                10, 5, 50.0, false, List.of());
+    // ── isInProgress() ───────────────────────────────────────────────────────
 
-        // Act & Assert
-        assertThat(examSession.isInProgress()).isFalse();
+    @Nested
+    @DisplayName("isInProgress()")
+    class IsInProgress {
+
+        @Test
+        @DisplayName("IN_PROGRESS → true")
+        void inProgress_shouldReturnTrue() {
+            assertThat(buildSession(SessionStatus.IN_PROGRESS, 10, 5, 50.0).isInProgress()).isTrue();
+        }
+
+        @Test
+        @DisplayName("COMPLETED → false")
+        void completed_shouldReturnFalse() {
+            assertThat(buildSession(SessionStatus.COMPLETED, 10, 5, 50.0).isInProgress()).isFalse();
+        }
+
+        @Test
+        @DisplayName("ABANDONED → false")
+        void abandoned_shouldReturnFalse() {
+            assertThat(buildSession(SessionStatus.ABANDONED, 10, 5, 50.0).isInProgress()).isFalse();
+        }
+
+        @Test
+        @DisplayName("EXPIRED → false")
+        void expired_shouldReturnFalse() {
+            assertThat(buildSession(SessionStatus.EXPIRED, 10, 5, 50.0).isInProgress()).isFalse();
+        }
     }
 
-    @Test
-    @DisplayName("should return answer for a specific question")
-    public void answerFor_existingQuestion() {
-        // Arrange
-        UserAnswer answer = new UserAnswer(UUID.randomUUID(), UUID.randomUUID(), "A");
-        examSession.addAnswer(answer);
+    // ── answerFor() ──────────────────────────────────────────────────────────
 
-        // Act
-        UserAnswer result = examSession.answerFor(answer.questionId());
+    @Nested
+    @DisplayName("answerFor()")
+    class AnswerFor {
 
-        // Assert
-        assertThat(result).isNotNull();
-    }
+        @Test
+        @DisplayName("existing questionId → returns correct answer")
+        void existingQuestion_shouldReturnAnswer() {
+            UUID questionId = UUID.randomUUID();
+            UUID sessionId  = UUID.randomUUID();
+            UserAnswer answer = new UserAnswer(
+                    UUID.randomUUID(), sessionId, questionId,
+                    UUID.randomUUID(), true, false, 500L, OffsetDateTime.now());
+            ExamSession session = new ExamSession(
+                    UUID.randomUUID(), USER_ID, CERT_ID, MODE,
+                    SessionStatus.IN_PROGRESS, STARTED_AT, null, null,
+                    10, 0, 0.0, false, List.of(answer));
 
-    @Test
-    @DisplayName("should return null for a non-existing question")
-    public void answerFor_nonExistingQuestion() {
-        // Arrange
-        UUID nonExistingQuestionId = UUID.randomUUID();
+            assertThat(session.answerFor(questionId)).isEqualTo(answer);
+        }
 
-        // Act
-        UserAnswer result = examSession.answerFor(nonExistingQuestionId);
-
-        // Assert
-        assertThat(result).isNull();
+        @Test
+        @DisplayName("non-existing questionId → returns null")
+        void unknownQuestion_shouldReturnNull() {
+            ExamSession session = buildSession(SessionStatus.IN_PROGRESS, 10, 0, 0.0);
+            assertThat(session.answerFor(UUID.randomUUID())).isNull();
+        }
     }
 }

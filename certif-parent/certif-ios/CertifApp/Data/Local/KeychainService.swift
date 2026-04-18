@@ -1,77 +1,96 @@
-// certif-ios/CertifApp/Data/Local/KeychainService.swift
+// certif-parent/certif-ios/CertifApp/Data/Local/KeychainService.swift
 //
-// Secure JWT token storage using the system Keychain via KeychainAccess SPM package.
-// This is the iOS equivalent of Android EncryptedSharedPreferences for tokens.
+// JWT token storage using the native Security framework (SecItem API).
+// No third-party dependencies — avoids KeychainAccess SPM for testability.
+// Mirrors Android EncryptedSharedPreferences / DataStore token storage.
 
 import Foundation
-import KeychainAccess
+import Security
 
 /// Manages JWT access and refresh token persistence in the iOS Keychain.
 final class KeychainService {
 
-    // MARK: - Constants
+    // MARK: - Service identifier
+
+    private let service = "com.certifapp.CertifApp"
+
+    // MARK: - Keys
 
     private enum Keys {
-        static let accessToken  = "com.certifapp.accessToken"
-        static let refreshToken = "com.certifapp.refreshToken"
-        static let userId       = "com.certifapp.userId"
+        static let accessToken  = "certifapp.accessToken"
+        static let refreshToken = "certifapp.refreshToken"
+        static let userId       = "certifapp.userId"
     }
-
-    // MARK: - Properties
-
-    private let keychain = Keychain(service: "com.certifapp.CertifApp")
-        .accessibility(.afterFirstUnlock)
 
     // MARK: - Read
 
-    /// Returns the stored JWT access token, or nil if not present.
-    var accessToken: String? {
-        try? keychain.get(Keys.accessToken)
-    }
+    var accessToken: String? { read(key: Keys.accessToken) }
+    var refreshToken: String? { read(key: Keys.refreshToken) }
+    var userId: String? { read(key: Keys.userId) }
 
-    /// Returns the stored JWT refresh token, or nil if not present.
-    var refreshToken: String? {
-        try? keychain.get(Keys.refreshToken)
-    }
-
-    /// Returns the stored user UUID string, or nil if not present.
-    var userId: String? {
-        try? keychain.get(Keys.userId)
-    }
-
-    /// True if a valid access token is stored.
-    var isAuthenticated: Bool {
-        accessToken != nil
-    }
+    var isAuthenticated: Bool { accessToken != nil }
 
     // MARK: - Write
 
-    /// Saves both tokens after successful login or refresh.
     func save(accessToken: String, refreshToken: String) {
-        do {
-            try keychain.set(accessToken, key: Keys.accessToken)
-            try keychain.set(refreshToken, key: Keys.refreshToken)
-        } catch {
-            // Keychain write failures are non-fatal; log for crash reporting
-            print("[KeychainService] Failed to save tokens: \(error)")
-        }
+        write(value: accessToken,  key: Keys.accessToken)
+        write(value: refreshToken, key: Keys.refreshToken)
     }
 
-    /// Saves the authenticated user's UUID.
     func save(userId: UUID) {
-        do {
-            try keychain.set(userId.uuidString, key: Keys.userId)
-        } catch {
-            print("[KeychainService] Failed to save userId: \(error)")
-        }
+        write(value: userId.uuidString, key: Keys.userId)
     }
 
     // MARK: - Delete
 
-    /// Clears all stored authentication data (logout).
     func clearTokens() {
-        try? keychain.remove(Keys.accessToken)
-        try? keychain.remove(Keys.refreshToken)
-        try? keychain.remove(Keys.userId)
+        delete(key: Keys.accessToken)
+        delete(key: Keys.refreshToken)
+        delete(key: Keys.userId)
+    }
+
+    // MARK: - Private Security API
+
+    private func read(key: String) -> String? {
+        let query: [String: Any] = [
+            kSecClass as String:            kSecClassGenericPassword,
+            kSecAttrService as String:      service,
+            kSecAttrAccount as String:      key,
+            kSecMatchLimit as String:       kSecMatchLimitOne,
+            kSecReturnData as String:       true
+        ]
+        var result: AnyObject?
+        let status = SecItemCopyMatching(query as CFDictionary, &result)
+        guard status == errSecSuccess,
+              let data = result as? Data,
+              let string = String(data: data, encoding: .utf8) else { return nil }
+        return string
+    }
+
+    private func write(value: String, key: String) {
+        guard let data = value.data(using: .utf8) else { return }
+        // Try updating existing item first
+        let query: [String: Any] = [
+            kSecClass as String:        kSecClassGenericPassword,
+            kSecAttrService as String:  service,
+            kSecAttrAccount as String:  key
+        ]
+        let attributes: [String: Any] = [kSecValueData as String: data]
+        let status = SecItemUpdate(query as CFDictionary, attributes as CFDictionary)
+        if status == errSecItemNotFound {
+            var addQuery = query
+            addQuery[kSecValueData as String] = data
+            addQuery[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlock
+            SecItemAdd(addQuery as CFDictionary, nil)
+        }
+    }
+
+    private func delete(key: String) {
+        let query: [String: Any] = [
+            kSecClass as String:        kSecClassGenericPassword,
+            kSecAttrService as String:  service,
+            kSecAttrAccount as String:  key
+        ]
+        SecItemDelete(query as CFDictionary)
     }
 }

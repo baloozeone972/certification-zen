@@ -1,73 +1,155 @@
+// certif-parent/certif-domain/src/test/java/com/certifapp/domain/model/user/UserTest.java
 package com.certifapp.domain.model.user;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
-public class UserTest {
+/**
+ * Unit tests for the {@link User} domain record.
+ * Verifies constructor, invariants, email normalization, and business methods.
+ */
+@DisplayName("User")
+class UserTest {
 
-    private User user;
-    private SubscriptionTier subscriptionTier;
+    // ── Helpers ──────────────────────────────────────────────────────────────
 
-    @BeforeEach
-    public void setUp() {
-        UUID id = UUID.randomUUID();
-        String email = "test@example.com";
-        String passwordHash = "passwordHash";
-        UserRole role = UserRole.BASIC;
-        String locale = User.DEFAULT_LOCALE;
-        String timezone = User.DEFAULT_TIMEZONE;
-        String stripeCustomerId = null;
-        boolean isActive = true;
-        OffsetDateTime createdAt = OffsetDateTime.now();
-        OffsetDateTime updatedAt = OffsetDateTime.now();
-
-        subscriptionTier = new SubscriptionTier(false, false);
-        user = new User(id, email, passwordHash, role, subscriptionTier, locale, timezone, stripeCustomerId, isActive, createdAt, updatedAt);
+    private User buildUser(SubscriptionTier tier) {
+        return new User(
+                UUID.randomUUID(),
+                "test@example.com",
+                "$2a$12$hashedpassword",
+                UserRole.USER,
+                tier,
+                User.DEFAULT_LOCALE,
+                User.DEFAULT_TIMEZONE,
+                null, true,
+                OffsetDateTime.now(), OffsetDateTime.now()
+        );
     }
 
-    @Test
-    @DisplayName("should have AI access for PRO subscription")
-    public void hasAiAccess_proSubscription_true() {
-        user.setRole(UserRole.PRO);
-        subscriptionTier = new SubscriptionTier(true, false);
-        user.setSubscriptionTier(subscriptionTier);
+    // ── Compact constructor ───────────────────────────────────────────────────
 
-        boolean result = user.hasAiAccess();
+    @Nested
+    @DisplayName("compact constructor")
+    class Constructor {
 
-        assertThat(result).isTrue();
+        @Test
+        @DisplayName("valid input → user created")
+        void validInput_shouldCreateUser() {
+            User u = buildUser(SubscriptionTier.FREE);
+            assertThat(u.email()).isEqualTo("test@example.com");
+            assertThat(u.role()).isEqualTo(UserRole.USER);
+            assertThat(u.subscriptionTier()).isEqualTo(SubscriptionTier.FREE);
+        }
+
+        @Test
+        @DisplayName("email is lowercased and trimmed")
+        void email_shouldBeLowercasedAndTrimmed() {
+            User u = new User(UUID.randomUUID(), "  Test@Example.COM  ",
+                    "$2a$12$hash", UserRole.USER, SubscriptionTier.FREE,
+                    "fr", "Europe/Paris", null, true,
+                    OffsetDateTime.now(), OffsetDateTime.now());
+            assertThat(u.email()).isEqualTo("test@example.com");
+        }
+
+        @Test
+        @DisplayName("blank email → IllegalArgumentException")
+        void blankEmail_shouldThrow() {
+            assertThatThrownBy(() -> new User(UUID.randomUUID(), "  ",
+                    "$2a$12$hash", UserRole.USER, SubscriptionTier.FREE,
+                    "fr", "Europe/Paris", null, true,
+                    OffsetDateTime.now(), OffsetDateTime.now()))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("email");
+        }
+
+        @Test
+        @DisplayName("blank passwordHash → IllegalArgumentException")
+        void blankPasswordHash_shouldThrow() {
+            assertThatThrownBy(() -> new User(UUID.randomUUID(), "a@b.com",
+                    "", UserRole.USER, SubscriptionTier.FREE,
+                    "fr", "Europe/Paris", null, true,
+                    OffsetDateTime.now(), OffsetDateTime.now()))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("passwordHash");
+        }
+
+        @Test
+        @DisplayName("null role → IllegalArgumentException")
+        void nullRole_shouldThrow() {
+            assertThatThrownBy(() -> new User(UUID.randomUUID(), "a@b.com",
+                    "$2a$12$hash", null, SubscriptionTier.FREE,
+                    "fr", "Europe/Paris", null, true,
+                    OffsetDateTime.now(), OffsetDateTime.now()))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("role");
+        }
+
+        @Test
+        @DisplayName("null subscriptionTier → IllegalArgumentException")
+        void nullTier_shouldThrow() {
+            assertThatThrownBy(() -> new User(UUID.randomUUID(), "a@b.com",
+                    "$2a$12$hash", UserRole.USER, null,
+                    "fr", "Europe/Paris", null, true,
+                    OffsetDateTime.now(), OffsetDateTime.now()))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("subscriptionTier");
+        }
     }
 
-    @Test
-    @DisplayName("should not have AI access for BASIC subscription")
-    public void hasAiAccess_basicSubscription_false() {
-        boolean result = user.hasAiAccess();
+    // ── hasAiAccess() ────────────────────────────────────────────────────────
 
-        assertThat(result).isFalse();
+    @Nested
+    @DisplayName("hasAiAccess()")
+    class HasAiAccess {
+
+        @Test
+        @DisplayName("FREE → false")
+        void free_shouldReturnFalse() {
+            assertThat(buildUser(SubscriptionTier.FREE).hasAiAccess()).isFalse();
+        }
+
+        @Test
+        @DisplayName("PRO → true")
+        void pro_shouldReturnTrue() {
+            assertThat(buildUser(SubscriptionTier.PRO).hasAiAccess()).isTrue();
+        }
+
+        @Test
+        @DisplayName("PACK → false (AI is PRO-only)")
+        void pack_shouldReturnFalse() {
+            assertThat(buildUser(SubscriptionTier.PACK).hasAiAccess()).isFalse();
+        }
     }
 
-    @Test
-    @DisplayName("should have unlimited access for PRO and PACK subscriptions")
-    public void hasUnlimitedAccess_proAndPackSubscriptions_true() {
-        user.setRole(UserRole.PRO);
-        subscriptionTier = new SubscriptionTier(false, true);
-        user.setSubscriptionTier(subscriptionTier);
+    // ── hasUnlimitedAccess() ─────────────────────────────────────────────────
 
-        boolean result = user.hasUnlimitedAccess();
+    @Nested
+    @DisplayName("hasUnlimitedAccess()")
+    class HasUnlimitedAccess {
 
-        assertThat(result).isTrue();
-    }
+        @Test
+        @DisplayName("FREE → false")
+        void free_shouldReturnFalse() {
+            assertThat(buildUser(SubscriptionTier.FREE).hasUnlimitedAccess()).isFalse();
+        }
 
-    @Test
-    @DisplayName("should not have unlimited access for other subscriptions")
-    public void hasUnlimitedAccess_otherSubscriptions_false() {
-        boolean result = user.hasUnlimitedAccess();
+        @Test
+        @DisplayName("PRO → true")
+        void pro_shouldReturnTrue() {
+            assertThat(buildUser(SubscriptionTier.PRO).hasUnlimitedAccess()).isTrue();
+        }
 
-        assertThat(result).isFalse();
+        @Test
+        @DisplayName("PACK → true")
+        void pack_shouldReturnTrue() {
+            assertThat(buildUser(SubscriptionTier.PACK).hasUnlimitedAccess()).isTrue();
+        }
     }
 }
