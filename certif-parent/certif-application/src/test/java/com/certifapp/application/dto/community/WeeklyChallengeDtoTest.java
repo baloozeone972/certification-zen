@@ -1,84 +1,20 @@
+// certif-application/src/test/java/com/certifapp/application/dto/community/WeeklyChallengeDtoTest.java
 package com.certifapp.application.dto.community;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
-
-import java.time.OffsetDateTime;
-import java.util.UUID;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(MockitoExtension.class)
-public class WeeklyChallengeDtoTest {
+@DisplayName("WeeklyChallengeDtoTest")
+class WeeklyChallengeDtoTest {
 
-    @InjectMocks
-    private WeeklyChallengeDto weeklyChallengeDto;
+    private final WeeklyChallengeDto dto = new WeeklyChallengeDto(java.util.UUID.randomUUID(),"ocp21","Beat the week",java.time.OffsetDateTime.now());
 
-    @BeforeEach
-    public void setUp() {
-        UUID id = UUID.randomUUID();
-        String title = "Sample Challenge";
-        String certificationId = "cert123";
-        String themeCode = "tech";
-        OffsetDateTime startsAt = OffsetDateTime.now().minusDays(1);
-        OffsetDateTime endsAt = OffsetDateTime.now().plusDays(1);
-        int totalParticipants = 50;
-        int questionCount = 10;
+    @Test @DisplayName("certificationId() returns expected")
+    void certificationId_expected() { assertThat(dto.certificationId()).isEqualTo("ocp21"); }
+    @Test @DisplayName("title() returns expected")
+    void title_expected() { assertThat(dto.title()).isEqualTo("Beat the week"); }
 
-        weeklyChallengeDto = new WeeklyChallengeDto(id, title, certificationId, themeCode, startsAt, endsAt, totalParticipants, questionCount);
-    }
-
-    @Test
-    @DisplayName("Should return the correct challenge ID")
-    public void getId_challengeExists_expectedId() {
-        assertThat(weeklyChallengeDto.id()).isEqualTo(weeklyChallengeDto.getId());
-    }
-
-    @Test
-    @DisplayName("Should return the correct challenge title")
-    public void getTitle_challengeExists_expectedTitle() {
-        assertThat(weeklyChallengeDto.title()).isEqualTo(weeklyChallengeDto.getTitle());
-    }
-
-    @Test
-    @DisplayName("Should return the correct certification ID")
-    public void getCertificationId_challengeExists_expectedCertificationId() {
-        assertThat(weeklyChallengeDto.certificationId()).isEqualTo(weeklyChallengeDto.getCertificationId());
-    }
-
-    @Test
-    @DisplayName("Should return the correct theme code")
-    public void getThemeCode_challengeExists_expectedThemeCode() {
-        assertThat(weeklyChallengeDto.themeCode()).isEqualTo(weeklyChallengeDto.getThemeCode());
-    }
-
-    @Test
-    @DisplayName("Should return the correct start time")
-    public void getStartsAt_challengeExists_expectedStartTime() {
-        assertThat(weeklyChallengeDto.startsAt()).isEqualTo(weeklyChallengeDto.getStartsAt());
-    }
-
-    @Test
-    @DisplayName("Should return the correct end time")
-    public void getEndsAt_challengeExists_expectedEndTime() {
-        assertThat(weeklyChallengeDto.endsAt()).isEqualTo(weeklyChallengeDto.getEndsAt());
-    }
-
-    @Test
-    @DisplayName("Should return the correct total participants")
-    public void getTotalParticipants_challengeExists_expectedTotalParticipants() {
-        assertThat(weeklyChallengeDto.totalParticipants()).isEqualTo(weeklyChallengeDto.getTotalParticipants());
-    }
-
-    @Test
-    @DisplayName("Should return the correct question count")
-    public void getQuestionCount_challengeExists_expectedQuestionCount() {
-        assertThat(weeklyChallengeDto.questionCount()).isEqualTo(weeklyChallengeDto.getQuestionCount());
-    }
+    @Test @DisplayName("record equality holds")
+    void equality_holds() { assertThat(dto).isEqualTo(new WeeklyChallengeDto(java.util.UUID.randomUUID(),"ocp21","Beat the week",java.time.OffsetDateTime.now())); }
 }

@@ -1,61 +1,20 @@
+// certif-application/src/test/java/com/certifapp/application/dto/certification/CertificationThemeDtoTest.java
 package com.certifapp.application.dto.certification;
 
-import java.util.UUID;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoExtension;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-public class CertificationThemeDtoTest {
+@DisplayName("CertificationThemeDtoTest")
+class CertificationThemeDtoTest {
 
-    @InjectMocks
-    private CertificationThemeDto certificationThemeDto;
+    private final CertificationThemeDto dto = new CertificationThemeDto(java.util.UUID.randomUUID(),"oop","OOP",50,1);
 
-    @BeforeEach
-    public void setUp() {
-        certificationThemeDto = new CertificationThemeDto(
-                UUID.randomUUID(),
-                "virtual_threads",
-                "Virtual Threads",
-                10,
-                25.0
-        );
-    }
+    @Test @DisplayName("label() returns expected")
+    void label_expected() { assertThat(dto.label()).isEqualTo("OOP"); }
+    @Test @DisplayName("questionCount() returns expected")
+    void questionCount_expected() { assertThat(dto.questionCount()).isEqualTo(50); }
 
-    @Test
-    @DisplayName("should return the correct id")
-    public void getId_correctIdReturned() {
-        assertThat(certificationThemeDto.id()).isEqualTo(UUID.randomUUID());
-    }
-
-    @Test
-    @DisplayName("should return the correct code")
-    public void getCode_correctCodeReturned() {
-        assertThat(certificationThemeDto.code()).isEqualTo("virtual_threads");
-    }
-
-    @Test
-    @DisplayName("should return the correct label")
-    public void getLabel_correctLabelReturned() {
-        assertThat(certificationThemeDto.label()).isEqualTo("Virtual Threads");
-    }
-
-    @Test
-    @DisplayName("should return the correct questionCount")
-    public void getQuestionCount_correctQuestionCountReturned() {
-        assertThat(certificationThemeDto.questionCount()).isEqualTo(10);
-    }
-
-    @Test
-    @DisplayName("should return the correct weightPercent")
-    public void getWeightPercent_correctWeightPercentReturned() {
-        assertThat(certificationThemeDto.weightPercent()).isEqualTo(25.0);
-    }
+    @Test @DisplayName("record equality holds")
+    void equality_holds() { assertThat(dto).isEqualTo(new CertificationThemeDto(java.util.UUID.randomUUID(),"oop","OOP",50,1)); }
 }

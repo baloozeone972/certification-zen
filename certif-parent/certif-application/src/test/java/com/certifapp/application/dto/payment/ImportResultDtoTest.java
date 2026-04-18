@@ -1,69 +1,20 @@
+// certif-application/src/test/java/com/certifapp/application/dto/payment/ImportResultDtoTest.java
 package com.certifapp.application.dto.payment;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-public class ImportResultDtoTest {
+@DisplayName("ImportResultDtoTest")
+class ImportResultDtoTest {
 
-    @InjectMocks
-    private ImportResultDto importResultDto;
+    private final ImportResultDto dto = new ImportResultDto(100,5,java.util.List.of());
 
-    @BeforeEach
-    public void setUp() {
-        importResultDto = new ImportResultDto(0, 0, null);
-    }
+    @Test @DisplayName("importedCount() returns expected")
+    void importedCount_expected() { assertThat(dto.importedCount()).isEqualTo(100); }
+    @Test @DisplayName("failedCount() returns expected")
+    void failedCount_expected() { assertThat(dto.failedCount()).isEqualTo(5); }
 
-    @Test
-    @DisplayName("should create an instance with default values")
-    public void constructor_defaultValues_validInstance() {
-        assertThat(importResultDto).isNotNull();
-        assertThat(importResultDto.imported()).isEqualTo(0);
-        assertThat(importResultDto.skipped()).isEqualTo(0);
-        assertThat(importResultDto.errors()).isNull();
-    }
-
-    @Test
-    @DisplayName("should create an instance with custom values")
-    public void constructor_customValues_validInstance() {
-        importResultDto = new ImportResultDto(5, 2, List.of("Error1", "Error2"));
-
-        assertThat(importResultDto).isNotNull();
-        assertThat(importResultDto.imported()).isEqualTo(5);
-        assertThat(importResultDto.skipped()).isEqualTo(2);
-        assertThat(importResultDto.errors()).hasSize(2);
-    }
-
-    @Test
-    @DisplayName("should return the number of imported questions")
-    public void imported_getter_validValue() {
-        importResultDto = new ImportResultDto(3, 0, null);
-
-        assertThat(importResultDto.imported()).isEqualTo(3);
-    }
-
-    @Test
-    @DisplayName("should return the number of skipped questions")
-    public void skipped_getter_validValue() {
-        importResultDto = new ImportResultDto(0, 4, List.of());
-
-        assertThat(importResultDto.skipped()).isEqualTo(4);
-    }
-
-    @Test
-    @DisplayName("should return the list of error messages")
-    public void errors_getter_validList() {
-        importResultDto = new ImportResultDto(0, 0, List.of("Error1", "Error2"));
-
-        assertThat(importResultDto.errors()).hasSize(2);
-        assertThat(importResultDto.errors().get(0)).isEqualTo("Error1");
-        assertThat(importResultDto.errors().get(1)).isEqualTo("Error2");
-    }
+    @Test @DisplayName("record equality holds")
+    void equality_holds() { assertThat(dto).isEqualTo(new ImportResultDto(100,5,java.util.List.of())); }
 }
