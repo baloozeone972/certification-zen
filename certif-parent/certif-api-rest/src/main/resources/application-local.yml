@@ -1,31 +1,82 @@
 # certif-parent/certif-api-rest/src/main/resources/application-local.yml
+# Profil local — utilisé avec docker-compose (profile: local)
+
 spring:
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/certifapp}
-    username: ${SPRING_DATASOURCE_USERNAME:certifapp}
-    password: ${SPRING_DATASOURCE_PASSWORD:certifapp_dev_password}
-    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/certifapp
+    username: certifapp
+    password: ${POSTGRES_PASSWORD:certifapp_dev}
     hikari:
       maximum-pool-size: 10
       minimum-idle: 2
+      connection-timeout: 30000
+      idle-timeout: 600000
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: false
+    validate-on-migrate: true
+
   jpa:
-    show-sql: true
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        default_schema: public
 
   mail:
-    host: ${SPRING_MAIL_HOST:localhost}
-    port: ${SPRING_MAIL_PORT:1025}
+    host: localhost
+    port: 1025
+    username: noreply@certifapp.com
+    password: ""
     properties:
       mail.smtp.auth: false
       mail.smtp.starttls.enable: false
 
+# Ollama local
+langchain4j:
+  ollama:
+    base-url: http://localhost:11434
+    light-model-name: qwen2.5-coder:7b
+    heavy-model-name: qwen2.5-coder:7b
+    timeout: 120s
+    log-requests: true
+    log-responses: false
+
 app:
   jwt:
-    secret: ${APP_JWT_SECRET:local_dev_jwt_secret_must_be_256_bits_xxxxxxxxxxxxxxxxxxxxxxxxxx}
+    secret: ${APP_JWT_SECRET:changeme_local_64_chars_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX}
+    expiration-ms: 3600000
+    refresh-expiration-ms: 604800000
+  cors:
+    allowed-origins:
+      - http://localhost:4200
+      - http://localhost:3000
+  freemium:
+    daily-exam-limit: 2
+    question-limit: 20
+  stripe:
+    secret-key: ${STRIPE_SECRET_KEY:sk_test_placeholder}
+    webhook-secret: ${STRIPE_WEBHOOK_SECRET:whsec_placeholder}
 
+# Actuator (Health, Info, Metrics)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+
+# Logging
 logging:
   level:
     com.certifapp: DEBUG
-    org.springframework.security: DEBUG
-
-server:
-  port: 8080
+    org.springframework.security: WARN
+    org.flywaydb: INFO
+    dev.langchain4j: INFO
