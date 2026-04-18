@@ -1,3 +1,4 @@
+// certif-parent/certif-android/app/src/test/java/com/certifapp/android/HomeViewModelTest.kt
 package com.certifapp.android
 
 import com.certifapp.android.domain.model.Certification
@@ -54,19 +55,6 @@ class HomeViewModelTest {
         advanceUntilIdle()
 
         assertTrue(viewModel.uiState.value is HomeUiState.Loading)
-    }
-
-    @Test
-    fun `error state on repository failure`() = runTest {
-        val exception = Exception("Repository error")
-        every { repository.getCertifications() } throws exception
-
-        viewModel = HomeViewModel(repository)
-        advanceUntilIdle()
-
-        val state = viewModel.uiState.value
-        assertTrue(state is HomeUiState.Error)
-        assertEquals("Repository error", (state as HomeUiState.Error).message)
     }
 
     private fun buildCert(id: String, name: String) = Certification(
