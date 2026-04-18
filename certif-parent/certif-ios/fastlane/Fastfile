@@ -1,0 +1,161 @@
+# certif-ios/fastlane/Fastfile
+#
+# Fastlane lanes for iOS deployment.
+# - beta   → TestFlight (every push to main)
+# - release → App Store (manual trigger)
+#
+# Prerequisites:
+#   gem install fastlane
+#   fastlane match init   (certificates/provisioning via Git repo)
+
+default_platform(:ios)
+
+APP_IDENTIFIER = "com.certifapp.CertifApp"
+SCHEME         = "CertifApp"
+XCODEPROJ      = "CertifApp.xcodeproj"
+
+platform :ios do
+
+  # ─────────────────────────────────────────────────────────────
+  # Before each lane
+  # ─────────────────────────────────────────────────────────────
+  before_all do
+    # Ensure clean git state (CI only — skip locally)
+    ensure_git_status_clean if ENV["CI"]
+    # Increment build number from App Store Connect
+    increment_build_number_from_app_store_connect
+  end
+
+  # ─────────────────────────────────────────────────────────────
+  # Lane: beta → TestFlight
+  # ─────────────────────────────────────────────────────────────
+  lane :beta do
+    setup_ci if ENV["CI"]
+
+    # Download certificates and provisioning profiles
+    match(
+      type: "appstore",
+      app_identifier: APP_IDENTIFIER,
+      readonly: ENV["CI"] ? true : false
+    )
+
+    # Build
+    build_app(
+      scheme: SCHEME,
+      export_method: "app-store",
+      include_bitcode: false,
+      include_symbols: true,
+      output_directory: "./build",
+      output_name: "CertifApp.ipa",
+      xcargs: "MARKETING_VERSION=#{get_version_number}"
+    )
+
+    # Upload to TestFlight
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true,
+      changelog: build_changelog
+    )
+
+    # Clean up build artifacts
+    clean_build_artifacts
+
+    UI.success("✅ Beta deployed to TestFlight successfully!")
+  end
+
+  # ─────────────────────────────────────────────────────────────
+  # Lane: release → App Store
+  # ─────────────────────────────────────────────────────────────
+  lane :release do
+    setup_ci if ENV["CI"]
+
+    match(
+      type: "appstore",
+      app_identifier: APP_IDENTIFIER,
+      readonly: ENV["CI"] ? true : false
+    )
+
+    # Bump version
+    increment_version_number(bump_type: "patch")
+
+    build_app(
+      scheme: SCHEME,
+      export_method: "app-store",
+      include_bitcode: false,
+      include_symbols: true,
+      output_directory: "./build",
+      output_name: "CertifApp.ipa"
+    )
+
+    upload_to_app_store(
+      submit_for_review: false,
+      automatic_release: false,
+      force: true,  # Skip HTML preview
+      metadata_path: "./fastlane/metadata",
+      screenshots_path: "./fastlane/screenshots"
+    )
+
+    clean_build_artifacts
+
+    # Tag release
+    version = get_version_number
+    build   = get_build_number
+    add_git_tag(tag: "ios/v#{version}-#{build}")
+    push_git_tags
+
+    UI.success("✅ App Store submission complete for v#{version} (#{build})!")
+  end
+
+  # ─────────────────────────────────────────────────────────────
+  # Lane: tests (for local use)
+  # ─────────────────────────────────────────────────────────────
+  lane :tests do
+    run_tests(
+      scheme: SCHEME,
+      devices: ["iPhone 15 Pro"],
+      output_types: "junit,html",
+      output_directory: "./fastlane/test_output"
+    )
+  end
+
+  # ─────────────────────────────────────────────────────────────
+  # Lane: certificates (initial setup)
+  # ─────────────────────────────────────────────────────────────
+  lane :setup_certificates do
+    match(
+      type: "appstore",
+      app_identifier: APP_IDENTIFIER,
+      force_for_new_devices: true
+    )
+    match(
+      type: "development",
+      app_identifier: APP_IDENTIFIER,
+      force_for_new_devices: true
+    )
+  end
+
+  # ─────────────────────────────────────────────────────────────
+  # Helpers
+  # ─────────────────────────────────────────────────────────────
+
+  def build_changelog
+    # Extract latest CHANGELOG.md entry (between first two ## headers)
+    changelog = File.read("../CHANGELOG.md") rescue "Nouvelles fonctionnalités et corrections de bugs."
+    first_entry = changelog.match(/##.*?\n(.*?)(?=##|\z)/m)&.captures&.first&.strip
+    first_entry || "Nouvelles fonctionnalités et corrections de bugs."
+  end
+
+  def increment_build_number_from_app_store_connect
+    latest = latest_testflight_build_number(
+      app_identifier: APP_IDENTIFIER
+    ) rescue 0
+    increment_build_number(build_number: latest + 1)
+  end
+
+  # ─────────────────────────────────────────────────────────────
+  # Error handler
+  # ─────────────────────────────────────────────────────────────
+  error do |lane, exception|
+    UI.error("❌ Lane #{lane} failed: #{exception.message}")
+  end
+
+end

@@ -1,0 +1,169 @@
+# certif-ios/.github/workflows/ios.yml
+#
+# CI/CD pipeline for the iOS module.
+# Mirrors the Android GitHub Actions workflow pattern.
+#
+# Triggers:
+#   - Push to main  → build + test + deploy to TestFlight
+#   - Pull request  → build + test only
+#
+# Required secrets (Settings → Secrets and variables → Actions):
+#   MATCH_PASSWORD              — Fastlane Match encryption passphrase
+#   MATCH_GIT_BASIC_AUTHORIZATION — Base64 Basic auth for certificates repo
+#   APP_STORE_CONNECT_API_KEY_ID    — App Store Connect API key ID
+#   APP_STORE_CONNECT_ISSUER_ID     — App Store Connect Issuer ID
+#   APP_STORE_CONNECT_API_KEY       — App Store Connect private key (.p8 content)
+#   SLACK_WEBHOOK_URL              — (optional) Slack notifications
+
+name: iOS CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'certif-ios/**'
+      - '.github/workflows/ios.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'certif-ios/**'
+
+env:
+  XCODE_VERSION:  '15.4'
+  IOS_SIMULATOR:  'iPhone 15 Pro'
+  IOS_VERSION:    '17.5'
+  SCHEME:         'CertifApp'
+  WORKSPACE:      'certif-ios/CertifApp.xcworkspace'
+
+jobs:
+  # ─────────────────────────────────────────────────────────────
+  # JOB 1 — Build & Test
+  # ─────────────────────────────────────────────────────────────
+  test:
+    name: Build & Test
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Select Xcode ${{ env.XCODE_VERSION }}
+        run: sudo xcode-select -s /Applications/Xcode_${{ env.XCODE_VERSION }}.app
+
+      - name: Show Xcode version
+        run: xcodebuild -version
+
+      - name: Cache Swift Package Manager dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            certif-ios/.build
+            ~/Library/Developer/Xcode/DerivedData
+          key: ${{ runner.os }}-spm-${{ hashFiles('certif-ios/Package.swift') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
+
+      - name: Resolve SPM dependencies
+        working-directory: certif-ios
+        run: xcodebuild -resolvePackageDependencies -scheme ${{ env.SCHEME }}
+
+      - name: Build
+        working-directory: certif-ios
+        run: |
+          xcodebuild build \
+            -scheme "${{ env.SCHEME }}" \
+            -destination "platform=iOS Simulator,name=${{ env.IOS_SIMULATOR }},OS=${{ env.IOS_VERSION }}" \
+            -configuration Debug \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            | xcpretty --color
+
+      - name: Run unit tests
+        working-directory: certif-ios
+        run: |
+          xcodebuild test \
+            -scheme "${{ env.SCHEME }}" \
+            -destination "platform=iOS Simulator,name=${{ env.IOS_SIMULATOR }},OS=${{ env.IOS_VERSION }}" \
+            -configuration Debug \
+            -resultBundlePath TestResults.xcresult \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            | xcpretty --color --report junit --output test-results.xml
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: certif-ios/test-results.xml
+
+      - name: Upload test bundle
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcresult-bundle
+          path: certif-ios/TestResults.xcresult
+
+  # ─────────────────────────────────────────────────────────────
+  # JOB 2 — TestFlight deployment (main branch only)
+  # ─────────────────────────────────────────────────────────────
+  deploy:
+    name: Deploy to TestFlight
+    needs: test
+    runs-on: macos-14
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Select Xcode ${{ env.XCODE_VERSION }}
+        run: sudo xcode-select -s /Applications/Xcode_${{ env.XCODE_VERSION }}.app
+
+      - name: Setup Ruby (for Fastlane)
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+          working-directory: certif-ios
+
+      - name: Cache SPM
+        uses: actions/cache@v4
+        with:
+          path: certif-ios/.build
+          key: ${{ runner.os }}-spm-${{ hashFiles('certif-ios/Package.swift') }}
+
+      - name: Import App Store Connect API key
+        env:
+          APP_STORE_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+        run: |
+          mkdir -p ~/private_keys
+          echo "$APP_STORE_API_KEY" > ~/private_keys/AuthKey_${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}.p8
+
+      - name: Run Fastlane beta
+        working-directory: certif-ios
+        env:
+          MATCH_PASSWORD:                       ${{ secrets.MATCH_PASSWORD }}
+          MATCH_GIT_BASIC_AUTHORIZATION:        ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+          APP_STORE_CONNECT_API_KEY_ID:         ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID:          ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY_FILEPATH:   ~/private_keys/AuthKey_${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}.p8
+        run: bundle exec fastlane beta
+
+      - name: Notify Slack on success
+        if: success() && env.SLACK_WEBHOOK_URL != ''
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST "$SLACK_WEBHOOK_URL" \
+            -H 'Content-type: application/json' \
+            --data '{"text":"✅ CertifApp iOS — nouvelle version déployée sur TestFlight 🚀"}'
+
+      - name: Notify Slack on failure
+        if: failure() && env.SLACK_WEBHOOK_URL != ''
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST "$SLACK_WEBHOOK_URL" \
+            -H 'Content-type: application/json' \
+            --data '{"text":"❌ CertifApp iOS — échec du déploiement TestFlight. Voir les logs CI."}'
