@@ -112,3 +112,6 @@
     "question": "Faut-il versionner terraform.tfvars ?",
     "options": ["Non (sauf exemple)", "Oui", "Optionnel", "A seulement"],
     "correct": 0,
+    "explanation": "terraform.tfvars ne doit pas être versionné car il peut contenir des valeurs sensibles."
+  }
+]
