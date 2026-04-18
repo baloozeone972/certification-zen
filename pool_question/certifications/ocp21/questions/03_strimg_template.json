@@ -6,13 +6,13 @@
     "difficulty": "easy",
     "question": "Quelle est la syntaxe d'un String Template ?",
     "options": [
-      "STR.\"Hello \{name}\"",
+      "STR.\"Hello \\{name}\"",
       "\"Hello $name\"",
       "\"Hello {name}\"",
       "STR.\"Hello $name\""
     ],
     "correct": 0,
-    "explanation": "La syntaxe est STR.\"Hello \{name}\" avec STR processeur."
+    "explanation": "La syntaxe est STR.\"Hello \\{name}\" avec STR processeur."
   },
   {
     "id": "OCP21-ST-002",
@@ -59,7 +59,7 @@
     "theme": "String Templates",
     "theme_label": "Expressions",
     "difficulty": "easy",
-    "question": "Que produit STR.\"Hello \{name}\" avec name='Alice' ?",
+    "question": "Que produit STR.\"Hello \\{name}\" avec name='Alice' ?",
     "options": ["Hello Alice", "Hello {name}", "STR.Hello Alice", "Erreur"],
     "correct": 0,
     "explanation": "STR évalue l'expression dans les accolades."
@@ -84,7 +84,7 @@
     "theme": "String Templates",
     "theme_label": "Expressions",
     "difficulty": "medium",
-    "question": "Que produit STR.\"Somme: \{2 + 3}\" ?",
+    "question": "Que produit STR.\"Somme: \\{2 + 3}\" ?",
     "options": ["Somme: 5", "Somme: {2+3}", "Somme: 2+3", "Erreur"],
     "correct": 0,
     "explanation": "L'expression 2+3 est évaluée à 5."
@@ -96,7 +96,7 @@
     "difficulty": "medium",
     "question": "Peut-on appeler des méthodes dans les accolades ?",
     "options": [
-      "Oui, STR.\"Résultat: \{compute()}\"",
+      "Oui, STR.\"Résultat: \\{compute()}\"",
       "Non",
       "Oui, mais sans paramètres",
       "Oui, seulement méthodes statiques"
@@ -124,7 +124,7 @@
     "theme": "String Templates",
     "theme_label": "Multi-lignes",
     "difficulty": "hard",
-    "question": "Que produit ce code ?\nSTR.\"\"\"\n    Hello \{name}\n    Welcome\n    \"\"\" avec name='Alice'",
+    "question": "Que produit ce code ?\nSTR.\"\"\"\n    Hello \\{name}\n    Welcome\n    \"\"\" avec name='Alice'",
     "options": [
       "Hello Alice\\n    Welcome\\n    ",
       "Hello Alice Welcome",
@@ -139,7 +139,7 @@
     "theme": "String Templates",
     "theme_label": "FMT Processeur",
     "difficulty": "hard",
-    "question": "Que produit FMT.\"%d\{x} + %d\{y} = %d\{x+y}\" avec x=5, y=3 ?",
+    "question": "Que produit FMT.\"%d\\{x} + %d\\{y} = %d\\{x+y}\" avec x=5, y=3 ?",
     "options": ["5 + 3 = 8", "%d5 + %d3 = %d8", "Erreur", "5 + 3 = 5+3"],
     "correct": 0,
     "explanation": "FMT applique le formatage avec les spécificateurs avant interpolation."
@@ -149,7 +149,7 @@
     "theme": "String Templates",
     "theme_label": "FMT Processeur",
     "difficulty": "hard",
-    "question": "Que produit FMT.\"%.2f\{Math.PI}\" ?",
+    "question": "Que produit FMT.\"%.2f\\{Math.PI}\" ?",
     "options": ["3.14", "3.141592653589793", "%.2f3.14", "Erreur"],
     "correct": 0,
     "explanation": "FMT formate PI avec 2 décimales."
@@ -159,7 +159,7 @@
     "theme": "String Templates",
     "theme_label": "RAW Processeur",
     "difficulty": "hard",
-    "question": "Que retourne RAW.\"Hello \{name}\" ?",
+    "question": "Que retourne RAW.\"Hello \\{name}\" ?",
     "options": [
       "StringTemplate objet",
       "String interpolée",
@@ -296,7 +296,7 @@
     "difficulty": "hard",
     "question": "Peut-on imbriquer des templates ?",
     "options": [
-      "Oui, STR.\"Hello \{STR.\"Mr \{name}\"}\"",
+      "Oui, STR.\"Hello \\{STR.\"Mr \\{name}\"}\"",
       "Non",
       "Oui, avec RAW seulement",
       "Oui, mais avec FMT"
@@ -309,7 +309,7 @@
     "theme": "String Templates",
     "theme_label": "Nested templates",
     "difficulty": "hard",
-    "question": "Que produit STR.\"Bonjour \{STR.\"M. \{nom}\"}\" avec nom='Alice' ?",
+    "question": "Que produit STR.\"Bonjour \\{STR.\"M. \\{nom}\"}\" avec nom='Alice' ?",
     "options": ["Bonjour M. Alice", "Bonjour M. {nom}", "Erreur", "Bonjour STR.M. Alice"],
     "correct": 0,
     "explanation": "Le template imbriqué est évalué en premier."
@@ -409,7 +409,7 @@
     "theme": "String Templates",
     "theme_label": "Exemple",
     "difficulty": "hard",
-    "question": "Que produit STR.\"a = \{a}, b = \{b}\" avec a=1, b=2 ?",
+    "question": "Que produit STR.\"a = \\{a}, b = \\{b}\" avec a=1, b=2 ?",
     "options": ["a = 1, b = 2", "a = {a}, b = {b}", "a = 1, b = 2, ", "Erreur"],
     "correct": 0,
     "explanation": "Les valeurs sont interpolées correctement."
@@ -419,7 +419,7 @@
     "theme": "String Templates",
     "theme_label": "Exemple",
     "difficulty": "hard",
-    "question": "Que produit STR.\"Hello \{name.toUpperCase()}\" avec name='Alice' ?",
+    "question": "Que produit STR.\"Hello \\{name.toUpperCase()}\" avec name='Alice' ?",
     "options": ["Hello ALICE", "Hello Alice", "Hello {name.toUpperCase()}", "Erreur"],
     "correct": 0,
     "explanation": "La méthode toUpperCase() est appelée dans l'expression."
@@ -429,7 +429,7 @@
     "theme": "String Templates",
     "theme_label": "Exemple",
     "difficulty": "hard",
-    "question": "Que produit STR.\"Résultat: \{x > 0 ? \"positif\" : \"négatif\"}\" avec x=5 ?",
+    "question": "Que produit STR.\"Résultat: \\{x > 0 ? \"positif\" : \"négatif\"}\" avec x=5 ?",
     "options": ["Résultat: positif", "Résultat: {x > 0 ? \"positif\" : \"négatif\"}", "Erreur", "Résultat: 5"],
     "correct": 0,
     "explanation": "L'opérateur ternaire est évalué dans l'expression."
@@ -439,7 +439,7 @@
     "theme": "String Templates",
     "theme_label": "Exemple",
     "difficulty": "hard",
-    "question": "Que produit FMT.\"PI = %.2f\{Math.PI}\" ?",
+    "question": "Que produit FMT.\"PI = %.2f\\{Math.PI}\" ?",
     "options": ["PI = 3.14", "PI = 3.141592653589793", "PI = %.2f3.14", "Erreur"],
     "correct": 0,
     "explanation": "FMT formate PI avec 2 décimales."
@@ -449,7 +449,7 @@
     "theme": "String Templates",
     "theme_label": "Exemple",
     "difficulty": "hard",
-    "question": "Que produit FMT.\"%d\{x} + %d\{y} = %d\{x + y}\" avec x=10, y=20 ?",
+    "question": "Que produit FMT.\"%d\\{x} + %d\\{y} = %d\\{x + y}\" avec x=10, y=20 ?",
     "options": ["10 + 20 = 30", "%d10 + %d20 = %d30", "10 + 20 = 10+20", "Erreur"],
     "correct": 0,
     "explanation": "FMT applique le formatage avant interpolation."
@@ -459,7 +459,7 @@
     "theme": "String Templates",
     "theme_label": "Exemple",
     "difficulty": "hard",
-    "question": "Que produit RAW.\"Hello \{name}\" avec name='Alice' ?",
+    "question": "Que produit RAW.\"Hello \\{name}\" avec name='Alice' ?",
     "options": [
       "StringTemplate objet",
       "Hello Alice",
@@ -474,7 +474,7 @@
     "theme": "String Templates",
     "theme_label": "Exemple",
     "difficulty": "hard",
-    "question": "Que produit ce code ?\nvar st = RAW.\"Hello \{name}\";\nSystem.out.println(st.fragments());",
+    "question": "Que produit ce code ?\nvar st = RAW.\"Hello \\{name}\";\nSystem.out.println(st.fragments());",
     "options": ["[Hello , ]", "[Hello {name}]", "[Hello, name]", "[Hello]"],
     "correct": 0,
     "explanation": "fragments() retourne les parties textuelles du template."
@@ -484,7 +484,7 @@
     "theme": "String Templates",
     "theme_label": "Exemple",
     "difficulty": "hard",
-    "question": "Que produit ce code ?\nvar st = RAW.\"Hello \{name}\";\nSystem.out.println(st.values());",
+    "question": "Que produit ce code ?\nvar st = RAW.\"Hello \\{name}\";\nSystem.out.println(st.values());",
     "options": ["[Alice]", "[name]", "[Hello]", "[]"],
     "correct": 0,
     "explanation": "values() retourne les valeurs des expressions."
