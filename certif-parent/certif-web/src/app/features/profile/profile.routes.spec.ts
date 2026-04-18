@@ -1,4 +1,3 @@
-```typescript
 import { TestBed } from '@angular/core/testing';
 import { Routes } from '@angular/router';
 import { PROFILE_ROUTES } from './profile.routes';
@@ -33,4 +32,3 @@ describe('PROFILE_ROUTES', () => {
     }
   });
 });
-```

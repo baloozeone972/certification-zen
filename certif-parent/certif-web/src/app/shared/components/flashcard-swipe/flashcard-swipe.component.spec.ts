@@ -1,4 +1,3 @@
-```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FlashcardSwipeComponent } from './flashcard-swipe.component';
 import { CommonModule } from '@angular/common';
@@ -71,4 +70,3 @@ describe('FlashcardSwipeComponent', () => {
     expect(spy).toHaveBeenCalledWith('FlashcardSwipeComponent requires a Flashcard input.');
   });
 });
-```

@@ -1,4 +1,3 @@
-```typescript
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { InterviewComponent } from './interview.component';
 
@@ -23,4 +22,3 @@ describe('InterviewComponent', () => {
     expect(component).toBeTruthy();
   });
 });
-```

@@ -1,4 +1,3 @@
-```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -40,4 +39,3 @@ describe('AdminComponent', () => {
     expect(component).toBeTruthy();
   });
 });
-```

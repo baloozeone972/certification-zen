@@ -1,4 +1,3 @@
-```typescript
 import { TestBed } from '@angular/core/testing';
 
 describe('Certification', () => {
@@ -53,4 +52,3 @@ describe('Certification', () => {
     expect(certification.isActive).toBe(true);
   });
 });
-```

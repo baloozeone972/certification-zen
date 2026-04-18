@@ -1,4 +1,3 @@
-```typescript
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -126,4 +125,3 @@ describe('TimerWidgetComponent', () => {
     expect(compiled.querySelector('.timer')?.classList.contains('timer--warning')).toBe(true);
   });
 });
-```

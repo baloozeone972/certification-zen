@@ -1,4 +1,3 @@
-```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
 import { CoachDashboardComponent } from './coach-dashboard.component';
@@ -41,4 +40,3 @@ describe('CoachDashboardComponent', () => {
     expect(message.style.color).toContain('--color-text-muted');
   });
 });
-```

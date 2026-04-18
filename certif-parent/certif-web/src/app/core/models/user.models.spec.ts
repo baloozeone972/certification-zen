@@ -1,4 +1,3 @@
-```typescript
 import { TestBed } from '@angular/core/testing';
 
 describe('User models', () => {
@@ -230,4 +229,3 @@ describe('User models', () => {
     });
   });
 });
-```

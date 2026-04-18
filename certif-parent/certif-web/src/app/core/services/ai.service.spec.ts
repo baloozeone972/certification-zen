@@ -1,4 +1,3 @@
-```typescript
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { Injectable } from '@angular/core';
@@ -97,4 +96,3 @@ describe('AiService', () => {
     });
   });
 });
-```

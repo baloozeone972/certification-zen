@@ -1,4 +1,3 @@
-```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ProfileComponent } from './profile.component';
 
@@ -37,4 +36,3 @@ describe('ProfileComponent', () => {
     // The component is simple and does not have asynchronous operations or dependencies that can fail, so there are no error cases to test for this specific component.
   });
 });
-```

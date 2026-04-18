@@ -1,4 +1,3 @@
-```typescript
 import { TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -184,4 +183,3 @@ describe('AuthService', () => {
     });
   });
 });
-```

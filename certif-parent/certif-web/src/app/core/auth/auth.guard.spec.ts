@@ -1,4 +1,3 @@
-```typescript
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { CanActivateFn } from '@angular/router';
@@ -47,4 +46,3 @@ describe('AuthGuard', () => {
     expect(navigateSpy).not.toHaveBeenCalled();
   });
 });
-```

@@ -1,4 +1,3 @@
-```typescript
 import { TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { LearningService } from './learning.service';
@@ -187,4 +186,3 @@ describe('LearningService', () => {
     }));
   });
 });
-```

@@ -1,4 +1,3 @@
-```typescript
 import { TestBed, getTestBed } from '@angular/core/testing';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -56,4 +55,3 @@ describe('ExamRoutes', () => {
     expect(route).toBeFalsy();
   });
 });
-```

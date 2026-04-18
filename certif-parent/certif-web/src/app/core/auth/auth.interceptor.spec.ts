@@ -1,4 +1,3 @@
-```typescript
 import { TestBed } from '@angular/core/testing';
 import { HttpInterceptorFn, HttpRequest, HttpHandlerFn, HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../auth.service';
@@ -84,4 +83,3 @@ class MockAuthService {
 
   logout(): void {}
 }
-```

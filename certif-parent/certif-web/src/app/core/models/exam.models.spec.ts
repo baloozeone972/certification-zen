@@ -1,4 +1,3 @@
-```typescript
 import { TestBed } from '@angular/core/testing';
 import { ExamModelService } from './exam.models.service';
 
@@ -18,4 +17,3 @@ describe('ExamModelService', () => {
     expect(service).toBeTruthy();
   });
 });
-```

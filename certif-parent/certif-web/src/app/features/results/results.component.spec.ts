@@ -1,4 +1,3 @@
-```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { of, throwError } from 'rxjs';
@@ -109,4 +108,3 @@ describe('ResultsComponent', () => {
     });
   });
 });
-```

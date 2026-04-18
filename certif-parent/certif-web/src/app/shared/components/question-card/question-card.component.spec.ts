@@ -1,4 +1,3 @@
-```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
 import { QuestionCardComponent } from './question-card.component';
@@ -97,4 +96,3 @@ describe('QuestionCardComponent', () => {
     expect(selectOptionSpy).not.toHaveBeenCalled();
   });
 });
-```

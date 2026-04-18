@@ -1,4 +1,3 @@
-```typescript
 import { TestBed, getTestBed } from '@angular/core/testing';
 import { Flashcard, SM2Progress, Course, AdaptivePlan } from './learning.models';
 
@@ -160,4 +159,3 @@ describe('Learning Models', () => {
     expect(() => new AdaptivePlan(invalidAdaptivePlan as AdaptivePlan)).toThrowError('Invalid date format');
   });
 });
-```

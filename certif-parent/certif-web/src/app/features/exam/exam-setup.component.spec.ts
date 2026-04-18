@@ -1,4 +1,3 @@
-```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -79,4 +78,3 @@ describe('ExamSetupComponent', () => {
     expect(component.starting()).toBeFalse();
   });
 });
-```

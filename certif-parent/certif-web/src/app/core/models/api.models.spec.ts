@@ -1,4 +1,3 @@
-```typescript
 import { TestBed } from '@angular/core/testing';
 import { ApiResponse, ErrorResponse, FieldError, PageResponse } from './api.models';
 
@@ -80,4 +79,3 @@ describe('API Models', () => {
     });
   });
 });
-```

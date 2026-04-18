@@ -1,4 +1,3 @@
-```typescript
 import { DurationPipe } from './duration.pipe';
 
 describe('DurationPipe', () => {
@@ -35,4 +34,3 @@ describe('DurationPipe', () => {
     expect(pipe.transform(3600)).toBe("1h00m00s");
   });
 });
-```

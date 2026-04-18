@@ -1,4 +1,3 @@
-```typescript
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AuthService } from './core/auth/auth.service';
@@ -60,4 +59,3 @@ describe('AppComponent', () => {
     });
   });
 });
-```

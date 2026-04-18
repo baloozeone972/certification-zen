@@ -1,4 +1,3 @@
-```typescript
 import { TestBed, getTestBed } from '@angular/core/testing';
 import { Routes } from '@angular/router';
 import { AUTH_ROUTES } from './auth.routes';
@@ -38,4 +37,3 @@ describe('AUTH_ROUTES', () => {
     expect(undefinedPathRoute).toBeFalsy();
   });
 });
-```

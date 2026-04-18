@@ -1,4 +1,3 @@
-```typescript
 import { TestBed } from '@angular/core/testing';
 import { LEARNING_ROUTES } from './learning.routes';
 
@@ -40,4 +39,3 @@ describe('LEARNING_ROUTES', () => {
     expect(invalidRoute).toBeUndefined();
   });
 });
-```

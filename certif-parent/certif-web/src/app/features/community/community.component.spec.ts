@@ -1,4 +1,3 @@
-```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
 import { CommunityComponent } from './community.component';
@@ -48,4 +47,3 @@ describe('CommunityComponent', () => {
     expect(el.querySelector('.placeholder__msg')!.style.color).toContain('--color-text-muted');
   });
 });
-```

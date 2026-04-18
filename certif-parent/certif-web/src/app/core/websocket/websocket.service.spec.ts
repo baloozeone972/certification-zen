@@ -1,4 +1,3 @@
-```typescript
 import { TestBed } from '@angular/core/testing';
 import { WebSocketService } from './websocket.service';
 import { AuthService } from '../auth/auth.service';
@@ -99,4 +98,3 @@ describe('WebSocketService', () => {
     expect(subscription.observers.length).toBe(0);
   });
 });
-```

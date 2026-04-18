@@ -1,4 +1,3 @@
-```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DifficultyBadgeComponent } from './difficulty-badge.component';
 
@@ -58,4 +57,3 @@ describe('DifficultyBadgeComponent', () => {
     expect(compiled.textContent.trim()).toBe('unknown');
   });
 });
-```

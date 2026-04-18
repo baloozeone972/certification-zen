@@ -1,4 +1,3 @@
-```typescript
 import { TestBed, inject } from '@angular/core/testing';
 import { CommunityRoutes } from './community.routes';
 
@@ -44,4 +43,3 @@ describe('CommunityRoutes', () => {
     });
   }));
 });
-```

@@ -1,4 +1,3 @@
-```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CertificationService } from '../../core/services/certification.service';
 import { AuthService } from '../../core/auth/auth.service';
@@ -79,4 +78,3 @@ describe('HomeComponent', () => {
     });
   });
 });
-```

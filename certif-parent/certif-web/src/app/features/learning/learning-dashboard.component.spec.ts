@@ -1,4 +1,3 @@
-```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -58,4 +57,3 @@ describe('LearningDashboardComponent', () => {
     expect(console.error).toHaveBeenCalledWith(new Error('Failed to load certifications'));
   });
 });
-```

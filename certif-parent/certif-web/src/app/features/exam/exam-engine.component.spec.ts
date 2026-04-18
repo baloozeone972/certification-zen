@@ -1,4 +1,3 @@
-```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRouteStub } from '../../test/mock-activated-route.stub';
 import { RouterStub } from '../../test/mock-router.stub';
@@ -125,4 +124,3 @@ describe('ExamEngineComponent', () => {
     });
   });
 });
-```

@@ -1,4 +1,3 @@
-```typescript
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AuthService } from '../auth.service';
@@ -50,4 +49,3 @@ describe('adminGuard', () => {
     expect(result).toEqual(['/']);
   });
 });
-```

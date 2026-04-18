@@ -1,4 +1,3 @@
-```typescript
 import { TestBed, RouterTestingModule } from '@angular/core/testing';
 import { ADMIN_ROUTES } from './admin.routes';
 
@@ -36,4 +35,3 @@ describe('ADMIN_ROUTES', () => {
     expect(invalidRoute).not.toContain({ path: '', loadComponent: jasmine.any(Function) });
   });
 });
-```

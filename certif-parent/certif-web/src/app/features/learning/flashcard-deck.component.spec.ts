@@ -1,4 +1,3 @@
-```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRouteStub } from '../../testing/activated-route.stub';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -84,4 +83,3 @@ describe('FlashcardDeckComponent', () => {
     });
   });
 });
-```
