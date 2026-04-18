@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class StudyGroupFullExceptionTest {
 
     @DisplayName("Test nominal case with non-empty group ID")

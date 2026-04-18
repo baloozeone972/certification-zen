@@ -35,7 +35,7 @@ class FreemiumGuardServiceTest {
         @DisplayName("FREE under limit → no exception")
         void freeBelowLimit_shouldNotThrow() {
             assertThatCode(() ->
-                service.checkDailyExamLimit(SubscriptionTier.FREE, Certification.FREE_DAILY_EXAM_LIMIT - 1)
+                    service.checkDailyExamLimit(SubscriptionTier.FREE, Certification.FREE_DAILY_EXAM_LIMIT - 1)
             ).doesNotThrowAnyException();
         }
 
@@ -43,7 +43,7 @@ class FreemiumGuardServiceTest {
         @DisplayName("FREE at limit → FreemiumLimitExceededException")
         void freeAtLimit_shouldThrow() {
             assertThatThrownBy(() ->
-                service.checkDailyExamLimit(SubscriptionTier.FREE, Certification.FREE_DAILY_EXAM_LIMIT)
+                    service.checkDailyExamLimit(SubscriptionTier.FREE, Certification.FREE_DAILY_EXAM_LIMIT)
             ).isInstanceOf(FreemiumLimitExceededException.class);
         }
 
@@ -51,7 +51,7 @@ class FreemiumGuardServiceTest {
         @DisplayName("FREE over limit → FreemiumLimitExceededException")
         void freeOverLimit_shouldThrow() {
             assertThatThrownBy(() ->
-                service.checkDailyExamLimit(SubscriptionTier.FREE, Certification.FREE_DAILY_EXAM_LIMIT + 5)
+                    service.checkDailyExamLimit(SubscriptionTier.FREE, Certification.FREE_DAILY_EXAM_LIMIT + 5)
             ).isInstanceOf(FreemiumLimitExceededException.class);
         }
 
@@ -59,7 +59,7 @@ class FreemiumGuardServiceTest {
         @DisplayName("PRO at limit → no exception")
         void proAtLimit_shouldNotThrow() {
             assertThatCode(() ->
-                service.checkDailyExamLimit(SubscriptionTier.PRO, Certification.FREE_DAILY_EXAM_LIMIT)
+                    service.checkDailyExamLimit(SubscriptionTier.PRO, Certification.FREE_DAILY_EXAM_LIMIT)
             ).doesNotThrowAnyException();
         }
 
@@ -67,7 +67,7 @@ class FreemiumGuardServiceTest {
         @DisplayName("PACK at limit → no exception")
         void packAtLimit_shouldNotThrow() {
             assertThatCode(() ->
-                service.checkDailyExamLimit(SubscriptionTier.PACK, Certification.FREE_DAILY_EXAM_LIMIT)
+                    service.checkDailyExamLimit(SubscriptionTier.PACK, Certification.FREE_DAILY_EXAM_LIMIT)
             ).doesNotThrowAnyException();
         }
     }
@@ -117,21 +117,21 @@ class FreemiumGuardServiceTest {
         @DisplayName("PRO → no exception")
         void pro_shouldNotThrow() {
             assertThatCode(() -> service.requirePro(SubscriptionTier.PRO, "AI feature"))
-                .doesNotThrowAnyException();
+                    .doesNotThrowAnyException();
         }
 
         @Test
         @DisplayName("FREE → SubscriptionRequiredException")
         void free_shouldThrow() {
             assertThatThrownBy(() -> service.requirePro(SubscriptionTier.FREE, "AI feature"))
-                .isInstanceOf(SubscriptionRequiredException.class);
+                    .isInstanceOf(SubscriptionRequiredException.class);
         }
 
         @Test
         @DisplayName("PACK → SubscriptionRequiredException (AI is PRO-only)")
         void pack_shouldThrow() {
             assertThatThrownBy(() -> service.requirePro(SubscriptionTier.PACK, "AI feature"))
-                .isInstanceOf(SubscriptionRequiredException.class);
+                    .isInstanceOf(SubscriptionRequiredException.class);
         }
     }
 
@@ -145,21 +145,21 @@ class FreemiumGuardServiceTest {
         @DisplayName("FREE → SubscriptionRequiredException")
         void free_shouldThrow() {
             assertThatThrownBy(() -> service.requireUnlimited(SubscriptionTier.FREE, "Unlimited"))
-                .isInstanceOf(SubscriptionRequiredException.class);
+                    .isInstanceOf(SubscriptionRequiredException.class);
         }
 
         @Test
         @DisplayName("PRO → no exception")
         void pro_shouldNotThrow() {
             assertThatCode(() -> service.requireUnlimited(SubscriptionTier.PRO, "Unlimited"))
-                .doesNotThrowAnyException();
+                    .doesNotThrowAnyException();
         }
 
         @Test
         @DisplayName("PACK → no exception")
         void pack_shouldNotThrow() {
             assertThatCode(() -> service.requireUnlimited(SubscriptionTier.PACK, "Unlimited"))
-                .doesNotThrowAnyException();
+                    .doesNotThrowAnyException();
         }
     }
 }

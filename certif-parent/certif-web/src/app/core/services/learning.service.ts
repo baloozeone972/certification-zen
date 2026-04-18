@@ -1,10 +1,12 @@
 // certif-parent/certif-web/src/app/core/services/learning.service.ts
 import {inject, Injectable} from "@angular/core";
 import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
+// certif-parent/certif-web/src/app/core/services/learning.service.spec.ts
 import {TestBed} from "@angular/core/testing";
 import {environment} from "../../../environments/environment";
-import {AdaptivePlan, Course, Flashcard, SM2Progress} from "../models/learning.models";
+import {AdaptivePlan, ApiResponse, Course, Flashcard, SM2Progress} from "../models/learning.models";
 import {ApiResponse} from "../models/api.models";
+import {LearningService} from "./learning.service";
 
 /**
  * Service for learning features: courses, flashcards and SM-2 review.
@@ -44,13 +46,6 @@ export class LearningService {
         ).pipe(map(r => r.data));
     }
 }
-
-// certif-parent/certif-web/src/app/core/services/learning.service.spec.ts
-import {TestBed, async} from "@angular/core/testing";
-import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
-import {LearningService} from "./learning.service";
-import {environment} from "../../../environments/environment";
-import {ApiResponse, Flashcard, Course, SM2Progress, AdaptivePlan} from "../models/learning.models";
 
 describe('LearningService', () => {
     let service: LearningService;

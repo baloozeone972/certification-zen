@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed, async, fakeAsync, tick } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { TimerWidgetComponent } from './timer-widget.component';
+import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {By} from '@angular/platform-browser';
+import {TimerWidgetComponent} from './timer-widget.component';
 
 describe('TimerWidgetComponent', () => {
     let component: TimerWidgetComponent;

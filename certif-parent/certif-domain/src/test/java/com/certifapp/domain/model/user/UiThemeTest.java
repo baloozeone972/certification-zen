@@ -1,7 +1,5 @@
 package com.certifapp.domain.model.user;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class UiThemeTest {
 
     @DisplayName("UiTheme_light_getName_returnsLight")

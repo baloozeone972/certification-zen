@@ -1,7 +1,6 @@
 // certif-parent/certif-infrastructure/src/main/java/com/certifapp/infrastructure/config/FlywayConfig.java
 package com.certifapp.infrastructure.config;
 
-import org.flywaydb.core.Flyway;
 import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

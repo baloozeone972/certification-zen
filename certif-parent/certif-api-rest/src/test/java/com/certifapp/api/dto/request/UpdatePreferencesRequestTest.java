@@ -13,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -46,9 +45,9 @@ public class UpdatePreferencesRequestTest {
         Boolean notificationsEnabled = true;
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/api/preferences")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"theme\":\"" + theme + "\",\"language\":\"" + language + "\",\"defaultMode\":\"" + defaultMode + "\",\"notificationsEnabled\":" + notificationsEnabled + "}")
-                .header("Authorization", "Bearer token"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"theme\":\"" + theme + "\",\"language\":\"" + language + "\",\"defaultMode\":\"" + defaultMode + "\",\"notificationsEnabled\":" + notificationsEnabled + "}")
+                        .header("Authorization", "Bearer token"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
 
@@ -64,9 +63,9 @@ public class UpdatePreferencesRequestTest {
         Boolean notificationsEnabled = true;
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/preferences")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"theme\":\"" + theme + "\",\"language\":\"" + language + "\",\"defaultMode\":\"" + defaultMode + "\",\"notificationsEnabled\":" + notificationsEnabled + "}")
-                .header("Authorization", "Bearer token"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"theme\":\"" + theme + "\",\"language\":\"" + language + "\",\"defaultMode\":\"" + defaultMode + "\",\"notificationsEnabled\":" + notificationsEnabled + "}")
+                        .header("Authorization", "Bearer token"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
@@ -79,9 +78,9 @@ public class UpdatePreferencesRequestTest {
         Boolean notificationsEnabled = true;
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/preferences")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"theme\":\"" + theme + "\",\"language\":\"" + language + "\",\"defaultMode\":\"" + defaultMode + "\",\"notificationsEnabled\":" + notificationsEnabled + "}")
-                .header("Authorization", "Bearer token"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"theme\":\"" + theme + "\",\"language\":\"" + language + "\",\"defaultMode\":\"" + defaultMode + "\",\"notificationsEnabled\":" + notificationsEnabled + "}")
+                        .header("Authorization", "Bearer token"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 }

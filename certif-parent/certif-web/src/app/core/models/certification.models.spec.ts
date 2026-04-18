@@ -1,5 +1,5 @@
-import { TestBed } from '@angular/core/testing';
-import { Certification } from './certification.model';
+import {TestBed} from '@angular/core/testing';
+import {Certification} from './certification.model';
 
 describe('Certification', () => {
     let certification: Certification;
@@ -7,21 +7,23 @@ describe('Certification', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
-                { provide: Certification, useValue: new Certification(
-                    '1',
-                    'C1',
-                    'Test Certification',
-                    50,
-                    40,
-                    30,
-                    60,
-                    'MCQ',
-                    [
-                        {id: 'T1', code: 'T1C', label: 'Theme 1', questionCount: 20},
-                        {id: 'T2', code: 'T2C', label: 'Theme 2', questionCount: 30}
-                    ],
-                    true
-                ) }
+                {
+                    provide: Certification, useValue: new Certification(
+                        '1',
+                        'C1',
+                        'Test Certification',
+                        50,
+                        40,
+                        30,
+                        60,
+                        'MCQ',
+                        [
+                            {id: 'T1', code: 'T1C', label: 'Theme 1', questionCount: 20},
+                            {id: 'T2', code: 'T2C', label: 'Theme 2', questionCount: 30}
+                        ],
+                        true
+                    )
+                }
             ]
         });
         certification = TestBed.inject(Certification);

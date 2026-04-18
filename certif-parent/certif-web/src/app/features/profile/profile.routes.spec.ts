@@ -1,5 +1,5 @@
 import {Routes} from '@angular/router';
-import {async, TestBed} from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 import {ProfileComponent} from './profile.component';
 
 describe('PROFILE_ROUTES', () => {

@@ -2,7 +2,7 @@ import {TestBed} from '@angular/core/testing';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import {CertificationService} from './certification.service';
 import {environment} from '../../../environments/environment';
-import {Certification, ApiResponse} from '../models/certification.models';
+import {Certification} from '../models/certification.models';
 
 describe('CertificationService', () => {
     let service: CertificationService;

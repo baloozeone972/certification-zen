@@ -7,7 +7,7 @@ package com.certifapp.domain.model.user;
  * <p>Maps to the {@code theme VARCHAR(10)} column in {@code user_preferences}.</p>
  */
 public record UiTheme(
-    String value
+        String value
 ) {
 
     /**

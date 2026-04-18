@@ -1,11 +1,11 @@
-import { ComponentFixture, TestBed, async, fakeAsync, tick } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { CommonModule, DecimalPipe } from '@angular/common';
-import { ResultsComponent } from './results.component';
-import { ExamService } from '../../core/services/exam.service';
-import { ExamResult } from '../../core/models/exam.models';
-import { ScoreWidgetComponent } from '../../shared/components/score-widget/score-widget.component';
-import { DurationPipe } from '../../shared/pipes/duration.pipe';
+import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {RouterTestingModule} from '@angular/router/testing';
+import {CommonModule, DecimalPipe} from '@angular/common';
+import {ResultsComponent} from './results.component';
+import {ExamService} from '../../core/services/exam.service';
+import {ExamResult} from '../../core/models/exam.models';
+import {ScoreWidgetComponent} from '../../shared/components/score-widget/score-widget.component';
+import {DurationPipe} from '../../shared/pipes/duration.pipe';
 
 describe('ResultsComponent', () => {
     let component: ResultsComponent;
@@ -22,7 +22,7 @@ describe('ResultsComponent', () => {
             imports: [RouterTestingModule, CommonModule],
             declarations: [ResultsComponent, ScoreWidgetComponent],
             providers: [
-                { provide: ExamService, useValue: examServiceMock },
+                {provide: ExamService, useValue: examServiceMock},
                 DecimalPipe,
                 DurationPipe
             ]
@@ -53,8 +53,8 @@ describe('ResultsComponent', () => {
             totalQuestions: 20,
             durationSeconds: 60,
             themeStats: [
-                { themeCode: '1', themeLabel: 'Theme 1', correct: 5, wrong: 2, percentage: 70 },
-                { themeCode: '2', themeLabel: 'Theme 2', correct: 3, wrong: 1, percentage: 60 }
+                {themeCode: '1', themeLabel: 'Theme 1', correct: 5, wrong: 2, percentage: 70},
+                {themeCode: '2', themeLabel: 'Theme 2', correct: 3, wrong: 1, percentage: 60}
             ]
         };
 

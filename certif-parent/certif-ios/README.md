@@ -1,4 +1,5 @@
 # certif-ios — CertifApp iOS
+
 <!-- certif-ios/README.md -->
 
 ## Responsabilité
@@ -10,19 +11,19 @@ via StoreKit 2 (App Store Connect).
 
 ## Stack technique
 
-| Composant        | Technologie                                  |
-|------------------|----------------------------------------------|
-| UI               | SwiftUI 5 + Swift Concurrency (async/await)  |
+| Composant        | Technologie                                          |
+|------------------|------------------------------------------------------|
+| UI               | SwiftUI 5 + Swift Concurrency (async/await)          |
 | Architecture     | MVVM + Clean Architecture (Data/Domain/Presentation) |
-| DI               | Swift `@EnvironmentObject` + `DIContainer`   |
-| Réseau           | URLSession + Async/Await                     |
-| Persistance      | SwiftData (iOS 17+) — équivalent Room        |
-| Authentification | JWT stocké dans Keychain                     |
-| Paiement         | StoreKit 2 (abonnement + achat unique)       |
-| Notifications    | UserNotifications + BGTaskScheduler         |
-| Tests            | XCTest + Swift Testing framework             |
-| CI/CD            | GitHub Actions → Fastlane → TestFlight       |
-| Min iOS          | iOS 17.0                                     |
+| DI               | Swift `@EnvironmentObject` + `DIContainer`           |
+| Réseau           | URLSession + Async/Await                             |
+| Persistance      | SwiftData (iOS 17+) — équivalent Room                |
+| Authentification | JWT stocké dans Keychain                             |
+| Paiement         | StoreKit 2 (abonnement + achat unique)               |
+| Notifications    | UserNotifications + BGTaskScheduler                  |
+| Tests            | XCTest + Swift Testing framework                     |
+| CI/CD            | GitHub Actions → Fastlane → TestFlight               |
+| Min iOS          | iOS 17.0                                             |
 
 ## Architecture des couches
 
@@ -59,26 +60,26 @@ STRIPE_PUBLISHABLE_KEY = pk_test_xxx
 
 ## Fonctionnalités
 
-| Feature                     | Statut | Équivalent Android              |
-|-----------------------------|--------|---------------------------------|
-| Catalogue certifications    | ✅      | HomeScreen.kt                   |
-| Examen (timer + navigation) | ✅      | ExamEngineScreen.kt             |
-| Résultats + stats           | ✅      | ExamResultsScreen.kt            |
-| Flashcards SM-2 (swipe)     | ✅      | FlashcardScreen.kt              |
-| Cours Markdown              | ✅      | CourseScreen.kt                 |
-| Plan adaptatif              | ✅      | AdaptivePlanScreen.kt           |
-| Challenge hebdomadaire      | ✅      | ChallengeScreen.kt              |
-| Mur des certifiés           | ✅      | CertifiedWallScreen.kt          |
-| Coach dashboard             | ✅      | CoachDashboardScreen.kt         |
-| Marché emploi               | ✅      | JobMarketScreen.kt              |
-| Simulation entretien        | ✅      | InterviewScreen.kt              |
-| Chat assistant IA           | ✅      | ChatScreen.kt                   |
-| Profil + abonnement         | ✅      | ProfileScreen.kt                |
-| Mode offline (SwiftData)    | ✅      | Room + SyncWorker               |
-| Sync différée               | ✅      | SyncWorker (WorkManager)        |
-| Achat in-app (StoreKit 2)   | ✅      | Google Play Billing             |
-| Notifications locales       | ✅      | CoachNotificationWorker         |
-| Thème clair/sombre          | ✅      | Material3 DarkTheme             |
+| Feature                     | Statut | Équivalent Android       |
+|-----------------------------|--------|--------------------------|
+| Catalogue certifications    | ✅      | HomeScreen.kt            |
+| Examen (timer + navigation) | ✅      | ExamEngineScreen.kt      |
+| Résultats + stats           | ✅      | ExamResultsScreen.kt     |
+| Flashcards SM-2 (swipe)     | ✅      | FlashcardScreen.kt       |
+| Cours Markdown              | ✅      | CourseScreen.kt          |
+| Plan adaptatif              | ✅      | AdaptivePlanScreen.kt    |
+| Challenge hebdomadaire      | ✅      | ChallengeScreen.kt       |
+| Mur des certifiés           | ✅      | CertifiedWallScreen.kt   |
+| Coach dashboard             | ✅      | CoachDashboardScreen.kt  |
+| Marché emploi               | ✅      | JobMarketScreen.kt       |
+| Simulation entretien        | ✅      | InterviewScreen.kt       |
+| Chat assistant IA           | ✅      | ChatScreen.kt            |
+| Profil + abonnement         | ✅      | ProfileScreen.kt         |
+| Mode offline (SwiftData)    | ✅      | Room + SyncWorker        |
+| Sync différée               | ✅      | SyncWorker (WorkManager) |
+| Achat in-app (StoreKit 2)   | ✅      | Google Play Billing      |
+| Notifications locales       | ✅      | CoachNotificationWorker  |
+| Thème clair/sombre          | ✅      | Material3 DarkTheme      |
 
 ## Build & Run
 
@@ -108,10 +109,10 @@ Aucune connaissance du backend Java requise (consommation REST uniquement).
 
 ## Modèle freemium (identique Android)
 
-| Tier    | Accès                                                      | Prix         |
-|---------|------------------------------------------------------------|--------------|
-| FREE    | 2 examens/certification, 20 questions max                  | Gratuit      |
-| PRO     | Illimité + historique + offline + IA                       | 9,99 €/mois  |
-| PACK    | Accès permanent à une certification                        | 4,99 €/achat |
+| Tier | Accès                                     | Prix         |
+|------|-------------------------------------------|--------------|
+| FREE | 2 examens/certification, 20 questions max | Gratuit      |
+| PRO  | Illimité + historique + offline + IA      | 9,99 €/mois  |
+| PACK | Accès permanent à une certification       | 4,99 €/achat |
 
 Les entitlements StoreKit sont vérifiés côté serveur via le webhook `/api/v1/payments/apple`.

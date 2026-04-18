@@ -1,11 +1,11 @@
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { RouterTestingModule } from '@angular/router/testing';
-import { CertificationService } from '../../core/services/certification.service';
-import { ExamService } from '../../core/services/exam.service';
-import { Certification } from '../../core/models/certification.models';
-import { ExamSetupComponent } from './exam-setup.component';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {RouterTestingModule} from '@angular/router/testing';
+import {CertificationService} from '../../core/services/certification.service';
+import {ExamService} from '../../core/services/exam.service';
+import {Certification} from '../../core/models/certification.models';
+import {ExamSetupComponent} from './exam-setup.component';
 
 describe('ExamSetupComponent', () => {
     let component: ExamSetupComponent;
@@ -18,8 +18,8 @@ describe('ExamSetupComponent', () => {
             imports: [CommonModule, FormsModule, RouterTestingModule],
             declarations: [ExamSetupComponent],
             providers: [
-                { provide: CertificationService, useValue: {} },
-                { provide: ExamService, useValue: {} }
+                {provide: CertificationService, useValue: {}},
+                {provide: ExamService, useValue: {}}
             ]
         }).compileComponents();
     }));
@@ -36,7 +36,13 @@ describe('ExamSetupComponent', () => {
     });
 
     it('should display certification details when available', async(() => {
-        const cert: Certification = { id: '1', name: 'Certification A', examQuestionCount: 10, examDurationMin: 60, passingScore: 75 };
+        const cert: Certification = {
+            id: '1',
+            name: 'Certification A',
+            examQuestionCount: 10,
+            examDurationMin: 60,
+            passingScore: 75
+        };
         spyOn(certificationService, 'getById').and.returnValue(of(cert));
 
         fixture.detectChanges();
@@ -55,9 +61,15 @@ describe('ExamSetupComponent', () => {
     }));
 
     it('should start exam and navigate to session page', async(() => {
-        const cert: Certification = { id: '1', name: 'Certification A', examQuestionCount: 10, examDurationMin: 60, passingScore: 75 };
+        const cert: Certification = {
+            id: '1',
+            name: 'Certification A',
+            examQuestionCount: 10,
+            examDurationMin: 60,
+            passingScore: 75
+        };
         spyOn(certificationService, 'getById').and.returnValue(of(cert));
-        const session = { id: '2' };
+        const session = {id: '2'};
         spyOn(examService, 'start').and.returnValue(of(session));
         spyOn(component.router, 'navigate');
 
@@ -71,7 +83,13 @@ describe('ExamSetupComponent', () => {
     }));
 
     it('should handle exam start error and reset starting state', async(() => {
-        const cert: Certification = { id: '1', name: 'Certification A', examQuestionCount: 10, examDurationMin: 60, passingScore: 75 };
+        const cert: Certification = {
+            id: '1',
+            name: 'Certification A',
+            examQuestionCount: 10,
+            examDurationMin: 60,
+            passingScore: 75
+        };
         spyOn(certificationService, 'getById').and.returnValue(of(cert));
         spyOn(examService, 'start').and.throwError('Error starting exam');
         spyOn(component.router, 'navigate');

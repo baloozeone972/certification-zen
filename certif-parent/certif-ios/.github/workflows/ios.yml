@@ -29,11 +29,11 @@ on:
       - 'certif-ios/**'
 
 env:
-  XCODE_VERSION:  '15.4'
-  IOS_SIMULATOR:  'iPhone 15 Pro'
-  IOS_VERSION:    '17.5'
-  SCHEME:         'CertifApp'
-  WORKSPACE:      'certif-ios/CertifApp.xcworkspace'
+  XCODE_VERSION: '15.4'
+  IOS_SIMULATOR: 'iPhone 15 Pro'
+  IOS_VERSION: '17.5'
+  SCHEME: 'CertifApp'
+  WORKSPACE: 'certif-ios/CertifApp.xcworkspace'
 
 jobs:
   # ─────────────────────────────────────────────────────────────
@@ -143,11 +143,11 @@ jobs:
       - name: Run Fastlane beta
         working-directory: certif-ios
         env:
-          MATCH_PASSWORD:                       ${{ secrets.MATCH_PASSWORD }}
-          MATCH_GIT_BASIC_AUTHORIZATION:        ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
-          APP_STORE_CONNECT_API_KEY_ID:         ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
-          APP_STORE_CONNECT_ISSUER_ID:          ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
-          APP_STORE_CONNECT_API_KEY_FILEPATH:   ~/private_keys/AuthKey_${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}.p8
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY_FILEPATH: ~/private_keys/AuthKey_${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}.p8
         run: bundle exec fastlane beta
 
       - name: Notify Slack on success

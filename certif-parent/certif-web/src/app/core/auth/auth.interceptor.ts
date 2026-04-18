@@ -11,7 +11,10 @@ describe('AuthInterceptor', () => {
         TestBed.configureTestingModule({
             imports: [HttpClientTestingModule],
             providers: [
-                {provide: AuthService, useValue: jasmine.createSpyObj('AuthService', ['getAccessToken', 'refreshToken', 'logout'])}
+                {
+                    provide: AuthService,
+                    useValue: jasmine.createSpyObj('AuthService', ['getAccessToken', 'refreshToken', 'logout'])
+                }
             ]
         });
 

@@ -1,17 +1,13 @@
 package com.certifapp.api.security;
 
-import io.jsonwebtoken.JwtException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -71,8 +67,8 @@ class JwtTokenProviderTest {
                 .andExpect(jsonPath("$.userId").value("user"));
 
         String token = mockMvc.perform(post("/api/auth/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"username\":\"user\",\"password\":\"pass\"}"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"user\",\"password\":\"pass\"}"))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
@@ -82,7 +78,7 @@ class JwtTokenProviderTest {
         String tampered = token.substring(0, token.length() - 5) + "XXXXX";
 
         mockMvc.perform(get("/api/auth/validate")
-                .header("Authorization", "Bearer " + tampered))
+                        .header("Authorization", "Bearer " + tampered))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -97,8 +93,8 @@ class JwtTokenProviderTest {
                 .andExpect(jsonPath("$.userId").value("user"));
 
         String token = mockMvc.perform(post("/api/auth/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"username\":\"user\",\"password\":\"pass\"}"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"user\",\"password\":\"pass\"}"))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
@@ -106,7 +102,7 @@ class JwtTokenProviderTest {
                 .split(" ")[1];
 
         mockMvc.perform(get("/api/auth/validate")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andExpect(status().isUnauthorized());
     }
 }

@@ -1,7 +1,6 @@
 import {TestBed} from '@angular/core/testing';
 import {CommunityRoutes} from './community.routes';
 import {RouterTestingModule} from '@angular/router/testing';
-import {CommunityComponent} from '../community.component';
 
 describe('CommunityRoutes', () => {
     let routes: Routes;

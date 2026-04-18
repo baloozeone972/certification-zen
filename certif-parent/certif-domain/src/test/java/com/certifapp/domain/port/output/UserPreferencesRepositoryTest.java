@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class UserPreferencesRepositoryTest {
@@ -23,7 +22,7 @@ public class UserPreferencesRepositoryTest {
     public void findByUserId_normalCaseUserPreferencesFound() {
         UUID userId = UUID.randomUUID();
         UserPreferences preferences = new UserPreferences(userId);
-        
+
         // Arrange
         var mockRepository = mock(UserPreferencesRepository.class);
         when(mockRepository.findByUserId(userId)).thenReturn(Optional.of(preferences));
@@ -39,7 +38,7 @@ public class UserPreferencesRepositoryTest {
     @DisplayName("findByUserId_edge_case_user_preferences_not_found")
     public void findByUserId_edgeCaseUserPreferencesNotFound() {
         UUID userId = UUID.randomUUID();
-        
+
         // Arrange
         var mockRepository = mock(UserPreferencesRepository.class);
         when(mockRepository.findByUserId(userId)).thenReturn(Optional.empty());
@@ -55,7 +54,7 @@ public class UserPreferencesRepositoryTest {
     @DisplayName("save_normal_case_user_preferences_saved")
     public void save_normalCaseUserPreferencesSaved() {
         UserPreferences preferences = new UserPreferences(UUID.randomUUID());
-        
+
         // Arrange
         var mockRepository = mock(UserPreferencesRepository.class);
         when(mockRepository.save(preferences)).thenReturn(preferences);
@@ -71,7 +70,7 @@ public class UserPreferencesRepositoryTest {
     @DisplayName("save_error_case_exception_thrown")
     public void save_errorCaseExceptionThrown() {
         UserPreferences preferences = new UserPreferences(UUID.randomUUID());
-        
+
         // Arrange
         var mockRepository = mock(UserPreferencesRepository.class);
         when(mockRepository.save(any(UserPreferences.class))).thenThrow(new RuntimeException("Mocked Exception"));

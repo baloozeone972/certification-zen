@@ -1,5 +1,5 @@
 import {Routes} from "@angular/router";
-import {TestBed, async} from '@angular/core/testing';
+import {async, TestBed} from '@angular/core/testing';
 import {JwtInterceptor} from "../../auth/jwt.interceptor";
 import {AdminComponent} from "./admin.component";
 

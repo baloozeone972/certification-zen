@@ -9,7 +9,8 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * Unit tests for {@link ExamSession} record.
@@ -18,9 +19,9 @@ import static org.assertj.core.api.Assertions.*;
 @DisplayName("ExamSession")
 class ExamSessionTest {
 
-    private static final UUID      USER_ID         = UUID.randomUUID();
-    private static final String    CERT_ID         = "ocp21";
-    private static final ExamMode  MODE            = ExamMode.EXAM;
+    private static final UUID USER_ID = UUID.randomUUID();
+    private static final String CERT_ID = "ocp21";
+    private static final ExamMode MODE = ExamMode.EXAM;
     private static final OffsetDateTime STARTED_AT = OffsetDateTime.now();
 
     // ── Helpers ──────────────────────────────────────────────────────────────
@@ -76,55 +77,55 @@ class ExamSessionTest {
         @DisplayName("null userId → IllegalArgumentException")
         void nullUserId_shouldThrow() {
             assertThatThrownBy(() ->
-                new ExamSession(UUID.randomUUID(), null, CERT_ID, MODE,
-                        SessionStatus.IN_PROGRESS, STARTED_AT, null, null,
-                        10, 0, 0.0, false, List.of())
+                    new ExamSession(UUID.randomUUID(), null, CERT_ID, MODE,
+                            SessionStatus.IN_PROGRESS, STARTED_AT, null, null,
+                            10, 0, 0.0, false, List.of())
             ).isInstanceOf(IllegalArgumentException.class)
-             .hasMessageContaining("userId");
+                    .hasMessageContaining("userId");
         }
 
         @Test
         @DisplayName("blank certificationId → IllegalArgumentException")
         void blankCertId_shouldThrow() {
             assertThatThrownBy(() ->
-                new ExamSession(UUID.randomUUID(), USER_ID, "  ", MODE,
-                        SessionStatus.IN_PROGRESS, STARTED_AT, null, null,
-                        10, 0, 0.0, false, List.of())
+                    new ExamSession(UUID.randomUUID(), USER_ID, "  ", MODE,
+                            SessionStatus.IN_PROGRESS, STARTED_AT, null, null,
+                            10, 0, 0.0, false, List.of())
             ).isInstanceOf(IllegalArgumentException.class)
-             .hasMessageContaining("certificationId");
+                    .hasMessageContaining("certificationId");
         }
 
         @Test
         @DisplayName("totalQuestions = 0 → IllegalArgumentException")
         void zeroTotalQuestions_shouldThrow() {
             assertThatThrownBy(() ->
-                new ExamSession(UUID.randomUUID(), USER_ID, CERT_ID, MODE,
-                        SessionStatus.IN_PROGRESS, STARTED_AT, null, null,
-                        0, 0, 0.0, false, List.of())
+                    new ExamSession(UUID.randomUUID(), USER_ID, CERT_ID, MODE,
+                            SessionStatus.IN_PROGRESS, STARTED_AT, null, null,
+                            0, 0, 0.0, false, List.of())
             ).isInstanceOf(IllegalArgumentException.class)
-             .hasMessageContaining("totalQuestions");
+                    .hasMessageContaining("totalQuestions");
         }
 
         @Test
         @DisplayName("correctCount > totalQuestions → IllegalArgumentException")
         void correctCountExceedsTotal_shouldThrow() {
             assertThatThrownBy(() ->
-                new ExamSession(UUID.randomUUID(), USER_ID, CERT_ID, MODE,
-                        SessionStatus.IN_PROGRESS, STARTED_AT, null, null,
-                        10, 11, 0.0, false, List.of())
+                    new ExamSession(UUID.randomUUID(), USER_ID, CERT_ID, MODE,
+                            SessionStatus.IN_PROGRESS, STARTED_AT, null, null,
+                            10, 11, 0.0, false, List.of())
             ).isInstanceOf(IllegalArgumentException.class)
-             .hasMessageContaining("correctCount");
+                    .hasMessageContaining("correctCount");
         }
 
         @Test
         @DisplayName("percentage = 101.0 → IllegalArgumentException")
         void percentageOver100_shouldThrow() {
             assertThatThrownBy(() ->
-                new ExamSession(UUID.randomUUID(), USER_ID, CERT_ID, MODE,
-                        SessionStatus.IN_PROGRESS, STARTED_AT, null, null,
-                        10, 5, 101.0, false, List.of())
+                    new ExamSession(UUID.randomUUID(), USER_ID, CERT_ID, MODE,
+                            SessionStatus.IN_PROGRESS, STARTED_AT, null, null,
+                            10, 5, 101.0, false, List.of())
             ).isInstanceOf(IllegalArgumentException.class)
-             .hasMessageContaining("percentage");
+                    .hasMessageContaining("percentage");
         }
 
         @Test
@@ -178,7 +179,7 @@ class ExamSessionTest {
         @DisplayName("existing questionId → returns correct answer")
         void existingQuestion_shouldReturnAnswer() {
             UUID questionId = UUID.randomUUID();
-            UUID sessionId  = UUID.randomUUID();
+            UUID sessionId = UUID.randomUUID();
             UserAnswer answer = new UserAnswer(
                     UUID.randomUUID(), sessionId, questionId,
                     UUID.randomUUID(), true, false, 500L, OffsetDateTime.now());

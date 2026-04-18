@@ -8,7 +8,8 @@ import org.junit.jupiter.api.Test;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * Unit tests for the {@link User} domain record.
@@ -65,8 +66,8 @@ class UserTest {
                     "$2a$12$hash", UserRole.USER, SubscriptionTier.FREE,
                     "fr", "Europe/Paris", null, true,
                     OffsetDateTime.now(), OffsetDateTime.now()))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("email");
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessageContaining("email");
         }
 
         @Test
@@ -76,8 +77,8 @@ class UserTest {
                     "", UserRole.USER, SubscriptionTier.FREE,
                     "fr", "Europe/Paris", null, true,
                     OffsetDateTime.now(), OffsetDateTime.now()))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("passwordHash");
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessageContaining("passwordHash");
         }
 
         @Test
@@ -87,8 +88,8 @@ class UserTest {
                     "$2a$12$hash", null, SubscriptionTier.FREE,
                     "fr", "Europe/Paris", null, true,
                     OffsetDateTime.now(), OffsetDateTime.now()))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("role");
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessageContaining("role");
         }
 
         @Test
@@ -98,8 +99,8 @@ class UserTest {
                     "$2a$12$hash", UserRole.USER, null,
                     "fr", "Europe/Paris", null, true,
                     OffsetDateTime.now(), OffsetDateTime.now()))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("subscriptionTier");
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessageContaining("subscriptionTier");
         }
     }
 

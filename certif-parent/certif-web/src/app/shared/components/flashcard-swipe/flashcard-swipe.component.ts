@@ -1,7 +1,6 @@
-import {ComponentFixture, TestBed, async} from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {CommonModule} from '@angular/common';
 import {FlashcardSwipeComponent} from './flashcard-swipe.component';
-import {Flashcard} from '../../../core/models/learning.models';
 
 describe('FlashcardSwipeComponent', () => {
     let component: FlashcardSwipeComponent;

@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.*;
 @DisplayName("SM2AlgorithmService")
 class SM2AlgorithmServiceTest {
 
-    private static final UUID USER_ID     = UUID.randomUUID();
+    private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID QUESTION_ID = UUID.randomUUID();
 
     private SM2AlgorithmService service;
@@ -48,6 +48,48 @@ class SM2AlgorithmServiceTest {
     }
 
     // ── review() — correct answers (quality >= 3) ─────────────────────────────
+
+    @Test
+    @DisplayName("Repeated quality=3 → EF never drops below 1.3")
+    void repeatedHard_efNeverBelowFloor() {
+        SM2Schedule s = SM2Schedule.initial(USER_ID, QUESTION_ID);
+        for (int i = 0; i < 30; i++) {
+            s = service.review(s, 3);
+        }
+        assertThat(s.easeFactor()).isGreaterThanOrEqualTo(SM2Schedule.MIN_EASE_FACTOR);
+    }
+
+    // ── review() — incorrect (quality < 3) ───────────────────────────────────
+
+    @ParameterizedTest(name = "quality={0} → IllegalArgumentException")
+    @ValueSource(ints = {-1, 6, 100})
+    @DisplayName("Out-of-range quality → IllegalArgumentException")
+    void invalidQuality_shouldThrow(int quality) {
+        SM2Schedule s = SM2Schedule.initial(USER_ID, QUESTION_ID);
+        assertThatThrownBy(() -> service.review(s, quality))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("0-5");
+    }
+
+    // ── ease factor floor ─────────────────────────────────────────────────────
+
+    @Test
+    @DisplayName("computeNewEaseFactor(2.5, 5) → EF increases")
+    void computeEF_perfect_shouldIncrease() {
+        double result = service.computeNewEaseFactor(2.5, 5);
+        assertThat(result).isGreaterThan(2.5);
+    }
+
+    // ── invalid quality ───────────────────────────────────────────────────────
+
+    @Test
+    @DisplayName("computeNewEaseFactor at floor → never goes below 1.3")
+    void computeEF_atFloor_shouldClamp() {
+        double result = service.computeNewEaseFactor(1.3, 3);
+        assertThat(result).isGreaterThanOrEqualTo(SM2Schedule.MIN_EASE_FACTOR);
+    }
+
+    // ── computeNewEaseFactor() ────────────────────────────────────────────────
 
     @Nested
     @DisplayName("Correct recall (quality >= 3)")
@@ -86,7 +128,7 @@ class SM2AlgorithmServiceTest {
         @DisplayName("Quality=5 → ease factor increases")
         void perfect_shouldIncreaseEF() {
             SM2Schedule initial = SM2Schedule.initial(USER_ID, QUESTION_ID);
-            SM2Schedule result  = service.review(initial, 5);
+            SM2Schedule result = service.review(initial, 5);
             assertThat(result.easeFactor()).isGreaterThan(SM2Schedule.DEFAULT_EASE_FACTOR);
         }
 
@@ -106,12 +148,10 @@ class SM2AlgorithmServiceTest {
             SM2Schedule after2 = service.review(after1, 4);
             SM2Schedule result = service.review(after2, 3);
             assertThat(result.easeFactor())
-                .isLessThan(SM2Schedule.DEFAULT_EASE_FACTOR)
-                .isGreaterThanOrEqualTo(SM2Schedule.MIN_EASE_FACTOR);
+                    .isLessThan(SM2Schedule.DEFAULT_EASE_FACTOR)
+                    .isGreaterThanOrEqualTo(SM2Schedule.MIN_EASE_FACTOR);
         }
     }
-
-    // ── review() — incorrect (quality < 3) ───────────────────────────────────
 
     @Nested
     @DisplayName("Incorrect recall (quality < 3)")
@@ -145,45 +185,5 @@ class SM2AlgorithmServiceTest {
 
             assertThat(result.easeFactor()).isEqualTo(efBefore, within(0.001));
         }
-    }
-
-    // ── ease factor floor ─────────────────────────────────────────────────────
-
-    @Test
-    @DisplayName("Repeated quality=3 → EF never drops below 1.3")
-    void repeatedHard_efNeverBelowFloor() {
-        SM2Schedule s = SM2Schedule.initial(USER_ID, QUESTION_ID);
-        for (int i = 0; i < 30; i++) {
-            s = service.review(s, 3);
-        }
-        assertThat(s.easeFactor()).isGreaterThanOrEqualTo(SM2Schedule.MIN_EASE_FACTOR);
-    }
-
-    // ── invalid quality ───────────────────────────────────────────────────────
-
-    @ParameterizedTest(name = "quality={0} → IllegalArgumentException")
-    @ValueSource(ints = {-1, 6, 100})
-    @DisplayName("Out-of-range quality → IllegalArgumentException")
-    void invalidQuality_shouldThrow(int quality) {
-        SM2Schedule s = SM2Schedule.initial(USER_ID, QUESTION_ID);
-        assertThatThrownBy(() -> service.review(s, quality))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("0-5");
-    }
-
-    // ── computeNewEaseFactor() ────────────────────────────────────────────────
-
-    @Test
-    @DisplayName("computeNewEaseFactor(2.5, 5) → EF increases")
-    void computeEF_perfect_shouldIncrease() {
-        double result = service.computeNewEaseFactor(2.5, 5);
-        assertThat(result).isGreaterThan(2.5);
-    }
-
-    @Test
-    @DisplayName("computeNewEaseFactor at floor → never goes below 1.3")
-    void computeEF_atFloor_shouldClamp() {
-        double result = service.computeNewEaseFactor(1.3, 3);
-        assertThat(result).isGreaterThanOrEqualTo(SM2Schedule.MIN_EASE_FACTOR);
     }
 }

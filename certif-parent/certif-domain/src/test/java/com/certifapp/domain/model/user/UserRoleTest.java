@@ -37,7 +37,7 @@ public class UserRoleTest {
     @DisplayName("UserRole_fromString_invalidRoleString_shouldThrowIllegalArgumentException")
     public void fromString_invalidRoleString_shouldThrowIllegalArgumentException() {
         assertThatThrownBy(() -> UserRole.fromString("INVALID_ROLE"))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Invalid role: INVALID_ROLE");
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Invalid role: INVALID_ROLE");
     }
 }

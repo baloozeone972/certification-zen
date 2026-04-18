@@ -13,8 +13,6 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 @DataJpaTest
 @ContextConfiguration(initializers = SpringJUnitConfig.Initializer.class)
 @SpringBootTestContextInitializer

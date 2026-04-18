@@ -4,7 +4,9 @@ import com.certifapp.domain.exception.CertificationNotFoundException;
 import com.certifapp.domain.exception.FreemiumLimitExceededException;
 import com.certifapp.domain.model.session.ExamMode;
 import com.certifapp.domain.model.session.ExamSession;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 
 import java.util.List;

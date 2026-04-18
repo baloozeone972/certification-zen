@@ -1,5 +1,5 @@
 import {Routes} from '@angular/router';
-import {authGuard, adminGuard} from './core/auth/guards';
+import {adminGuard, authGuard} from './core/auth/guards';
 import {TestBed} from '@angular/core/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 

@@ -1,7 +1,6 @@
-import {ComponentFixture, TestBed, async} from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {ChatComponent} from './chat.component';
 import {AiService} from '../../core/services/ai.service';
-import {signal} from '@angular/core';
 
 class MockAiService {
     chat(text: string) {
@@ -9,7 +8,7 @@ class MockAiService {
             if (text === "error") {
                 reject();
             } else {
-                resolve({ message: `Answer to ${text}` });
+                resolve({message: `Answer to ${text}`});
             }
         });
     }
@@ -24,7 +23,7 @@ describe('ChatComponent', () => {
         TestBed.configureTestingModule({
             declarations: [ChatComponent],
             providers: [
-                { provide: AiService, useClass: MockAiService }
+                {provide: AiService, useClass: MockAiService}
             ]
         }).compileComponents();
     }));
@@ -44,7 +43,7 @@ describe('ChatComponent', () => {
         component.send();
         fixture.detectChanges();
 
-        expect(component.messages()).toContain({ role: "user", content: "test" });
+        expect(component.messages()).toContain({role: "user", content: "test"});
         expect(aiService.chat).toHaveBeenCalledWith("test");
     }));
 
@@ -53,7 +52,10 @@ describe('ChatComponent', () => {
         component.send();
         fixture.detectChanges();
 
-        expect(component.messages()).toContain({ role: "assistant", content: "Désolé, une erreur s'est produite. Veuillez réessayer." });
+        expect(component.messages()).toContain({
+            role: "assistant",
+            content: "Désolé, une erreur s'est produite. Veuillez réessayer."
+        });
     }));
 
     it('should clear inputText after sending', async(() => {

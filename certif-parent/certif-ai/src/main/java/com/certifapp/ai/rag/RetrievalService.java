@@ -42,7 +42,7 @@ public class RetrievalService {
                     String source = match.embedded().metadata().getString("source");
                     String content = match.embedded().text();
                     return String.format("### Source: %s
-                            % s", source != null ? source : " corpus", content);
+                            % s", source != null ? source : "corpus", content);
                 })
                 .collect(Collectors.joining("
 

@@ -1,5 +1,5 @@
-import { DurationPipe } from './duration.pipe';
-import { TestBed, async } from '@angular/core/testing';
+import {DurationPipe} from './duration.pipe';
+import {TestBed} from '@angular/core/testing';
 
 describe('DurationPipe', () => {
     let pipe: DurationPipe;

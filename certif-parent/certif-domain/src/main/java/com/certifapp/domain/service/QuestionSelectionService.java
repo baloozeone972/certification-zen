@@ -4,8 +4,6 @@ package com.certifapp.domain.service;
 import com.certifapp.domain.model.question.Question;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Pure domain service implementing question selection strategies.

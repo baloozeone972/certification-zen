@@ -32,7 +32,13 @@ describe('ExamService', () => {
 
         const req = httpMock.expectOne(`${environment.apiUrl}/exams/sessions`);
         expect(req.request.method).toBe('POST');
-        expect(req.request.body).toEqual({certificationId, mode, selectedThemes: ['theme1'], questionCount: 10, durationMinutes: 60});
+        expect(req.request.body).toEqual({
+            certificationId,
+            mode,
+            selectedThemes: ['theme1'],
+            questionCount: 10,
+            durationMinutes: 60
+        });
         req.flush({data: expectedSession});
     });
 

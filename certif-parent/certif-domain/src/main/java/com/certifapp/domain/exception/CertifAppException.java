@@ -8,7 +8,9 @@ package com.certifapp.domain.exception;
  */
 public class CertifAppException extends RuntimeException {
 
-    /** Error code for structured API error responses. */
+    /**
+     * Error code for structured API error responses.
+     */
     private final String errorCode;
 
     /**

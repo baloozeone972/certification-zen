@@ -69,7 +69,8 @@ public class CertPathAdvisor {
         try {
             String response = lightModel.generate(prompt);
             String json = response.replaceAll("json\\s*|", "").trim();
-            return objectMapper.readValue(json, new TypeReference<>() {});
+            return objectMapper.readValue(json, new TypeReference<>() {
+            });
         } catch (Exception e) {
             log.error("Failed to generate cert path: {}", e.getMessage());
             return Map.of("steps", List.of(), "aiRationale", "");

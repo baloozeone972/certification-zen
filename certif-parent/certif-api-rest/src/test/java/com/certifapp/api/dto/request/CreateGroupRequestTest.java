@@ -16,13 +16,12 @@ public class CreateGroupRequestTest {
 
     @InjectMocks
     private CreateGroupRequest createGroupRequest;
+    private MockMvc mockMvc;
 
     @Mock
     private void mockDependencies() {
         // No dependencies to mock for this record class
     }
-
-    private MockMvc mockMvc;
 
     @BeforeEach
     public void setUp() {

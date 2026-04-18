@@ -141,7 +141,9 @@ describe('AuthService', () => {
 
             expect(service.currentUser()).toBeNull();
             expect(localStorage.getItem('certifapp_access')).toBeNull();
-            expect(localStorage.getItem('certifapp_refresh')).toBeNull());
+            expect(localStorage.getItem('certifapp_refresh')).toBeNull()
+        )
+            ;
         });
     });
 
