@@ -8,13 +8,10 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 import java.util.UUID;
 
-/**
- * Spring Data JPA repository for {@link UserEntity}.
- */
+/** Spring Data JPA repository for {@link UserEntity}. */
 @Repository
 public interface UserJpaRepository extends JpaRepository<UserEntity, UUID> {
-
     Optional<UserEntity> findByEmail(String email);
-
+    Optional<UserEntity> findByStripeCustomerId(String stripeCustomerId);
     boolean existsByEmail(String email);
 }
