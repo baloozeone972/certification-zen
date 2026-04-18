@@ -14,7 +14,7 @@
   </parent>
 
   <artifactId>certif-application</artifactId>
-  <n>certif-application</n>
+  <name>certif-application</name>
   <description>
     Application module — use case implementations and DTOs.
     No Spring annotations allowed here; BCrypt injected via Function interfaces.
