@@ -14,7 +14,7 @@
   </parent>
 
   <artifactId>certif-domain</artifactId>
-  <n>certif-domain</n>
+  <name>certif-domain</name>
   <description>
     Domain module — pure Java 21, no framework dependency.
     Contains entities (Records), domain services, port interfaces and exceptions.
