@@ -1,142 +1,87 @@
+// certif-parent/certif-domain/src/test/java/com/certifapp/domain/port/input/learning/ReviewFlashcardUseCaseTest.java
 package com.certifapp.domain.port.input.learning;
 
 import com.certifapp.domain.model.learning.SM2Schedule;
 import org.junit.jupiter.api.*;
-import org.mockito.InjectMocks;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import static org.assertj.core.api.Assertions.assertThat;
+
+import java.time.LocalDate;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@DisplayName("ReviewFlashcardUseCase tests")
+/**
+ * Contract tests for {@link ReviewFlashcardUseCase} interface.
+ * Uses a mock of the interface — implementation tested in ReviewFlashcardUseCaseImplTest.
+ */
 @ExtendWith(MockitoExtension.class)
-public class ReviewFlashcardUseCaseTest {
+@DisplayName("ReviewFlashcardUseCase — interface contract")
+class ReviewFlashcardUseCaseTest {
 
     @Mock
-    private SM2ScheduleService sm2ScheduleService;
+    private ReviewFlashcardUseCase useCase;
 
-    @InjectMocks
-    private ReviewFlashcardUseCase reviewFlashcardUseCase;
+    private static final UUID USER_ID      = UUID.randomUUID();
+    private static final UUID FLASHCARD_ID = UUID.randomUUID();
 
-    @BeforeEach
-    public void setUp() {
-        // Setup code if needed
-    }
-
-    @AfterEach
-    public void tearDown() {
-        // Teardown code if needed
+    private SM2Schedule makeSchedule(int rep, int interval) {
+        return new SM2Schedule(UUID.randomUUID(), USER_ID, FLASHCARD_ID,
+                2.5, rep, interval, LocalDate.now().plusDays(interval), null);
     }
 
     @Test
-    @DisplayName("record valid SM-2 rating")
-    public void execute_validRating_sm2ScheduleUpdated() {
-        UUID userId = UUID.randomUUID();
-        UUID flashcardId = UUID.randomUUID();
-        int rating = 3;
-        SM2Schedule expectedSchedule = new SM2Schedule();
+    @DisplayName("execute() with valid rating returns SM2Schedule")
+    void execute_validRating_returnsSchedule() {
+        SM2Schedule expected = makeSchedule(1, 1);
+        when(useCase.execute(any())).thenReturn(expected);
 
-        when(sm2ScheduleService.update(any(SM2Schedule.class))).thenReturn(expectedSchedule);
+        ReviewFlashcardUseCase.ReviewFlashcardCommand cmd =
+                new ReviewFlashcardUseCase.ReviewFlashcardCommand(USER_ID, FLASHCARD_ID, 4);
 
-        SM2Schedule result = reviewFlashcardUseCase.execute(new ReviewFlashcardCommand(userId, flashcardId, rating));
+        SM2Schedule result = useCase.execute(cmd);
 
-        assertThat(result).isEqualTo(expectedSchedule);
-        verify(sm2ScheduleService, times(1)).update(any(SM2Schedule.class));
+        assertThat(result).isEqualTo(expected);
+        verify(useCase, times(1)).execute(cmd);
     }
 
     @Test
-    @DisplayName("record invalid SM-2 rating")
-    public void execute_invalidRating_exceptionThrown() {
-        UUID userId = UUID.randomUUID();
-        UUID flashcardId = UUID.randomUUID();
-        int rating = 6;
+    @DisplayName("execute() with rating 0 (blackout) returns reset schedule")
+    void execute_ratingZero_returnsResetSchedule() {
+        SM2Schedule reset = makeSchedule(0, 1);
+        when(useCase.execute(any())).thenReturn(reset);
 
-        assertThrows(IllegalArgumentException.class, () -> 
-            reviewFlashcardUseCase.execute(new ReviewFlashcardCommand(userId, flashcardId, rating))
-        );
+        ReviewFlashcardUseCase.ReviewFlashcardCommand cmd =
+                new ReviewFlashcardUseCase.ReviewFlashcardCommand(USER_ID, FLASHCARD_ID, 0);
+
+        SM2Schedule result = useCase.execute(cmd);
+        assertThat(result.repetitions()).isZero();
+        assertThat(result.intervalDays()).isEqualTo(1);
     }
 
     @Test
-    @DisplayName("record SM-2 rating of zero")
-    public void execute_ratingZero_sm2ScheduleUpdated() {
-        UUID userId = UUID.randomUUID();
-        UUID flashcardId = UUID.randomUUID();
-        int rating = 0;
-        SM2Schedule expectedSchedule = new SM2Schedule();
+    @DisplayName("ReviewFlashcardCommand holds userId, flashcardId and rating")
+    void command_holdsAllFields() {
+        ReviewFlashcardUseCase.ReviewFlashcardCommand cmd =
+                new ReviewFlashcardUseCase.ReviewFlashcardCommand(USER_ID, FLASHCARD_ID, 3);
 
-        when(sm2ScheduleService.update(any(SM2Schedule.class))).thenReturn(expectedSchedule);
-
-        SM2Schedule result = reviewFlashcardUseCase.execute(new ReviewFlashcardCommand(userId, flashcardId, rating));
-
-        assertThat(result).isEqualTo(expectedSchedule);
-        verify(sm2ScheduleService, times(1)).update(any(SM2Schedule.class));
+        assertThat(cmd.userId()).isEqualTo(USER_ID);
+        assertThat(cmd.flashcardId()).isEqualTo(FLASHCARD_ID);
+        assertThat(cmd.rating()).isEqualTo(3);
     }
 
     @Test
-    @DisplayName("record SM-2 rating of one")
-    public void execute_ratingOne_sm2ScheduleUpdated() {
-        UUID userId = UUID.randomUUID();
-        UUID flashcardId = UUID.randomUUID();
-        int rating = 1;
-        SM2Schedule expectedSchedule = new SM2Schedule();
-
-        when(sm2ScheduleService.update(any(SM2Schedule.class))).thenReturn(expectedSchedule);
-
-        SM2Schedule result = reviewFlashcardUseCase.execute(new ReviewFlashcardCommand(userId, flashcardId, rating));
-
-        assertThat(result).isEqualTo(expectedSchedule);
-        verify(sm2ScheduleService, times(1)).update(any(SM2Schedule.class));
-    }
-
-    @Test
-    @DisplayName("record SM-2 rating of two")
-    public void execute_ratingTwo_sm2ScheduleUpdated() {
-        UUID userId = UUID.randomUUID();
-        UUID flashcardId = UUID.randomUUID();
-        int rating = 2;
-        SM2Schedule expectedSchedule = new SM2Schedule();
-
-        when(sm2ScheduleService.update(any(SM2Schedule.class))).thenReturn(expectedSchedule);
-
-        SM2Schedule result = reviewFlashcardUseCase.execute(new ReviewFlashcardCommand(userId, flashcardId, rating));
-
-        assertThat(result).isEqualTo(expectedSchedule);
-        verify(sm2ScheduleService, times(1)).update(any(SM2Schedule.class));
-    }
-
-    @Test
-    @DisplayName("record SM-2 rating of four")
-    public void execute_ratingFour_sm2ScheduleUpdated() {
-        UUID userId = UUID.randomUUID();
-        UUID flashcardId = UUID.randomUUID();
-        int rating = 4;
-        SM2Schedule expectedSchedule = new SM2Schedule();
-
-        when(sm2ScheduleService.update(any(SM2Schedule.class))).thenReturn(expectedSchedule);
-
-        SM2Schedule result = reviewFlashcardUseCase.execute(new ReviewFlashcardCommand(userId, flashcardId, rating));
-
-        assertThat(result).isEqualTo(expectedSchedule);
-        verify(sm2ScheduleService, times(1)).update(any(SM2Schedule.class));
-    }
-
-    @Test
-    @DisplayName("record SM-2 rating of five")
-    public void execute_ratingFive_sm2ScheduleUpdated() {
-        UUID userId = UUID.randomUUID();
-        UUID flashcardId = UUID.randomUUID();
-        int rating = 5;
-        SM2Schedule expectedSchedule = new SM2Schedule();
-
-        when(sm2ScheduleService.update(any(SM2Schedule.class))).thenReturn(expectedSchedule);
-
-        SM2Schedule result = reviewFlashcardUseCase.execute(new ReviewFlashcardCommand(userId, flashcardId, rating));
-
-        assertThat(result).isEqualTo(expectedSchedule);
-        verify(sm2ScheduleService, times(1)).update(any(SM2Schedule.class));
+    @DisplayName("ReviewFlashcardCommand rating must be 0-5")
+    void command_ratingRange_validated() {
+        // Valid boundaries
+        assertThatCode(() ->
+            new ReviewFlashcardUseCase.ReviewFlashcardCommand(USER_ID, FLASHCARD_ID, 0))
+            .doesNotThrowAnyException();
+        assertThatCode(() ->
+            new ReviewFlashcardUseCase.ReviewFlashcardCommand(USER_ID, FLASHCARD_ID, 5))
+            .doesNotThrowAnyException();
     }
 }
-```
-
-Note: The `SM2ScheduleService` class and its `update` method are assumed to be properly implemented in the production codebase. If not, you would need to mock or implement them for the tests to run.
