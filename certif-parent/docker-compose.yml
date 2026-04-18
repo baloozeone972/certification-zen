@@ -1,60 +1,89 @@
 # certif-parent/docker-compose.yml
-# CertifApp — Stack développement local complète
-# Usage : docker compose up -d
+# CertifApp — Docker Compose complet pour développement local
+#
+# Profils disponibles :
+#   local  (défaut) : API + PostgreSQL + pgvector + Ollama + MailHog
+#   test            : API test + PostgreSQL test uniquement
+#   prod            : API prod + PostgreSQL + Redis + sans Ollama
+#
+# Usage :
+#   Démarrage local     : docker compose --profile local up -d
+#   Tests uniquement    : docker compose --profile test up -d
+#   Arrêt total         : docker compose down -v
+#   Logs API            : docker compose logs -f api
+#   Reconstruire API    : docker compose build api && docker compose up -d api
 
 name: certifapp
 
+# ── Volumes persistants ───────────────────────────────────────────────────────
+volumes:
+  postgres_data:
+    driver: local
+  pgvector_data:
+    driver: local
+  ollama_models:
+    driver: local
+  mailhog_data:
+    driver: local
+
+# ── Réseaux ───────────────────────────────────────────────────────────────────
+networks:
+  backend:
+    driver: bridge
+  frontend:
+    driver: bridge
+
+# ── Services ──────────────────────────────────────────────────────────────────
 services:
 
-  # ===========================================================================
-  # PostgreSQL 16 avec pgvector
-  # ===========================================================================
-  db:
+  # ── PostgreSQL + pgvector ───────────────────────────────────────────────────
+  postgres:
     image: pgvector/pgvector:pg16
-    container_name: certifapp-db
+    container_name: certifapp-postgres
     restart: unless-stopped
     environment:
       POSTGRES_DB:       certifapp
       POSTGRES_USER:     certifapp
-      POSTGRES_PASSWORD: certifapp_dev_password
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-certifapp_dev}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=fr_FR.UTF-8"
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./certif-infrastructure/src/main/resources/db/init:/docker-entrypoint-initdb.d:ro
+      - ./certif-infrastructure/src/main/resources/db/migration:/docker-entrypoint-initdb.d:ro
+    networks:
+      - backend
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U certifapp -d certifapp"]
       interval: 10s
       timeout: 5s
       retries: 5
-    networks:
-      - certifapp-network
+      start_period: 30s
+    profiles: [local, test, prod]
 
-  # ===========================================================================
-  # Redis — rate limiting, sessions, cache distribuée
-  # ===========================================================================
-  redis:
-    image: redis:7.2-alpine
-    container_name: certifapp-redis
+  # ── PostgreSQL test (base isolée pour les tests d'intégration) ──────────────
+  postgres-test:
+    image: pgvector/pgvector:pg16
+    container_name: certifapp-postgres-test
     restart: unless-stopped
-    command: redis-server --requirepass certifapp_redis_dev
+    environment:
+      POSTGRES_DB:       certifapp_test
+      POSTGRES_USER:     certifapp
+      POSTGRES_PASSWORD: test_password
     ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
+      - "5433:5432"
+    networks:
+      - backend
+    tmpfs:
+      - /var/lib/postgresql/data   # En mémoire → plus rapide pour les tests
     healthcheck:
-      test: ["CMD", "redis-cli", "-a", "certifapp_redis_dev", "ping"]
-      interval: 10s
+      test: ["CMD-SHELL", "pg_isready -U certifapp -d certifapp_test"]
+      interval: 5s
       timeout: 3s
       retries: 5
-    networks:
-      - certifapp-network
+    profiles: [test]
 
-  # ===========================================================================
-  # Ollama — LLM local (profil local)
-  # Modèles recommandés : llama3.1:8b-instruct-q4_K_M + nomic-embed-text
-  # Premier démarrage : docker exec certifapp-ollama ollama pull llama3.1:8b-instruct-q4_K_M
-  # ===========================================================================
+  # ── Ollama (IA locale — modèle qwen2.5-coder-7b) ───────────────────────────
   ollama:
     image: ollama/ollama:latest
     container_name: certifapp-ollama
@@ -63,152 +92,125 @@ services:
       - "11434:11434"
     volumes:
       - ollama_models:/root/.ollama
-    environment:
-      OLLAMA_KEEP_ALIVE: "24h"
-      OLLAMA_NUM_PARALLEL: "2"
-    # Décommenter pour GPU NVIDIA :
-    # deploy:
-    #   resources:
-    #     reservations:
-    #       devices:
-    #         - driver: nvidia
-    #           count: 1
-    #           capabilities: [gpu]
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:11434/api/version || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
     networks:
-      - certifapp-network
-
-  # ===========================================================================
-  # Spring Boot backend
-  # ===========================================================================
-  app:
-    build:
-      context: ..
-      dockerfile: certif-parent/certif-api-rest/Dockerfile
-      target: runtime
-    container_name: certifapp-backend
-    restart: unless-stopped
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-      ollama:
-        condition: service_healthy
-    environment:
-      SPRING_PROFILES_ACTIVE: local
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/certifapp
-      SPRING_DATASOURCE_USERNAME: certifapp
-      SPRING_DATASOURCE_PASSWORD: certifapp_dev_password
-      SPRING_DATA_REDIS_HOST: redis
-      SPRING_DATA_REDIS_PORT: 6379
-      SPRING_DATA_REDIS_PASSWORD: certifapp_redis_dev
-      # LangChain4j Ollama (profil local)
-      LANGCHAIN4J_OLLAMA_BASE_URL: http://ollama:11434
-      LANGCHAIN4J_OLLAMA_MODEL_NAME: llama3.1:8b-instruct-q4_K_M
-      LANGCHAIN4J_OLLAMA_EMBEDDING_MODEL: nomic-embed-text
-      # JWT
-      APP_JWT_SECRET: local_dev_jwt_secret_must_be_at_least_256_bits_long_for_hs256
-      APP_JWT_ACCESS_EXPIRY: 900
-      APP_JWT_REFRESH_EXPIRY: 604800
-      # Stripe (sandbox)
-      STRIPE_SECRET_KEY: sk_test_replace_with_real_key
-      STRIPE_WEBHOOK_SECRET: whsec_replace_with_real_webhook_secret
-      # Virtual Threads
-      JDK_VIRTUAL_THREAD_SCHEDULER_PARALLELISM: "4"
-      SPRING_THREADS_VIRTUAL_ENABLED: "true"
-      # Mail (MailHog local)
-      SPRING_MAIL_HOST: mailhog
-      SPRING_MAIL_PORT: 1025
-      SPRING_MAIL_USERNAME: ""
-      SPRING_MAIL_PASSWORD: ""
-      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: "false"
-      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: "false"
-    ports:
-      - "8080:8080"
-    volumes:
-      - app_logs:/app/logs
+      - backend
+    # Télécharger le modèle au premier démarrage
+    entrypoint: >
+      sh -c "ollama serve &
+             sleep 5 &&
+             ollama pull qwen2.5-coder:7b &&
+             wait"
+    deploy:
+      resources:
+        limits:
+          memory: 8g    # Ajuster selon la RAM disponible
+        reservations:
+          memory: 4g
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1"]
+      test: ["CMD-SHELL", "curl -sf http://localhost:11434/api/version || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 90s
-    networks:
-      - certifapp-network
+      start_period: 120s   # Laisse le temps au modèle de se télécharger
+    profiles: [local]
 
-  # ===========================================================================
-  # Angular frontend (dev server ng serve)
-  # ===========================================================================
-  web:
-    build:
-      context: certif-web
-      dockerfile: certif-web/Dockerfile
-      target: dev
-    container_name: certifapp-frontend
-    restart: unless-stopped
-    depends_on:
-      app:
-        condition: service_healthy
-    environment:
-      API_URL: http://app:8080
-      NODE_ENV: development
-    ports:
-      - "4200:4200"
-    volumes:
-      - ./certif-web/src:/app/src:ro          # hot reload
-      - node_modules_cache:/app/node_modules
-    networks:
-      - certifapp-network
-
-  # ===========================================================================
-  # Nginx — reverse proxy (unifie :80 → app:8080 + web:4200)
-  # ===========================================================================
-  nginx:
-    image: nginx:1.27-alpine
-    container_name: certifapp-nginx
-    restart: unless-stopped
-    depends_on:
-      - app
-      - web
-    ports:
-      - "80:80"
-    volumes:
-      - ./certif-api-rest/src/main/resources/nginx/nginx.local.conf:/etc/nginx/nginx.conf:ro
-    networks:
-      - certifapp-network
-
-  # ===========================================================================
-  # MailHog — serveur SMTP local pour tester les emails
-  # Interface web : http://localhost:8025
-  # ===========================================================================
+  # ── MailHog (SMTP de développement) ────────────────────────────────────────
   mailhog:
-    image: mailhog/mailhog:latest
+    image: mailhog/mailhog:v1.0.1
     container_name: certifapp-mailhog
     restart: unless-stopped
     ports:
       - "1025:1025"   # SMTP
-      - "8025:8025"   # Interface web
+      - "8025:8025"   # Web UI → http://localhost:8025
+    volumes:
+      - mailhog_data:/data
     networks:
-      - certifapp-network
+      - backend
+    profiles: [local]
 
-volumes:
-  postgres_data:
-    driver: local
-  redis_data:
-    driver: local
-  ollama_models:
-    driver: local
-  app_logs:
-    driver: local
-  node_modules_cache:
-    driver: local
+  # ── API REST Spring Boot ────────────────────────────────────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: certif-api-rest/Dockerfile
+      cache_from:
+        - ghcr.io/baloozeone972/certification-zen/certifapp-api:develop
+    image: certifapp-api:local
+    container_name: certifapp-api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # Spring
+      SPRING_PROFILES_ACTIVE:           ${SPRING_PROFILES_ACTIVE:-local}
+      # Database
+      SPRING_DATASOURCE_URL:            jdbc:postgresql://postgres:5432/certifapp
+      SPRING_DATASOURCE_USERNAME:       certifapp
+      SPRING_DATASOURCE_PASSWORD:       ${POSTGRES_PASSWORD:-certifapp_dev}
+      # JWT (min 64 chars en production)
+      APP_JWT_SECRET:                   ${APP_JWT_SECRET:-changeme_min_64_chars_XXXXXXXXXXXXXXXX}
+      APP_JWT_EXPIRATION_MS:            ${APP_JWT_EXPIRATION_MS:-3600000}
+      APP_JWT_REFRESH_EXPIRATION_MS:    ${APP_JWT_REFRESH_EXPIRATION_MS:-604800000}
+      # Ollama (profil local uniquement)
+      OLLAMA_BASE_URL:                  http://ollama:11434
+      LANGCHAIN4J_OLLAMA_BASE_URL:      http://ollama:11434
+      # Anthropic (profil prod)
+      ANTHROPIC_API_KEY:                ${ANTHROPIC_API_KEY:-}
+      # Mail
+      SPRING_MAIL_HOST:                 mailhog
+      SPRING_MAIL_PORT:                 1025
+      SPRING_MAIL_USERNAME:             noreply@certifapp.com
+      SPRING_MAIL_PASSWORD:             ""
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: "false"
+      # Stripe
+      STRIPE_SECRET_KEY:                ${STRIPE_SECRET_KEY:-sk_test_placeholder}
+      STRIPE_WEBHOOK_SECRET:            ${STRIPE_WEBHOOK_SECRET:-whsec_placeholder}
+      # Logging
+      LOGGING_LEVEL_COM_CERTIFAPP:      ${LOG_LEVEL:-INFO}
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK: WARN
+    ports:
+      - "8080:8080"
+    networks:
+      - backend
+      - frontend
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health | grep -q UP || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
+    profiles: [local, prod]
 
-networks:
-  certifapp-network:
-    driver: bridge
+  # ── Angular PWA (dev avec proxy vers API) ───────────────────────────────────
+  web:
+    build:
+      context: certif-web
+      dockerfile: Dockerfile
+    image: certifapp-web:local
+    container_name: certifapp-web
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "4200:80"
+    networks:
+      - frontend
+    profiles: [local]
+
+  # ── Adminer (UI PostgreSQL — dev uniquement) ────────────────────────────────
+  adminer:
+    image: adminer:4.8.1-standalone
+    container_name: certifapp-adminer
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    ports:
+      - "8888:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+      ADMINER_DESIGN:         dracula
+    networks:
+      - backend
+    profiles: [local]

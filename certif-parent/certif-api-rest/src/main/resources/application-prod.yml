@@ -1,4 +1,6 @@
 # certif-parent/certif-api-rest/src/main/resources/application-prod.yml
+# Profil production — variables injectées via GitHub Secrets / Supabase
+
 spring:
   datasource:
     url: ${SPRING_DATASOURCE_URL}
@@ -8,22 +10,71 @@ spring:
       maximum-pool-size: 20
       minimum-idle: 5
       connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      leak-detection-threshold: 60000
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    validate-on-migrate: true
+    out-of-order: false
+
   jpa:
     show-sql: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  mail:
+    host: ${SMTP_HOST}
+    port: ${SMTP_PORT:587}
+    username: ${SMTP_USERNAME}
+    password: ${SMTP_PASSWORD}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
+# Anthropic Claude (profil prod — pas Ollama)
+langchain4j:
+  anthropic:
+    api-key: ${ANTHROPIC_API_KEY}
+    light-model-name: claude-haiku-4-5-20251001
+    heavy-model-name: claude-sonnet-4-6
+    timeout: 60s
+    log-requests: false
+    log-responses: false
 
 app:
   jwt:
     secret: ${APP_JWT_SECRET}
+    expiration-ms: ${APP_JWT_EXPIRATION_MS:3600000}
+    refresh-expiration-ms: ${APP_JWT_REFRESH_EXPIRATION_MS:604800000}
+  cors:
+    allowed-origins:
+      - https://certifapp.com
+      - https://www.certifapp.com
+      - https://app.certifapp.com
+  freemium:
+    daily-exam-limit: 2
+    question-limit: 20
+  stripe:
+    secret-key: ${STRIPE_SECRET_KEY}
+    webhook-secret: ${STRIPE_WEBHOOK_SECRET}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized
 
 logging:
   level:
     com.certifapp: INFO
+    org.springframework.security: WARN
     root: WARN
-  file:
-    path: /app/logs
-
-server:
-  port: 8080
-  compression:
-    enabled: true
-    mime-types: application/json,text/plain

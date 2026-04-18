@@ -1,0 +1,29 @@
+# certif-parent/.dockerignore
+# Fichiers exclus du contexte Docker build
+
+# Cibles Maven (présence volontaire : le Dockerfile les rebuilde)
+**/target/
+**/node_modules/
+**/.git/
+**/.github/
+
+# IDE
+**/.idea/
+**/.vscode/
+**/*.iml
+
+# Environnement local
+.env
+**/.DS_Store
+**/Thumbs.db
+
+# Tests et rapports
+**/surefire-reports/
+**/failsafe-reports/
+**/coverage/
+
+# Modules non buildés dans l'image API
+certif-web/
+certif-android/
+certif-ios/
+pool_question/
