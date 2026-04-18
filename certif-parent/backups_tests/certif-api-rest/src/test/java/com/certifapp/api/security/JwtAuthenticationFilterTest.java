@@ -14,7 +14,6 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
 import java.io.IOException;
-import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -108,3 +107,4 @@ public class JwtAuthenticationFilterTest {
         verify(chain, times(1)).doFilter(request, response);
     }
 }
+

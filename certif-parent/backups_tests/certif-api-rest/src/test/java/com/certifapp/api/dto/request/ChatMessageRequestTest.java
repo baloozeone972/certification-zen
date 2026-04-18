@@ -8,8 +8,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @ExtendWith(MockitoExtension.class)
 public class ChatMessageRequestTest {
@@ -20,13 +18,10 @@ public class ChatMessageRequestTest {
     @Mock
     private UUID sessionIdMock;
 
-    private MockMvc mockMvc;
-
     @BeforeEach
     public void setUp() {
         // Initialize the session ID mock
         when(sessionIdMock).thenReturn(UUID.randomUUID());
-        mockMvc = MockMvcBuilders.standaloneSetup(chatMessageRequest).build();
     }
 
     @DisplayName("Should create a valid ChatMessageRequest with message and optional sessionId")
@@ -75,3 +70,4 @@ public class ChatMessageRequestTest {
                 .withMessageContaining("size must be between");
     }
 }
+

@@ -21,7 +21,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -155,3 +154,4 @@ public class ExamControllerTest {
         verify(historyUseCase).execute(eq(userId), any(GetSessionHistoryUseCase.HistoryFilter.class), eq(page), eq(size));
     }
 }
+

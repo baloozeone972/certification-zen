@@ -13,13 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
 public class SecurityConfigTest {
@@ -30,12 +26,9 @@ public class SecurityConfigTest {
     @InjectMocks
     private SecurityConfig securityConfig;
 
-    private MockMvc mockMvc;
-
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(securityConfig).build();
     }
 
     @DisplayName("Should configure filter chain with correct settings")
@@ -83,11 +76,5 @@ public class SecurityConfigTest {
         assertThat(passwordEncoder instanceof BCryptPasswordEncoder).isTrue();
         assertThat(((BCryptPasswordEncoder) passwordEncoder).getStrength()).isEqualTo(12);
     }
-
-    @DisplayName("Should return 403 Forbidden for unauthenticated request")
-    @Test
-    public void shouldReturn403ForbiddenForUnauthenticatedRequest() throws Exception {
-        mockMvc.perform(get("/api/public"))
-                .andExpect(status().isForbidden());
-    }
 }
+

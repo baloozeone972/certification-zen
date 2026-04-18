@@ -6,13 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
 public class StartExamRequestTest {
@@ -20,11 +15,9 @@ public class StartExamRequestTest {
     @InjectMocks
     private StartExamRequest startExamRequest;
 
-    private MockMvc mockMvc;
-
     @BeforeEach
     public void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(startExamRequest).build();
+        // Initialize any necessary mocks or setup here if needed
     }
 
     @DisplayName("Valid request with default values")
@@ -102,3 +95,4 @@ public class StartExamRequestTest {
     }
 
 }
+

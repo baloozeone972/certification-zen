@@ -30,8 +30,8 @@ public class WebhookControllerTest {
     }
 
     @Test
-    @DisplayName("stripeWebhook_normalCase_webhookProcessedAndOkResponse")
-    public void stripeWebhook_normalCase_webhookProcessedAndOkResponse() {
+    @DisplayName("stripeWebhook_nomalCase_webhookProcessedAndOkResponse")
+    public void stripeWebhook_nomalCase_webhookProcessedAndOkResponse() {
         // Arrange
         String payload = "{\"event\": \"payment_intent.succeeded\"}";
         String signature = "v1=signature";
@@ -81,3 +81,4 @@ public class WebhookControllerTest {
         assertThatNullPointerException().isThrownBy(() -> controller.stripeWebhook(payload, signature));
     }
 }
+

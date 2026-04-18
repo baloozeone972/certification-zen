@@ -6,13 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
 public class LoginRequestTest {
@@ -20,15 +15,10 @@ public class LoginRequestTest {
     @InjectMocks
     private LoginRequest loginRequest;
 
-    private MockMvc mockMvc;
-
     @BeforeEach
     public void setUp() {
         // Initialize the LoginRequest object with default values
         loginRequest = new LoginRequest("user@example.com", "password123");
-
-        // Setup MockMvc
-        mockMvc = MockMvcBuilders.standaloneSetup(loginRequest).build();
     }
 
     @Test

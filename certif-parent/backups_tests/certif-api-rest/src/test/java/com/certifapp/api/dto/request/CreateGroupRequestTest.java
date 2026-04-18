@@ -8,8 +8,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @ExtendWith(MockitoExtension.class)
 public class CreateGroupRequestTest {
@@ -22,11 +20,14 @@ public class CreateGroupRequestTest {
         // No dependencies to mock for this record class
     }
 
-    private MockMvc mockMvc;
-
     @BeforeEach
     public void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(createGroupRequest).build();
+        // Setup code if needed
+    }
+
+    @AfterEach
+    public void tearDown() {
+        // Teardown code if needed
     }
 
     @Test
@@ -67,3 +68,4 @@ public class CreateGroupRequestTest {
         Assertions.assertThat(exception).isInstanceOf(ConstraintViolationException.class);
     }
 }
+

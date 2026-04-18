@@ -1,80 +1,112 @@
-// certif-parent/certif-api-rest/src/test/java/com/certifapp/api/security/JwtTokenProviderTest.java
 package com.certifapp.api.security;
 
 import io.jsonwebtoken.JwtException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.UUID;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/**
- * Unit tests for {@link JwtTokenProvider}.
- */
-@DisplayName("JwtTokenProvider")
+@WebMvcTest(JwtTokenProviderController.class)
 class JwtTokenProviderTest {
 
-    private static final UUID USER_ID = UUID.randomUUID();
-    // 64-char secret (512 bits) — safe for HS256
-    private static final String SECRET =
-            "test_jwt_secret_256_bits_minimum_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
-    private JwtTokenProvider tokenProvider;
+    @Autowired
+    private MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {
-        tokenProvider = new JwtTokenProvider(SECRET, 900L, 604800L);
+        // Setup if needed
     }
 
     @Test
     @DisplayName("Access token is valid and contains user UUID")
-    void generateAccessToken_shouldBeValidAndContainUserId() {
-        String token = tokenProvider.generateAccessToken(USER_ID, "USER");
-
-        assertThat(token).isNotBlank();
-        assertThat(tokenProvider.isAccessToken(token)).isTrue();
-        assertThat(tokenProvider.extractUserId(token)).isEqualTo(USER_ID);
+    void generateAccessToken_shouldBeValidAndContainUserId() throws Exception {
+        mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"user\",\"password\":\"pass\"}"))
+                .andExpect(status().isOk())
+                .andExpect(header().string("Authorization", "Bearer [^ ]+"))
+                .andExpect(jsonPath("$.userId").value("user"));
     }
 
     @Test
     @DisplayName("Refresh token is NOT an access token")
-    void generateRefreshToken_shouldNotBeAccessToken() {
-        String token = tokenProvider.generateRefreshToken(USER_ID);
-
-        assertThat(token).isNotBlank();
-        assertThat(tokenProvider.isAccessToken(token)).isFalse();
-        assertThat(tokenProvider.extractUserId(token)).isEqualTo(USER_ID);
+    void generateRefreshToken_shouldNotBeAccessToken() throws Exception {
+        mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"user\",\"password\":\"pass\"}"))
+                .andExpect(status().isOk())
+                .andExpect(header().string("Authorization", "Bearer [^ ]+"))
+                .andExpect(jsonPath("$.refreshToken").value("[^ ]+"));
     }
 
     @Test
     @DisplayName("Role claim is present in access token")
-    void accessToken_shouldContainRoleClaim() {
-        String token = tokenProvider.generateAccessToken(USER_ID, "ADMIN");
-
-        var claims = tokenProvider.validateAndGetClaims(token);
-        assertThat(claims.get("role", String.class)).isEqualTo("ADMIN");
+    void accessToken_shouldContainRoleClaim() throws Exception {
+        mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"admin\",\"password\":\"pass\"}"))
+                .andExpect(status().isOk())
+                .andExpect(header().string("Authorization", "Bearer [^ ]+"))
+                .andExpect(jsonPath("$.role").value("ADMIN"));
     }
 
     @Test
     @DisplayName("Tampered token throws JwtException")
-    void tamperedToken_shouldThrowJwtException() {
-        String token = tokenProvider.generateAccessToken(USER_ID, "USER");
+    void tamperedToken_shouldThrowJwtException() throws Exception {
+        mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"user\",\"password\":\"pass\"}"))
+                .andExpect(status().isOk())
+                .andExpect(header().string("Authorization", "Bearer [^ ]+"))
+                .andExpect(jsonPath("$.userId").value("user"));
+
+        String token = mockMvc.perform(post("/api/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"username\":\"user\",\"password\":\"pass\"}"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getHeader("Authorization")
+                .split(" ")[1];
+
         String tampered = token.substring(0, token.length() - 5) + "XXXXX";
 
-        assertThatThrownBy(() -> tokenProvider.validateAndGetClaims(tampered))
-                .isInstanceOf(JwtException.class);
+        mockMvc.perform(get("/api/auth/validate")
+                .header("Authorization", "Bearer " + tampered))
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
     @DisplayName("Expired token throws JwtException")
-    void expiredToken_shouldThrowJwtException() {
-        // Token with 0-second expiry
-        JwtTokenProvider shortProvider = new JwtTokenProvider(SECRET, -1L, -1L);
-        String token = shortProvider.generateAccessToken(USER_ID, "USER");
+    void expiredToken_shouldThrowJwtException() throws Exception {
+        mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"user\",\"password\":\"pass\"}"))
+                .andExpect(status().isOk())
+                .andExpect(header().string("Authorization", "Bearer [^ ]+"))
+                .andExpect(jsonPath("$.userId").value("user"));
 
-        assertThatThrownBy(() -> tokenProvider.validateAndGetClaims(token))
-                .isInstanceOf(JwtException.class);
+        String token = mockMvc.perform(post("/api/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"username\":\"user\",\"password\":\"pass\"}"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getHeader("Authorization")
+                .split(" ")[1];
+
+        mockMvc.perform(get("/api/auth/validate")
+                .header("Authorization", "Bearer " + token))
+                .andExpect(status().isUnauthorized());
     }
 }

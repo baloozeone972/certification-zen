@@ -7,8 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @ExtendWith(MockitoExtension.class)
 public class ReviewFlashcardRequestTest {
@@ -16,11 +14,9 @@ public class ReviewFlashcardRequestTest {
     @InjectMocks
     private ReviewFlashcardRequest underTest;
 
-    private MockMvc mockMvc;
-
     @BeforeEach
     public void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(underTest).build();
+        // Initialization if needed
     }
 
     @DisplayName("should create a valid ReviewFlashcardRequest with rating 3")
@@ -57,3 +53,4 @@ public class ReviewFlashcardRequestTest {
                 .hasMessage("rating must be between 0 and 5");
     }
 }
+
