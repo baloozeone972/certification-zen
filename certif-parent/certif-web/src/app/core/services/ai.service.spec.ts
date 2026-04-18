@@ -23,7 +23,7 @@ describe('AiService', () => {
     });
 
     describe('chat', () => {
-        it('should return the expected data from a chat request', () => {
+        it('should return the expected data from a chat request', async () => {
             const mockData: { message: string; sources: string[] } = {
                 message: 'response',
                 sources: ['source1', 'source2']
@@ -39,7 +39,7 @@ describe('AiService', () => {
             req.flush(mockData);
         });
 
-        it('should handle the case where no sessionId is provided', () => {
+        it('should handle the case where no sessionId is provided', async () => {
             const mockData: { message: string; sources: string[] } = {
                 message: 'response',
                 sources: ['source1', 'source2']
@@ -54,7 +54,7 @@ describe('AiService', () => {
             req.flush(mockData);
         });
 
-        it('should handle errors from the chat request', () => {
+        it('should handle errors from the chat request', async () => {
             const errorResponse = {error: 'Something went wrong'};
 
             service.chat('test message').subscribe(
@@ -69,7 +69,7 @@ describe('AiService', () => {
     });
 
     describe('explainQuestion', () => {
-        it('should return the expected data from an explain request', () => {
+        it('should return the expected data from an explain request', async () => {
             const mockData: { explanation: string; codeExample?: string; officialDocUrl?: string } = {
                 explanation: 'explanation',
                 codeExample: 'code example',
@@ -84,7 +84,7 @@ describe('AiService', () => {
             req.flush(mockData);
         });
 
-        it('should handle errors from the explain request', () => {
+        it('should handle errors from the explain request', async () => {
             const errorResponse = {error: 'Something went wrong'};
 
             service.explainQuestion('question123').subscribe(
@@ -98,4 +98,3 @@ describe('AiService', () => {
         });
     });
 });
-

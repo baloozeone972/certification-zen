@@ -1,11 +1,19 @@
 import {Routes} from '@angular/router';
-import {authGuard} from './core/auth/auth.guard';
-import {adminGuard} from './core/auth/admin.guard';
+import {authGuard, adminGuard} from './core/auth/guards';
+import {TestBed} from '@angular/core/testing';
+import {RouterTestingModule} from '@angular/router/testing';
 
 describe('app.routes', () => {
     let routes: Routes;
 
     beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [RouterTestingModule],
+            providers: [
+                {provide: authGuard, useValue: {}},
+                {provide: adminGuard, useValue: {}}
+            ]
+        });
         routes = [
             {
                 path: '',
@@ -172,4 +180,3 @@ describe('app.routes', () => {
         expect(wildcardRoute.redirectTo).toBe('');
     });
 });
-

@@ -1,49 +1,92 @@
-// certif-parent/certif-web/src/app/core/auth/auth.interceptor.ts
-import {inject} from '@angular/core';
-import {HttpErrorResponse, HttpHandlerFn, HttpInterceptorFn, HttpRequest} from '@angular/common/http';
-import {catchError, switchMap, throwError} from 'rxjs';
+import {TestBed} from '@angular/core/testing';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import {AuthService} from './auth.service';
+import {authInterceptor} from './auth.interceptor';
 
-/**
- * Functional HTTP interceptor (Angular 15+ syntax).
- *
- * 1. Attaches Bearer access token to all outbound requests (except /auth/*).
- * 2. On 401, attempts a token refresh and retries the request once.
- * 3. If refresh fails, logs out the user.
- */
-export const authInterceptor: HttpInterceptorFn = (
-    req: HttpRequest<unknown>,
-    next: HttpHandlerFn
-) => {
-    const authService = inject(AuthService);
+describe('AuthInterceptor', () => {
+    let httpMock: HttpTestingController;
+    let authService: AuthService;
 
-    // Skip auth endpoints
-    if (req.url.includes('/auth/')) return next(req);
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [HttpClientTestingModule],
+            providers: [
+                {provide: AuthService, useValue: jasmine.createSpyObj('AuthService', ['getAccessToken', 'refreshToken', 'logout'])}
+            ]
+        });
 
-    const token = authService.getAccessToken();
-    const authReq = token
-        ? req.clone({setHeaders: {Authorization: `Bearer ${token}`}})
-        : req;
+        httpMock = TestBed.inject(HttpTestingController);
+        authService = TestBed.inject(AuthService);
+    });
 
-    return next(authReq).pipe(
-        catchError((error: HttpErrorResponse) => {
-            if (error.status === 401 && !req.url.includes('/auth/refresh')) {
-                // Attempt refresh
-                return authService.refreshToken().pipe(
-                    switchMap(() => {
-                        const newToken = authService.getAccessToken();
-                        const retryReq = req.clone({
-                            setHeaders: {Authorization: `Bearer ${newToken}`}
-                        });
-                        return next(retryReq);
-                    }),
-                    catchError(refreshError => {
-                        authService.logout();
-                        return throwError(() => refreshError);
-                    })
-                );
+    afterEach(() => {
+        httpMock.verify();
+    });
+
+    it('should attach Bearer token to requests', async () => {
+        const token = 'testToken';
+        authService.getAccessToken.and.returnValue(token);
+
+        authInterceptor(
+            new HttpRequest('GET', 'https://example.com/api/data'),
+            (req) => {
+                expect(req.headers.get('Authorization')).toBe(`Bearer ${token}`);
+                return of(null);
             }
-            return throwError(() => error);
-        })
-    );
-};
+        );
+
+        httpMock.expectOne('https://example.com/api/data').flush({});
+    });
+
+    it('should refresh token and retry request on 401', async () => {
+        const token = 'testToken';
+        authService.getAccessToken.and.returnValue(token);
+        authService.refreshToken.and.returnValue(of('newToken'));
+
+        authInterceptor(
+            new HttpRequest('GET', 'https://example.com/api/data'),
+            (req) => {
+                return of(null);
+            }
+        ).subscribe();
+
+        httpMock.expectOne('https://example.com/api/data').error(new HttpErrorResponse({status: 401}));
+        httpMock.expectOne('https://example.com/auth/refresh').flush({access_token: 'newToken'});
+
+        httpMock.expectOne('https://example.com/api/data').flush({});
+    });
+
+    it('should logout and throw error on refresh failure', async () => {
+        const token = 'testToken';
+        authService.getAccessToken.and.returnValue(token);
+        authService.refreshToken.and.returnValue(throwError(() => new HttpErrorResponse({status: 401})));
+
+        authInterceptor(
+            new HttpRequest('GET', 'https://example.com/api/data'),
+            (req) => {
+                return of(null);
+            }
+        ).subscribe(
+            () => fail('Should not reach here'),
+            (error) => expect(error.status).toBe(401)
+        );
+
+        httpMock.expectOne('https://example.com/api/data').error(new HttpErrorResponse({status: 401}));
+        httpMock.expectOne('https://example.com/auth/refresh').flush(null, {status: 401, statusText: 'Unauthorized'});
+
+        authService.logout.and.callFake(() => {
+            expect(authService.logout).toHaveBeenCalled();
+        });
+    });
+
+    it('should skip auth endpoints', async () => {
+        authInterceptor(
+            new HttpRequest('GET', 'https://example.com/auth/login'),
+            (req) => {
+                return of(null);
+            }
+        );
+
+        httpMock.expectNone('https://example.com/auth/login');
+    });
+});

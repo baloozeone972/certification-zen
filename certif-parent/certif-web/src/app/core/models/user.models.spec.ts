@@ -55,7 +55,7 @@ describe('User models', () => {
             const user: Partial<User> = {
                 id: '1',
                 email: 'test@example.com',
-                role: 'INVALID_ROLE',
+                role: 'INVALID_ROLE' as UserRole,
                 subscriptionTier: SubscriptionTier.FREE,
                 locale: 'en-US',
                 timezone: 'UTC',
@@ -227,4 +227,3 @@ describe('User models', () => {
         });
     });
 });
-

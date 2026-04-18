@@ -47,15 +47,15 @@ describe('QuestionCardComponent', () => {
 
     it('should render question details correctly', () => {
         const compiled = fixture.nativeElement as HTMLElement;
-        expect(compiled.querySelector('.q-card__theme').textContent).toContain(mockQuestion.themeCode);
-        expect(compiled.querySelector('.q-card__statement').innerHTML).toContain(mockQuestion.statement);
-        expect(compiled.querySelectorAll('.q-option').length).toBe(mockQuestion.options.length);
+        expect(compiled.querySelector('.q-card__theme').textContent).toContain('Geography');
+        expect(compiled.querySelector('.q-card__statement').innerHTML).toContain('What is the capital of France?');
+        expect(compiled.querySelectorAll('.q-option').length).toBe(2);
     });
 
     it('should emit selected option when clicked', () => {
         const selectOptionSpy = spyOn(component.answered, 'emit');
         fixture.debugElement.nativeElement.querySelector('.q-option').click();
-        expect(selectOptionSpy).toHaveBeenCalledWith(mockQuestion.options[0].id);
+        expect(selectOptionSpy).toHaveBeenCalledWith('A');
     });
 
     it('should disable buttons when locked', () => {
@@ -66,14 +66,14 @@ describe('QuestionCardComponent', () => {
     });
 
     it('should correctly mark selected option as correct and wrong', () => {
-        component.correctOptionId = mockQuestion.options[0].id;
+        component.correctOptionId = 'A';
         fixture.detectChanges();
 
         const firstOption = fixture.debugElement.nativeElement.querySelector('.q-option:nth-child(1)');
         expect(firstOption.classList.contains('q-option--correct')).toBeTrue();
         expect(firstOption.classList.contains('q-option--wrong')).toBeFalse();
 
-        component.selectedOptionId.set(mockQuestion.options[1].id);
+        component.selectedOptionId.set('B');
         fixture.detectChanges();
 
         expect(firstOption.classList.contains('q-option--correct')).toBeFalse();
@@ -81,7 +81,7 @@ describe('QuestionCardComponent', () => {
     });
 
     it('should reveal correct answer when in reveal mode', () => {
-        component.correctOptionId = mockQuestion.options[0].id;
+        component.correctOptionId = 'A';
         component.revealMode = true;
         fixture.detectChanges();
 
@@ -96,4 +96,3 @@ describe('QuestionCardComponent', () => {
         expect(selectOptionSpy).not.toHaveBeenCalled();
     });
 });
-

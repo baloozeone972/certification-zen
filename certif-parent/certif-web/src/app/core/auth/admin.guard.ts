@@ -1,15 +1,44 @@
-// certif-parent/certif-web/src/app/core/auth/admin.guard.ts
-import {inject} from '@angular/core';
-import {CanActivateFn, Router} from '@angular/router';
+import {TestBed} from '@angular/core/testing';
+import {RouterTestingModule} from '@angular/router/testing';
 import {AuthService} from './auth.service';
+import {adminGuard} from './admin.guard';
 
-/**
- * Route guard — only allows ADMIN users to access admin routes.
- */
-export const adminGuard: CanActivateFn = () => {
-    const auth = inject(AuthService);
-    const router = inject(Router);
+describe('adminGuard', () => {
+    let authService: AuthService;
+    let router: Router;
 
-    if (auth.isAdmin()) return true;
-    return router.createUrlTree(['/']);
-};
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [RouterTestingModule],
+            providers: [
+                {provide: AuthService, useValue: {isAdmin: () => true}}
+            ]
+        });
+
+        authService = TestBed.inject(AuthService);
+        router = TestBed.inject(Router);
+    });
+
+    it('should return true if user is admin', async () => {
+        // Arrange
+        const guard = TestBed.inject(adminGuard);
+
+        // Act
+        const result = await guard();
+
+        // Assert
+        expect(result).toBe(true);
+    });
+
+    it('should redirect to root if user is not admin', async () => {
+        // Arrange
+        const guard = TestBed.inject(adminGuard);
+        lenient().when(authService.isAdmin()).thenReturn(false);
+
+        // Act
+        const result = await guard();
+
+        // Assert
+        expect(result).toEqual(['/']);
+    });
+});

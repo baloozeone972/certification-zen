@@ -1,7 +1,8 @@
-import {fakeAsync, inject, TestBed, tick} from '@angular/core/testing';
+import {fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import {LearningService} from './learning.service';
 import {AdaptivePlan, Course, Flashcard, SM2Progress} from '../models/learning.models';
+import {environment} from '../../environments/environment';
 
 describe('LearningService', () => {
     let service: LearningService;
@@ -185,4 +186,3 @@ describe('LearningService', () => {
         }));
     });
 });
-

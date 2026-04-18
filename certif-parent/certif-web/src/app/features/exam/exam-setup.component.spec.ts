@@ -2,6 +2,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {RouterTestingModule} from '@angular/router/testing';
+import {ActivatedRoute, Router} from '@angular/router';
 import {CertificationService} from '../../core/services/certification.service';
 import {ExamService} from '../../core/services/exam.service';
 import {Certification} from '../../core/models/certification.models';
@@ -12,6 +13,7 @@ describe('ExamSetupComponent', () => {
     let fixture: ComponentFixture<ExamSetupComponent>;
     let certificationService: CertificationService;
     let examService: ExamService;
+    let router: Router;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
@@ -25,6 +27,7 @@ describe('ExamSetupComponent', () => {
         component = fixture.componentInstance;
         certificationService = TestBed.inject(CertificationService);
         examService = TestBed.inject(ExamService);
+        router = TestBed.inject(Router);
 
         spyOn(certificationService, 'getById').and.returnValue(of(null));
         spyOn(examService, 'start').and.returnValue(of({id: 'session-id'}));
@@ -53,7 +56,7 @@ describe('ExamSetupComponent', () => {
         expect(component.starting()).toBeFalse();
     });
 
-    it('should start exam and redirect on success', () => {
+    it('should start exam and redirect on success', async () => {
         const cert: Certification = {
             id: 'cert-id',
             name: 'Mock Cert',
@@ -66,12 +69,12 @@ describe('ExamSetupComponent', () => {
         });
         certificationService.getById.and.returnValue(of(cert));
         component.ngOnInit();
-        component.startExam();
+        await component.startExam();
         expect(examService.start).toHaveBeenCalledWith(cert.id, 'EXAM');
         expect(component.starting()).toBeTrue();
     });
 
-    it('should handle error during exam start', () => {
+    it('should handle error during exam start', async () => {
         const certId = 'mock-cert-id';
         spyOnProperty(TestBed.inject(ActivatedRoute), 'snapshot').and.returnValue({
             queryParams: {certId}
@@ -79,9 +82,8 @@ describe('ExamSetupComponent', () => {
         certificationService.getById.and.returnValue(of({id: certId, name: 'Mock Cert'}));
         examService.start.and.throwError('Error starting exam');
         component.ngOnInit();
-        component.startExam();
+        await component.startExam();
         expect(examService.start).toHaveBeenCalledWith(certId, 'EXAM');
         expect(component.starting()).toBeFalse();
     });
 });
-

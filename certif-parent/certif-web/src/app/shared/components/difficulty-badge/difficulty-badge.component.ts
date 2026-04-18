@@ -1,26 +1,59 @@
-// certif-parent/certif-web/src/app/shared/components/difficulty-badge/difficulty-badge.component.ts
-import {ChangeDetectionStrategy, Component, Input} from "@angular/core";
-import {CommonModule} from "@angular/common";
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {By} from '@angular/platform-browser';
+import {DifficultyBadgeComponent} from './difficulty-badge.component';
 
-/** Colour-coded difficulty badge: easy (green), medium (orange), hard (red). */
-@Component({
-    selector: "app-difficulty-badge",
-    standalone: true,
-    imports: [CommonModule],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    template: `
-    <span class="badge badge-diff" [ngClass]="'badge-diff--' + difficulty">
-      {{ labels[difficulty] }}
-    </span>
-  `,
-    styles: [`
-    .badge-diff { font-size: .7rem; padding: .2rem .5rem; border-radius: 4px; }
-    .badge-diff--easy   { background: #d4edda; color: #155724; }
-    .badge-diff--medium { background: #fff3cd; color: #856404; }
-    .badge-diff--hard   { background: #f8d7da; color: #721c24; }
-  `]
-})
-export class DifficultyBadgeComponent {
-    @Input({required: true}) difficulty: "easy" | "medium" | "hard" = "medium";
-    readonly labels = {easy: "Facile", medium: "Moyen", hard: "Difficile"};
-}
+describe('DifficultyBadgeComponent', () => {
+    let component: DifficultyBadgeComponent;
+    let fixture: ComponentFixture<DifficultyBadgeComponent>;
+
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            declarations: [DifficultyBadgeComponent],
+            imports: []
+        }).compileComponents();
+    });
+
+    beforeEach(() => {
+        fixture = TestBed.createComponent(DifficultyBadgeComponent);
+        component = fixture.componentInstance;
+    });
+
+    it('should display "Facile" for difficulty "easy"', async () => {
+        component.difficulty = 'easy';
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        const badgeElement = fixture.debugElement.query(By.css('.badge-diff--easy'));
+        expect(badgeElement).toBeTruthy();
+        expect(badgeElement.nativeElement.textContent.trim()).toBe('Facile');
+    });
+
+    it('should display "Moyen" for difficulty "medium"', async () => {
+        component.difficulty = 'medium';
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        const badgeElement = fixture.debugElement.query(By.css('.badge-diff--medium'));
+        expect(badgeElement).toBeTruthy();
+        expect(badgeElement.nativeElement.textContent.trim()).toBe('Moyen');
+    });
+
+    it('should display "Difficile" for difficulty "hard"', async () => {
+        component.difficulty = 'hard';
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        const badgeElement = fixture.debugElement.query(By.css('.badge-diff--hard'));
+        expect(badgeElement).toBeTruthy();
+        expect(badgeElement.nativeElement.textContent.trim()).toBe('Difficile');
+    });
+
+    it('should default to "Moyen" if no difficulty is provided', async () => {
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        const badgeElement = fixture.debugElement.query(By.css('.badge-diff--medium'));
+        expect(badgeElement).toBeTruthy();
+        expect(badgeElement.nativeElement.textContent.trim()).toBe('Moyen');
+    });
+});

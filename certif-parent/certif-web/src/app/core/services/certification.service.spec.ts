@@ -2,6 +2,7 @@ import {TestBed} from '@angular/core/testing';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import {CertificationService} from './certification.service';
 import {Certification} from '../models';
+import {environment} from '../../environments/environment';
 
 describe('CertificationService', () => {
     let service: CertificationService;
@@ -25,11 +26,11 @@ describe('CertificationService', () => {
     });
 
     describe('loadAll', () => {
-        it('should load all certifications and set loading to false on success', () => {
+        it('should load all certifications and set loading to false on success', async () => {
             const mockData: Certification[] = [{id: '1', name: 'Cert1'}];
             service.loading.set(true);
 
-            service.loadAll().subscribe();
+            await service.loadAll().toPromise();
 
             httpMock.expectOne(`${environment.apiUrl}/certifications`).flush({
                 data: mockData,
@@ -40,13 +41,10 @@ describe('CertificationService', () => {
             expect(service.loading()).toBeFalse();
         });
 
-        it('should handle error and set loading to false on failure', () => {
+        it('should handle error and set loading to false on failure', async () => {
             service.loading.set(true);
 
-            service.loadAll().subscribe(
-                () => fail('Expected an error, but got success'),
-                error => expect(error).toBeTruthy()
-            );
+            await expectAsync(service.loadAll()).toBeRejectedWith('Test error');
 
             httpMock.expectOne(`${environment.apiUrl}/certifications`).error(new ErrorEvent('Test error'));
 
@@ -55,25 +53,25 @@ describe('CertificationService', () => {
     });
 
     describe('getById', () => {
-        it('should get certification by id and return the data', () => {
+        it('should get certification by id and return the data', async () => {
             const mockData: Certification = {id: '1', name: 'Cert1'};
 
-            service.getById('1').subscribe(data => expect(data).toEqual(mockData));
+            await service.getById('1').toPromise();
 
             httpMock.expectOne(`${environment.apiUrl}/certifications/1`).flush({
                 data: mockData,
                 message: 'success'
             });
+
+            expect(service.getById('1')).toBeObservableOf(mockData);
         });
 
-        it('should handle error and return null on failure', () => {
-            service.getById('1').subscribe(
-                data => expect(data).toBeNull(),
-                error => fail('Expected an error, but got success')
-            );
+        it('should handle error and return null on failure', async () => {
+            await expectAsync(service.getById('1')).toBeRejectedWith('Test error');
 
             httpMock.expectOne(`${environment.apiUrl}/certifications/1`).error(new ErrorEvent('Test error'));
+
+            expect(service.getById('1')).toBeObservableOf(null);
         });
     });
 });
-

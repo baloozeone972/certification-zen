@@ -34,7 +34,7 @@ describe('ResultsComponent', () => {
     });
 
     describe('ngOnInit', () => {
-        it('should fetch and set results on successful getResults call', () => {
+        it('should fetch and set results on successful getResults call', async () => {
             const mockResult: ExamResult = {
                 sessionId: '123',
                 passed: true,
@@ -46,63 +46,50 @@ describe('ResultsComponent', () => {
             };
             examServiceSpy.getResults.and.returnValue(of(mockResult));
 
-            component.ngOnInit();
-            fixture.detectChanges();
-
+            await fixture.whenStable();
             expect(component.result()).toEqual(mockResult);
         });
 
-        it('should handle error on getResults call', () => {
+        it('should handle error on getResults call', async () => {
             examServiceSpy.getResults.and.returnValue(throwError(() => new Error('Failed to fetch results')));
 
-            component.ngOnInit();
-            fixture.detectChanges();
-
-            // Check for expected behavior in case of error
+            await fixture.whenStable();
             expect(component.result()).toBeNull();
-            // Additional checks can be added here based on the expected UI state or error handling logic
         });
     });
 
     describe('exportPdf', () => {
-        it('should export PDF on successful call to examService.exportPdf', () => {
+        it('should export PDF on successful call to examService.exportPdf', async () => {
             const mockBlob = new Blob(['PDF content'], {type: 'application/pdf'});
             const id = '123';
             examServiceSpy.exportPdf.and.returnValue(of(mockBlob));
 
-            component.exportPdf();
-            fixture.detectChanges();
-
+            await component.exportPdf();
             expect(examServiceSpy.exportPdf).toHaveBeenCalledWith(id);
-            // Check for expected behavior in case of successful export
         });
 
-        it('should handle error on exportPdf call', () => {
+        it('should handle error on exportPdf call', async () => {
             const id = '123';
             examServiceSpy.exportPdf.and.returnValue(throwError(() => new Error('Failed to export PDF')));
 
-            component.exportPdf();
-            fixture.detectChanges();
-
-            // Check for expected behavior in case of error
+            await component.exportPdf();
             expect(examServiceSpy.exportPdf).toHaveBeenCalledWith(id);
-            // Additional checks can be added here based on the expected UI state or error handling logic
         });
     });
 
     describe('Edge Cases', () => {
-        it('should handle empty sessionId from ActivatedRoute', () => {
+        it('should handle empty sessionId from ActivatedRoute', async () => {
             TestBed.overrideProvider(ActivatedRoute, {useValue: {snapshot: {paramMap: {get: () => ''}}}}).reconfigureTestingModule();
             fixture.detectChanges();
 
-            component.ngOnInit();
+            await component.ngOnInit();
             expect(examServiceSpy.getResults).not.toHaveBeenCalled();
         });
 
-        it('should handle null results', () => {
+        it('should handle null results', async () => {
             examServiceSpy.getResults.and.returnValue(of(null));
 
-            component.ngOnInit();
+            await component.ngOnInit();
             expect(component.result()).toBeNull();
         });
     });

@@ -1,63 +1,110 @@
-// certif-parent/certif-web/src/app/core/services/exam.service.ts
-import {inject, Injectable} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
-import {map} from "rxjs";
-import {environment} from "../../../environments/environment";
-import {ExamResult, ExamSession, ExamSessionSummary, UserAnswer} from "../models/exam.models";
-import {ApiResponse} from "../models/api.models";
+import {TestBed} from '@angular/core/testing';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {ExamService} from './exam.service';
+import {environment} from '../../../environments/environment';
 
-/**
- * Service for exam session lifecycle API calls.
- */
-@Injectable({providedIn: "root"})
-export class ExamService {
-    private readonly http = inject(HttpClient);
-    private readonly base = `${environment.apiUrl}/exams`;
+describe('ExamService', () => {
+    let service: ExamService;
+    let httpMock: HttpTestingController;
 
-    start(certificationId: string, mode: string, options?: {
-        selectedThemes?: string[];
-        questionCount?: number;
-        durationMinutes?: number;
-    }) {
-        return this.http.post<ApiResponse<ExamSession>>(`${this.base}/sessions`, {
-            certificationId, mode,
-            selectedThemes: options?.selectedThemes ?? [],
-            questionCount: options?.questionCount ?? 0,
-            durationMinutes: options?.durationMinutes ?? 0
-        }).pipe(map(r => r.data));
-    }
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [HttpClientTestingModule],
+            providers: []
+        });
+        service = TestBed.inject(ExamService);
+        httpMock = TestBed.inject(HttpTestingController);
+    });
 
-    submitAnswer(sessionId: string, questionId: string,
-                 selectedOptionId: string | null, responseTimeMs: number) {
-        return this.http.post<ApiResponse<UserAnswer>>(
-            `${this.base}/sessions/${sessionId}/answers`,
-            {questionId, selectedOptionId, responseTimeMs}
-        ).pipe(map(r => r.data));
-    }
+    afterEach(() => {
+        httpMock.verify();
+    });
 
-    submitExam(sessionId: string) {
-        return this.http.post<ApiResponse<ExamSession>>(
-            `${this.base}/sessions/${sessionId}/submit`, {}
-        ).pipe(map(r => r.data));
-    }
+    it('should start exam session', async () => {
+        const certificationId = '123';
+        const mode = 'testMode';
+        const options = {selectedThemes: ['theme1'], questionCount: 10, durationMinutes: 60};
+        const expectedSession: ExamSession = {id: 'session1', ...options};
 
-    getResults(sessionId: string) {
-        return this.http.get<ApiResponse<ExamResult>>(
-            `${this.base}/sessions/${sessionId}/results`
-        ).pipe(map(r => r.data));
-    }
+        service.start(certificationId, mode, options).subscribe(session => {
+            expect(session).toEqual(expectedSession);
+        });
 
-    getHistory(page = 0, size = 20, certificationId?: string, mode?: string) {
-        let params: Record<string, string | number> = {page, size};
-        if (certificationId) params["certificationId"] = certificationId;
-        if (mode) params["mode"] = mode;
-        return this.http.get<ApiResponse<ExamSessionSummary[]>>(
-            `${this.base}/history`, {params}
-        ).pipe(map(r => r.data));
-    }
+        const req = httpMock.expectOne(`${environment.apiUrl}/exams/sessions`);
+        expect(req.request.method).toBe('POST');
+        expect(req.request.body).toEqual({certificationId, mode, selectedThemes: ['theme1'], questionCount: 10, durationMinutes: 60});
+        req.flush({data: expectedSession});
+    });
 
-    exportPdf(sessionId: string) {
-        return this.http.get(`${this.base}/sessions/${sessionId}/export-pdf`,
-            {responseType: "blob"});
-    }
-}
+    it('should submit answer', async () => {
+        const sessionId = 'session1';
+        const questionId = 'question1';
+        const selectedOptionId = 'option1';
+        const responseTimeMs = 500;
+        const expectedAnswer: UserAnswer = {id: 'answer1', questionId, selectedOptionId, responseTimeMs};
+
+        service.submitAnswer(sessionId, questionId, selectedOptionId, responseTimeMs).subscribe(answer => {
+            expect(answer).toEqual(expectedAnswer);
+        });
+
+        const req = httpMock.expectOne(`${environment.apiUrl}/exams/sessions/${sessionId}/answers`);
+        expect(req.request.method).toBe('POST');
+        expect(req.request.body).toEqual({questionId, selectedOptionId, responseTimeMs});
+        req.flush({data: expectedAnswer});
+    });
+
+    it('should submit exam', async () => {
+        const sessionId = 'session1';
+        const expectedSession: ExamSession = {id: 'session1', status: 'submitted'};
+
+        service.submitExam(sessionId).subscribe(session => {
+            expect(session).toEqual(expectedSession);
+        });
+
+        const req = httpMock.expectOne(`${environment.apiUrl}/exams/sessions/${sessionId}/submit`);
+        expect(req.request.method).toBe('POST');
+        req.flush({data: expectedSession});
+    });
+
+    it('should get results', async () => {
+        const sessionId = 'session1';
+        const expectedResult: ExamResult = {id: 'result1', score: 85};
+
+        service.getResults(sessionId).subscribe(result => {
+            expect(result).toEqual(expectedResult);
+        });
+
+        const req = httpMock.expectOne(`${environment.apiUrl}/exams/sessions/${sessionId}/results`);
+        expect(req.request.method).toBe('GET');
+        req.flush({data: expectedResult});
+    });
+
+    it('should get history', async () => {
+        const page = 0;
+        const size = 20;
+        const certificationId = 'cert1';
+        const mode = 'testMode';
+        const expectedHistory: ExamSessionSummary[] = [{id: 'history1', certificationId, mode}];
+
+        service.getHistory(page, size, certificationId, mode).subscribe(history => {
+            expect(history).toEqual(expectedHistory);
+        });
+
+        const req = httpMock.expectOne(`${environment.apiUrl}/exams/history?page=0&size=20&certificationId=cert1&mode=testMode`);
+        expect(req.request.method).toBe('GET');
+        req.flush({data: expectedHistory});
+    });
+
+    it('should export PDF', async () => {
+        const sessionId = 'session1';
+        const expectedBlob = new Blob(['PDF content'], {type: 'application/pdf'});
+
+        service.exportPdf(sessionId).subscribe(blob => {
+            expect(blob).toEqual(expectedBlob);
+        });
+
+        const req = httpMock.expectOne(`${environment.apiUrl}/exams/sessions/${sessionId}/export-pdf`);
+        expect(req.request.method).toBe('GET');
+        req.flush(expectedBlob, {responseType: 'blob'});
+    });
+});

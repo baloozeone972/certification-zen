@@ -8,7 +8,12 @@ describe('Learning Models', () => {
     let adaptivePlan: AdaptivePlan;
 
     beforeEach(() => {
-        flashcard = {
+        TestBed.configureTestingModule({
+            declarations: [],
+            providers: []
+        });
+
+        flashcard = new Flashcard({
             id: '1',
             frontText: 'Question',
             backText: 'Answer',
@@ -17,17 +22,17 @@ describe('Learning Models', () => {
             easeFactor: 2.5,
             intervalDays: 3,
             repetitions: 1
-        };
+        });
 
-        sm2Progress = {
+        sm2Progress = new SM2Progress({
             flashcardId: '1',
             nextReviewDate: new Date().toISOString(),
             intervalDays: 3,
             easeFactor: 2.5,
             repetitions: 1
-        };
+        });
 
-        course = {
+        course = new Course({
             id: '1',
             certificationId: 'cert123',
             themeCode: 'theme001',
@@ -35,16 +40,16 @@ describe('Learning Models', () => {
             contentMarkdown: '# Angular Introduction',
             contentHtml: '<h1>Angular Introduction</h1>',
             aiStatus: 'processed'
-        };
+        });
 
-        adaptivePlan = {
+        adaptivePlan = new AdaptivePlan({
             userId: 'user123',
             certificationId: 'cert123',
             dueTodayCount: 5,
             weakThemes: ['theme001', 'theme002'],
             predictedScore: 85,
             recommendedExamDate: new Date().toISOString()
-        };
+        });
     });
 
     afterEach(() => {
@@ -159,4 +164,3 @@ describe('Learning Models', () => {
         expect(() => new AdaptivePlan(invalidAdaptivePlan as AdaptivePlan)).toThrowError('Invalid date format');
     });
 });
-

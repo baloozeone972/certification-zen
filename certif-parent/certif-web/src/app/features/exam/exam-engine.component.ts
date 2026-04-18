@@ -1,126 +1,106 @@
-// certif-parent/certif-web/src/app/features/exam/exam-engine.component.ts
-import {ChangeDetectionStrategy, Component, computed, inject, OnInit, signal} from "@angular/core";
-import {ActivatedRoute, Router} from "@angular/router";
-import {CommonModule} from "@angular/common";
-import {ExamService} from "../../core/services/exam.service";
-import {ExamSession, Question} from "../../core/models/exam.models";
-import {QuestionCardComponent} from "../../shared/components/question-card/question-card.component";
-import {TimerWidgetComponent} from "../../shared/components/timer-widget/timer-widget.component";
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {ExamEngineComponent} from './exam-engine.component';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ExamService} from '../../core/services/exam.service';
+import {of, throwError} from 'rxjs';
+import {ExamSession, Question} from '../../core/models/exam.models';
 
-/**
- * Main exam engine — navigates through questions,
- * submits answers in real time, finalises the session.
- */
-@Component({
-    selector: "app-exam-engine",
-    standalone: true,
-    imports: [CommonModule, QuestionCardComponent, TimerWidgetComponent],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    template: `
-    <div class="engine">
-      @if (session()) {
-        <header class="engine__header">
-          <div class="engine__progress">
-            <span>{{ currentIndex() + 1 }} / {{ session()!.questions.length }}</span>
-            <div class="progress-bar">
-              <div class="progress-bar__fill"
-                   [style.width.%]="(currentIndex() / session()!.questions.length) * 100"></div>
-            </div>
-          </div>
-          <app-timer-widget [durationSeconds]="session()!.durationSeconds"
-                            (expired)="onTimerExpired()" />
-        </header>
+describe('ExamEngineComponent', () => {
+    let component: ExamEngineComponent;
+    let fixture: ComponentFixture<ExamEngineComponent>;
+    let examServiceMock: jasmine.SpyObj<ExamService>;
+    let routerMock: jasmine.SpyObj<Router>;
+    let routeMock: ActivatedRoute;
 
-        <div class="engine__question container">
-          <app-question-card
-            [question]="currentQuestion()"
-            [revealMode]="session()!.mode === 'REVISION'"
-            [correctOptionId]="answers().get(currentQuestion().id)"
-            (answered)="onAnswered($event)" />
-        </div>
+    beforeEach(async () => {
+        examServiceMock = jasmine.createSpyObj('ExamService', ['getResults', 'submitAnswer', 'submitExam']);
+        routerMock = jasmine.createSpyObj('Router', ['navigate']);
+        routeMock = {snapshot: {paramMap: {get: () => '123'}}} as ActivatedRoute;
 
-        <footer class="engine__footer">
-          <button class="btn" (click)="skipQuestion()">Passer →</button>
-          @if (currentIndex() === session()!.questions.length - 1) {
-            <button class="btn btn-primary" [disabled]="submitting()" (click)="submitExam()">
-              {{ submitting() ? "Envoi..." : "Terminer l'examen ✓" }}
-            </button>
-          } @else {
-            <button class="btn btn-secondary" (click)="nextQuestion()">Question suivante →</button>
-          }
-        </footer>
-      } @else {
-        <div class="engine__loading">Chargement de la session...</div>
-      }
-    </div>
-  `,
-    styles: [`
-    .engine { display: flex; flex-direction: column; min-height: calc(100vh - 60px); }
-    .engine__header { padding: 1rem 2rem; background: var(--color-surface);
-                       border-bottom: 1px solid var(--color-border);
-                       display: flex; align-items: center; justify-content: space-between; gap: 2rem; }
-    .engine__progress { display: flex; align-items: center; gap: 1rem; flex: 1; }
-    .progress-bar { flex: 1; height: 6px; background: var(--color-border); border-radius: 3px; }
-    .progress-bar__fill { height: 100%; background: var(--color-secondary);
-                           border-radius: 3px; transition: width .3s; }
-    .engine__question { flex: 1; padding: 2rem 1rem; display: flex; justify-content: center; }
-    .engine__footer { padding: 1.5rem 2rem; background: var(--color-surface);
-                       border-top: 1px solid var(--color-border);
-                       display: flex; justify-content: flex-end; gap: 1rem; }
-    .engine__loading { display: flex; align-items: center; justify-content: center;
-                        flex: 1; font-size: 1.1rem; color: var(--color-text-muted); }
-  `]
-})
-export class ExamEngineComponent implements OnInit {
-    readonly session = signal<ExamSession | null>(null);
-    readonly currentIndex = signal(0);
-    readonly answers = signal<Map<string, string>>(new Map());
-    readonly submitting = signal(false);
-    readonly startTime = signal(Date.now());
-    readonly currentQuestion = computed<Question>(() =>
-        this.session()!.questions[this.currentIndex()]
-    );
-    private readonly examService = inject(ExamService);
-    private readonly route = inject(ActivatedRoute);
-    private readonly router = inject(Router);
+        await TestBed.configureTestingModule({
+            declarations: [ExamEngineComponent],
+            providers: [
+                {provide: ExamService, useValue: examServiceMock},
+                {provide: Router, useValue: routerMock},
+                {provide: ActivatedRoute, useValue: routeMock}
+            ]
+        }).compileComponents();
+    });
 
-    ngOnInit(): void {
-        const sessionId = this.route.snapshot.paramMap.get("sessionId") ?? "";
-        this.examService.getResults(sessionId).subscribe(s => this.session.set(s as any));
-    }
+    beforeEach(() => {
+        fixture = TestBed.createComponent(ExamEngineComponent);
+        component = fixture.componentInstance;
+    });
 
-    onAnswered(optionId: string | null): void {
-        if (!optionId) return;
-        const qId = this.currentQuestion().id;
-        this.answers.update(m => {
-            const nm = new Map(m);
-            nm.set(qId, optionId);
-            return nm;
-        });
-        const elapsed = Date.now() - this.startTime();
-        this.examService.submitAnswer(this.session()!.id, qId, optionId, elapsed).subscribe();
-    }
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 
-    skipQuestion(): void {
-        const qId = this.currentQuestion().id;
-        this.examService.submitAnswer(this.session()!.id, qId, null, 0).subscribe();
-        this.nextQuestion();
-    }
+    it('should load session on init', async () => {
+        const mockSession: ExamSession = {id: '123', questions: [], durationSeconds: 60, mode: 'NORMAL'};
+        examServiceMock.getResults.and.returnValue(of(mockSession));
 
-    nextQuestion(): void {
-        const max = (this.session()?.questions.length ?? 1) - 1;
-        if (this.currentIndex() < max) this.currentIndex.update(i => i + 1);
-    }
+        await fixture.whenStable();
+        expect(component.session()).toEqual(mockSession);
+    });
 
-    onTimerExpired(): void {
-        this.submitExam();
-    }
+    it('should handle session loading error', async () => {
+        examServiceMock.getResults.and.returnValue(throwError(() => new Error('Failed to load session')));
 
-    submitExam(): void {
-        this.submitting.set(true);
-        this.examService.submitExam(this.session()!.id).subscribe({
-            next: () => this.router.navigate(["/results", this.session()!.id]),
-            error: () => this.submitting.set(false)
-        });
-    }
-}
+        await fixture.whenStable();
+        expect(component.session()).toBeNull();
+    });
+
+    it('should submit answer on answered event', async () => {
+        const mockQuestion: Question = {id: '1', text: 'Q1', options: []};
+        const mockSession: ExamSession = {id: '123', questions: [mockQuestion], durationSeconds: 60, mode: 'NORMAL'};
+        component.session.set(mockSession);
+        examServiceMock.submitAnswer.and.returnValue(of(null));
+
+        component.onAnswered('A1');
+        await fixture.whenStable();
+        expect(examServiceMock.submitAnswer).toHaveBeenCalledWith('123', '1', 'A1', jasmine.any(Number));
+    });
+
+    it('should skip question and submit answer', async () => {
+        const mockQuestion: Question = {id: '1', text: 'Q1', options: []};
+        const mockSession: ExamSession = {id: '123', questions: [mockQuestion], durationSeconds: 60, mode: 'NORMAL'};
+        component.session.set(mockSession);
+        examServiceMock.submitAnswer.and.returnValue(of(null));
+
+        component.skipQuestion();
+        await fixture.whenStable();
+        expect(examServiceMock.submitAnswer).toHaveBeenCalledWith('123', '1', null, 0);
+        expect(component.currentIndex()).toBe(1);
+    });
+
+    it('should submit exam on timer expired', async () => {
+        const mockSession: ExamSession = {id: '123', questions: [], durationSeconds: 60, mode: 'NORMAL'};
+        component.session.set(mockSession);
+        examServiceMock.submitExam.and.returnValue(of(null));
+
+        component.onTimerExpired();
+        await fixture.whenStable();
+        expect(examServiceMock.submitExam).toHaveBeenCalledWith('123');
+    });
+
+    it('should navigate to results on exam submission success', async () => {
+        const mockSession: ExamSession = {id: '123', questions: [], durationSeconds: 60, mode: 'NORMAL'};
+        component.session.set(mockSession);
+        examServiceMock.submitExam.and.returnValue(of(null));
+
+        component.submitExam();
+        await fixture.whenStable();
+        expect(routerMock.navigate).toHaveBeenCalledWith(['/results', '123']);
+    });
+
+    it('should handle exam submission error', async () => {
+        const mockSession: ExamSession = {id: '123', questions: [], durationSeconds: 60, mode: 'NORMAL'};
+        component.session.set(mockSession);
+        examServiceMock.submitExam.and.returnValue(throwError(() => new Error('Failed to submit exam')));
+
+        component.submitExam();
+        await fixture.whenStable();
+        expect(component.submitting()).toBeFalse();
+    });
+});

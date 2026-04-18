@@ -46,8 +46,8 @@ describe('LoginComponent', () => {
         it('should set loading to true and clear error before calling authService.login', () => {
             component.form.patchValue({email: 'test@example.com', password: '12345678'});
             component.submit();
-            expect(component.loading()).toBe(true);
-            expect(component.error()).toBe(null);
+            expect(component.loading).toBe(true);
+            expect(component.error).toBe(null);
         });
 
         it('should navigate to returnUrl if login is successful', () => {
@@ -63,8 +63,8 @@ describe('LoginComponent', () => {
             component.form.patchValue({email: 'test@example.com', password: '12345678'});
             authService.login.and.returnValue(throwError(() => new Error()));
             component.submit();
-            expect(component.error()).toBe('Email ou mot de passe incorrect.');
-            expect(component.loading()).toBe(false);
+            expect(component.error).toBe('Email ou mot de passe incorrect.');
+            expect(component.loading).toBe(false);
         });
 
         it('should handle error if router.navigateByUrl fails', () => {
@@ -74,9 +74,8 @@ describe('LoginComponent', () => {
             authService.login.and.returnValue(of(null));
             spyOn(router, 'navigateByUrl').and.throwError(() => new Error());
             component.submit();
-            expect(component.error()).toBe('Email ou mot de passe incorrect.');
-            expect(component.loading()).toBe(false);
+            expect(component.error).toBe('Email ou mot de passe incorrect.');
+            expect(component.loading).toBe(false);
         });
     });
 });
-

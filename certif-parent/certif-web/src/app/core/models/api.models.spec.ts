@@ -1,24 +1,40 @@
 import {ApiResponse, ErrorResponse, PageResponse} from './api.models';
+import {TestBed} from '@angular/core/testing';
 
 describe('API Models', () => {
     let apiResponse: ApiResponse<any>;
     let errorResponse: ErrorResponse;
+    let pageResponse: PageResponse<any>;
 
     beforeEach(() => {
-        apiResponse = {
-            data: {},
-            message: 'Success',
-            timestamp: new Date().toISOString()
-        };
+        TestBed.configureTestingModule({
+            providers: [
+                {provide: ApiResponse, useValue: {}},
+                {provide: ErrorResponse, useValue: {}},
+                {provide: PageResponse, useValue: {}}
+            ]
+        });
 
-        errorResponse = {
-            status: 400,
-            message: 'Bad Request',
-            errors: [
-                {field: 'email', message: 'Invalid email'}
-            ],
-            timestamp: new Date().toISOString()
-        };
+        apiResponse = TestBed.inject(ApiResponse);
+        errorResponse = TestBed.inject(ErrorResponse);
+        pageResponse = TestBed.inject(PageResponse);
+
+        apiResponse.data = {};
+        apiResponse.message = 'Success';
+        apiResponse.timestamp = new Date().toISOString();
+
+        errorResponse.status = 400;
+        errorResponse.message = 'Bad Request';
+        errorResponse.errors = [
+            {field: 'email', message: 'Invalid email'}
+        ];
+        errorResponse.timestamp = new Date().toISOString();
+
+        pageResponse.content = [];
+        pageResponse.totalElements = 0;
+        pageResponse.totalPages = 1;
+        pageResponse.page = 0;
+        pageResponse.size = 10;
     });
 
     describe('ApiResponse', () => {
@@ -51,18 +67,6 @@ describe('API Models', () => {
     });
 
     describe('PageResponse', () => {
-        let pageResponse: PageResponse<any>;
-
-        beforeEach(() => {
-            pageResponse = {
-                content: [],
-                totalElements: 0,
-                totalPages: 1,
-                page: 0,
-                size: 10
-            };
-        });
-
         it('should create an instance with content, totalElements, totalPages, page, and size', () => {
             expect(pageResponse).toBeTruthy();
             expect(pageResponse.content).toEqual([]);
@@ -78,4 +82,3 @@ describe('API Models', () => {
         });
     });
 });
-

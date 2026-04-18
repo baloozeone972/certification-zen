@@ -14,13 +14,15 @@ describe('AuthService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [HttpClientTestingModule, RouterTestingModule],
-            providers: [AuthService]
+            providers: [
+                AuthService,
+                {provide: Router, useValue: routerSpy}
+            ]
         });
 
         service = TestBed.inject(AuthService);
         httpMock = TestBed.inject(HttpTestingController);
         routerSpy = jasmine.createSpyObj('Router', ['navigate']);
-        (service as any).router = routerSpy;
     });
 
     afterEach(() => {
@@ -28,7 +30,7 @@ describe('AuthService', () => {
     });
 
     describe('register', () => {
-        it('should register a new user and login', () => {
+        it('should register a new user and login', async () => {
             const email = 'test@example.com';
             const password = 'password123';
 
@@ -54,7 +56,7 @@ describe('AuthService', () => {
             });
         });
 
-        it('should handle registration error', () => {
+        it('should handle registration error', async () => {
             const email = 'test@example.com';
             const password = 'password123';
 
@@ -72,7 +74,7 @@ describe('AuthService', () => {
     });
 
     describe('login', () => {
-        it('should login and update currentUser', () => {
+        it('should login and update currentUser', async () => {
             const email = 'test@example.com';
             const password = 'password123';
 
@@ -98,7 +100,7 @@ describe('AuthService', () => {
             });
         });
 
-        it('should handle login error', () => {
+        it('should handle login error', async () => {
             const email = 'test@example.com';
             const password = 'password123';
 
@@ -116,7 +118,7 @@ describe('AuthService', () => {
     });
 
     describe('refreshToken', () => {
-        it('should refresh access token', () => {
+        it('should refresh access token', async () => {
             const accessToken = 'access_token';
             localStorage.setItem('certifapp_access', accessToken);
             localStorage.setItem('certifapp_refresh', 'refresh_token');
@@ -134,7 +136,7 @@ describe('AuthService', () => {
             expect(localStorage.getItem('certifapp_refresh')).toBe('new_refresh_token');
         });
 
-        it('should handle refresh error and logout', () => {
+        it('should handle refresh error and logout', async () => {
             const accessToken = 'access_token';
             localStorage.setItem('certifapp_access', accessToken);
             localStorage.setItem('certifapp_refresh', 'refresh_token');
@@ -155,7 +157,7 @@ describe('AuthService', () => {
     });
 
     describe('logout', () => {
-        it('should clear tokens and navigate to home', () => {
+        it('should clear tokens and navigate to home', async () => {
             localStorage.setItem('certifapp_access', 'access_token');
             localStorage.setItem('certifapp_refresh', 'refresh_token');
 
@@ -169,7 +171,7 @@ describe('AuthService', () => {
     });
 
     describe('getAccessToken', () => {
-        it('should return stored access token', () => {
+        it('should return stored access token', async () => {
             localStorage.setItem('certifapp_access', 'access_token');
 
             const accessToken = service.getAccessToken();
@@ -177,11 +179,10 @@ describe('AuthService', () => {
             expect(accessToken).toBe('access_token');
         });
 
-        it('should return null if no token is stored', () => {
+        it('should return null if no token is stored', async () => {
             const accessToken = service.getAccessToken();
 
             expect(accessToken).toBeNull();
         });
     });
 });
-

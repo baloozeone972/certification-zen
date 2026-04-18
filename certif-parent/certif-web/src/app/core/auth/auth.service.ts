@@ -1,111 +1,159 @@
-// certif-parent/certif-web/src/app/core/auth/auth.service.ts
-import {computed, inject, Injectable, signal} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Router} from '@angular/router';
-import {catchError, EMPTY, tap} from 'rxjs';
+import {TestBed} from '@angular/core/testing';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {RouterTestingModule} from '@angular/router/testing';
+import {AuthService} from './auth.service';
 import {environment} from '../../../environments/environment';
 import {TokenResponse, User} from '../models/user.models';
-import {ApiResponse} from '../models/api.models';
 
-const ACCESS_TOKEN_KEY = 'certifapp_access';
-const REFRESH_TOKEN_KEY = 'certifapp_refresh';
+describe('AuthService', () => {
+    let service: AuthService;
+    let httpMock: HttpTestingController;
 
-/**
- * Authentication service using Angular 18 Signals.
- *
- * Manages JWT tokens in localStorage, exposes reactive currentUser signal
- * and provides login/register/logout/refresh methods.
- */
-@Injectable({providedIn: 'root'})
-export class AuthService {
-    // Reactive state — Angular 18 Signals
-    readonly currentUser = signal<User | null>(this.loadUserFromToken());
-    readonly isAuthenticated = computed(() => this.currentUser() !== null);
-    readonly isPro = computed(() => {
-        const tier = this.currentUser()?.subscriptionTier;
-        return tier === 'PRO' || tier === 'PACK';
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [HttpClientTestingModule, RouterTestingModule],
+            providers: [
+                AuthService,
+                {provide: environment, useValue: {apiUrl: 'http://localhost:3000'}}
+            ]
+        });
+        service = TestBed.inject(AuthService);
+        httpMock = TestBed.inject(HttpTestingController);
     });
-    readonly isAdmin = computed(() => this.currentUser()?.role === 'ADMIN');
-    private readonly http = inject(HttpClient);
-    private readonly router = inject(Router);
-    private readonly base = `${environment.apiUrl}/auth`;
 
-    /** Register a new account and auto-login. */
-    register(email: string, password: string, locale = 'fr', timezone = 'Europe/Paris') {
-        return this.http.post<ApiResponse<TokenResponse>>(`${this.base}/register`,
-            {email, password, locale, timezone})
-            .pipe(tap(res => this.handleTokens(res.data)));
-    }
+    afterEach(() => {
+        httpMock.verify();
+    });
 
-    /** Authenticate with email/password. */
-    login(email: string, password: string) {
-        return this.http.post<ApiResponse<TokenResponse>>(`${this.base}/login`,
-            {email, password})
-            .pipe(tap(res => this.handleTokens(res.data)));
-    }
+    it('should be created', () => {
+        expect(service).toBeTruthy();
+    });
 
-    /** Refresh access token using stored refresh token. */
-    refreshToken() {
-        const refresh = localStorage.getItem(REFRESH_TOKEN_KEY);
-        if (!refresh) return EMPTY;
-        return this.http.post<ApiResponse<TokenResponse>>(`${this.base}/refresh`,
-            {refreshToken: refresh})
-            .pipe(
-                tap(res => this.handleTokens(res.data)),
-                catchError(() => {
-                    this.logout();
-                    return EMPTY;
-                })
-            );
-    }
-
-    /** Clear tokens and navigate to home. */
-    logout(): void {
-        localStorage.removeItem(ACCESS_TOKEN_KEY);
-        localStorage.removeItem(REFRESH_TOKEN_KEY);
-        this.currentUser.set(null);
-        this.router.navigate(['/']);
-    }
-
-    /** Returns the stored access token (used by AuthInterceptor). */
-    getAccessToken(): string | null {
-        return localStorage.getItem(ACCESS_TOKEN_KEY);
-    }
-
-    // ── Private ────────────────────────────────────────────────────────────────
-
-    private handleTokens(tokens: TokenResponse): void {
-        localStorage.setItem(ACCESS_TOKEN_KEY, tokens.accessToken);
-        localStorage.setItem(REFRESH_TOKEN_KEY, tokens.refreshToken);
-        this.currentUser.set(this.decodeUser(tokens.accessToken));
-    }
-
-    private loadUserFromToken(): User | null {
-        const token = localStorage.getItem(ACCESS_TOKEN_KEY);
-        if (!token) return null;
-        try {
-            return this.decodeUser(token);
-        } catch {
-            return null;
-        }
-    }
-
-    private decodeUser(token: string): User | null {
-        try {
-            const payload = JSON.parse(atob(token.split('.')[1]));
-            // Check expiry
-            if (payload.exp && Date.now() / 1000 > payload.exp) return null;
-            return {
-                id: payload.sub,
-                email: payload.email ?? '',
-                role: payload.role ?? 'USER',
-                subscriptionTier: payload.tier ?? 'FREE',
-                locale: payload.locale ?? 'fr',
-                timezone: payload.timezone ?? 'Europe/Paris',
+    describe('register', () => {
+        it('should register a new account and auto-login', async () => {
+            const email = 'test@example.com';
+            const password = 'password123';
+            const user: User = {
+                id: '1',
+                email,
+                role: 'USER',
+                subscriptionTier: 'FREE',
+                locale: 'fr',
+                timezone: 'Europe/Paris',
                 createdAt: ''
             };
-        } catch {
-            return null;
-        }
-    }
-}
+            const tokenResponse: TokenResponse = {
+                accessToken: 'access_token',
+                refreshToken: 'refresh_token'
+            };
+
+            service.register(email, password).subscribe(response => {
+                expect(response.data).toEqual(tokenResponse);
+                expect(service.currentUser()).toEqual(user);
+            });
+
+            const req = httpMock.expectOne(`${environment.apiUrl}/auth/register`);
+            expect(req.request.method).toBe('POST');
+            req.flush({data: tokenResponse});
+        });
+    });
+
+    describe('login', () => {
+        it('should authenticate with email/password', async () => {
+            const email = 'test@example.com';
+            const password = 'password123';
+            const user: User = {
+                id: '1',
+                email,
+                role: 'USER',
+                subscriptionTier: 'FREE',
+                locale: 'fr',
+                timezone: 'Europe/Paris',
+                createdAt: ''
+            };
+            const tokenResponse: TokenResponse = {
+                accessToken: 'access_token',
+                refreshToken: 'refresh_token'
+            };
+
+            service.login(email, password).subscribe(response => {
+                expect(response.data).toEqual(tokenResponse);
+                expect(service.currentUser()).toEqual(user);
+            });
+
+            const req = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
+            expect(req.request.method).toBe('POST');
+            req.flush({data: tokenResponse});
+        });
+    });
+
+    describe('refreshToken', () => {
+        it('should refresh access token using stored refresh token', async () => {
+            const refreshToken = 'refresh_token';
+            localStorage.setItem('certifapp_refresh', refreshToken);
+            const user: User = {
+                id: '1',
+                email: 'test@example.com',
+                role: 'USER',
+                subscriptionTier: 'FREE',
+                locale: 'fr',
+                timezone: 'Europe/Paris',
+                createdAt: ''
+            };
+            const tokenResponse: TokenResponse = {
+                accessToken: 'new_access_token',
+                refreshToken: 'new_refresh_token'
+            };
+
+            service.refreshToken().subscribe(response => {
+                expect(response.data).toEqual(tokenResponse);
+                expect(service.currentUser()).toEqual(user);
+            });
+
+            const req = httpMock.expectOne(`${environment.apiUrl}/auth/refresh`);
+            expect(req.request.method).toBe('POST');
+            req.flush({data: tokenResponse});
+        });
+
+        it('should handle refresh token error and logout', async () => {
+            localStorage.setItem('certifapp_refresh', 'refresh_token');
+
+            service.refreshToken().subscribe({
+                error: () => {
+                    expect(service.currentUser()).toBeNull();
+                    expect(localStorage.getItem('certifapp_access')).toBeNull();
+                    expect(localStorage.getItem('certifapp_refresh')).toBeNull();
+                }
+            });
+
+            const req = httpMock.expectOne(`${environment.apiUrl}/auth/refresh`);
+            expect(req.request.method).toBe('POST');
+            req.error(new ErrorEvent('Network error'));
+        });
+    });
+
+    describe('logout', () => {
+        it('should clear tokens and navigate to home', async () => {
+            localStorage.setItem('certifapp_access', 'access_token');
+            localStorage.setItem('certifapp_refresh', 'refresh_token');
+
+            service.logout();
+
+            expect(service.currentUser()).toBeNull();
+            expect(localStorage.getItem('certifapp_access')).toBeNull();
+            expect(localStorage.getItem('certifapp_refresh')).toBeNull());
+        });
+    });
+
+    describe('getAccessToken', () => {
+        it('should return the stored access token', async () => {
+            localStorage.setItem('certifapp_access', 'access_token');
+
+            expect(service.getAccessToken()).toBe('access_token');
+        });
+
+        it('should return null if no access token is stored', async () => {
+            expect(service.getAccessToken()).toBeNull();
+        });
+    });
+});

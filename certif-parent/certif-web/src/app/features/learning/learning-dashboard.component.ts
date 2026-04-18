@@ -1,48 +1,52 @@
-// certif-parent/certif-web/src/app/features/learning/learning-dashboard.component.ts
-import {ChangeDetectionStrategy, Component, inject, OnInit} from "@angular/core";
-import {RouterLink} from "@angular/router";
-import {CommonModule} from "@angular/common";
-import {CertificationService} from "../../core/services/certification.service";
-import {LearningService} from "../../core/services/learning.service";
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {RouterTestingModule} from '@angular/router/testing';
+import {CommonModule} from '@angular/common';
+import {CertificationService} from '../../core/services/certification.service';
+import {LearningDashboardComponent} from './learning-dashboard.component';
 
-@Component({
-    selector: "app-learning-dashboard",
-    standalone: true,
-    imports: [CommonModule, RouterLink],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    template: `
-    <div class="learn container">
-      <h1>Mes révisions</h1>
-      <div class="learn__grid">
-        @for (cert of certService.certifications(); track cert.id) {
-          <div class="learn-card card">
-            <h3>{{ cert.name }}</h3>
-            <p class="learn-card__code">{{ cert.code }}</p>
-            <div class="learn-card__actions">
-              <a [routerLink]="['/learning/flashcards', cert.id]" class="btn btn-primary">
-                🃏 Flashcards SM-2
-              </a>
-            </div>
-          </div>
-        }
-      </div>
-    </div>
-  `,
-    styles: [`
-    .learn { padding: 2rem 1rem; }
-    .learn h1 { font-size: 1.75rem; margin-bottom: 1.5rem; }
-    .learn__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap: 1.25rem; }
-    .learn-card h3 { margin-bottom: .25rem; }
-    .learn-card__code { font-size: .85rem; color: var(--color-text-muted); margin-bottom: 1rem; }
-    .learn-card__actions { display: flex; flex-direction: column; gap: .5rem; }
-    .learn-card__actions .btn { justify-content: center; }
-  `]
-})
-export class LearningDashboardComponent implements OnInit {
-    readonly certService = inject(CertificationService);
-    private readonly learningService = inject(LearningService);
+describe('LearningDashboardComponent', () => {
+    let component: LearningDashboardComponent;
+    let fixture: ComponentFixture<LearningDashboardComponent>;
+    let certificationService: CertificationService;
 
-    ngOnInit(): void {
-        this.certService.loadAll().subscribe();
-    }
-}
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [CommonModule, RouterTestingModule],
+            declarations: [LearningDashboardComponent],
+            providers: [
+                {provide: CertificationService, useValue: jasmine.createSpyObj('CertificationService', ['loadAll'])}
+            ]
+        }).compileComponents();
+    });
+
+    beforeEach(() => {
+        fixture = TestBed.createComponent(LearningDashboardComponent);
+        component = fixture.componentInstance;
+        certificationService = TestBed.inject(CertificationService);
+    });
+
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
+
+    it('should call loadAll on ngOnInit', () => {
+        component.ngOnInit();
+        expect(certificationService.loadAll).toHaveBeenCalled();
+    });
+
+    it('should display certifications', async () => {
+        const mockCertifications = [
+            {id: 1, name: 'Certification 1', code: 'C1'},
+            {id: 2, name: 'Certification 2', code: 'C2'}
+        ];
+        certificationService.loadAll.and.returnValue(Promise.resolve(mockCertifications));
+
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        const certificationCards = fixture.nativeElement.querySelectorAll('.learn-card');
+        expect(certificationCards.length).toBe(2);
+        expect(certificationCards[0].querySelector('h3').textContent).toContain('Certification 1');
+        expect(certificationCards[1].querySelector('h3').textContent).toContain('Certification 2');
+    });
+});

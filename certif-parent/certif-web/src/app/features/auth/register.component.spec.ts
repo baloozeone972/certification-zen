@@ -33,36 +33,39 @@ describe('RegisterComponent', () => {
     });
 
     describe('submit', () => {
-        it('should call AuthService.register with form values and navigate on success', () => {
+        it('should call AuthService.register with form values and navigate on success', async () => {
             const email = 'test@example.com';
             const password = 'password123456';
             component.form.setValue({email, password});
 
             authService.register.and.returnValue(of(undefined));
 
+            await fixture.whenStable();
             component.submit();
 
             expect(authService.register).toHaveBeenCalledWith(email, password);
             expect(router.navigate).toHaveBeenCalledWith(['/']);
         });
 
-        it('should set error message on failure', () => {
+        it('should set error message on failure', async () => {
             const errorMessage = 'Invalid credentials';
             authService.register.and.returnValue(throwError(() => new Error(errorMessage)));
 
+            await fixture.whenStable();
             component.submit();
 
             expect(authService.register).toHaveBeenCalledWith(email, password);
             expect(component.error()).toBe(errorMessage);
         });
 
-        it('should disable button and show loading state while submitting', () => {
+        it('should disable button and show loading state while submitting', async () => {
             const email = 'test@example.com';
             const password = 'password123456';
             component.form.setValue({email, password});
 
             authService.register.and.returnValue(of(undefined));
 
+            await fixture.whenStable();
             component.submit();
 
             expect(component.loading()).toBeTrue();

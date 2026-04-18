@@ -1,4 +1,4 @@
-// certif-parent/certif-web/src/app/app.config.ts
+import {TestBed} from '@angular/core/testing';
 import {ApplicationConfig, isDevMode} from '@angular/core';
 import {PreloadAllModules, provideRouter, withPreloading} from '@angular/router';
 import {provideHttpClient, withInterceptors} from '@angular/common/http';
@@ -7,25 +7,40 @@ import {provideServiceWorker} from '@angular/service-worker';
 import {routes} from './app.routes';
 import {authInterceptor} from './core/auth/auth.interceptor';
 
-/**
- * Root application configuration — bootstrapped in main.ts.
- * Uses the new standalone API (Angular 18 — no NgModule).
- */
-export const appConfig: ApplicationConfig = {
-    providers: [
-        // Router with lazy loading + preloading all modules
-        provideRouter(routes, withPreloading(PreloadAllModules)),
+describe('appConfig', () => {
+    let appConfig: ApplicationConfig;
 
-        // HTTP client with JWT interceptor
-        provideHttpClient(withInterceptors([authInterceptor])),
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            providers: [
+                provideRouter(routes, withPreloading(PreloadAllModules)),
+                provideHttpClient(withInterceptors([authInterceptor])),
+                provideAnimations(),
+                provideServiceWorker('ngsw-worker.js', {
+                    enabled: !isDevMode(),
+                    registrationStrategy: 'registerWhenStable:30000'
+                }),
+            ]
+        });
+        appConfig = TestBed.inject(ApplicationConfig);
+    });
 
-        // Animations for transitions
-        provideAnimations(),
+    it('should provide router with preloading', () => {
+        expect(appConfig.providers).toContainEqual(provideRouter(routes, withPreloading(PreloadAllModules)));
+    });
 
-        // Service Worker (PWA) — disabled in dev mode
-        provideServiceWorker('ngsw-worker.js', {
+    it('should provide HTTP client with JWT interceptor', () => {
+        expect(appConfig.providers).toContainEqual(provideHttpClient(withInterceptors([authInterceptor])));
+    });
+
+    it('should provide animations', () => {
+        expect(appConfig.providers).toContainEqual(provideAnimations());
+    });
+
+    it('should provide service worker with registration strategy', () => {
+        expect(appConfig.providers).toContainEqual(provideServiceWorker('ngsw-worker.js', {
             enabled: !isDevMode(),
             registrationStrategy: 'registerWhenStable:30000'
-        }),
-    ]
-};
+        }));
+    });
+});

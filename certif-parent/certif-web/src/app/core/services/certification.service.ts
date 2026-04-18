@@ -1,35 +1,53 @@
-// certif-parent/certif-web/src/app/core/services/certification.service.ts
-import {inject, Injectable, signal} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
-import {map, tap} from "rxjs";
-import {environment} from "../../../environments/environment";
-import {Certification} from "../models/certification.models";
-import {ApiResponse} from "../models/api.models";
+import {TestBed} from '@angular/core/testing';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {CertificationService} from './certification.service';
+import {environment} from '../../../environments/environment';
+import {Certification, ApiResponse} from '../models/certification.models';
 
-/**
- * Service for certification catalogue data.
- * Uses Angular 18 signals for reactive local state.
- */
-@Injectable({providedIn: "root"})
-export class CertificationService {
-    readonly certifications = signal<Certification[]>([]);
-    readonly loading = signal(false);
-    private readonly http = inject(HttpClient);
-    private readonly base = `${environment.apiUrl}/certifications`;
+describe('CertificationService', () => {
+    let service: CertificationService;
+    let httpMock: HttpTestingController;
 
-    loadAll() {
-        this.loading.set(true);
-        return this.http.get<ApiResponse<Certification[]>>(this.base).pipe(
-            map(res => res.data),
-            tap(data => {
-                this.certifications.set(data);
-                this.loading.set(false);
-            })
-        );
-    }
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [HttpClientTestingModule],
+            providers: [
+                CertificationService,
+                {provide: environment, useValue: {apiUrl: 'http://localhost:3000'}}
+            ]
+        });
+        service = TestBed.inject(CertificationService);
+        httpMock = TestBed.inject(HttpTestingController);
+    });
 
-    getById(id: string) {
-        return this.http.get<ApiResponse<Certification>>(`${this.base}/${id}`)
-            .pipe(map(res => res.data));
-    }
-}
+    afterEach(() => {
+        httpMock.verify();
+    });
+
+    it('should load all certifications', async () => {
+        const mockCertifications: Certification[] = [
+            {id: '1', name: 'Certification 1'},
+            {id: '2', name: 'Certification 2'}
+        ];
+
+        service.loadAll().subscribe(certifications => {
+            expect(certifications).toEqual(mockCertifications);
+        });
+
+        const req = httpMock.expectOne(`${environment.apiUrl}/certifications`);
+        expect(req.request.method).toBe('GET');
+        req.flush({data: mockCertifications, status: 200});
+    });
+
+    it('should get certification by id', async () => {
+        const mockCertification: Certification = {id: '1', name: 'Certification 1'};
+
+        service.getById('1').subscribe(certification => {
+            expect(certification).toEqual(mockCertification);
+        });
+
+        const req = httpMock.expectOne(`${environment.apiUrl}/certifications/1`);
+        expect(req.request.method).toBe('GET');
+        req.flush({data: mockCertification, status: 200});
+    });
+});

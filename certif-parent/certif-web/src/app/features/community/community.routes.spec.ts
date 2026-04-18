@@ -1,46 +1,40 @@
-import {inject, TestBed} from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 import {CommunityRoutes} from './community.routes';
+import {RouterTestingModule} from '@angular/router/testing';
+import {CommunityComponent} from '../community.component';
 
 describe('CommunityRoutes', () => {
     let routes: Routes;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
+            imports: [RouterTestingModule],
             providers: []
         });
     });
 
-    it('should be defined', inject([], (service: any) => {
+    it('should be defined', () => {
         expect(CommunityRoutes).toBeDefined();
-    }));
+    });
 
-    it('should have a route for the empty path', inject([], () => {
+    it('should have a route for the empty path', () => {
         expect(CommunityRoutes).toContain({path: '', loadComponent: jasmine.any(Function)});
-    }));
+    });
 
-    it('should load the CommunityComponent when navigating to the empty path', async (done) => {
+    it('should load the CommunityComponent when navigating to the empty path', async () => {
         const route = CommunityRoutes.find(route => route.path === '');
         const componentPromise = route.loadComponent();
 
-        componentPromise.then(componentFactory => {
-            expect(componentFactory).toBeDefined();
-            done();
-        }).catch(error => {
-            fail(error);
-            done();
-        });
+        await expectAsync(componentPromise).toBeResolvedTo(jasmine.any(Function));
     });
 
-    it('should handle error cases for loadComponent', inject([], () => {
+    it('should handle error cases for loadComponent', () => {
         spyOn(console, 'error');
 
         const route = CommunityRoutes.find(route => route.path === '');
         const componentPromise = route.loadComponent();
 
-        componentPromise.catch(() => {
-            expect(console.error).toHaveBeenCalled();
-            done();
-        });
-    }));
+        expectAsync(componentPromise).toBeRejected();
+        expect(console.error).toHaveBeenCalled();
+    });
 });
-

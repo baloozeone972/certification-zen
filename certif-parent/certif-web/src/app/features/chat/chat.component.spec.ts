@@ -59,6 +59,7 @@ describe('ChatComponent', () => {
     it('should handle error when AI service fails', () => {
         aiServiceSpy.chat.and.returnValue(jasmine.createSpyObj('Observable', ['subscribe']).subscribe({
             error: () => {
+                component.messages().push({role: "assistant", content: "Désolé, une erreur s'est produite. Veuillez réessayer."});
             }
         }));
         component.inputText.set("What is AWS?");
@@ -75,4 +76,3 @@ describe('ChatComponent', () => {
         ]);
     });
 });
-

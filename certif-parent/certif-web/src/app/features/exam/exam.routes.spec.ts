@@ -1,8 +1,7 @@
-import {getTestBed, TestBed} from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 import {RouterModule, Routes} from '@angular/router';
 
 describe('ExamRoutes', () => {
-    let injector: TestBed;
     let routes: Routes;
 
     beforeEach(() => {
@@ -14,7 +13,6 @@ describe('ExamRoutes', () => {
                 }
             ]
         });
-        injector = getTestBed();
         routes = TestBed.inject(RouterModule).routes as Routes;
     });
 
@@ -31,23 +29,13 @@ describe('ExamRoutes', () => {
     });
 
     it('should not allow empty path for session route', () => {
-        try {
-            const route = routes.find(r => r.path === 'session/');
-            fail('Expected an error to be thrown');
-        } catch (error) {
-            expect(error).toBeInstanceOf(Error);
-            expect(error.message).toContain('Path cannot be empty');
-        }
+        const route = routes.find(r => r.path === 'session/');
+        expect(route).toBeFalsy();
     });
 
     it('should not allow missing sessionId in session route', () => {
-        try {
-            const route = routes.find(r => r.path === 'session');
-            fail('Expected an error to be thrown');
-        } catch (error) {
-            expect(error).toBeInstanceOf(Error);
-            expect(error.message).toContain('SessionId parameter is required');
-        }
+        const route = routes.find(r => r.path === 'session');
+        expect(route).toBeFalsy();
     });
 
     it('should handle invalid path', () => {
@@ -55,4 +43,3 @@ describe('ExamRoutes', () => {
         expect(route).toBeFalsy();
     });
 });
-

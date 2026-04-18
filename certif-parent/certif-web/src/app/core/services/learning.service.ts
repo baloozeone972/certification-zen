@@ -1,7 +1,7 @@
 // certif-parent/certif-web/src/app/core/services/learning.service.ts
 import {inject, Injectable} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
-import {map} from "rxjs";
+import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
+import {TestBed} from "@angular/core/testing";
 import {environment} from "../../../environments/environment";
 import {AdaptivePlan, Course, Flashcard, SM2Progress} from "../models/learning.models";
 import {ApiResponse} from "../models/api.models";
@@ -44,3 +44,96 @@ export class LearningService {
         ).pipe(map(r => r.data));
     }
 }
+
+// certif-parent/certif-web/src/app/core/services/learning.service.spec.ts
+import {TestBed, async} from "@angular/core/testing";
+import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
+import {LearningService} from "./learning.service";
+import {environment} from "../../../environments/environment";
+import {ApiResponse, Flashcard, Course, SM2Progress, AdaptivePlan} from "../models/learning.models";
+
+describe('LearningService', () => {
+    let service: LearningService;
+    let httpMock: HttpTestingController;
+
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [HttpClientTestingModule],
+            providers: []
+        });
+        service = TestBed.inject(LearningService);
+        httpMock = TestBed.inject(HttpTestingController);
+    });
+
+    afterEach(() => {
+        httpMock.verify();
+    });
+
+    it('should get flashcards due', async () => {
+        const certificationId = '123';
+        const limit = 20;
+        const mockFlashcards: Flashcard[] = [];
+
+        service.getFlashcardsDue(certificationId, limit).subscribe(flashcards => {
+            expect(flashcards).toEqual(mockFlashcards);
+        });
+
+        const req = httpMock.expectOne(`${environment.apiUrl}/learning/flashcards/${certificationId}?limit=${limit}`);
+        expect(req.request.method).toBe('GET');
+        req.flush({data: mockFlashcards});
+    });
+
+    it('should review flashcard', async () => {
+        const id = '456';
+        const rating = 3;
+        const mockSM2Progress: SM2Progress = {};
+
+        service.reviewFlashcard(id, rating).subscribe(sm2Progress => {
+            expect(sm2Progress).toEqual(mockSM2Progress);
+        });
+
+        const req = httpMock.expectOne(`${environment.apiUrl}/learning/flashcards/${id}/review`);
+        expect(req.request.method).toBe('POST');
+        req.flush({data: mockSM2Progress});
+    });
+
+    it('should get courses', async () => {
+        const certificationId = '789';
+        const mockCourses: Course[] = [];
+
+        service.getCourses(certificationId).subscribe(courses => {
+            expect(courses).toEqual(mockCourses);
+        });
+
+        const req = httpMock.expectOne(`${environment.apiUrl}/learning/courses/${certificationId}`);
+        expect(req.request.method).toBe('GET');
+        req.flush({data: mockCourses});
+    });
+
+    it('should get course', async () => {
+        const certificationId = '101';
+        const themeCode = 'abc';
+        const mockCourse: Course = {};
+
+        service.getCourse(certificationId, themeCode).subscribe(course => {
+            expect(course).toEqual(mockCourse);
+        });
+
+        const req = httpMock.expectOne(`${environment.apiUrl}/learning/courses/${certificationId}/${themeCode}`);
+        expect(req.request.method).toBe('GET');
+        req.flush({data: mockCourse});
+    });
+
+    it('should get adaptive plan', async () => {
+        const certificationId = '112';
+        const mockAdaptivePlan: AdaptivePlan = {};
+
+        service.getAdaptivePlan(certificationId).subscribe(adaptivePlan => {
+            expect(adaptivePlan).toEqual(mockAdaptivePlan);
+        });
+
+        const req = httpMock.expectOne(`${environment.apiUrl}/learning/adaptive-plan?certificationId=${certificationId}`);
+        expect(req.request.method).toBe('GET');
+        req.flush({data: mockAdaptivePlan});
+    });
+});

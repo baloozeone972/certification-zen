@@ -1,17 +1,37 @@
-// certif-parent/certif-web/src/app/shared/pipes/duration.pipe.ts
-import {Pipe, PipeTransform} from "@angular/core";
+import { TestBed } from '@angular/core/testing';
+import { DurationPipe } from './duration.pipe';
 
-/** Converts seconds to HH:MM:SS or MM:SS display string. */
-@Pipe({name: "duration", standalone: true})
-export class DurationPipe implements PipeTransform {
-    transform(seconds: number | null | undefined): string {
-        if (!seconds && seconds !== 0) return "--";
-        const h = Math.floor(seconds / 3600);
-        const m = Math.floor((seconds % 3600) / 60);
-        const s = seconds % 60;
-        if (h > 0) {
-            return `${h}h${m.toString().padStart(2, "0")}m${s.toString().padStart(2, "0")}s`;
-        }
-        return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
-    }
-}
+describe('DurationPipe', () => {
+    let pipe: DurationPipe;
+
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            providers: [DurationPipe]
+        });
+        pipe = TestBed.inject(DurationPipe);
+    });
+
+    it('should return "--" for null input', () => {
+        expect(pipe.transform(null)).toBe("--");
+    });
+
+    it('should return "--" for undefined input', () => {
+        expect(pipe.transform(undefined)).toBe("--");
+    });
+
+    it('should return "0h00m00s" for 0 seconds', () => {
+        expect(pipe.transform(0)).toBe("0h00m00s");
+    });
+
+    it('should return "1h00m00s" for 3600 seconds', () => {
+        expect(pipe.transform(3600)).toBe("1h00m00s");
+    });
+
+    it('should return "01:00" for 60 seconds', () => {
+        expect(pipe.transform(60)).toBe("01:00");
+    });
+
+    it('should return "00:30" for 30 seconds', () => {
+        expect(pipe.transform(30)).toBe("00:30");
+    });
+});

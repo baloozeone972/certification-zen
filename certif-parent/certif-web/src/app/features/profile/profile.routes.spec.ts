@@ -1,11 +1,18 @@
 import {Routes} from '@angular/router';
-import {PROFILE_ROUTES} from './profile.routes';
+import {async, TestBed} from '@angular/core/testing';
+import {ProfileComponent} from './profile.component';
 
 describe('PROFILE_ROUTES', () => {
     let routes: Routes;
 
     beforeEach(() => {
-        routes = PROFILE_ROUTES;
+        TestBed.configureTestingModule({
+            declarations: [ProfileComponent],
+            providers: [
+                {provide: ProfileComponent, useValue: new ProfileComponent()}
+            ]
+        });
+        routes = TestBed.inject(Routes);
     });
 
     it('should have a route with path "" and loadComponent for ProfileComponent', () => {
@@ -31,4 +38,3 @@ describe('PROFILE_ROUTES', () => {
         }
     });
 });
-

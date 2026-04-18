@@ -33,25 +33,27 @@ describe('Auth Interceptor', () => {
         expect(handler.handle).toHaveBeenCalledWith(req);
     });
 
-    it('should attempt token refresh on 401 error and retry request', () => {
+    it('should attempt token refresh on 401 error and retry request', async () => {
         const req = new HttpRequest('GET', 'https://example.com/api/resource');
         const handler = jasmine.createSpyObj<HttpHandlerFn>('HttpHandler', ['handle']);
         authService.refreshToken = jasmine.createSpy().and.returnValue(Promise.resolve());
         interceptor(req, handler).subscribe(() => {
         });
+        await tick();
         expect(authService.refreshToken).toHaveBeenCalled();
     });
 
-    it('should log out user if token refresh fails', () => {
+    it('should log out user if token refresh fails', async () => {
         const req = new HttpRequest('GET', 'https://example.com/api/resource');
         const handler = jasmine.createSpyObj<HttpHandlerFn>('HttpHandler', ['handle']);
         authService.refreshToken = jasmine.createSpy().and.returnValue(Promise.reject(new Error('Refresh failed')));
         interceptor(req, handler).subscribe(() => {
         });
+        await tick();
         expect(authService.logout).toHaveBeenCalled();
     });
 
-    it('should rethrow error if refresh fails and logout', () => {
+    it('should rethrow error if refresh fails and logout', async () => {
         const req = new HttpRequest('GET', 'https://example.com/api/resource');
         const handler = jasmine.createSpyObj<HttpHandlerFn>('HttpHandler', ['handle']);
         authService.refreshToken = jasmine.createSpy().and.returnValue(Promise.reject(new Error('Refresh failed')));
@@ -62,9 +64,10 @@ describe('Auth Interceptor', () => {
                 expect(error.message).toBe('Refresh failed');
             }
         );
+        await tick();
     });
 
-    it('should rethrow original error if token is invalid and not refreshable', () => {
+    it('should rethrow original error if token is invalid and not refreshable', async () => {
         const req = new HttpRequest('GET', 'https://example.com/api/resource');
         const handler = jasmine.createSpyObj<HttpHandlerFn>('HttpHandler', ['handle']);
         authService.refreshToken = jasmine.createSpy().and.returnValue(Promise.reject(new HttpErrorResponse({status: 401})));
@@ -75,6 +78,7 @@ describe('Auth Interceptor', () => {
                 expect(error.status).toBe(401);
             }
         );
+        await tick();
     });
 });
 
@@ -90,4 +94,3 @@ class MockAuthService {
     logout(): void {
     }
 }
-

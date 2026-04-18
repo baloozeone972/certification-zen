@@ -29,32 +29,34 @@ describe('LearningDashboardComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should load certifications on init', () => {
+    it('should load certifications on init', fakeAsync(() => {
         spyOnProperty(certificationService, 'certifications').and.returnValue(signal([]));
         component.ngOnInit();
+        tick();
         fixture.detectChanges();
         expect(certificationService.loadAll).toHaveBeenCalled();
-    });
+    }));
 
-    it('should display certifications', () => {
+    it('should display certifications', fakeAsync(() => {
         const mockCertifications = [
             {id: 1, name: 'Certif 1', code: 'C1'},
             {id: 2, name: 'Certif 2', code: 'C2'}
         ];
         spyOnProperty(certificationService, 'certifications').and.returnValue(signal(mockCertifications));
         component.ngOnInit();
+        tick();
         fixture.detectChanges();
         const cards = fixture.nativeElement.querySelectorAll('.learn-card');
         expect(cards.length).toBe(2);
         expect(cards[0].querySelector('h3').textContent.trim()).toBe('Certif 1');
         expect(cards[1].querySelector('h3').textContent.trim()).toBe('Certif 2');
-    });
+    }));
 
-    it('should handle error when loading certifications', () => {
+    it('should handle error when loading certifications', fakeAsync(() => {
         spyOn(certificationService, 'loadAll').and.returnValue(throwError(() => new Error('Failed to load certifications')));
         component.ngOnInit();
+        tick();
         fixture.detectChanges();
         expect(console.error).toHaveBeenCalledWith(new Error('Failed to load certifications'));
-    });
+    }));
 });
-
