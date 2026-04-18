@@ -1,0 +1,77 @@
+[
+  {
+    "id": "TRIVY-T1-001",
+    "theme": "Fondamentaux Architecture",
+    "theme_label": "Architecture Trivy",
+    "difficulty": "easy",
+    "question": "Qu'est-ce que Trivy ?",
+    "options": [
+      "Scanner de vulnerabilites open-source pour conteneurs et IaC",
+      "Outil de monitoring reseau",
+      "Gestionnaire de packages Linux",
+      "Framework de tests de securite"
+    ],
+    "correct": 0,
+    "explanation": "Trivy est un scanner de vulnerabilites open-source polyvalent developpe par Aqua Security."
+  },
+  {
+    "id": "TRIVY-T1-002",
+    "theme": "Fondamentaux Architecture",
+    "theme_label": "Architecture Trivy",
+    "difficulty": "easy",
+    "question": "Quels types d'artefacts Trivy peut-il scanner ?",
+    "options": [
+      "Uniquement les images Docker",
+      "Images conteneurs, systemes de fichiers, depots Git, IaC",
+      "Uniquement les fichiers Terraform",
+      "Uniquement les paquets npm"
+    ],
+    "correct": 1,
+    "explanation": "Trivy supporte les images OCI/Docker, filesystems locaux, depots Git, IaC (Terraform, Kubernetes) et SBOM."
+  },
+  {
+    "id": "TRIVY-T1-003",
+    "theme": "Fondamentaux Architecture",
+    "theme_label": "Bases de donnees",
+    "difficulty": "easy",
+    "question": "Quelle base de donnees Trivy utilise-t-il par defaut ?",
+    "options": [
+      "NVD uniquement",
+      "CVE Details uniquement",
+      "Base de donnees agregee (NVD, Red Hat, Debian, Alpine...)",
+      "OWASP uniquement"
+    ],
+    "correct": 2,
+    "explanation": "Trivy utilise une base de donnees agregee combinant NVD, Red Hat CVE DB, Debian Security Tracker, Alpine SecDB et autres."
+  },
+  {
+    "id": "TRIVY-T1-004",
+    "theme": "Fondamentaux Architecture",
+    "theme_label": "Modes de scan",
+    "difficulty": "medium",
+    "question": "Quels sont les principaux types de vulnerabilites que Trivy detecte ?",
+    "options": [
+      "CVE dans OS uniquement",
+      "CVE OS + libraries de langages + misconfigurations + secrets",
+      "Secrets uniquement",
+      "Misconfigurations uniquement"
+    ],
+    "correct": 1,
+    "explanation": "Trivy detecte les CVE dans les paquets OS, les dependances de langages (npm, pip, maven...), les misconfigurations et les secrets exposes."
+  },
+  {
+    "id": "TRIVY-T1-005",
+    "theme": "Fondamentaux Architecture",
+    "theme_label": "Installation",
+    "difficulty": "easy",
+    "question": "Comment installer Trivy sur Linux via le gestionnaire de packages ?",
+    "options": [
+      "apt install trivy",
+      "rpm -i trivy",
+      "Via le repository officiel Aqua Security",
+      "pip install trivy"
+    ],
+    "correct": 2,
+    "explanation": "Trivy s'installe via le repository officiel Aqua Security (rpm ou deb) ou via homebrew/docker."
+  }
+]
