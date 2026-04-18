@@ -1108,7 +1108,7 @@
       "options": [
         "MutableList<out T>",
         "MutableList<in T>",
-        "MutableList<*>";
+        "MutableList<*>",
         "A et B"
       ],
       "correct": 3,
